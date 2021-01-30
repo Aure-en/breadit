@@ -13,6 +13,7 @@ function usePost() {
       date: new Date(),
       upvotes: 0,
       downvotes: 0,
+      comments: 0,
       subreadit: subreaditId,
     });
     ref.update({ id: ref.id });
