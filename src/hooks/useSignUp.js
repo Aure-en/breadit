@@ -1,67 +1,96 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import useUser from "./useUser";
 
 function useSignUp() {
   const [email, setEmail] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [terms, setTerms] = useState(false);
   const [emailError, setEmailError] = useState("");
+  const [usernameError, setUsernameError] = useState("");
   const [passwordError, setPasswordError] = useState("");
-  const [isFormCompleted, setIsFormCompleted] = useState(true);
   const [loading, setLoading] = useState(false);
+  const { signUp } = useAuth();
+  const { createUser, isUsernameAvailable } = useUser();
 
-  const { currentUser, signUp, signUpFromAnonymous } = useAuth();
-  const { createUser } = useUser();
+  const checkUsername = async (username) => {
+    if (!username) {
+      setUsernameError("This field is required.");
+      return false;
+    }
 
-  useEffect(() => {
-    setIsFormCompleted(!(email && firstName && lastName && password && terms));
-  }, [email, firstName, lastName, password, terms]);
+    if (!(await isUsernameAvailable(username))) {
+      setUsernameError("That username is already taken.");
+      return false;
+    }
+    setUsernameError("");
+    return true;
+  };
 
-  async function handleSignUp() {
-    setLoading(true);
-    setEmailError("");
+  const checkEmail = async (email) => {
+    if (!email) {
+      setEmailError("This field is required");
+      return false;
+    }
+  };
+
+  const checkPassword = (password) => {
+    if (!password) {
+      setPasswordError("This field is required");
+      return false;
+    }
+
+    if (password.length < 6) {
+      setPasswordError("The password must be 6 characters long or more");
+      return false;
+    }
     setPasswordError("");
+    return true;
+  };
 
+  const validateForm = (username, email, password) => {
+    return (
+      checkUsername(username) && checkEmail(email) && checkPassword(password)
+    );
+  };
+
+  const handleSignUp = async (username, email, password) => {
+    if (!validateForm(username, email, password)) return;
+    setLoading(true);
     try {
-      const user =
-        currentUser && currentUser.isAnonymous
-          ? await signUpFromAnonymous(email, password)
-          : await signUp(email, password);
-      await createUser(user.user.uid, firstName, lastName, email);
-      setLoading(false);
+      const user = await signUp(email, password);
+      if (user) await createUser(user.user.uid, username);
     } catch (err) {
       switch (err.code) {
-        case "auth/email-already-in-use":
         case "auth/invalid-email":
-          setEmailError(err.message);
+          setEmailError("Fix your email to continue");
           break;
-        case "auth/weak-password":
-          setPasswordError(err.message);
+        case "email-already-in-use":
+          setEmailError("This email already belongs to an user");
+          break;
+        case "weak-password":
+          setPasswordError("The password must be 6 characters long or more");
           break;
         default:
       }
-      setLoading(false);
     }
-  }
+    setLoading(false);
+  };
 
   return {
     email,
     setEmail,
-    firstName,
-    setFirstName,
-    lastName,
-    setLastName,
+    username,
+    setUsername,
     password,
     setPassword,
-    terms,
-    setTerms,
     emailError,
     passwordError,
-    isFormCompleted,
+    usernameError,
     loading,
+    checkUsername,
+    checkEmail,
+    checkPassword,
     handleSignUp,
   };
 }

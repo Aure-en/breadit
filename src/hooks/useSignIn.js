@@ -7,41 +7,38 @@ function useSignIn() {
   const [password, setPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [loading, setLoading] = useState(false);
-  const { signIn, resetPassword } = useAuth();
-
-  const clearErrors = () => {
-    setEmailError("");
-    setPasswordError("");
-  };
+  const [message, setMessage] = useState("");
+  const { signIn } = useAuth();
 
   async function handleSignIn() {
-    clearErrors();
+    setEmailError("");
+    setPasswordError("");
+    let areFieldsFilled = true;
 
-    if (!password && !email) {
-      setPasswordError("This field is required");
-      setEmailError("This field is required");
-      return;
-    }
     if (!password) {
       setPasswordError("This field is required");
-      return;
-    }
-    if (!email) {
-      setEmailError("This field is required");
-      return;
+      areFieldsFilled = false;
     }
 
+    if (!email) {
+      setEmailError("This field is required");
+      areFieldsFilled = false;
+    }
+    if (!areFieldsFilled) return;
+
     setLoading(true);
+
     try {
       await signIn(email, password);
+      setMessage("You are now logged in. You will soon be redirected.");
       setLoading(false);
     } catch (err) {
       switch (err.code) {
         case "auth/invalid-email":
         case "auth/user-not-found":
         case "auth/wrong-password":
-          setEmailError("Login or password is invalid");
-          setPasswordError("Login or password is invalid");
+          setEmailError("Incorrect password or username.");
+          setPasswordError("Incorrect password or username.");
           setLoading(false);
           break;
         default:
@@ -51,43 +48,16 @@ function useSignIn() {
     }
   }
 
-  const handleForgotPassword = async () => {
-    clearErrors();
-    if (!email) {
-      setEmailError("This field is required");
-      return;
-    }
-
-    setLoading(true);
-
-    try {
-      await resetPassword(email);
-      setLoading(false);
-    } catch (err) {
-      switch (err.code) {
-        case "auth/invalid-email":
-        case "auth/user-not-found":
-          setEmailError("Email does not exist");
-          break;
-        default:
-          setEmailError("Sorry, we were unable to reset your password.");
-      }
-    }
-  };
-
   return {
     email,
     setEmail,
     password,
     setPassword,
     emailError,
-    setEmailError,
     passwordError,
-    setPasswordError,
+    message,
     loading,
-    setLoading,
     handleSignIn,
-    handleForgotPassword,
   };
 }
 

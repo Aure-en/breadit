@@ -1,7 +1,14 @@
 import { firestore } from "../firebase";
 
 function usePost() {
-  const createPost = async (subreaditId, title, type, content, author) => {
+  const createPost = async (
+    subreaditId,
+    title,
+    type,
+    content,
+    author,
+    spoiler
+  ) => {
     const ref = await firestore.collection("posts").add({
       author: {
         id: author.id,
@@ -15,8 +22,10 @@ function usePost() {
       downvotes: 0,
       comments: 0,
       subreadit: subreaditId,
+      spoiler,
     });
     ref.update({ id: ref.id });
+    return ref.id;
   };
 
   const deletePost = (postId) => {

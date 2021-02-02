@@ -3,6 +3,13 @@ import { storage } from "../firebase";
 function useStorage() {
   const storageRef = storage.ref();
 
+  const uploadImage = (image) => {
+    return storageRef
+      .child(`images/${image.name}${Date.now()}`)
+      .put(image)
+      .then((snapshot) => snapshot.ref.getDownloadURL());
+  }
+
   const uploadAvatar = (userId, image) => {
     return storageRef
       .child(`users/${userId}/${image.name}${Date.now()}`)
@@ -17,7 +24,7 @@ function useStorage() {
       .then((snapshot) => snapshot.ref.getDownloadURL());
   };
 
-  return { uploadAvatar, uploadSubreaditIcon };
+  return { uploadImage, uploadAvatar, uploadSubreaditIcon };
 }
 
 export default useStorage;

@@ -33,11 +33,25 @@ function useSubreadit() {
     return query.docs.length === 0;
   };
 
+  const getSubreadits = async () => {
+    const subreadits = [];
+    const subreaditsDocs = await firestore.collection("subreadits").get();
+    subreaditsDocs.forEach((subreadit) =>
+      subreadits.push({
+        name: subreadit.data().name,
+        members: subreadit.data().members,
+        id: subreadit.data().id,
+      })
+    );
+    return subreadits;
+  };
+
   return {
     createSubreadit,
     deleteSubreadit,
     getPosts,
     isNameAvailable,
+    getSubreadits,
   };
 }
 
