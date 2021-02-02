@@ -11,6 +11,10 @@ function useSubreadit() {
     ref.update({ id: ref.id });
   };
 
+  const getSubreadit = (subreaditId) => {
+    return firestore.collection("subreadits").doc(subreaditId).get();
+  }
+
   const deleteSubreadit = (subreaditId) => {
     return firestore.collection("subreadits").doc(subreaditId).delete();
   };
@@ -49,6 +53,7 @@ function useSubreadit() {
   return {
     createSubreadit,
     deleteSubreadit,
+    getSubreadit,
     getPosts,
     isNameAvailable,
     getSubreadits,

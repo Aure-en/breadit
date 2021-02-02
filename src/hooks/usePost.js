@@ -18,9 +18,7 @@ function usePost() {
       title,
       content,
       date: new Date(),
-      upvotes: 0,
-      downvotes: 0,
-      comments: 0,
+      votes: {},
       subreadit: subreaditId,
       spoiler,
     });
@@ -37,19 +35,18 @@ function usePost() {
     return firestore.collection("posts").doc(postId).get();
   };
 
-  const getComments = async (postId) => {
-    return firestore
-      .collection("posts")
-      .doc(postId)
-      .collection("comments")
-      .get();
+  const getPosts = async (limit) => {
+    const posts = [];
+    const postsDocs = await firestore.collection("posts").limit(limit).get();
+    postsDocs.docs.forEach((doc) => posts.push(doc.data()));
+    return posts;
   };
 
   return {
     createPost,
     deletePost,
     getPost,
-    getComments,
+    getPosts,
   };
 }
 
