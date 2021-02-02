@@ -10,7 +10,7 @@ function useSignUp() {
   const [usernameError, setUsernameError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [loading, setLoading] = useState(false);
-  const { signUp } = useAuth();
+  const { signUp, updateUsername, updatePicture } = useAuth();
   const { createUser, isUsernameAvailable } = useUser();
 
   const checkUsername = async (username) => {
@@ -59,6 +59,8 @@ function useSignUp() {
     setLoading(true);
     try {
       const user = await signUp(email, password);
+      updateUsername(user.user, username);
+      updatePicture(user.user, "defaultpic");
       if (user) await createUser(user.user.uid, username);
     } catch (err) {
       switch (err.code) {

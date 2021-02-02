@@ -1,5 +1,4 @@
 import React, { useContext, useState, useEffect } from "react";
-import firebase from "firebase";
 import PropTypes from "prop-types";
 import { auth } from "../firebase";
 
@@ -13,19 +12,7 @@ export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState();
   const [loading, setLoading] = useState(true);
 
-  const signInAnonymously = () => {
-    return auth.signInAnonymously();
-  };
-
-  const signUpFromAnonymous = async (email, password) => {
-    const credential = await firebase.auth.EmailAuthProvider.credential(
-      email,
-      password
-    );
-    return auth.currentUser.linkWithCredential(credential);
-  };
-
-  const signUp = (email, password) => {
+  const signUp = async (email, password) => {
     return auth.createUserWithEmailAndPassword(email, password);
   };
 
@@ -35,6 +22,18 @@ export function AuthProvider({ children }) {
 
   const signOut = () => {
     return auth.signOut();
+  };
+
+  const updateUsername = (user, username) => {
+    user.updateProfile({
+      displayName: username,
+    });
+  };
+
+  const updatePicture = (user, photoURL) => {
+    user.updateProfile({
+      photoURL,
+    });
   };
 
   const resetPassword = (email) => {
@@ -53,8 +52,8 @@ export function AuthProvider({ children }) {
     signUp,
     signIn,
     signOut,
-    signInAnonymously,
-    signUpFromAnonymous,
+    updateUsername,
+    updatePicture,
     currentUser,
     resetPassword,
   };

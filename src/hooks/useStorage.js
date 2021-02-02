@@ -8,7 +8,7 @@ function useStorage() {
       .child(`images/${image.name}${Date.now()}`)
       .put(image)
       .then((snapshot) => snapshot.ref.getDownloadURL());
-  }
+  };
 
   const uploadAvatar = (userId, image) => {
     return storageRef

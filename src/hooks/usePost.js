@@ -2,17 +2,17 @@ import { firestore } from "../firebase";
 
 function usePost() {
   const createPost = async (
+    author,
     subreaditId,
     title,
     type,
     content,
-    author,
     spoiler
   ) => {
     const ref = await firestore.collection("posts").add({
       author: {
-        id: author.id,
-        name: author.name,
+        id: author.uid,
+        name: author.displayName,
       },
       type,
       title,
