@@ -1,4 +1,5 @@
 import React from "react";
+import Modal from "react-modal";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
 import CreateSubreadit from "./routes/create/CreateSubreadit";
@@ -8,7 +9,9 @@ import All from "./routes/All";
 import Subreadit from "./routes/Subreadit";
 import CreatePost from "./routes/create/CreatePost";
 import Nav from "./components/Nav";
+import Settings from "./routes/settings/Settings";
 
+Modal.setAppElement("#root");
 function App() {
   return (
     <Router>
@@ -20,6 +23,7 @@ function App() {
 
           <Switch>
             <Route exact path="/" component={Main} />
+            <Route exact path="/settings" component={Settings} />
             <Route exact path="/submit" component={CreatePost} />
             <Route exact path="/create/subreadit" component={CreateSubreadit} />
             <Route exact path="/s/all" component={All} />

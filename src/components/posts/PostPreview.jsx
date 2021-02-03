@@ -7,7 +7,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import { ReactComponent as IconUp } from "../../assets/icons/icon-upvote.svg";
 import { ReactComponent as IconDown } from "../../assets/icons/icon-downvote.svg";
 
-const Container = styled.div``;
+const Container = styled.article``;
 
 const BoldPrimary = styled.div``;
 

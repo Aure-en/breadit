@@ -8,7 +8,6 @@ function useUser() {
       username,
       // To check if username is available (no case insensitive search >:)
       username_lowercase: username.toLowerCase(),
-      avatar: "",
       karma: 0,
     });
   };
