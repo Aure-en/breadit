@@ -37,7 +37,7 @@ const Close = styled.button`
   right: 1rem;
 `;
 
-function Entry({ close, entryTab }) {
+function Entry({ close, entryTab = "signUp" }) {
   const [currentTab, setCurrentTab] = useState(entryTab);
 
   return (

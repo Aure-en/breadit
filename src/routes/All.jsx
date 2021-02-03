@@ -27,6 +27,7 @@ function All() {
             author={post.author.name}
             date="2/2"
             content={post.content}
+            id={post.id}
           />
         );
       })}
