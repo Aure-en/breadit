@@ -57,7 +57,7 @@ const decorator = new CompositeDecorator([
 ]);
 
 const styleMap = {
-  "HEADING": {
+  HEADING: {
     fontSize: "1.75rem",
   },
 };
@@ -146,16 +146,11 @@ function TextEditor({ type, sendContent }) {
   };
 
   // Blocks custom styles
-  const quoteBlockFn = (contentBlock) => {
+  const customBlockFn = (contentBlock) => {
     const type = contentBlock.getType();
     if (type === "quoteBlock") {
       return "quoteBlock";
     }
-    return "";
-  };
-
-  const codeBlockFn = (contentBlock) => {
-    const type = contentBlock.getType();
     if (type === "codeBlock") {
       return "codeBlock";
     }
@@ -177,7 +172,7 @@ function TextEditor({ type, sendContent }) {
             customStyleMap={styleMap}
             handleKeyCommand={handleKeyCommand}
             onTab={handleTab}
-            blockStyleFn={(quoteBlockFn, codeBlockFn)}
+            blockStyleFn={customBlockFn}
             placeholder="What are your thoughts?"
           />
         </Container>
@@ -325,7 +320,7 @@ function TextEditor({ type, sendContent }) {
             customStyleMap={styleMap}
             handleKeyCommand={handleKeyCommand}
             onTab={handleTab}
-            blockStyleFn={(quoteBlockFn, codeBlockFn)}
+            blockStyleFn={customBlockFn}
           />
         </Container>
       )}

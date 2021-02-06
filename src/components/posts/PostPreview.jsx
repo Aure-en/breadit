@@ -4,12 +4,12 @@ import PropTypes from "prop-types";
 import formatDistanceStrict from "date-fns/formatDistanceStrict";
 import { Link } from "react-router-dom";
 import { convertFromRaw } from "draft-js";
-import { stateToHTML } from "draft-js-export-html";
-import ReactHtmlParser from "react-html-parser";
+import redraft from "redraft";
 import useVote from "../../hooks/useVote";
 import Entry from "../entry/Entry";
 import { useAuth } from "../../contexts/AuthContext";
 import useSubreadit from "../../hooks/useSubreadit";
+import "../../styles/textEditor.css";
 
 // Icons
 import { ReactComponent as IconUp } from "../../assets/icons/icon-upvote.svg";
@@ -28,6 +28,22 @@ const Vote = styled.button`
 `;
 
 const Image = styled.img``;
+
+const renderers = {
+  inline: {
+    // The key passed here is just an index based on rendering order inside a block
+    BOLD: (children, { key }) => <strong key={key}>{children}</strong>,
+    ITALIC: (children, { key }) => <em key={key}>{children}</em>,
+    UNDERLINE: (children, { key }) => <u key={key}>{children}</u>,
+    CODE: (children, { key }) => <span key={key}>{children}</span>,
+    HEADING: (children, { key }) => <h2 className="heading" key={key}>{children}</h2>,
+  },
+  blocks: {
+    unstyled: (children) => children.map(child => <p>{child}</p>),
+    codeBlock: (children, { key }) => <div key={key} className="codeBlock">{children}</div>,
+    quoteBlock: (children, { key }) => <div key={key} className="quoteBlock">{children}</div>,
+  },
+};
 
 function PostPreview({ subreaditId, author, date, title, content, id }) {
   const { currentUser } = useAuth();
@@ -52,7 +68,7 @@ function PostPreview({ subreaditId, author, date, title, content, id }) {
   const renderText = (content) => {
     return (
       <div>
-        {ReactHtmlParser(stateToHTML(convertFromRaw(JSON.parse(content))))}
+        {redraft(JSON.parse(content), renderers)}
       </div>
     );
   };
