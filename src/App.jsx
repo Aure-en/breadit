@@ -26,9 +26,9 @@ function App() {
             <Route exact path="/settings" component={Settings} />
             <Route exact path="/submit" component={CreatePost} />
             <Route exact path="/create/subreadit" component={CreateSubreadit} />
-            <Route exact path="/s/all" component={All} />
-            <Route exact path="/s/:name" component={Subreadit} />
-            <Route exact path="/:id" component={Post} />
+            <Route exact path="/b/all" component={All} />
+            <Route exact path="/b/:subreadit" component={Subreadit} />
+            <Route exact path="/b/:subreadit/:postId" component={Post} />
           </Switch>
         </AuthProvider>
       </div>

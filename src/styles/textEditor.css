@@ -1,0 +1,21 @@
+/* Quote Block */
+.quoteBlock {
+  position: relative;
+  margin-left: 2rem;
+}
+
+.quoteBlock:before {
+  position: absolute;
+  content: '';
+  border: 2px solid grey;
+  border-radius: 15%;
+  left: -.75rem;
+  height: 100%;
+}
+
+/* Code Block */
+.codeBlock {
+  background: grey;
+  padding: .5rem;
+  margin: 1rem;
+}

@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
+import { convertFromRaw } from "draft-js";
+import { stateToHTML } from "draft-js-export-html";
+import ReactHtmlParser from "react-html-parser";
 import useComment from "../../hooks/useComment";
 import useVote from "../../hooks/useVote";
 import Entry from "../entry/Entry";
+import TextEditor from "../TextEditor";
 import { useAuth } from "../../contexts/AuthContext";
 import { ReactComponent as IconUp } from "../../assets/icons/icon-upvote.svg";
 import { ReactComponent as IconDown } from "../../assets/icons/icon-downvote.svg";
@@ -71,7 +75,11 @@ function Comment({ commentId }) {
               </Vote>
             </div>
             <div>
-              {comment.author.name} {comment.text}
+              {comment.author.name}
+{" "}
+              {ReactHtmlParser(
+                stateToHTML(convertFromRaw(JSON.parse(comment.text)))
+              )}
             </div>
             <button type="button" onClick={() => setIsReplying(!isReplying)}>
               Reply
@@ -83,12 +91,7 @@ function Comment({ commentId }) {
                   createComment(comment.id, currentUser, reply, commentId);
                 }}
               >
-                <input
-                  type="text"
-                  value={reply}
-                  onChange={(e) => setReply(e.target.value)}
-                  placeholder="What are your throughts?"
-                />
+                <TextEditor type="comment" sendContent={setReply} />
                 <button type="submit">Comment</button>
               </form>
             )}

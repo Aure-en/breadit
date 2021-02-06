@@ -17,6 +17,31 @@ function useUser() {
     return user.data();
   };
 
+  const getKarma = async (userId) => {
+    let karma = 0;
+    const posts = await firestore
+      .collection("posts")
+      .where("author.id", "==", userId)
+      .get();
+    posts.docs.forEach((post) => {
+      karma += Object.values(post.data().votes).reduce(
+        (sum, current) => sum + current,
+        0
+      );
+    });
+    const comments = await firestore
+      .collection("comments")
+      .where("author.id", "==", userId)
+      .get();
+    comments.docs.forEach((post) => {
+      karma += Object.values(post.data().votes).reduce(
+        (sum, current) => sum + current,
+        0
+      );
+    });
+    return karma;
+  };
+
   const isUsernameAvailable = async (name) => {
     const query = await firestore
       .collection("users")
@@ -29,6 +54,7 @@ function useUser() {
     createUser,
     getUser,
     isUsernameAvailable,
+    getKarma,
   };
 }
 

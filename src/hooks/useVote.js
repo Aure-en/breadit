@@ -42,6 +42,7 @@ function useVote(type, id, userId) {
 
   const countVotes = async (type, id) => {
     const doc = await firestore.collection(type).doc(id).get();
+    if (!doc) return 0;
     return Object.values(doc.data().votes).reduce(
       (sum, current) => sum + current,
       0
@@ -64,6 +65,10 @@ function useVote(type, id, userId) {
       // User hasn't voted yet
       // - Simply adds an upvote.
       case -1:
+        upvote(type, id, userId);
+        setVote(1);
+        setVotes((prev) => prev + 2);
+        break;
       default:
         upvote(type, id, userId);
         setVote(1);
@@ -87,6 +92,10 @@ function useVote(type, id, userId) {
       // User hasn't voted yet:
       // - Simply adds an upvote.
       case 1:
+        downvote(type, id, userId);
+        setVote(-1);
+        setVotes((prev) => prev - 2);
+        break;
       default:
         downvote(type, id, userId);
         setVote(-1);

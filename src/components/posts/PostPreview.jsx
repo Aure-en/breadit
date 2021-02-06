@@ -1,9 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
+import formatDistanceStrict from "date-fns/formatDistanceStrict";
+import { Link } from "react-router-dom";
+import { convertFromRaw } from "draft-js";
+import { stateToHTML } from "draft-js-export-html";
+import ReactHtmlParser from "react-html-parser";
 import useVote from "../../hooks/useVote";
 import Entry from "../entry/Entry";
 import { useAuth } from "../../contexts/AuthContext";
+import useSubreadit from "../../hooks/useSubreadit";
+
+// Icons
 import { ReactComponent as IconUp } from "../../assets/icons/icon-upvote.svg";
 import { ReactComponent as IconDown } from "../../assets/icons/icon-downvote.svg";
 
@@ -19,14 +27,51 @@ const Vote = styled.button`
   color: ${(props) => (props.active ? "red" : "black")};
 `;
 
-function PostPreview({ subreadit, author, date, content, id }) {
+const Image = styled.img``;
+
+function PostPreview({ subreaditId, author, date, title, content, id }) {
   const { currentUser } = useAuth();
+  const { getSubreaditById } = useSubreadit();
   const { vote, votes, handleUpvote, handleDownvote } = useVote(
     "posts",
     id,
     currentUser && currentUser.uid
   );
   const [isEntryOpen, setIsEntryOpen] = useState(false);
+  const [subreadit, setSubreadit] = useState();
+
+  useEffect(() => {
+    (async () => {
+      const subreadit = await getSubreaditById(subreaditId);
+      setSubreadit(subreadit.data());
+    })();
+  }, []);
+
+  // Helper functions to render content depending on its type
+
+  const renderText = (content) => {
+    return (
+      <div>
+        {ReactHtmlParser(stateToHTML(convertFromRaw(JSON.parse(content))))}
+      </div>
+    );
+  };
+
+  const renderImage = (image, title) => {
+    return (
+      <div>
+        <Image src="image" alt={title} />
+      </div>
+    );
+  };
+
+  const renderImages = (images, title) => {
+    return <div />;
+  };
+
+  const renderLink = (link) => {
+    <div />;
+  };
 
   return (
     <>
@@ -59,14 +104,32 @@ function PostPreview({ subreadit, author, date, content, id }) {
           </Vote>
         </div>
         <div>
-          <BoldPrimary>{subreadit}</BoldPrimary>
-          <Informations>
-            Posted by u/
-            {author}
-            {date}
-          </Informations>
-          <div>{content}</div>
-          <BoldSecondary>Comments</BoldSecondary>
+          {subreadit && (
+            <>
+              <Link to={`/b/${subreadit.name}`}>
+                <BoldPrimary>{subreadit.name}</BoldPrimary>
+              </Link>
+
+              <Informations>
+                Posted by u/
+                <Link to={`/user/${author.id}`}>{author}</Link>
+                <Link to={`/b/${subreadit.name}/${id}`}>
+                  {formatDistanceStrict(
+                    new Date(date.seconds * 1000),
+                    new Date()
+                  )}
+{" "}
+                  ago
+                </Link>
+              </Informations>
+              <div>{title}</div>
+              <div>{renderText(content)}</div>
+              <BoldSecondary>
+                <Link to={`/b/${subreadit.name}/${id}`}>Comments</Link>
+                <button type="button">Save</button>
+              </BoldSecondary>
+            </>
+          )}
         </div>
       </Container>
 
@@ -76,10 +139,14 @@ function PostPreview({ subreadit, author, date, content, id }) {
 }
 
 PostPreview.propTypes = {
-  subreadit: PropTypes.string.isRequired,
+  subreaditId: PropTypes.string.isRequired,
   author: PropTypes.string.isRequired,
-  date: PropTypes.string.isRequired,
+  date: PropTypes.shape({
+    seconds: PropTypes.number,
+    nanoseconds: PropTypes.number,
+  }).isRequired,
   id: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
   content: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.arrayOf(PropTypes.number),

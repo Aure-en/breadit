@@ -1,30 +1,45 @@
 import { firestore } from "../firebase";
 
 function useSubreadit() {
-  const createSubreadit = async (name, description) => {
+  const createSubreadit = async (name, description, user) => {
     const ref = await firestore.collection("subreadits").add({
       name,
+      name_lowercase: name.toLowerCase(),
       description,
-      permissions: [],
+      icon: "",
+      permissions: {
+        owner: [user],
+      },
       members: 1,
+      date: new Date(),
     });
     ref.update({ id: ref.id });
   };
 
-  const getSubreadit = (subreaditId) => {
+  const getSubreaditById = (subreaditId) => {
     return firestore.collection("subreadits").doc(subreaditId).get();
-  }
+  };
+
+  const getSubreaditByName = async (name) => {
+    const query = await firestore
+      .collection("subreadits")
+      .where("name", "==", name)
+      .get();
+    return query.docs[0].data();
+  };
 
   const deleteSubreadit = (subreaditId) => {
     return firestore.collection("subreadits").doc(subreaditId).delete();
   };
 
-  const getPosts = async (subreaditId) => {
+  const getSubreaditPosts = async (subreaditId, limit) => {
     const posts = [];
     const postsDocs = await firestore
       .collection("posts")
-      .where("subreadit", "==", subreaditId);
-    postsDocs.forEach((doc) => posts.push(doc.data()));
+      .where("subreadit", "==", subreaditId)
+      .limit(limit)
+      .get();
+    postsDocs.docs.forEach((doc) => posts.push(doc.data()));
     return posts;
   };
 
@@ -53,8 +68,9 @@ function useSubreadit() {
   return {
     createSubreadit,
     deleteSubreadit,
-    getSubreadit,
-    getPosts,
+    getSubreaditById,
+    getSubreaditByName,
+    getSubreaditPosts,
     isNameAvailable,
     getSubreadits,
   };

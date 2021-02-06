@@ -5,6 +5,7 @@ import { useAuth } from "../contexts/AuthContext";
 import usePost from "../hooks/usePost";
 import useComment from "../hooks/useComment";
 import PostPreview from "../components/posts/PostPreview";
+import TextEditor from "../components/TextEditor";
 import Comment from "../components/posts/Comment";
 
 function Post({ match }) {
@@ -14,13 +15,14 @@ function Post({ match }) {
   const { getPost } = usePost();
   const { createComment, getComments } = useComment();
   const { currentUser } = useAuth();
-  const postId = match.params.id;
+  const { postId } = match.params;
 
   // Loads the post itself
   useEffect(() => {
     (async () => {
       const post = await getPost(postId);
       setPost(post.data());
+      console.log(post.data().subreadit);
     })();
   }, []);
 
@@ -36,9 +38,10 @@ function Post({ match }) {
     <div>
       {post && (
         <PostPreview
-          subreadit={post.subreadit}
+          subreaditId={post.subreadit}
           author={post.author.name}
-          date="2/2"
+          title={post.title}
+          date={post.date}
           content={post.content}
           id={post.id}
         />
@@ -50,12 +53,7 @@ function Post({ match }) {
           createComment(postId, currentUser, comment);
         }}
       >
-        <input
-          type="text"
-          value={comment}
-          onChange={(e) => setComment(e.target.value)}
-          placeholder="What are your throughts?"
-        />
+        <TextEditor type="comment" sendContent={setComment} />
         <button type="submit">Comment</button>
       </form>
 
@@ -71,7 +69,7 @@ function Post({ match }) {
 Post.propTypes = {
   match: PropTypes.shape({
     params: PropTypes.shape({
-      id: PropTypes.string,
+      postId: PropTypes.string,
     }),
   }).isRequired,
 };

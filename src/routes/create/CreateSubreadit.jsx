@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
 import styled from "styled-components";
 import useSubreadit from "../../hooks/useSubreadit";
 
@@ -25,6 +26,7 @@ function CreateSubreadit() {
   const [description, setDescription] = useState("");
   const [descriptionError, setDescriptionError] = useState("");
   const [message, setMessage] = useState("");
+  const { currentUser } = useAuth();
   const { createSubreadit, isNameAvailable } = useSubreadit();
   const history = useHistory();
 
@@ -51,7 +53,7 @@ function CreateSubreadit() {
     }
 
     try {
-      createSubreadit(name, description);
+      createSubreadit(name, description, currentUser.uid);
       setMessage(
         "Your Subreadit has been created. You will be redirected shortly."
       );

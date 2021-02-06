@@ -7,6 +7,7 @@ import usePost from "../../hooks/usePost";
 import useSubreadit from "../../hooks/useSubreadit";
 import useDragAndDrop from "../../hooks/useDragAndDrop";
 import useStorage from "../../hooks/useStorage";
+import TextEditor from "../../components/TextEditor";
 
 const Form = styled.form``;
 
@@ -36,7 +37,9 @@ const Image = styled.img`
 
 const Textarea = styled.textarea``;
 
-const Buttons = styled.div``;
+const Buttons = styled.div`
+  margin-top: 4rem;
+`;
 
 const Button = styled.button``;
 
@@ -166,12 +169,9 @@ function CreatePost() {
         {type === "post" && (
           <Field>
             <Label htmlFor="text">
-              <Textarea
-                id="text"
-                name="text"
-                value={post}
-                onChange={(e) => setPost(e.target.value)}
-              />
+              <div>
+                <TextEditor type="post" sendContent={setPost} />
+              </div>
             </Label>
           </Field>
         )}
