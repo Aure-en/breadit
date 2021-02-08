@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import { convertFromRaw } from "draft-js";
-import { stateToHTML } from "draft-js-export-html";
-import ReactHtmlParser from "react-html-parser";
 import useComment from "../../hooks/useComment";
 import useVote from "../../hooks/useVote";
 import Entry from "../entry/Entry";

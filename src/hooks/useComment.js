@@ -67,6 +67,16 @@ function useComment() {
     return commentsList;
   };
 
+  // Get number of comments of a certain post
+  const getCommentsNumber = async (postId) => {
+    const comments = await firestore
+      .collection("comments")
+      .where("post", "==", postId)
+      .where("parent", "==", null)
+      .get();
+    return comments.docs.length;
+  };
+
   // Get a comment from an id
   const getComment = (commentId) => {
     return firestore.collection("comments").doc(commentId).get();
@@ -77,6 +87,7 @@ function useComment() {
     deleteComment,
     editComment,
     getComments,
+    getCommentsNumber,
     getComment,
   };
 }

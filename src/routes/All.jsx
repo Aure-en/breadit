@@ -2,6 +2,11 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import usePost from "../hooks/usePost";
 import PostPreview from "../components/posts/PostPreview";
+import "../styles/styles.css";
+
+const Container = styled.div`
+  max-width: 40rem;
+`;
 
 function All() {
   const [posts, setPosts] = useState([]);
@@ -16,13 +21,14 @@ function All() {
   }, [limit]);
 
   return (
-    <div>
+    <Container>
       {posts.map((post) => {
         return (
           <PostPreview
+            type={post.type}
             key={post.id}
             subreaditId={post.subreadit}
-            author={post.author.name}
+            author={post.author}
             date={post.date}
             title={post.title}
             content={post.content}
@@ -30,7 +36,7 @@ function All() {
           />
         );
       })}
-    </div>
+    </Container>
   );
 }
 

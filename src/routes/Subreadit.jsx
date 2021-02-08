@@ -27,8 +27,9 @@ function Subreadit({ match }) {
         return (
           <PostPreview
             key={post.id}
+            type={post.type}
             subreaditId={post.subreadit}
-            author={post.author.name}
+            author={post.author}
             date={post.date}
             title={post.title}
             content={post.content}

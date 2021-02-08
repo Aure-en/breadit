@@ -7,7 +7,7 @@
 .quoteBlock:before {
   position: absolute;
   content: '';
-  border: 2px solid grey;
+  border: 2px solid rgb(237, 212, 194);
   border-radius: 15%;
   left: -.75rem;
   height: 100%;
@@ -15,12 +15,28 @@
 
 /* Code Block */
 .codeBlock {
-  background: grey;
+  background: rgb(241, 236, 230);
   padding: .5rem;
   margin: 1rem;
+  font-family: "Monospace";
 }
 
 /* Heading Block */
 .heading {
   font-size: 1.75rem;
+}
+
+.strikethrough {
+  text-decoration: line-through;
+}
+
+.code {
+  font-family: "Monospace";
+}
+
+.block {
+  line-height: 1.5rem;
+  margin-bottom: 1rem;
+  font-family: "Noto Sans", sans-serif;
+  font-size: .875rem;
 }

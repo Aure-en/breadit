@@ -1,33 +1,183 @@
-import React, { useState, useEffect } from "react";
+/* eslint-disable react/display-name */
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import formatDistanceStrict from "date-fns/formatDistanceStrict";
 import { Link } from "react-router-dom";
-import { convertFromRaw } from "draft-js";
 import redraft from "redraft";
-import useVote from "../../hooks/useVote";
-import Entry from "../entry/Entry";
 import { useAuth } from "../../contexts/AuthContext";
 import useSubreadit from "../../hooks/useSubreadit";
+import useComment from "../../hooks/useComment";
+import useVote from "../../hooks/useVote";
 import "../../styles/textEditor.css";
+import Entry from "../entry/Entry";
+import Carousel from "./Carousel";
 
 // Icons
 import { ReactComponent as IconUp } from "../../assets/icons/icon-upvote.svg";
 import { ReactComponent as IconDown } from "../../assets/icons/icon-downvote.svg";
+import { ReactComponent as IconComment } from "../../assets/icons/icon-comment.svg";
+import { ReactComponent as IconSave } from "../../assets/icons/icon-save.svg";
+import { ReactComponent as IconHide } from "../../assets/icons/icon-hide.svg";
+import { ReactComponent as IconCopy } from "../../assets/icons/icon-copy.svg";
 
-const Container = styled.article``;
+const colors = {
+  primary: "black",
+  secondary: "grey",
+  background: "rgb(241, 236, 230)",
+  arrowBackground: "rgb(237, 212, 194)",
+  upvote: "rgb(179, 72, 54)",
+  downvote: "rgb(70, 153, 147)",
+  neutral: "rgb(209, 163, 155)",
+};
 
-const BoldPrimary = styled.div``;
+const Container = styled.article`
+  border: 1px solid ${colors.neutral};
+  display: flex;
+  border-radius: 0.25rem;
+  margin: 1rem 0;
 
-const BoldSecondary = styled(BoldPrimary)``;
-
-const Informations = styled.div``;
-
-const Vote = styled.button`
-  color: ${(props) => (props.active ? "red" : "black")};
+  &:hover {
+    border: 1px solid ${colors.upvote};
+  }
 `;
 
-const Image = styled.img``;
+const BoldPrimary = styled.div`
+  font-weight: 600;
+  color: ${colors.primary};
+`;
+
+const Informations = styled.div`
+  display: flex;
+  font-size: 0.75rem;
+  color: ${colors.secondary};
+  padding: 0.5rem;
+
+  & > * {
+    margin-right: 0.25rem;
+  }
+
+  & > a:hover {
+    text-decoration: underline;
+  }
+`;
+
+const Vote = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: ${colors.background};
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.5rem 0 0.5rem;
+
+  & > * {
+    margin-bottom: 0.25rem;
+  }
+`;
+
+const VoteButton = styled.button`
+  color: ${(props) =>
+    props.isUpvoted
+      ? colors.upvote
+      : props.isDownvoted
+      ? colors.downvote
+      : colors.neutral};
+  cursor: pointer;
+  padding: 0;
+  border-radius: 0.15rem;
+  width: 1.5rem;
+  height: 1.5rem;
+
+  &:hover {
+    background: ${colors.arrowBackground};
+  }
+`;
+
+const Main = styled.div`
+  flex: 1;
+`;
+
+const Title = styled.h3`
+  margin-bottom: 0.5rem;
+  font-size: 1.125rem;
+  font-weight: 500;
+  padding: 0.5rem;
+`;
+
+const ImageContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 100%;
+`;
+
+const Image = styled.img`
+  max-height: 35rem;
+  max-width: 100%;
+  object-fit: cover;
+`;
+
+const Text = styled.div`
+  position: relative;
+  max-height: 15rem;
+  overflow: hidden;
+  padding: 0 0.5rem;
+
+  &:before {
+    content: "";
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    background: linear-gradient(transparent 10rem, white);
+  }
+`;
+
+const Buttons = styled.div`
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: ${colors.secondary};
+  display: flex;
+  align-items: stretch;
+  margin-top: 0.75rem;
+  padding: 0.5rem;
+
+  & > * {
+    display: flex;
+    align-items: center;
+    padding: 0.15rem 0.5rem;
+    border-radius: 3px;
+  }
+
+  & > *:hover {
+    background: ${colors.background};
+  }
+`;
+
+const Button = styled.button`
+  font-size: 0.75rem;
+  font-weight: 500;
+
+  & > *:first-child {
+    margin-right: 0.15rem;
+  }
+`;
+
+const ButtonLink = styled(Link)`
+  & > *:first-child {
+    margin-right: 0.15rem;
+  }
+
+  & > a {
+    height: 100%;
+  }
+`;
+
+const InputCopy = styled.input`
+  position: absolute;
+  top: -9999px;
+`;
 
 const renderers = {
   inline: {
@@ -35,128 +185,217 @@ const renderers = {
     BOLD: (children, { key }) => <strong key={key}>{children}</strong>,
     ITALIC: (children, { key }) => <em key={key}>{children}</em>,
     UNDERLINE: (children, { key }) => <u key={key}>{children}</u>,
-    CODE: (children, { key }) => <span key={key}>{children}</span>,
-    HEADING: (children, { key }) => <h2 className="heading" key={key}>{children}</h2>,
+    CODE: (children, { key }) => (
+      <span key={key} className="code">
+        {children}
+      </span>
+    ),
+    HEADING: (children, { key }) => (
+      <div className="heading" key={key}>
+        {children}
+      </div>
+    ),
+    STRIKETHROUGH: (children, { key }) => (
+      <span key={key} className="strikethrough">
+        {children}
+      </span>
+    ),
   },
   blocks: {
-    unstyled: (children) => children.map(child => <p>{child}</p>),
-    codeBlock: (children, { key }) => <div key={key} className="codeBlock">{children}</div>,
-    quoteBlock: (children, { key }) => <div key={key} className="quoteBlock">{children}</div>,
+    unstyled: (children, { key }) =>
+      children.map((child) => (
+        <div key={key} className="block">
+          {child}
+        </div>
+      )),
+    codeBlock: (children, { key }) =>
+      children.map((child) => (
+        <pre key={key} className="codeBlock">
+          {child}
+        </pre>
+      )),
+    quoteBlock: (children, { key }) =>
+      children.map((child) => (
+        <div key={key} className="quoteBlock">
+          {child}
+        </div>
+      )),
+    "unordered-list-item": (children, { keys }) => (
+      <ul key={keys[keys.length - 1]}>
+        {children.map((child) => (
+          <li key={keys[keys.length - 1]}>{child}</li>
+        ))}
+      </ul>
+    ),
+    "ordered-list-item": (children, { keys }) => (
+      <ol key={keys.join("|")}>
+        {children.map((child, index) => (
+          <li key={keys[index]}>{child}</li>
+        ))}
+      </ol>
+    ),
   },
 };
 
-function PostPreview({ subreaditId, author, date, title, content, id }) {
+function PostPreview({ subreaditId, author, date, title, content, id, type }) {
   const { currentUser } = useAuth();
   const { getSubreaditById } = useSubreadit();
+  const { getCommentsNumber } = useComment();
   const { vote, votes, handleUpvote, handleDownvote } = useVote(
     "posts",
     id,
     currentUser && currentUser.uid
   );
   const [isEntryOpen, setIsEntryOpen] = useState(false);
+  const [isHidden, setIsHidden] = useState(false);
   const [subreadit, setSubreadit] = useState();
+  const [commentsNumber, setCommentsNumber] = useState(0);
+  const copyRef = useRef();
 
   useEffect(() => {
     (async () => {
       const subreadit = await getSubreaditById(subreaditId);
       setSubreadit(subreadit.data());
+      const comments = await getCommentsNumber(id);
+      setCommentsNumber(comments);
     })();
   }, []);
 
   // Helper functions to render content depending on its type
-
-  const renderText = (content) => {
+  const renderText = (content, subreaditName, postId) => {
     return (
-      <div>
-        {redraft(JSON.parse(content), renderers)}
-      </div>
-    );
-  };
-
-  const renderImage = (image, title) => {
-    return (
-      <div>
-        <Image src="image" alt={title} />
-      </div>
+      <Link to={`/b/${subreaditName}/${postId}`}>
+        <Text>{redraft(JSON.parse(content), renderers)}</Text>
+      </Link>
     );
   };
 
   const renderImages = (images, title) => {
-    return <div />;
+    return images.length > 1 ? (
+      <Carousel images={images} title={title} />
+    ) : (
+      <ImageContainer>
+        <Image src={images[0]} alt={title} />
+      </ImageContainer>
+    );
   };
 
   const renderLink = (link) => {
-    <div />;
+    <a href={link}>{link}</a>;
+  };
+
+  // Copy the post link
+  const copyLink = () => {
+    if (!copyRef) return;
+    copyRef.current.select();
+    copyRef.current.setSelectionRange(0, 99999);
+    document.execCommand("copy");
   };
 
   return (
     <>
-      <Container>
-        <div>
-          <Vote
-            type="button"
-            active={vote === 1}
-            onClick={() => {
-              // eslint-disable-next-line no-unused-expressions
-              currentUser
-                ? handleUpvote("posts", id, currentUser.uid, vote)
-                : setIsEntryOpen(true);
-            }}
-          >
-            <IconUp />
-          </Vote>
-          <span>{votes}</span>
-          <Vote
-            type="button"
-            active={vote === -1}
-            onClick={() => {
-              // eslint-disable-next-line no-unused-expressions
-              currentUser
-                ? handleDownvote("posts", id, currentUser.uid, vote)
-                : setIsEntryOpen(true);
-            }}
-          >
-            <IconDown />
-          </Vote>
-        </div>
-        <div>
-          {subreadit && (
-            <>
-              <Link to={`/b/${subreadit.name}`}>
-                <BoldPrimary>{subreadit.name}</BoldPrimary>
-              </Link>
-
-              <Informations>
-                Posted by u/
-                <Link to={`/user/${author.id}`}>{author}</Link>
-                <Link to={`/b/${subreadit.name}/${id}`}>
-                  {formatDistanceStrict(
-                    new Date(date.seconds * 1000),
-                    new Date()
-                  )}
+      {!isHidden && (
+        <>
+          <Container>
+            <Vote>
+              <VoteButton
+                type="button"
+                isUpvoted={vote === 1}
+                onClick={() => {
+                  // eslint-disable-next-line no-unused-expressions
+                  currentUser
+                    ? handleUpvote("posts", id, currentUser.uid, vote)
+                    : setIsEntryOpen(true);
+                }}
+              >
+                <IconUp />
+              </VoteButton>
+              <span>{votes}</span>
+              <VoteButton
+                type="button"
+                isDownvoted={vote === -1}
+                onClick={() => {
+                  // eslint-disable-next-line no-unused-expressions
+                  currentUser
+                    ? handleDownvote("posts", id, currentUser.uid, vote)
+                    : setIsEntryOpen(true);
+                }}
+              >
+                <IconDown />
+              </VoteButton>
+            </Vote>
+            <Main>
+              {subreadit && (
+                <>
+                  <Informations>
+                    <Link to={`/b/${subreadit.name}`}>
+                      <BoldPrimary>
+                        b/
+                        {subreadit.name}
+                      </BoldPrimary>
+                    </Link>
+                    <span> • Posted by </span>
+                    <Link to={`/user/${author.id}`}>
+u/{author.name}</Link>
 {" "}
-                  ago
-                </Link>
-              </Informations>
-              <div>{title}</div>
-              <div>{renderText(content)}</div>
-              <BoldSecondary>
-                <Link to={`/b/${subreadit.name}/${id}`}>Comments</Link>
-                <button type="button">Save</button>
-              </BoldSecondary>
-            </>
-          )}
-        </div>
-      </Container>
+                    <Link to={`/b/${subreadit.name}/${id}`}>
+                      {formatDistanceStrict(
+                        new Date(date.seconds * 1000),
+                        new Date()
+                      )}
+{" "}
+                      ago
+                    </Link>
+                  </Informations>
+                  <Title>{title}</Title>
+                  <>
+                    {type === "post" && renderText(content, subreadit.name, id)}
+                    {type === "image" && renderImages(content, title)}
+                    {type === "link" && renderLink(content)}
+                  </>
+                  <Buttons>
+                    <ButtonLink to={`/b/${subreadit.name}/${id}`}>
+                      <IconComment />
+                      {commentsNumber} Comment
+                      {commentsNumber !== 1 && "s"}
+                    </ButtonLink>
+                    <Button type="button">
+                      <IconSave />
+                      Save
+                    </Button>
+                    <Button type="button" onClick={() => setIsHidden(true)}>
+                      <IconHide />
+                      Hide
+                    </Button>
+                    <Button type="button" onClick={copyLink}>
+                      <IconCopy />
+                      Share
+                      <InputCopy
+                        type="text"
+                        value={`https://breadit-296d8.web.app/b/${subreadit.name}/${id}`}
+                        ref={copyRef}
+                        readOnly
+                      />
+                    </Button>
+                  </Buttons>
+                </>
+              )}
+            </Main>
+          </Container>
 
-      {isEntryOpen && <Entry close={() => setIsEntryOpen(false)} />}
+          {isEntryOpen && <Entry close={() => setIsEntryOpen(false)} />}
+        </>
+      )}
     </>
   );
 }
 
 PostPreview.propTypes = {
   subreaditId: PropTypes.string.isRequired,
-  author: PropTypes.string.isRequired,
+  author: PropTypes.shape({
+    name: PropTypes.string,
+    id: PropTypes.string,
+  }).isRequired,
   date: PropTypes.shape({
     seconds: PropTypes.number,
     nanoseconds: PropTypes.number,
@@ -165,7 +404,8 @@ PostPreview.propTypes = {
   title: PropTypes.string.isRequired,
   content: PropTypes.oneOfType([
     PropTypes.string,
-    PropTypes.arrayOf(PropTypes.number),
+    PropTypes.arrayOf(PropTypes.string),
   ]).isRequired,
+  type: PropTypes.string.isRequired,
 };
 export default PostPreview;
