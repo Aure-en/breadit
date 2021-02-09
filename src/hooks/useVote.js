@@ -125,6 +125,7 @@ function useVote(type, id, userId) {
     votes,
     handleUpvote,
     handleDownvote,
+    countVotes,
   };
 }
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import usePost from "../hooks/usePost";
 import PropTypes from "prop-types";
+import usePost from "../hooks/usePost";
 import useSubreadit from "../hooks/useSubreadit";
 import PostPreview from "../components/posts/PostPreview";
 
@@ -24,18 +24,7 @@ function Subreadit({ match }) {
   return (
     <div>
       {posts.map((post) => {
-        return (
-          <PostPreview
-            key={post.id}
-            type={post.type}
-            subreaditId={post.subreadit}
-            author={post.author}
-            date={post.date}
-            title={post.title}
-            content={post.content}
-            id={post.id}
-          />
-        );
+        return <PostPreview key={post.id} postId={post.id} />;
       })}
     </div>
   );

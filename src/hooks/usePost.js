@@ -38,7 +38,7 @@ function usePost() {
   const getPosts = async (limit) => {
     const posts = [];
     const postsDocs = await firestore.collection("posts").limit(limit).get();
-    postsDocs.docs.forEach((doc) => posts.push(doc.data()));
+    postsDocs.docs.forEach((doc) => posts.push(doc.data().id));
     return posts;
   };
 

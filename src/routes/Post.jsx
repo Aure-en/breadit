@@ -22,7 +22,6 @@ function Post({ match }) {
     (async () => {
       const post = await getPost(postId);
       setPost(post.data());
-      console.log(post.data().subreadit);
     })();
   }, []);
 
@@ -36,16 +35,7 @@ function Post({ match }) {
 
   return (
     <div>
-      {post && (
-        <PostPreview
-          subreaditId={post.subreadit}
-          author={post.author.name}
-          title={post.title}
-          date={post.date}
-          content={post.content}
-          id={post.id}
-        />
-      )}
+      {post && <PostPreview postId={post.id} />}
 
       <form
         onSubmit={(e) => {

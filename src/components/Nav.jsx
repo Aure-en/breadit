@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import Entry from "./entry/Entry";
 import { useAuth } from "../contexts/AuthContext";
 
@@ -31,6 +32,7 @@ function Nav() {
       <button type="button" onClick={signOut}>
         Log Out
       </button>
+      <Link to="/b/all">All</Link>
 
       {isEntryOpen && (
         <Entry close={() => setIsEntryOpen(false)} entryTab={entryTab} />

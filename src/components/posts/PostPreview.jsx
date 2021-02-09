@@ -9,9 +9,11 @@ import { useAuth } from "../../contexts/AuthContext";
 import useSubreadit from "../../hooks/useSubreadit";
 import useComment from "../../hooks/useComment";
 import useVote from "../../hooks/useVote";
+import usePost from "../../hooks/usePost";
 import "../../styles/textEditor.css";
 import Entry from "../entry/Entry";
 import Carousel from "./Carousel";
+import LinkPreview from "./LinkPreview";
 
 // Icons
 import { ReactComponent as IconUp } from "../../assets/icons/icon-upvote.svg";
@@ -19,7 +21,7 @@ import { ReactComponent as IconDown } from "../../assets/icons/icon-downvote.svg
 import { ReactComponent as IconComment } from "../../assets/icons/icon-comment.svg";
 import { ReactComponent as IconSave } from "../../assets/icons/icon-save.svg";
 import { ReactComponent as IconHide } from "../../assets/icons/icon-hide.svg";
-import { ReactComponent as IconCopy } from "../../assets/icons/icon-copy.svg";
+import { ReactComponent as IconLink } from "../../assets/icons/icon-link-small.svg";
 
 const colors = {
   primary: "black",
@@ -99,7 +101,6 @@ const Main = styled.div`
 `;
 
 const Title = styled.h3`
-  margin-bottom: 0.5rem;
   font-size: 1.125rem;
   font-weight: 500;
   padding: 0.5rem;
@@ -237,15 +238,17 @@ const renderers = {
   },
 };
 
-function PostPreview({ subreaditId, author, date, title, content, id, type }) {
+function PostPreview({ postId }) {
   const { currentUser } = useAuth();
   const { getSubreaditById } = useSubreadit();
+  const { getPost } = usePost();
   const { getCommentsNumber } = useComment();
   const { vote, votes, handleUpvote, handleDownvote } = useVote(
     "posts",
-    id,
+    postId,
     currentUser && currentUser.uid
   );
+  const [post, setPost] = useState();
   const [isEntryOpen, setIsEntryOpen] = useState(false);
   const [isHidden, setIsHidden] = useState(false);
   const [subreadit, setSubreadit] = useState();
@@ -254,9 +257,11 @@ function PostPreview({ subreaditId, author, date, title, content, id, type }) {
 
   useEffect(() => {
     (async () => {
-      const subreadit = await getSubreaditById(subreaditId);
+      const post = await getPost(postId);
+      setPost(post.data());
+      const subreadit = await getSubreaditById(post.data().subreadit);
       setSubreadit(subreadit.data());
-      const comments = await getCommentsNumber(id);
+      const comments = await getCommentsNumber(postId);
       setCommentsNumber(comments);
     })();
   }, []);
@@ -280,8 +285,8 @@ function PostPreview({ subreaditId, author, date, title, content, id, type }) {
     );
   };
 
-  const renderLink = (link) => {
-    <a href={link}>{link}</a>;
+  const renderLink = (link, title) => {
+    return <LinkPreview link={link} title={title} />;
   };
 
   // Copy the post link
@@ -294,7 +299,7 @@ function PostPreview({ subreaditId, author, date, title, content, id, type }) {
 
   return (
     <>
-      {!isHidden && (
+      {!isHidden && post && (
         <>
           <Container>
             <Vote>
@@ -304,7 +309,7 @@ function PostPreview({ subreaditId, author, date, title, content, id, type }) {
                 onClick={() => {
                   // eslint-disable-next-line no-unused-expressions
                   currentUser
-                    ? handleUpvote("posts", id, currentUser.uid, vote)
+                    ? handleUpvote("posts", postId, currentUser.uid, vote)
                     : setIsEntryOpen(true);
                 }}
               >
@@ -317,7 +322,7 @@ function PostPreview({ subreaditId, author, date, title, content, id, type }) {
                 onClick={() => {
                   // eslint-disable-next-line no-unused-expressions
                   currentUser
-                    ? handleDownvote("posts", id, currentUser.uid, vote)
+                    ? handleDownvote("posts", postId, currentUser.uid, vote)
                     : setIsEntryOpen(true);
                 }}
               >
@@ -335,26 +340,28 @@ function PostPreview({ subreaditId, author, date, title, content, id, type }) {
                       </BoldPrimary>
                     </Link>
                     <span> • Posted by </span>
-                    <Link to={`/user/${author.id}`}>
-u/{author.name}</Link>
-{" "}
-                    <Link to={`/b/${subreadit.name}/${id}`}>
+                    <Link to={`/user/${post.author.id}`}>u/{post.author.name}</Link>{" "}
+                    <Link to={`/b/${subreadit.name}/${postId}`}>
                       {formatDistanceStrict(
-                        new Date(date.seconds * 1000),
+                        new Date(post.date.seconds * 1000),
                         new Date()
                       )}
 {" "}
                       ago
                     </Link>
                   </Informations>
-                  <Title>{title}</Title>
+                  {post.type !== "link" && (
+                    <Link to={`/b/${subreadit.name}/${postId}`}>
+                      <Title>{post.title}</Title>
+                    </Link>
+                  )}
                   <>
-                    {type === "post" && renderText(content, subreadit.name, id)}
-                    {type === "image" && renderImages(content, title)}
-                    {type === "link" && renderLink(content)}
+                    {post.type === "post" && renderText(post.content, subreadit.name, postId)}
+                    {post.type === "image" && renderImages(post.content, post.title)}
+                    {post.type === "link" && renderLink(post.content, post.title)}
                   </>
                   <Buttons>
-                    <ButtonLink to={`/b/${subreadit.name}/${id}`}>
+                    <ButtonLink to={`/b/${subreadit.name}/${postId}`}>
                       <IconComment />
                       {commentsNumber} Comment
                       {commentsNumber !== 1 && "s"}
@@ -368,11 +375,11 @@ u/{author.name}</Link>
                       Hide
                     </Button>
                     <Button type="button" onClick={copyLink}>
-                      <IconCopy />
+                      <IconLink />
                       Share
                       <InputCopy
                         type="text"
-                        value={`https://breadit-296d8.web.app/b/${subreadit.name}/${id}`}
+                        value={`https://breadit-296d8.web.app/b/${subreadit.name}/${postId}`}
                         ref={copyRef}
                         readOnly
                       />
@@ -391,21 +398,6 @@ u/{author.name}</Link>
 }
 
 PostPreview.propTypes = {
-  subreaditId: PropTypes.string.isRequired,
-  author: PropTypes.shape({
-    name: PropTypes.string,
-    id: PropTypes.string,
-  }).isRequired,
-  date: PropTypes.shape({
-    seconds: PropTypes.number,
-    nanoseconds: PropTypes.number,
-  }).isRequired,
-  id: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
-  content: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.arrayOf(PropTypes.string),
-  ]).isRequired,
-  type: PropTypes.string.isRequired,
+  postId: PropTypes.string.isRequired,
 };
 export default PostPreview;

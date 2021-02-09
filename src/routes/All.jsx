@@ -23,18 +23,7 @@ function All() {
   return (
     <Container>
       {posts.map((post) => {
-        return (
-          <PostPreview
-            type={post.type}
-            key={post.id}
-            subreaditId={post.subreadit}
-            author={post.author}
-            date={post.date}
-            title={post.title}
-            content={post.content}
-            id={post.id}
-          />
-        );
+        return <PostPreview key={post} postId={post} />;
       })}
     </Container>
   );
