@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import SignIn from "./SignIn";
 import SignUp from "./SignUp";
 import ForgotPassword from "./ForgotPassword";
-import { ReactComponent as IconClose } from "../../assets/icons/icon-x.svg";
+import { ReactComponent as IconClose } from "../../assets/icons/general/icon-x.svg";
 
 const colors = {
   overlay: "rgba(0, 0, 0, .2)",

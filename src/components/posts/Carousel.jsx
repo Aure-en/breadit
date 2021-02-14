@@ -4,8 +4,8 @@ import PropTypes from "prop-types";
 import useCarousel from "../../hooks/useCarousel";
 
 // Icons
-import { ReactComponent as IconLeft } from "../../assets/icons/icon-left.svg";
-import { ReactComponent as IconRight } from "../../assets/icons/icon-right.svg";
+import { ReactComponent as IconLeft } from "../../assets/icons/general/icon-left.svg";
+import { ReactComponent as IconRight } from "../../assets/icons/general/icon-right.svg";
 
 const colors = {
   "button-shadow": "rgba(0, 0, 0, .2)",

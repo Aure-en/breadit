@@ -3,7 +3,7 @@ import { firestore } from "../firebase";
 function usePost() {
   const createPost = async (
     author,
-    subreaditId,
+    subreadit,
     title,
     type,
     content,
@@ -19,7 +19,10 @@ function usePost() {
       content,
       date: new Date(),
       votes: {},
-      subreadit: subreaditId,
+      subreadit: {
+        id: subreadit.id,
+        name: subreadit.name,
+      },
       spoiler,
     });
     ref.update({ id: ref.id });
@@ -42,11 +45,46 @@ function usePost() {
     return posts;
   };
 
+  const getRecentPosts = async (limit) => {
+    let posts = [];
+    const postsDocs = await firestore
+      .collection("posts")
+      .orderBy("date")
+      .limit(limit)
+      .get();
+    postsDocs.docs.forEach((doc) => posts.push(doc.data()));
+
+    // Counts comments
+    posts = await Promise.all(
+      posts.map(async (post) => {
+        const comments = await firestore
+          .collection("comments")
+          .where("post", "==", post.id)
+          .where("parent", "==", null)
+          .get();
+        return { ...post, comments: comments.docs.length };
+      })
+    );
+
+    // Counts upvotes
+    posts = posts.map((post) => {
+      return {
+        ...post,
+        upvotes: Object.values(post.votes).reduce(
+          (sum, current) => sum + current,
+          0
+        ),
+      };
+    });
+    return posts;
+  };
+
   return {
     createPost,
     deletePost,
     getPost,
     getPosts,
+    getRecentPosts,
   };
 }
 

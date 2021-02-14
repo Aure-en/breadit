@@ -10,18 +10,30 @@ import All from "./routes/All";
 import Subreadit from "./routes/Subreadit";
 import CreatePost from "./routes/create/CreatePost";
 import Nav from "./components/Nav";
-import Settings from "./routes/settings/Settings";
+import UserSettings from "./routes/settings/UserSettings";
+
+const colors = {
+  background: "rgb(241, 236, 230)",
+};
+
+const Wrapper = styled.div`
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+`;
 
 const Container = styled.div`
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: stretch;
+  flex: 1;
 `;
 
 Modal.setAppElement("#root");
 function App() {
   return (
     <Router>
-      <div className="App">
+      <Wrapper>
         <AuthProvider>
           <header>
             <Nav />
@@ -30,7 +42,7 @@ function App() {
           <Container>
             <Switch>
               <Route exact path="/" component={Main} />
-              <Route exact path="/settings" component={Settings} />
+              <Route exact path="/settings" component={UserSettings} />
               <Route exact path="/submit" component={CreatePost} />
               <Route
                 exact
@@ -43,7 +55,7 @@ function App() {
             </Switch>
           </Container>
         </AuthProvider>
-      </div>
+      </Wrapper>
     </Router>
   );
 }

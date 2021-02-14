@@ -58,8 +58,28 @@ function useSubreadit() {
     subreaditsDocs.forEach((subreadit) =>
       subreadits.push({
         name: subreadit.data().name,
+        members: subreadit.data().members.length,
+        id: subreadit.data().id,
+        icon: subreadit.data().icon,
+      })
+    );
+    return subreadits;
+  };
+
+  // Gets subreadits with most members
+  const getPopularSubreadits = async (limit) => {
+    const subreadits = [];
+    const subreaditsDocs = await firestore
+      .collection("subreadits")
+      .orderBy("members")
+      .limit(limit)
+      .get();
+    subreaditsDocs.forEach((subreadit) =>
+      subreadits.push({
+        name: subreadit.data().name,
         members: subreadit.data().members,
         id: subreadit.data().id,
+        icon: subreadit.data().icon,
       })
     );
     return subreadits;
@@ -73,6 +93,7 @@ function useSubreadit() {
     getSubreaditPosts,
     isNameAvailable,
     getSubreadits,
+    getPopularSubreadits,
   };
 }
 

@@ -16,17 +16,18 @@ import Carousel from "./Carousel";
 import LinkPreview from "./LinkPreview";
 
 // Icons
-import { ReactComponent as IconUp } from "../../assets/icons/icon-upvote.svg";
-import { ReactComponent as IconDown } from "../../assets/icons/icon-downvote.svg";
-import { ReactComponent as IconComment } from "../../assets/icons/icon-comment.svg";
-import { ReactComponent as IconSave } from "../../assets/icons/icon-save.svg";
-import { ReactComponent as IconHide } from "../../assets/icons/icon-hide.svg";
-import { ReactComponent as IconLink } from "../../assets/icons/icon-link-small.svg";
+import { ReactComponent as IconUp } from "../../assets/icons/general/icon-upvote.svg";
+import { ReactComponent as IconDown } from "../../assets/icons/general/icon-downvote.svg";
+import { ReactComponent as IconComment } from "../../assets/icons/general/icon-comment.svg";
+import { ReactComponent as IconSave } from "../../assets/icons/general/icon-save.svg";
+import { ReactComponent as IconHide } from "../../assets/icons/general/icon-hide.svg";
+import { ReactComponent as IconLink } from "../../assets/icons/general/icon-link-small.svg";
 
 const colors = {
   primary: "black",
   secondary: "grey",
-  background: "rgb(241, 236, 230)",
+  background: "rgb(255, 255, 255)",
+  voteBackground: "rgb(247, 244, 240)",
   arrowBackground: "rgb(237, 212, 194)",
   upvote: "rgb(179, 72, 54)",
   downvote: "rgb(70, 153, 147)",
@@ -37,7 +38,7 @@ const Container = styled.article`
   border: 1px solid ${colors.neutral};
   display: flex;
   border-radius: 0.25rem;
-  margin: 1rem 0;
+  background: ${colors.background};
 
   &:hover {
     border: 1px solid ${colors.upvote};
@@ -68,7 +69,7 @@ const Vote = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: ${colors.background};
+  background: ${colors.voteBackground};
   font-size: 0.75rem;
   font-weight: 600;
   padding: 0.25rem 0.5rem 0 0.5rem;
@@ -152,7 +153,7 @@ const Buttons = styled.div`
   }
 
   & > *:hover {
-    background: ${colors.background};
+    background: ${colors.voteBackground};
   }
 `;
 
@@ -251,7 +252,6 @@ function PostPreview({ postId }) {
   const [post, setPost] = useState();
   const [isEntryOpen, setIsEntryOpen] = useState(false);
   const [isHidden, setIsHidden] = useState(false);
-  const [subreadit, setSubreadit] = useState();
   const [commentsNumber, setCommentsNumber] = useState(0);
   const copyRef = useRef();
 
@@ -259,8 +259,6 @@ function PostPreview({ postId }) {
     (async () => {
       const post = await getPost(postId);
       setPost(post.data());
-      const subreadit = await getSubreaditById(post.data().subreadit);
-      setSubreadit(subreadit.data());
       const comments = await getCommentsNumber(postId);
       setCommentsNumber(comments);
     })();
@@ -330,63 +328,66 @@ function PostPreview({ postId }) {
               </VoteButton>
             </Vote>
             <Main>
-              {subreadit && (
-                <>
-                  <Informations>
-                    <Link to={`/b/${subreadit.name}`}>
-                      <BoldPrimary>
-                        b/
-                        {subreadit.name}
-                      </BoldPrimary>
-                    </Link>
-                    <span> • Posted by </span>
-                    <Link to={`/user/${post.author.id}`}>u/{post.author.name}</Link>{" "}
-                    <Link to={`/b/${subreadit.name}/${postId}`}>
-                      {formatDistanceStrict(
-                        new Date(post.date.seconds * 1000),
-                        new Date()
-                      )}
+              <Link to={`/b/${post.subreadit.name}`}>
+                <Informations>
+                  <Link to={`/b/${post.subreadit.name}`}>
+                    <BoldPrimary>
+                      b/
+                      {post.subreadit.name}
+                    </BoldPrimary>
+                  </Link>
+                  <span> • Posted by </span>
+                  <Link to={`/user/${post.author.id}`}>
+                    u/
+                    {post.author.name}
+                  </Link>{" "}
+                  <Link to={`/b/${post.subreadit.name}/${postId}`}>
+                    {formatDistanceStrict(
+                      new Date(post.date.seconds * 1000),
+                      new Date()
+                    )}
 {" "}
-                      ago
-                    </Link>
-                  </Informations>
-                  {post.type !== "link" && (
-                    <Link to={`/b/${subreadit.name}/${postId}`}>
-                      <Title>{post.title}</Title>
-                    </Link>
-                  )}
-                  <>
-                    {post.type === "post" && renderText(post.content, subreadit.name, postId)}
-                    {post.type === "image" && renderImages(post.content, post.title)}
-                    {post.type === "link" && renderLink(post.content, post.title)}
-                  </>
-                  <Buttons>
-                    <ButtonLink to={`/b/${subreadit.name}/${postId}`}>
-                      <IconComment />
-                      {commentsNumber} Comment
-                      {commentsNumber !== 1 && "s"}
-                    </ButtonLink>
-                    <Button type="button">
-                      <IconSave />
-                      Save
-                    </Button>
-                    <Button type="button" onClick={() => setIsHidden(true)}>
-                      <IconHide />
-                      Hide
-                    </Button>
-                    <Button type="button" onClick={copyLink}>
-                      <IconLink />
-                      Share
-                      <InputCopy
-                        type="text"
-                        value={`https://breadit-296d8.web.app/b/${subreadit.name}/${postId}`}
-                        ref={copyRef}
-                        readOnly
-                      />
-                    </Button>
-                  </Buttons>
+                    ago
+                  </Link>
+                </Informations>
+                {post.type !== "link" && (
+                  <Link to={`/b/${post.subreadit.name}/${postId}`}>
+                    <Title>{post.title}</Title>
+                  </Link>
+                )}
+                <>
+                  {post.type === "post" &&
+                    renderText(post.content, post.subreadit.name, postId)}
+                  {post.type === "image" &&
+                    renderImages(post.content, post.title)}
+                  {post.type === "link" && renderLink(post.content, post.title)}
                 </>
-              )}
+              </Link>
+              <Buttons>
+                <ButtonLink to={`/b/${post.subreadit.name}/${postId}`}>
+                  <IconComment />
+                  {commentsNumber} Comment
+                  {commentsNumber !== 1 && "s"}
+                </ButtonLink>
+                <Button type="button">
+                  <IconSave />
+                  Save
+                </Button>
+                <Button type="button" onClick={() => setIsHidden(true)}>
+                  <IconHide />
+                  Hide
+                </Button>
+                <Button type="button" onClick={copyLink}>
+                  <IconLink />
+                  Share
+                  <InputCopy
+                    type="text"
+                    value={`https://breadit-296d8.web.app/b/${post.subreadit.name}/${postId}`}
+                    ref={copyRef}
+                    readOnly
+                  />
+                </Button>
+              </Buttons>
             </Main>
           </Container>
 

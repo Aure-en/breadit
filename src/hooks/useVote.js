@@ -49,6 +49,16 @@ function useVote(type, id, userId) {
     );
   };
 
+  const getRatio = async (type, id) => {
+    const doc = await firestore.collection(type).doc(id).get();
+    if (!doc) return 0;
+    const upvotes = Object.values(doc.data().votes).reduce((sum, current) => {
+      if (current === 1) return sum + current;
+      return 0;
+    }, 0);
+    return Math.round(upvotes / Object.keys(doc.data().votes).length);
+  };
+
   const handleUpvote = async (type, id, userId, vote) => {
     if (!userId) return;
     switch (vote) {
@@ -126,6 +136,7 @@ function useVote(type, id, userId) {
     handleUpvote,
     handleDownvote,
     countVotes,
+    getRatio,
   };
 }
 

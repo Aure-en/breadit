@@ -65,6 +65,9 @@ function useUserSettings() {
   };
 
   const handleUpdateEmail = async () => {
+    if (!currentPassword) {
+      setCurrentPasswordError("This field is required.");
+    }
     if (!(await checkPassword())) return;
     try {
       await currentUser.updateEmail(email);

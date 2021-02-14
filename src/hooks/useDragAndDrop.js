@@ -42,12 +42,18 @@ function useDragAndDrop() {
     setInDragZone(false);
   };
 
+  const deleteFile = (index) => {
+    const newFiles = [...files];
+    newFiles.splice(index, 1);
+    setFiles(newFiles);
+    displayPreview(newFiles);
+  };
+
   return {
     inDragZone,
     files,
-    setFiles,
+    deleteFile,
     preview,
-    setPreview,
     handleDragEnter,
     handleDragLeave,
     handleDragOver,

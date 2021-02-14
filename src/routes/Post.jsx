@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import { useAuth } from "../contexts/AuthContext";
 import usePost from "../hooks/usePost";
 import useComment from "../hooks/useComment";
-import PostPreview from "../components/posts/PostPreview";
+import PostContent from "../components/posts/Post";
 import TextEditor from "../components/TextEditor";
 import Comment from "../components/posts/Comment";
 
@@ -15,7 +15,7 @@ function Post({ match }) {
   const { getPost } = usePost();
   const { createComment, getComments } = useComment();
   const { currentUser } = useAuth();
-  const { postId } = match.params;
+  const { postId, subreadit } = match.params;
 
   // Loads the post itself
   useEffect(() => {
@@ -35,7 +35,7 @@ function Post({ match }) {
 
   return (
     <div>
-      {post && <PostPreview postId={post.id} />}
+      {post && <PostContent postId={post.id} subreadit={subreadit} />}
 
       <form
         onSubmit={(e) => {
@@ -60,6 +60,7 @@ Post.propTypes = {
   match: PropTypes.shape({
     params: PropTypes.shape({
       postId: PropTypes.string,
+      subreadit: PropTypes.string,
     }),
   }).isRequired,
 };

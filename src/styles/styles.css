@@ -52,7 +52,8 @@ table {
 *,
 body {
   box-sizing: border-box;
-  font-family: 'IBM Plex Sans', 'Noto Sans JP', 'IBM Plex Mono', sans-serif;
+	font-family: 'IBM Plex Sans', 'Noto Sans JP', 'IBM Plex Mono', sans-serif;
+	font-size: .875rem;
 }
 
 a {

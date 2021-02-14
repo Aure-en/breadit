@@ -185,8 +185,8 @@ function NestedPostPreview({ postId }) {
     );
   };
 
-  const renderLink = (link) => {
-    return <LinkPreview link={link} />;
+  const renderLink = (link, title) => {
+    return <LinkPreview link={link} title={title} />;
   };
 
   return (
@@ -216,14 +216,16 @@ function NestedPostPreview({ postId }) {
                 ago
               </Link>
             </Informations>
-            <Link to={`/b/${subreadit.name}/${postId}`}>
-              <Title>{post.title}</Title>
-            </Link>
+            {post.type !== "link" && (
+              <Link to={`/b/${subreadit.name}/${postId}`}>
+                <Title>{post.title}</Title>
+              </Link>
+            )}
             <>
               {post.type === "post" &&
                 renderText(post.content, subreadit.name, postId)}
               {post.type === "image" && renderImages(post.content, post.title)}
-              {post.type === "link" && renderLink(post.content)}
+              {post.type === "link" && renderLink(post.content, post.title)}
             </>
             <Informations>
               <Link to={`/b/${subreadit.name}/${postId}`}>{votes} points</Link>

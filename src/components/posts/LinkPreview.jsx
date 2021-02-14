@@ -4,8 +4,8 @@ import styled from "styled-components";
 import NestedPostPreview from "./NestedPostPreview";
 
 // Icons
-import { ReactComponent as IconExternalLink } from "../../assets/icons/icon-external-link.svg";
-import { ReactComponent as IconLink } from "../../assets/icons/icon-link-med.svg";
+import { ReactComponent as IconExternalLink } from "../../assets/icons/general/icon-external-link.svg";
+import { ReactComponent as IconLink } from "../../assets/icons/general/icon-link-med.svg";
 
 const colors = {
   icon: "rgb(255, 255, 255)",
