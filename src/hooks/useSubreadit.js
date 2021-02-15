@@ -1,3 +1,4 @@
+import firebase from "firebase";
 import { firestore } from "../firebase";
 
 function useSubreadit() {
@@ -85,6 +86,46 @@ function useSubreadit() {
     return subreadits;
   };
 
+  // Add a member to the subreadit members count
+  // Add the subreadit to the user's subscriptions.
+  const joinSubreadit = (userId, subreadit) => {
+    firestore
+      .collection("subreadits")
+      .doc(subreadit.id)
+      .update({
+        members: firebase.firestore.FieldValue.increment(1),
+      });
+    firestore
+      .collection("users")
+      .doc(userId)
+      .update({
+        subreadits: firebase.firestore.FieldValue.arrayUnion({
+          id: subreadit.id,
+          name: subreadit.name,
+        }),
+      });
+  };
+
+  // Remove a member to the subreadit members count
+  // Remove the subreadit from the user's subscriptions.
+  const leaveSubreadit = (userId, subreadit) => {
+    firestore
+      .collection("subreadits")
+      .doc(subreadit.id)
+      .update({
+        members: firebase.firestore.FieldValue.increment(-1),
+      });
+    firestore
+      .collection("users")
+      .doc(userId)
+      .update({
+        subreadits: firebase.firestore.FieldValue.arrayRemove({
+          id: subreadit.id,
+          name: subreadit.name,
+        }),
+      });
+  };
+
   return {
     createSubreadit,
     deleteSubreadit,
@@ -94,6 +135,8 @@ function useSubreadit() {
     isNameAvailable,
     getSubreadits,
     getPopularSubreadits,
+    joinSubreadit,
+    leaveSubreadit,
   };
 }
 

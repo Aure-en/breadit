@@ -142,7 +142,6 @@ const Buttons = styled.div`
   color: ${colors.secondary};
   display: flex;
   align-items: stretch;
-  margin-top: 0.75rem;
   padding: 0.5rem;
 
   & > * {

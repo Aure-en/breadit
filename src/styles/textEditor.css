@@ -1,7 +1,7 @@
 /* Quote Block */
 .quoteBlock {
   position: relative;
-  margin-left: 2rem;
+  margin: 1rem 0 1rem 1rem;
 }
 
 .quoteBlock:before {
@@ -36,7 +36,7 @@
 
 .block {
   line-height: 1.5rem;
-  margin-bottom: 1rem;
+  margin: 1rem 0;
   font-family: "Noto Sans", sans-serif;
   font-size: .875rem;
 }

@@ -9,6 +9,10 @@ function useUser() {
       // To check if username is available (no case insensitive search >:)
       username_lowercase: username.toLowerCase(),
       karma: 0,
+      avatar: "",
+      banner: "",
+      about: "",
+      subreadits: [],
     });
   };
 

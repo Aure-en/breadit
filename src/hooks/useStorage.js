@@ -17,14 +17,14 @@ function useStorage() {
       .then((snapshot) => snapshot.ref.getDownloadURL());
   };
 
-  const uploadSubreaditIcon = (subreaditId, image) => {
+  const uploadSubreaditImage = (subreaditId, image) => {
     return storageRef
       .child(`subreadits/${subreaditId}/${image.name}${Date.now()}`)
       .put(image)
       .then((snapshot) => snapshot.ref.getDownloadURL());
   };
 
-  return { uploadImage, uploadAvatar, uploadSubreaditIcon };
+  return { uploadImage, uploadAvatar, uploadSubreaditImage };
 }
 
 export default useStorage;

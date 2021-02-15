@@ -1,174 +1,61 @@
-import { useState, useEffect } from "react";
 import firebase from "firebase";
-import { useAuth } from "../contexts/AuthContext";
 import { firestore } from "../firebase";
-import useStorage from "./useStorage";
 
 function useUserSettings() {
-  const { currentUser, updatePicture } = useAuth();
-  const { uploadImage } = useStorage();
-
-  const [email, setEmail] = useState("");
-  const [emailError, setEmailError] = useState("");
-
-  const [currentPassword, setCurrentPassword] = useState("");
-  const [currentPasswordError, setCurrentPasswordError] = useState("");
-
-  const [newPassword, setNewPassword] = useState("");
-  const [newPasswordError, setNewPasswordError] = useState("");
-
-  const [newPasswordConfirmation, setNewPasswordConfirmation] = useState("");
-  const [
-    newPasswordConfirmationError,
-    setNewPasswordConfirmationError,
-  ] = useState("");
-
-  const [about, setAbout] = useState("");
-  const [aboutMessage, setAboutMessage] = useState("");
-  const [message, setMessage] = useState("");
-  const [avatar, setAvatar] = useState("");
-
-  useEffect(() => {
-    if (!currentUser) return;
-    setAvatar(currentUser.photoURL);
-  }, [currentUser]);
-
   // Check if the user entered the right password before updating his data.
-  const checkPassword = async () => {
+  const checkPassword = async (user, email, password) => {
     const credential = await firebase.auth.EmailAuthProvider.credential(
-      currentUser.email,
-      currentPassword
+      email,
+      password
     );
     try {
-      await currentUser.reauthenticateWithCredential(credential);
-      return true;
+      await user.reauthenticateWithCredential(credential);
     } catch (err) {
-      setCurrentPasswordError(
-        "Enter your password properly to save the changes."
-      );
+      return err.code;
     }
-    return false;
   };
 
   // When the user changes password, check if they entered the new password properly twice.
-  const checkNewPasswords = () => {
-    if (newPassword !== newPasswordConfirmation) {
-      setNewPasswordError(
-        "New password and password confirmation do not match."
-      );
-      setNewPasswordConfirmationError(
-        "New password and password confirmation do not match."
-      );
+  const checkConfirmation = (password, confirmation) => {
+    if (password !== confirmation) {
       return false;
     }
     return true;
   };
 
-  const handleUpdateEmail = async () => {
-    if (!currentPassword) {
-      setCurrentPasswordError("This field is required.");
-    }
-    if (!(await checkPassword())) return;
-    try {
-      await currentUser.updateEmail(email);
-      setEmail(email);
-      setMessage("Your email address was successfully updated.");
-      return true;
-    } catch (err) {
-      switch (err.code) {
-        case "auth/invalid-email":
-          setEmailError("Not a well formed email address.");
-          break;
-        case "auth/email-already-in-use":
-          setEmailError("This email is already registered.");
-          break;
-        default:
-      }
-      setMessage("Sorry, we were unable to update your information.");
-    }
-    return false;
+  const updateEmail = (user, email) => {
+    return user.updateEmail(email);
   };
 
-  const handleUpdatePassword = async () => {
-    if (!checkNewPasswords()) return;
-    if (!(await checkPassword())) return;
-    try {
-      await currentUser.updatePassword(newPassword);
-      setMessage("Your password was successfully updated.");
-      return true;
-    } catch (err) {
-      switch (err.code) {
-        case "weak-password":
-          setNewPasswordError("Must be 6 or more in length.");
-          break;
-        default:
-      }
-      setMessage("Sorry, we were unable to update your information.");
-      return false;
-    }
+  const updatePassword = (user, password) => {
+    return user.updatePassword(password);
   };
 
-  const handleDeleteAccount = async () => {
-    if (!(await checkPassword())) return;
-    await currentUser.delete();
+  const deleteAccount = (user) => {
+    return user.delete();
   };
 
-  const handleUpdateAbout = async () => {
-    setAboutMessage("");
-    try {
-      await firestore
-        .collection("users")
-        .doc(currentUser.uid)
-        .update({ about });
-      setAboutMessage("Your description was successfully updated.");
-    } catch (err) {
-      setAboutMessage("Sorry, we were unable to update your description.");
-    }
+  const updateAbout = (user, about) => {
+    return firestore.collection("users").doc(user).update({ about });
   };
 
-  const handleUpdateAvatar = async (image) => {
-    const imageUrl = await uploadImage(image);
-    updatePicture(currentUser, imageUrl);
-    setAvatar(imageUrl);
+  const updateAvatar = (user, image) => {
+    return firestore.collection("users").doc(user).update({ avatar: image });
   };
 
-  const reset = () => {
-    setEmail("");
-    setCurrentPassword("");
-    setNewPassword("");
-    setNewPasswordConfirmation("");
-    setEmailError("");
-    setCurrentPasswordError("");
-    setNewPasswordError("");
-    setNewPasswordConfirmationError("");
-    setMessage("");
+  const updateBanner = (user, image) => {
+    return firestore.collection("users").doc(user).update({ banner: image });
   };
 
   return {
-    email,
-    setEmail,
-    emailError,
-    currentPassword,
-    setCurrentPassword,
-    currentPasswordError,
-    newPassword,
-    setNewPassword,
-    newPasswordError,
-    newPasswordConfirmation,
-    setNewPasswordConfirmation,
-    newPasswordConfirmationError,
-    message,
-    setMessage,
-    about,
-    setAbout,
-    aboutMessage,
-    avatar,
-    reset,
-    handleUpdateAbout,
-    handleUpdateEmail,
-    handleUpdatePassword,
-    handleUpdateAvatar,
-    handleDeleteAccount,
+    checkPassword,
+    checkConfirmation,
+    updateEmail,
+    updatePassword,
+    updateAbout,
+    updateAvatar,
+    updateBanner,
+    deleteAccount,
   };
 }
 

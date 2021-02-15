@@ -29,6 +29,7 @@ const Box = styled.div`
   height: 500px;
   border: 1px solid red;
   background: ${colors.background};
+  z-index: 10;
 `;
 
 const Close = styled.button`

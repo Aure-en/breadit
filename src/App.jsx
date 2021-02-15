@@ -11,6 +11,7 @@ import Subreadit from "./routes/Subreadit";
 import CreatePost from "./routes/create/CreatePost";
 import Nav from "./components/Nav";
 import UserSettings from "./routes/settings/UserSettings";
+import SubreaditSettings from "./routes/settings/SubreaditSettings";
 
 const colors = {
   background: "rgb(241, 236, 230)",
@@ -51,6 +52,11 @@ function App() {
               />
               <Route exact path="/b/all" component={All} />
               <Route exact path="/b/:subreadit" component={Subreadit} />
+              <Route
+                exact
+                path="/b/:subreadit/settings"
+                component={SubreaditSettings}
+              />
               <Route exact path="/b/:subreadit/:postId" component={Post} />
             </Switch>
           </Container>
