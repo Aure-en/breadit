@@ -75,7 +75,7 @@ function useSubreadit() {
       .orderBy("members")
       .limit(limit)
       .get();
-    subreaditsDocs.forEach((subreadit) =>
+    subreaditsDocs.docs.forEach((subreadit) =>
       subreadits.push({
         name: subreadit.data().name,
         members: subreadit.data().members,
@@ -98,11 +98,11 @@ function useSubreadit() {
     firestore
       .collection("users")
       .doc(userId)
-      .update({
-        subreadits: firebase.firestore.FieldValue.arrayUnion({
-          id: subreadit.id,
-          name: subreadit.name,
-        }),
+      .collection("subreadits")
+      .doc(subreadit.id)
+      .set({
+        id: subreadit.id,
+        name: subreadit.name,
       });
   };
 
@@ -118,12 +118,9 @@ function useSubreadit() {
     firestore
       .collection("users")
       .doc(userId)
-      .update({
-        subreadits: firebase.firestore.FieldValue.arrayRemove({
-          id: subreadit.id,
-          name: subreadit.name,
-        }),
-      });
+      .collection("subreadits")
+      .doc(subreadit.id)
+      .delete();
   };
 
   return {

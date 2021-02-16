@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
+import { useSubscription } from "../../contexts/SubscriptionContext";
 import useSubreadit from "../../hooks/useSubreadit";
 
 const colors = {
@@ -53,7 +55,7 @@ const Name = styled(Link)`
 `;
 
 const Small = styled.div`
-  font-size: .75rem;
+  font-size: 0.75rem;
   color: ${colors.secondary};
 `;
 
@@ -61,13 +63,33 @@ const Button = styled.button`
   border: 1px solid ${colors.accent};
   color: ${colors.accent};
   border-radius: 5rem;
-  padding: 0.35rem 1.5rem;
+  padding: 0.45rem 1.25rem;
   font-weight: 500;
+  align-self: center;
+  width: 6rem;
+`;
+
+const ButtonFilled = styled(Button)`
+  color: ${colors.background};
+  background-color: ${colors.accent};
+  border: 1px solid ${colors.accent};
+
+  &::disabled {
+    background-color: ${colors.disabled};
+    border: 1px solid ${colors.disabled};
+  }
 `;
 
 function TopSubreadits() {
   const [subreadits, setSubreadits] = useState([]);
-  const { getPopularSubreadits } = useSubreadit();
+  const [isHovered, setIsHovered] = useState();
+  const {
+    getPopularSubreadits,
+    joinSubreadit,
+    leaveSubreadit,
+  } = useSubreadit();
+  const { subscriptions } = useSubscription();
+  const { currentUser } = useAuth();
 
   useEffect(() => {
     (async () => {
@@ -87,10 +109,34 @@ function TopSubreadits() {
                 <Subreadit key={subreadit.id}>
                   <Icon src={subreadit.icon} alt={`${subreadit.name}'s Icon`} />
                   <div>
-                    <Name to={`/b/${subreadit.name}`}>b/{subreadit.name}</Name>
-                    <Small>{subreadit.members} member{subreadit.members !== 1 && "s"}</Small>
+                    <Name to={`/b/${subreadit.name}`}>
+                      b/
+                      {subreadit.name}
+                    </Name>
+                    <Small>
+                      {subreadit.members} member
+                      {subreadit.members !== 1 && "s"}
+                    </Small>
                   </div>
-                  <Button type="button">Join</Button>
+                  {subscriptions.filter(
+                    (subscription) => subscription.id === subreadit.id
+                  ).length === 0 ? (
+                    <ButtonFilled
+                      type="button"
+                      onClick={() => joinSubreadit(currentUser.uid, subreadit)}
+                    >
+                      Join
+                    </ButtonFilled>
+                  ) : (
+                    <Button
+                      type="button"
+                      onMouseEnter={() => setIsHovered(subreadit.id)}
+                      onMouseLeave={() => setIsHovered("")}
+                      onClick={() => leaveSubreadit(currentUser.uid, subreadit)}
+                    >
+                      {isHovered === subreadit.id ? "Leave" : "Joined"}
+                    </Button>
+                  )}
                 </Subreadit>
               );
             })}

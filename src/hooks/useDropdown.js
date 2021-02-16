@@ -4,7 +4,7 @@ function useDropdown(ref) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [current, setCurrent] = useState();
 
-  const handleChoiceClick = (choice) => {
+  const handleChoice = (choice) => {
     setCurrent(choice);
     setIsDropdownOpen(false);
   };
@@ -27,7 +27,7 @@ function useDropdown(ref) {
     isDropdownOpen,
     setIsDropdownOpen,
     current,
-    handleChoiceClick,
+    handleChoice,
   };
 }
 

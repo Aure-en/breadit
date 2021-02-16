@@ -319,7 +319,7 @@ function CreatePost() {
     isDropdownOpen,
     setIsDropdownOpen,
     current,
-    handleChoiceClick,
+    handleChoice,
   } = useDropdown(dropdownRef);
 
   // Get list of subreadits
@@ -398,9 +398,7 @@ function CreatePost() {
               {subreadits.map((subreadit) => {
                 return (
                   <li key={subreadit.id}>
-                    <DropdownChoice
-                      onClick={() => handleChoiceClick(subreadit)}
-                    >
+                    <DropdownChoice onClick={() => handleChoice(subreadit)}>
                       <SubreaditIcon
                         src={subreadit.icon}
                         alt={subreadit.name}

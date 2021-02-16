@@ -5,16 +5,14 @@ function useSubreaditSettings() {
   const { uploadSubreaditImage } = useStorage();
 
   const updateIcon = async (image, subreaditId) => {
-    const imageUrl = await uploadSubreaditImage(subreaditId, image);
     firestore.collection("subreadits").doc(subreaditId).update({
-      icon: imageUrl,
+      icon: image,
     });
   };
 
   const updateBanner = async (image, subreaditId) => {
-    const imageUrl = await uploadSubreaditImage(subreaditId, image);
     firestore.collection("subreadits").doc(subreaditId).update({
-      banner: imageUrl,
+      banner: image,
     });
   };
 

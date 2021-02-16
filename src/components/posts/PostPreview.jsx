@@ -3,17 +3,18 @@ import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import formatDistanceStrict from "date-fns/formatDistanceStrict";
-import { Link } from "react-router-dom";
 import redraft from "redraft";
+import { Link } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
-import useSubreadit from "../../hooks/useSubreadit";
+import { useSubscription } from "../../contexts/SubscriptionContext";
 import useComment from "../../hooks/useComment";
 import useVote from "../../hooks/useVote";
 import usePost from "../../hooks/usePost";
-import "../../styles/textEditor.css";
+import useSubreadit from "../../hooks/useSubreadit";
 import Entry from "../entry/Entry";
 import Carousel from "./Carousel";
 import LinkPreview from "./LinkPreview";
+import "../../styles/textEditor.css";
 
 // Icons
 import { ReactComponent as IconUp } from "../../assets/icons/general/icon-upvote.svg";
@@ -165,6 +166,8 @@ const Button = styled.button`
   }
 `;
 
+const JoinButton = styled.button``;
+
 const ButtonLink = styled(Link)`
   & > *:first-child {
     margin-right: 0.15rem;
@@ -240,14 +243,15 @@ const renderers = {
 
 function PostPreview({ postId }) {
   const { currentUser } = useAuth();
-  const { getSubreaditById } = useSubreadit();
   const { getPost } = usePost();
   const { getCommentsNumber } = useComment();
+  const { joinSubreadit } = useSubreadit();
   const { vote, votes, handleUpvote, handleDownvote } = useVote(
     "posts",
     postId,
     currentUser && currentUser.uid
   );
+  const { subscriptions } = useSubscription();
   const [post, setPost] = useState();
   const [isEntryOpen, setIsEntryOpen] = useState(false);
   const [isHidden, setIsHidden] = useState(false);
@@ -345,9 +349,20 @@ function PostPreview({ postId }) {
                       new Date(post.date.seconds * 1000),
                       new Date()
                     )}
-{" "}
+                  {" "}
                     ago
                   </Link>
+                  {subscriptions.filter(
+                    (subreadit) => subreadit.id === post.subreadit.id
+                  ).length === 0 && (
+                    <JoinButton
+                      onClick={(e) => {
+                        e.preventDefault();
+                        joinSubreadit(currentUser.uid, post.subreadit)}}
+                    >
+                      Join
+                    </JoinButton>
+                  )}
                 </Informations>
                 {post.type !== "link" && (
                   <Link to={`/b/${post.subreadit.name}/${postId}`}>
