@@ -13,30 +13,6 @@ import { ReactComponent as IconHome } from "../../assets/icons/header/icon-home.
 import { ReactComponent as IconFeed } from "../../assets/icons/header/icon-feed.svg";
 import { ReactComponent as IconPost } from "../../assets/icons/header/icon-post.svg";
 
-const Container = styled.header`
-  display: flex;
-`;
-
-const EntryModal = styled(Modal)`
-  width: 30rem;
-  height: 30rem;
-  border: 1px solid red;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-`;
-
-const Buttons = styled.div``;
-
-const Button = styled.button`
-  width: 8rem;
-`;
-
-const ButtonFilled = styled(Button)``;
-
-const LinkIcon = styled(Link)``;
-
 function Header() {
   const { currentUser } = useAuth();
   const [isLogInModalOpen, setIsLogInModalOpen] = useState(false);
@@ -46,7 +22,7 @@ function Header() {
     <Container>
       <div>{/* TO-DO : Add Breadit Icon */}</div>
 
-      <SubreaditDropdown />
+      {currentUser && <SubreaditDropdown />}
 
       <Buttons>
         {currentUser ? (
@@ -97,3 +73,27 @@ function Header() {
 }
 
 export default Header;
+
+const Container = styled.header`
+  display: flex;
+`;
+
+const EntryModal = styled(Modal)`
+  width: 30rem;
+  height: 30rem;
+  border: 1px solid red;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+`;
+
+const Buttons = styled.div``;
+
+const Button = styled.button`
+  width: 8rem;
+`;
+
+const ButtonFilled = styled(Button)``;
+
+const LinkIcon = styled(Link)``;

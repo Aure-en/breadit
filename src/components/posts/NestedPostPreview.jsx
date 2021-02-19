@@ -14,78 +14,6 @@ import Carousel from "./Carousel";
 import LinkPreview from "./LinkPreview";
 import "../../styles/textEditor.css";
 
-const colors = {
-  primary: "black",
-  secondary: "grey",
-  upvote: "rgb(179, 72, 54, .3)",
-  neutral: "rgb(209, 163, 155, .3)",
-};
-
-const Container = styled.article`
-  border: 1px solid ${colors.neutral};
-  border-radius: 0.25rem;
-  margin: 1rem 0.5rem;
-
-  &:hover {
-    border: 1px solid ${colors.upvote};
-  }
-`;
-
-const BoldPrimary = styled.div`
-  font-weight: 600;
-  color: ${colors.primary};
-`;
-
-const Informations = styled.div`
-  display: flex;
-  font-size: 0.75rem;
-  color: ${colors.secondary};
-  padding: 0.5rem;
-
-  & > * {
-    margin-right: 0.25rem;
-  }
-
-  & > a:hover {
-    text-decoration: underline;
-  }
-`;
-
-const Title = styled.h3`
-  font-size: 0.875rem;
-  font-weight: 500;
-  padding: 0 0.5rem 0.5rem 0.5rem;
-`;
-
-const ImageContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  width: 100%;
-`;
-
-const Image = styled.img`
-  max-height: 35rem;
-  max-width: 100%;
-  object-fit: cover;
-`;
-
-const Text = styled.div`
-  position: relative;
-  max-height: 15rem;
-  overflow: hidden;
-  padding: 0 0.5rem;
-
-  &:before {
-    content: "";
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    left: 0;
-    top: 0;
-    background: linear-gradient(transparent 10rem, white);
-  }
-`;
-
 const renderers = {
   inline: {
     // The key passed here is just an index based on rendering order inside a block
@@ -245,3 +173,75 @@ NestedPostPreview.propTypes = {
   postId: PropTypes.string.isRequired,
 };
 export default NestedPostPreview;
+
+const colors = {
+  primary: "black",
+  secondary: "grey",
+  upvote: "rgb(179, 72, 54, .3)",
+  neutral: "rgb(209, 163, 155, .3)",
+};
+
+const Container = styled.article`
+  border: 1px solid ${colors.neutral};
+  border-radius: 0.25rem;
+  margin: 1rem 0.5rem;
+
+  &:hover {
+    border: 1px solid ${colors.upvote};
+  }
+`;
+
+const BoldPrimary = styled.div`
+  font-weight: 600;
+  color: ${colors.primary};
+`;
+
+const Informations = styled.div`
+  display: flex;
+  font-size: 0.75rem;
+  color: ${colors.secondary};
+  padding: 0.5rem;
+
+  & > * {
+    margin-right: 0.25rem;
+  }
+
+  & > a:hover {
+    text-decoration: underline;
+  }
+`;
+
+const Title = styled.h3`
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 0 0.5rem 0.5rem 0.5rem;
+`;
+
+const ImageContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 100%;
+`;
+
+const Image = styled.img`
+  max-height: 35rem;
+  max-width: 100%;
+  object-fit: cover;
+`;
+
+const Text = styled.div`
+  position: relative;
+  max-height: 15rem;
+  overflow: hidden;
+  padding: 0 0.5rem;
+
+  &:before {
+    content: "";
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    background: linear-gradient(transparent 10rem, white);
+  }
+`;

@@ -5,90 +5,6 @@ import useStorage from "../../hooks/useStorage";
 import useSubreadit from "../../hooks/useSubreadit";
 import useSubreaditSettings from "../../hooks/useSubreaditSettings";
 
-const colors = {
-  primary: "black",
-  secondary: "grey",
-  accent: "red",
-  disabled: "blue",
-  background: "white",
-  overlay: "rgba(0, 0, 0, .8)",
-};
-
-const Wrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  padding: 3rem;
-  flex: 1;
-`;
-
-const Container = styled.div`
-  width: 100%;
-  max-width: 50rem;
-`;
-
-const Heading = styled.h1`
-  font-weight: 500;
-  font-size: 1.5rem;
-  line-height: 3rem;
-  margin-bottom: 1rem;
-`;
-
-const Category = styled.h2`
-  font-weight: 500;
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  line-height: 1.5rem;
-  color: ${colors.secondary};
-  border-bottom: 1px solid ${colors.secondary};
-`;
-
-const Setting = styled.div`
-  margin: 2rem 0;
-`;
-
-const SettingType = styled.h3`
-  font-weight: 500;
-  font-size: 1rem;
-  line-height: 2rem;
-`;
-
-const Message = styled.div`
-  font-size: 0.75rem;
-  color: ${colors.secondary};
-  margin-bottom: 0.5rem;
-`;
-
-const Textarea = styled.textarea`
-  width: 100%;
-`;
-
-const Button = styled.button`
-  border: 1px solid ${colors.accent};
-  color: ${colors.accent};
-  border-radius: 5rem;
-  padding: 0.45rem 1.25rem;
-  font-weight: 500;
-  align-self: center;
-`;
-
-const ImageInput = styled.input`
-  display: none;
-`;
-
-const Icon = styled.img`
-  width: 5rem;
-  height: 5rem;
-  border-radius: 5px;
-  cursor: pointer;
-`;
-
-const Banner = styled.img`
-  width: 15rem;
-  height: 5rem;
-  border-radius: 5px;
-  cursor: pointer;
-`;
-
 function SubreaditSettings({ match }) {
   const [subreadit, setSubreadit] = useState();
   const [icon, setIcon] = useState();
@@ -253,3 +169,87 @@ SubreaditSettings.propTypes = {
 };
 
 export default SubreaditSettings;
+
+const colors = {
+  primary: "black",
+  secondary: "grey",
+  accent: "red",
+  disabled: "blue",
+  background: "white",
+  overlay: "rgba(0, 0, 0, .8)",
+};
+
+const Wrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  padding: 3rem;
+  flex: 1;
+`;
+
+const Container = styled.div`
+  width: 100%;
+  max-width: 50rem;
+`;
+
+const Heading = styled.h1`
+  font-weight: 500;
+  font-size: 1.5rem;
+  line-height: 3rem;
+  margin-bottom: 1rem;
+`;
+
+const Category = styled.h2`
+  font-weight: 500;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  line-height: 1.5rem;
+  color: ${colors.secondary};
+  border-bottom: 1px solid ${colors.secondary};
+`;
+
+const Setting = styled.div`
+  margin: 2rem 0;
+`;
+
+const SettingType = styled.h3`
+  font-weight: 500;
+  font-size: 1rem;
+  line-height: 2rem;
+`;
+
+const Message = styled.div`
+  font-size: 0.75rem;
+  color: ${colors.secondary};
+  margin-bottom: 0.5rem;
+`;
+
+const Textarea = styled.textarea`
+  width: 100%;
+`;
+
+const Button = styled.button`
+  border: 1px solid ${colors.accent};
+  color: ${colors.accent};
+  border-radius: 5rem;
+  padding: 0.45rem 1.25rem;
+  font-weight: 500;
+  align-self: center;
+`;
+
+const ImageInput = styled.input`
+  display: none;
+`;
+
+const Icon = styled.img`
+  width: 5rem;
+  height: 5rem;
+  border-radius: 5px;
+  cursor: pointer;
+`;
+
+const Banner = styled.img`
+  width: 15rem;
+  height: 5rem;
+  border-radius: 5px;
+  cursor: pointer;
+`;

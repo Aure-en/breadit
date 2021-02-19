@@ -14,6 +14,98 @@ import { ReactComponent as IconLight } from "../../assets/icons/header/icon-ligh
 import { ReactComponent as IconLogOut } from "../../assets/icons/header/icon-logout.svg";
 import { ReactComponent as IconLogIn } from "../../assets/icons/header/icon-login.svg";
 
+function UserDropdown() {
+  const { currentUser, signOut } = useAuth();
+  const dropdownRef = useRef();
+  const { isDropdownOpen, setIsDropdownOpen } = useDropdown(dropdownRef);
+  const { getUser, getKarma } = useUser();
+  const [isEntryModalOpen, setIsEntryModalOpen] = useState(false);
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    (async () => {
+      if (!currentUser) {
+        setUser(null);
+      } else {
+        const data = await getUser(currentUser.uid);
+        const karma = await getKarma(currentUser.uid);
+        setUser({ ...data, karma });
+      }
+    })();
+  }, [currentUser]);
+
+  return (
+    <>
+      <Dropdown ref={dropdownRef}>
+        <DropdownHeader
+          isDropdownOpen={isDropdownOpen}
+          onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+        >
+          {user ? (
+            <User>
+              <Icon src={user.avatar} alt={`${user.name}'s avatar`} />
+              <Informations>
+                <Name>{user.username}</Name>
+                <div>{user.karma} karma</div>
+              </Informations>
+            </User>
+          ) : (
+            <IconUser />
+          ) }
+        </DropdownHeader>
+        {isDropdownOpen && (
+          <DropdownList>
+            {currentUser && (
+              <>
+                <Category>My stuff</Category>
+                <Choice to={`/u/${currentUser.uid}`}>
+                  <IconUser />
+                  <div>Profile</div>
+                </Choice>
+                <Choice to="/settings">
+                  <IconSettings />
+                  <div>User Settings</div>
+                </Choice>
+              </>
+            )}
+
+            <Category>View Options</Category>
+            <Choice as="button" type="button">
+              <IconLight />
+              <div>Night Mode</div>
+            </Choice>
+
+            {currentUser ? (
+              <Choice as="button" type="button" onClick={signOut}>
+                <IconLogOut />
+                <div>Log Out</div>
+              </Choice>
+            ) : (
+              <Choice
+                as="button"
+                type="button"
+                onClick={() => setIsEntryModalOpen(true)}
+              >
+                <IconLogIn />
+                <div>Log In / Sign Up</div>
+              </Choice>
+            )}
+          </DropdownList>
+        )}
+      </Dropdown>
+
+      <EntryModal
+        isOpen={isEntryModalOpen}
+        onRequestClose={() => setIsEntryModalOpen(false)}
+      >
+        <Entry close={() => setIsEntryModalOpen(false)} />
+      </EntryModal>
+    </>
+  );
+}
+
+export default UserDropdown;
+
 const colors = {
   background: "white",
   hover: "lightgrey",
@@ -91,95 +183,3 @@ const EntryModal = styled(Modal)`
   top: 50%;
   transform: translate(-50%, -50%);
 `;
-
-function UserDropdown() {
-  const { currentUser, signOut } = useAuth();
-  const dropdownRef = useRef();
-  const { isDropdownOpen, setIsDropdownOpen } = useDropdown(dropdownRef);
-  const { getUser, getKarma } = useUser();
-  const [isEntryModalOpen, setIsEntryModalOpen] = useState(false);
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    (async () => {
-      if (!currentUser) {
-        setUser(null);
-      } else {
-        const data = await getUser(currentUser.uid);
-        const karma = await getKarma(currentUser.uid);
-        setUser({ ...data, karma });
-      }
-    })();
-  }, [currentUser]);
-
-  return (
-    <>
-      <Dropdown ref={dropdownRef}>
-        <DropdownHeader
-          isDropdownOpen={isDropdownOpen}
-          onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-        >
-          {user ? (
-            <User>
-              <Icon src={user.avatar} alt={`${user.name}'s avatar`} />
-              <Informations>
-                <Name>{user.username}</Name>
-                <div>{user.karma} karma</div>
-              </Informations>
-            </User>
-          ) : (
-            <IconUser />
-          ) }
-        </DropdownHeader>
-        {isDropdownOpen && (
-          <DropdownList>
-            {currentUser && (
-              <>
-                <Category>My stuff</Category>
-                <Choice to={`u/${currentUser.uid}`}>
-                  <IconUser />
-                  <div>Profile</div>
-                </Choice>
-                <Choice to="/settings">
-                  <IconSettings />
-                  <div>User Settings</div>
-                </Choice>
-              </>
-            )}
-
-            <Category>View Options</Category>
-            <Choice as="button" type="button">
-              <IconLight />
-              <div>Night Mode</div>
-            </Choice>
-
-            {currentUser ? (
-              <Choice as="button" type="button" onClick={signOut}>
-                <IconLogOut />
-                <div>Log Out</div>
-              </Choice>
-            ) : (
-              <Choice
-                as="button"
-                type="button"
-                onClick={() => setIsEntryModalOpen(true)}
-              >
-                <IconLogIn />
-                <div>Log In / Sign Up</div>
-              </Choice>
-            )}
-          </DropdownList>
-        )}
-      </Dropdown>
-
-      <EntryModal
-        isOpen={isEntryModalOpen}
-        onRequestClose={() => setIsEntryModalOpen(false)}
-      >
-        <Entry close={() => setIsEntryModalOpen(false)} />
-      </EntryModal>
-    </>
-  );
-}
-
-export default UserDropdown;

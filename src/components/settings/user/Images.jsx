@@ -5,55 +5,6 @@ import { useAuth } from "../../../contexts/AuthContext";
 import useUserSettings from "../../../hooks/useUserSettings";
 import useStorage from "../../../hooks/useStorage";
 
-const colors = {
-  background: "grey",
-  border: "red",
-  accent: "red",
-};
-
-const Container = styled.div`
-  display: flex;
-  margin-top: 1rem;
-
-  & > label {
-    margin-right: 2rem;
-  }
-
-  & > label:last-child {
-    margin-right: 0;
-  }
-`;
-
-const ImageInput = styled.input`
-  display: none;
-`;
-
-const Image = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 5px;
-  cursor: pointer;
-  background: ${(props) =>
-    props.src ? `url("${props.src}")` : colors.background};
-  border: ${(props) => !props.src && `1px dashed ${colors.border}`};
-  background-position: center;
-  background-size: cover;
-`;
-
-const Avatar = styled(Image)`
-  width: 5rem;
-  height: 5rem;
-`;
-
-const Banner = styled(Image)`
-  width: 15rem;
-  height: 5rem;
-`;
-
-const Message = styled.div`
-`;
-
 function Images({ prevAvatar, prevBanner }) {
   const [avatar, setAvatar] = useState(prevAvatar);
   const [banner, setBanner] = useState(prevBanner);
@@ -129,3 +80,51 @@ Images.defaultProps = {
 };
 
 export default Images;
+const colors = {
+  background: "grey",
+  border: "red",
+  accent: "red",
+};
+
+const Container = styled.div`
+  display: flex;
+  margin-top: 1rem;
+
+  & > label {
+    margin-right: 2rem;
+  }
+
+  & > label:last-child {
+    margin-right: 0;
+  }
+`;
+
+const ImageInput = styled.input`
+  display: none;
+`;
+
+const Image = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  cursor: pointer;
+  background: ${(props) =>
+    props.src ? `url("${props.src}")` : colors.background};
+  border: ${(props) => !props.src && `1px dashed ${colors.border}`};
+  background-position: center;
+  background-size: cover;
+`;
+
+const Avatar = styled(Image)`
+  width: 5rem;
+  height: 5rem;
+`;
+
+const Banner = styled(Image)`
+  width: 15rem;
+  height: 5rem;
+`;
+
+const Message = styled.div`
+`;

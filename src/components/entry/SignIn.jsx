@@ -3,23 +3,6 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 import useSignIn from "../../hooks/useSignIn";
 
-const Field = styled.div``;
-
-const Label = styled.label`
-  position: absolute;
-  top: -9999px;
-`;
-
-const Input = styled.input``;
-
-const Message = styled.div``;
-
-const SmallFont = styled(Message)``;
-
-const Button = styled.button``;
-
-const ChangeTab = styled.button``;
-
 function SignIn({ changeTab }) {
   const {
     email,
@@ -97,3 +80,20 @@ SignIn.defaultProps = {
 };
 
 export default SignIn;
+
+const Field = styled.div``;
+
+const Label = styled.label`
+  position: absolute;
+  top: -9999px;
+`;
+
+const Input = styled.input``;
+
+const Message = styled.div``;
+
+const SmallFont = styled(Message)``;
+
+const Button = styled.button``;
+
+const ChangeTab = styled.button``;

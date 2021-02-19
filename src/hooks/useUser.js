@@ -12,6 +12,7 @@ function useUser() {
       banner: "",
       about: "",
       subreadits: [],
+      date: new Date(),
     });
   };
 
@@ -53,11 +54,35 @@ function useUser() {
     return query.docs.length === 0;
   };
 
+  const getUserPosts = async (userId, limit) => {
+    const posts = [];
+    const query = await firestore
+      .collection("posts")
+      .where("author.id", "==", userId)
+      .limit(limit)
+      .get();
+    query.docs.forEach((post) => posts.push(post.data()));
+    return posts;
+  };
+
+  const getUserComments = async (userId, limit) => {
+    const comments = [];
+    const query = await firestore
+      .collection("comments")
+      .where("author.id", "==", userId)
+      .limit(limit)
+      .get();
+    query.docs.forEach((comment) => comments.push(comment.data()));
+    return comments;
+  };
+
   return {
     createUser,
     getUser,
     isUsernameAvailable,
     getKarma,
+    getUserPosts,
+    getUserComments,
   };
 }
 

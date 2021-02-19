@@ -12,74 +12,6 @@ const colors = {
   link: "rgb(51, 148, 163)",
 };
 
-const Link = styled.a`
-  color: ${colors.link};
-  font-size: 0.75rem;
-  display: flex;
-  align-items: center;
-  margin: 0 0 0.5rem 0.5rem;
-
-  &:hover {
-    text-decoration: underline;
-  }
-`;
-
-const Url = styled.span`
-  max-width: 12.5rem;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-`;
-
-const Title = styled.h3`
-  font-size: 1.125rem;
-  font-weight: 500;
-  padding: 0.5rem;
-`;
-
-const Row = styled.div`
-  display: grid;
-  grid-template-columns: 1fr auto;
-`;
-
-const Preview = styled.div`
-  position: relative;
-  border: 1px solid ${colors.link};
-  border-radius: 5px;
-  color: ${colors.link};
-  width: 9rem;
-  height: 6rem;
-  margin-right: 0.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-const ExternalLinkIcon = styled.div`
-  background: ${colors.link};
-  color: ${colors.icon};
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  padding: 0.25rem;
-  border-radius: 4px;
-`;
-
-const VideoWrapper = styled.div`
-  position: relative;
-  padding-bottom: 56.25%; /* 16:9 */
-  padding-top: 25px;
-  height: 0;
-
-  & iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-  }
-`;
-
 function LinkPreview({ link, title }) {
   const youtubeRegex = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
   const breaditRegex = /^.*(breadit-296d8.web.app)\/b\/.+\/([a-zA-Z0-9]+)/;
@@ -164,3 +96,71 @@ LinkPreview.propTypes = {
 };
 
 export default LinkPreview;
+
+const Link = styled.a`
+  color: ${colors.link};
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  margin: 0 0 0.5rem 0.5rem;
+
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
+const Url = styled.span`
+  max-width: 12.5rem;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+`;
+
+const Title = styled.h3`
+  font-size: 1.125rem;
+  font-weight: 500;
+  padding: 0.5rem;
+`;
+
+const Row = styled.div`
+  display: grid;
+  grid-template-columns: 1fr auto;
+`;
+
+const Preview = styled.div`
+  position: relative;
+  border: 1px solid ${colors.link};
+  border-radius: 5px;
+  color: ${colors.link};
+  width: 9rem;
+  height: 6rem;
+  margin-right: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const ExternalLinkIcon = styled.div`
+  background: ${colors.link};
+  color: ${colors.icon};
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  padding: 0.25rem;
+  border-radius: 4px;
+`;
+
+const VideoWrapper = styled.div`
+  position: relative;
+  padding-bottom: 56.25%; /* 16:9 */
+  padding-top: 25px;
+  height: 0;
+
+  & iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+`;

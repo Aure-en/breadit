@@ -3,21 +3,6 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 import useSignUp from "../../hooks/useSignUp";
 
-const Field = styled.div``;
-
-const Label = styled.label`
-  position: absolute;
-  top: -9999px;
-`;
-
-const Input = styled.input``;
-
-const Message = styled.div``;
-
-const Button = styled.button``;
-
-const ChangeTab = styled.button``;
-
 function SignUp({ changeTab }) {
   const {
     email,
@@ -108,3 +93,18 @@ SignUp.defaultProps = {
 };
 
 export default SignUp;
+
+const Field = styled.div``;
+
+const Label = styled.label`
+  position: absolute;
+  top: -9999px;
+`;
+
+const Input = styled.input``;
+
+const Message = styled.div``;
+
+const Button = styled.button``;
+
+const ChangeTab = styled.button``;

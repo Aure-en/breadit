@@ -6,12 +6,6 @@ import SignUp from "./SignUp";
 import ForgotPassword from "./ForgotPassword";
 import { ReactComponent as IconClose } from "../../assets/icons/general/icon-x.svg";
 
-const Close = styled.button`
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-`;
-
 function Entry({ close, entryTab }) {
   const [currentTab, setCurrentTab] = useState(entryTab);
 
@@ -40,3 +34,9 @@ Entry.defaultProps = {
 };
 
 export default Entry;
+
+const Close = styled.button`
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+`;

@@ -4,29 +4,6 @@ import PropTypes from "prop-types";
 import { format } from "date-fns";
 import useSubreadit from "../../hooks/useSubreadit";
 
-const colors = {
-  background: "white",
-};
-
-const Container = styled.div`
-  padding: 1rem;
-  background: ${colors.background};
-  border-radius: 5px;
-`;
-
-const Banner = styled.img`
-  max-width: 100%;
-  height: 3rem;
-`;
-
-const Icon = styled.img`
-  width: 5rem;
-  height: 5rem;
-  border-radius: 50%;
-`;
-
-const Heading = styled.h2``;
-
 function SubreaditInfo({ subreaditId }) {
   const [subreadit, setSubreadit] = useState();
   const { getSubreaditById } = useSubreadit();
@@ -64,3 +41,26 @@ SubreaditInfo.propTypes = {
 };
 
 export default SubreaditInfo;
+
+const colors = {
+  background: "white",
+};
+
+const Container = styled.div`
+  padding: 1rem;
+  background: ${colors.background};
+  border-radius: 5px;
+`;
+
+const Banner = styled.img`
+  max-width: 100%;
+  height: 3rem;
+`;
+
+const Icon = styled.img`
+  width: 5rem;
+  height: 5rem;
+  border-radius: 50%;
+`;
+
+const Heading = styled.h2``;

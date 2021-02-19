@@ -25,84 +25,6 @@ import { ReactComponent as IconBlockQuote } from "../assets/icons/text_editor/ic
 import { ReactComponent as IconCode } from "../assets/icons/text_editor/icon-code.svg";
 import { ReactComponent as IconBlockCode } from "../assets/icons/text_editor/icon-code-block.svg";
 
-const colors = {
-  primary: "black",
-  secondary: "rgb(179, 72, 54)",
-  background: "rgb(255, 255, 255)",
-  buttons: "rgb(241, 236, 230)",
-  hover: "rgb(235, 215, 199)",
-  border: "rgb(242, 234, 230)",
-};
-
-const Wrapper = styled.div`
-  border: 1px solid
-    ${(props) => (props.isActive ? colors.secondary : colors.border)};
-  border-radius: 5px;
-`;
-
-const Container = styled.div`
-  min-height: 8rem;
-  padding: 1rem;
-  background: ${colors.background};
-  cursor: text;
-`;
-
-const Buttons = styled.div`
-  background: ${colors.buttons};
-  display: flex;
-  color: ${colors.primary};
-`;
-
-const Button = styled.button`
-  padding: 0.2rem;
-  margin: 0.2rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  &:hover {
-    background: ${colors.hover};
-    border-radius: 3px;
-  }
-`;
-
-const LinkContainer = styled.div`
-  position: relative;
-`;
-
-const LinkBox = styled.div`
-  position: absolute;
-  background: ${colors.buttons};
-  padding: 1rem;
-  border-radius: 5px;
-  left: 50%;
-  transform: translate(-50%, 1rem);
-  z-index: 2;
-
-  &:before {
-    content: "";
-    border: 7px solid transparent;
-    border-bottom: 10px solid ${colors.buttons};
-    z-index: 3;
-    position: absolute;
-    top: calc(-0.75rem - 5px);
-    left: 50%;
-    transform: translateX(-50%);
-  }
-`;
-
-const Input = styled.input`
-  border: 1px solid ${colors.border};
-  padding: 0.5rem;
-  border-radius: 5px;
-  margin-bottom: 0.5rem;
-
-  &:focus {
-    outline: none;
-    border: 1px solid ${colors.primary};
-  }
-`;
-
 const findLinkEntities = (contentBlock, callback, contentState) => {
   contentBlock.findEntityRanges((character) => {
     const entityKey = character.getEntity();
@@ -419,3 +341,81 @@ TextEditor.defaultProps = {
 };
 
 export default TextEditor;
+
+const colors = {
+  primary: "black",
+  secondary: "rgb(179, 72, 54)",
+  background: "rgb(255, 255, 255)",
+  buttons: "rgb(241, 236, 230)",
+  hover: "rgb(235, 215, 199)",
+  border: "rgb(242, 234, 230)",
+};
+
+const Wrapper = styled.div`
+  border: 1px solid
+    ${(props) => (props.isActive ? colors.secondary : colors.border)};
+  border-radius: 5px;
+`;
+
+const Container = styled.div`
+  min-height: 8rem;
+  padding: 1rem;
+  background: ${colors.background};
+  cursor: text;
+`;
+
+const Buttons = styled.div`
+  background: ${colors.buttons};
+  display: flex;
+  color: ${colors.primary};
+`;
+
+const Button = styled.button`
+  padding: 0.2rem;
+  margin: 0.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    background: ${colors.hover};
+    border-radius: 3px;
+  }
+`;
+
+const LinkContainer = styled.div`
+  position: relative;
+`;
+
+const LinkBox = styled.div`
+  position: absolute;
+  background: ${colors.buttons};
+  padding: 1rem;
+  border-radius: 5px;
+  left: 50%;
+  transform: translate(-50%, 1rem);
+  z-index: 2;
+
+  &:before {
+    content: "";
+    border: 7px solid transparent;
+    border-bottom: 10px solid ${colors.buttons};
+    z-index: 3;
+    position: absolute;
+    top: calc(-0.75rem - 5px);
+    left: 50%;
+    transform: translateX(-50%);
+  }
+`;
+
+const Input = styled.input`
+  border: 1px solid ${colors.border};
+  padding: 0.5rem;
+  border-radius: 5px;
+  margin-bottom: 0.5rem;
+
+  &:focus {
+    outline: none;
+    border: 1px solid ${colors.primary};
+  }
+`;

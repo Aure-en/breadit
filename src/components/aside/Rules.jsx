@@ -1,22 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 
-const colors = {
-  background: "white",
-};
-
-const Container = styled.div`
-  padding: 1rem;
-  background: ${colors.background};
-  border-radius: 5px;
-`;
-
-const Heading = styled.h2`
-  font-size: 1rem;
-`;
-
-const RulesList = styled.ol``;
-
 function Rules() {
   return (
     <Container>
@@ -33,3 +17,19 @@ function Rules() {
 }
 
 export default Rules;
+
+const colors = {
+  background: "white",
+};
+
+const Container = styled.div`
+  padding: 1rem;
+  background: ${colors.background};
+  border-radius: 5px;
+`;
+
+const Heading = styled.h2`
+  font-size: 1rem;
+`;
+
+const RulesList = styled.ol``;

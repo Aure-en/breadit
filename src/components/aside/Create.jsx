@@ -2,6 +2,23 @@ import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
+function Create() {
+  return (
+    <Container>
+      <Heading>Home</Heading>
+      <p>
+        Your personal Breadit frontpage.
+        <br />
+        Come here to check in with your favorite communities.
+      </p>
+      <ButtonFilled to="/submit">Create Post</ButtonFilled>
+      <Button to="/create/subreadit">Create Community</Button>
+    </Container>
+  );
+}
+
+export default Create;
+
 const colors = {
   accent: "red",
   background: "white",
@@ -42,20 +59,3 @@ const ButtonFilled = styled(Button)`
   background-color: ${colors.accent};
   border: 1px solid ${colors.accent};
 `;
-
-function Create() {
-  return (
-    <Container>
-      <Heading>Home</Heading>
-      <p>
-        Your personal Breadit frontpage.
-        <br />
-        Come here to check in with your favorite communities.
-      </p>
-      <ButtonFilled to="/submit">Create Post</ButtonFilled>
-      <Button to="/create/subreadit">Create Community</Button>
-    </Container>
-  );
-}
-
-export default Create;

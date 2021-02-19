@@ -21,157 +21,6 @@ import { ReactComponent as IconComment } from "../../assets/icons/general/icon-c
 import { ReactComponent as IconSave } from "../../assets/icons/general/icon-save.svg";
 import { ReactComponent as IconLink } from "../../assets/icons/general/icon-link-small.svg";
 
-const colors = {
-  primary: "black",
-  secondary: "grey",
-  background: "rgb(241, 236, 230)",
-  arrowBackground: "rgb(237, 212, 194)",
-  upvote: "rgb(179, 72, 54)",
-  downvote: "rgb(70, 153, 147)",
-  neutral: "rgb(209, 163, 155)",
-};
-
-const Container = styled.article`
-  display: flex;
-  border-radius: 0.25rem;
-  margin: 1rem 0;
-`;
-
-const BoldPrimary = styled.div`
-  font-weight: 600;
-  color: ${colors.primary};
-`;
-
-const Informations = styled.div`
-  display: flex;
-  font-size: 0.75rem;
-  color: ${colors.secondary};
-  padding: 0.5rem;
-
-  & > * {
-    margin-right: 0.25rem;
-  }
-
-  & > a:hover {
-    text-decoration: underline;
-  }
-`;
-
-const Vote = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  font-size: 0.75rem;
-  font-weight: 600;
-  padding: 0.25rem 0.5rem 0 0.5rem;
-
-  & > * {
-    margin-bottom: 0.25rem;
-  }
-`;
-
-const VoteButton = styled.button`
-  color: ${(props) =>
-    props.isUpvoted
-      ? colors.upvote
-      : props.isDownvoted
-      ? colors.downvote
-      : colors.neutral};
-  cursor: pointer;
-  padding: 0;
-  border-radius: 0.15rem;
-  width: 1.5rem;
-  height: 1.5rem;
-
-  &:hover {
-    background: ${colors.arrowBackground};
-  }
-`;
-
-const Main = styled.div`
-  flex: 1;
-`;
-
-const Title = styled.h3`
-  font-size: 1.125rem;
-  font-weight: 500;
-  padding: 0.5rem;
-`;
-
-const ImageContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  width: 100%;
-`;
-
-const Image = styled.img`
-  max-height: 35rem;
-  max-width: 100%;
-  object-fit: cover;
-`;
-
-const Text = styled.div`
-  position: relative;
-  max-height: 15rem;
-  overflow: hidden;
-  padding: 0 0.5rem;
-
-  &:before {
-    content: "";
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    left: 0;
-    top: 0;
-    background: linear-gradient(transparent 10rem, white);
-  }
-`;
-
-const Buttons = styled.div`
-  font-size: 0.75rem;
-  font-weight: 500;
-  color: ${colors.secondary};
-  display: flex;
-  align-items: stretch;
-  margin-top: 0.75rem;
-  padding: 0.5rem;
-
-  & > * {
-    display: flex;
-    align-items: center;
-    padding: 0.15rem 0.5rem;
-    border-radius: 3px;
-  }
-
-  & > *:hover {
-    background: ${colors.background};
-  }
-`;
-
-const Button = styled.button`
-  font-size: 0.75rem;
-  font-weight: 500;
-
-  & > *:first-child {
-    margin-right: 0.15rem;
-  }
-`;
-
-const ButtonLink = styled(Link)`
-  & > *:first-child {
-    margin-right: 0.15rem;
-  }
-
-  & > a {
-    height: 100%;
-  }
-`;
-
-const InputCopy = styled.input`
-  position: absolute;
-  top: -9999px;
-`;
-
 const renderers = {
   inline: {
     // The key passed here is just an index based on rendering order inside a block
@@ -393,3 +242,154 @@ Post.propTypes = {
   subreadit: PropTypes.string.isRequired,
 };
 export default Post;
+
+const colors = {
+  primary: "black",
+  secondary: "grey",
+  background: "rgb(241, 236, 230)",
+  arrowBackground: "rgb(237, 212, 194)",
+  upvote: "rgb(179, 72, 54)",
+  downvote: "rgb(70, 153, 147)",
+  neutral: "rgb(209, 163, 155)",
+};
+
+const Container = styled.article`
+  display: flex;
+  border-radius: 0.25rem;
+  margin: 1rem 0;
+`;
+
+const BoldPrimary = styled.div`
+  font-weight: 600;
+  color: ${colors.primary};
+`;
+
+const Informations = styled.div`
+  display: flex;
+  font-size: 0.75rem;
+  color: ${colors.secondary};
+  padding: 0.5rem;
+
+  & > * {
+    margin-right: 0.25rem;
+  }
+
+  & > a:hover {
+    text-decoration: underline;
+  }
+`;
+
+const Vote = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.5rem 0 0.5rem;
+
+  & > * {
+    margin-bottom: 0.25rem;
+  }
+`;
+
+const VoteButton = styled.button`
+  color: ${(props) =>
+    props.isUpvoted
+      ? colors.upvote
+      : props.isDownvoted
+      ? colors.downvote
+      : colors.neutral};
+  cursor: pointer;
+  padding: 0;
+  border-radius: 0.15rem;
+  width: 1.5rem;
+  height: 1.5rem;
+
+  &:hover {
+    background: ${colors.arrowBackground};
+  }
+`;
+
+const Main = styled.div`
+  flex: 1;
+`;
+
+const Title = styled.h3`
+  font-size: 1.125rem;
+  font-weight: 500;
+  padding: 0.5rem;
+`;
+
+const ImageContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 100%;
+`;
+
+const Image = styled.img`
+  max-height: 35rem;
+  max-width: 100%;
+  object-fit: cover;
+`;
+
+const Text = styled.div`
+  position: relative;
+  max-height: 15rem;
+  overflow: hidden;
+  padding: 0 0.5rem;
+
+  &:before {
+    content: "";
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    background: linear-gradient(transparent 10rem, white);
+  }
+`;
+
+const Buttons = styled.div`
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: ${colors.secondary};
+  display: flex;
+  align-items: stretch;
+  margin-top: 0.75rem;
+  padding: 0.5rem;
+
+  & > * {
+    display: flex;
+    align-items: center;
+    padding: 0.15rem 0.5rem;
+    border-radius: 3px;
+  }
+
+  & > *:hover {
+    background: ${colors.background};
+  }
+`;
+
+const Button = styled.button`
+  font-size: 0.75rem;
+  font-weight: 500;
+
+  & > *:first-child {
+    margin-right: 0.15rem;
+  }
+`;
+
+const ButtonLink = styled(Link)`
+  & > *:first-child {
+    margin-right: 0.15rem;
+  }
+
+  & > a {
+    height: 100%;
+  }
+`;
+
+const InputCopy = styled.input`
+  position: absolute;
+  top: -9999px;
+`;

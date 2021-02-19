@@ -4,22 +4,6 @@ import { useAuth } from "../../contexts/AuthContext";
 import styled from "styled-components";
 import useSubreadit from "../../hooks/useSubreadit";
 
-const Form = styled.form``;
-
-const Field = styled.div``;
-
-const Label = styled.label``;
-
-const Input = styled.input``;
-
-const Textarea = styled.textarea``;
-
-const Message = styled.div``;
-
-const Error = styled(Message)``;
-
-const Button = styled.button``;
-
 function CreateSubreadit() {
   const [name, setName] = useState("");
   const [nameError, setNameError] = useState("");
@@ -105,3 +89,20 @@ function CreateSubreadit() {
 }
 
 export default CreateSubreadit;
+
+const Form = styled.form``;
+
+const Field = styled.div``;
+
+const Label = styled.label``;
+
+const Input = styled.input``;
+
+const Textarea = styled.textarea``;
+
+const Message = styled.div``;
+
+const Error = styled(Message)``;
+
+const Button = styled.button``;
+

@@ -8,6 +8,54 @@ import usePost from "../../hooks/usePost";
 import { ReactComponent as IconPost } from "../../assets/icons/general/icon-post.svg";
 import { ReactComponent as IconLink } from "../../assets/icons/general/icon-link.svg";
 
+// Loads and displays the 5 latest breadit posts.
+function LatestPosts() {
+  const [posts, setPosts] = useState();
+  const { getRecentPosts } = usePost();
+
+  useEffect(() => {
+    (async () => {
+      const recentPosts = await getRecentPosts(5);
+      setPosts(recentPosts);
+    })();
+  }, []);
+
+  return (
+    <Container>
+      <Heading>Recent Posts</Heading>
+      <PostsList>
+        {posts &&
+          posts.map((post) => {
+            return (
+              <Link key={post.id} to={`/b/${post.subreadit.name}/${post.id}`}>
+                <Post>
+                  <Preview>
+                    {post.type === "link" && <IconLink />}
+                    {post.type === "post" && <IconPost />}
+                    {post.type === "image" && (
+                      <Image src={post.content[0]} alt={post.title} />
+                    )}
+                  </Preview>
+                  <Text>
+                    <Title title={post.title}>{post.title}</Title>
+                    <Informations>
+                      {post.upvotes} points • {post.comments} comments • {formatDistanceStrict(
+                        new Date(post.date.seconds * 1000),
+                        new Date()
+                      )}
+                    </Informations>
+                  </Text>
+                </Post>
+              </Link>
+            );
+          })}
+      </PostsList>
+    </Container>
+  );
+}
+
+export default LatestPosts;
+
 const colors = {
   background: "white",
   secondary: "grey",
@@ -84,51 +132,3 @@ const Informations = styled.div`
   color: ${colors.secondary};
   font-size: 0.75rem;
 `;
-
-// Loads and displays the 5 latest breadit posts.
-function LatestPosts() {
-  const [posts, setPosts] = useState();
-  const { getRecentPosts } = usePost();
-
-  useEffect(() => {
-    (async () => {
-      const recentPosts = await getRecentPosts(5);
-      setPosts(recentPosts);
-    })();
-  }, []);
-
-  return (
-    <Container>
-      <Heading>Recent Posts</Heading>
-      <PostsList>
-        {posts &&
-          posts.map((post) => {
-            return (
-              <Link key={post.id} to={`/b/${post.subreadit.name}/${post.id}`}>
-                <Post>
-                  <Preview>
-                    {post.type === "link" && <IconLink />}
-                    {post.type === "post" && <IconPost />}
-                    {post.type === "image" && (
-                      <Image src={post.content[0]} alt={post.title} />
-                    )}
-                  </Preview>
-                  <Text>
-                    <Title title={post.title}>{post.title}</Title>
-                    <Informations>
-                      {post.upvotes} points • {post.comments} comments • {formatDistanceStrict(
-                        new Date(post.date.seconds * 1000),
-                        new Date()
-                      )}
-                    </Informations>
-                  </Text>
-                </Post>
-              </Link>
-            );
-          })}
-      </PostsList>
-    </Container>
-  );
-}
-
-export default LatestPosts;

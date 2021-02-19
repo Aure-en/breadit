@@ -1,26 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 
-const colors = {
-  background: "white",
-};
-
-const Container = styled.div`
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  line-height: 1.25rem;
-  padding: 1rem;
-  background: ${colors.background};
-  border-radius: 5px;
-  font-size: 0.825rem;
-`;
-
-const Link = styled.a`
-  &:hover {
-    text-decoration: underline;
-  }
-`;
-
 function Footer() {
   return (
     <Container>
@@ -84,3 +64,23 @@ function Footer() {
 }
 
 export default Footer;
+
+const colors = {
+  background: "white",
+};
+
+const Container = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  line-height: 1.25rem;
+  padding: 1rem;
+  background: ${colors.background};
+  border-radius: 5px;
+  font-size: 0.825rem;
+`;
+
+const Link = styled.a`
+  &:hover {
+    text-decoration: underline;
+  }
+`;

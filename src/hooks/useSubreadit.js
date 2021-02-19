@@ -37,7 +37,7 @@ function useSubreadit() {
     const posts = [];
     const postsDocs = await firestore
       .collection("posts")
-      .where("subreadit", "==", subreaditId)
+      .where("subreadit.id", "==", subreaditId)
       .limit(limit)
       .get();
     postsDocs.docs.forEach((doc) => posts.push(doc.data()));

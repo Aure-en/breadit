@@ -12,56 +12,6 @@ import { ReactComponent as IconHome } from "../../assets/icons/header/icon-home.
 import { ReactComponent as IconSettings } from "../../assets/icons/header/icon-settings.svg";
 import { ReactComponent as IconPost } from "../../assets/icons/header/icon-post.svg";
 
-const colors = {
-  background: "white",
-  hover: "lightgrey",
-};
-
-const Dropdown = styled.div`
-  position: relative;
-`;
-
-const DropdownHeader = styled.button`
-  padding: 0.5rem 1.75rem;
-  border: 1px solid ${colors.hover};
-  cursor: pointer;
-  width: 15rem;
-`;
-
-const DropdownList = styled.div`
-  position: absolute;
-  background: ${colors.background};
-  padding-bottom: 1rem;
-  max-height: 30rem;
-  overflow: auto;
-  width: 15rem;
-`;
-
-const Category = styled.div`
-  text-transform: uppercase;
-  font-weight: 500;
-  font-size: 0.75rem;
-  margin: 1rem;
-`;
-
-const Choice = styled(Link)`
-  display: grid;
-  grid-template-columns: 2rem 1fr;
-  grid-gap: 0.75rem;
-  align-items: center;
-  padding: 0.35rem 1.75rem;
-
-  &:hover {
-    background: ${colors.hover};
-  }
-`;
-
-const Icon = styled.img`
-  width: 2rem;
-  height: 2rem;
-  border-radius: 50%;
-`;
-
 function SubreaditDropdown() {
   const [mySubreadits, setMySubreadits] = useState([]);
   const [topSubreadits, setTopSubreadits] = useState([]);
@@ -176,3 +126,53 @@ function SubreaditDropdown() {
 }
 
 export default SubreaditDropdown;
+
+const colors = {
+  background: "white",
+  hover: "lightgrey",
+};
+
+const Dropdown = styled.div`
+  position: relative;
+`;
+
+const DropdownHeader = styled.button`
+  padding: 0.5rem 1.75rem;
+  border: 1px solid ${colors.hover};
+  cursor: pointer;
+  width: 15rem;
+`;
+
+const DropdownList = styled.div`
+  position: absolute;
+  background: ${colors.background};
+  padding-bottom: 1rem;
+  max-height: 30rem;
+  overflow: auto;
+  width: 15rem;
+`;
+
+const Category = styled.div`
+  text-transform: uppercase;
+  font-weight: 500;
+  font-size: 0.75rem;
+  margin: 1rem;
+`;
+
+const Choice = styled(Link)`
+  display: grid;
+  grid-template-columns: 2rem 1fr;
+  grid-gap: 0.75rem;
+  align-items: center;
+  padding: 0.35rem 1.75rem;
+
+  &:hover {
+    background: ${colors.hover};
+  }
+`;
+
+const Icon = styled.img`
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+`;

@@ -5,6 +5,75 @@ import { useAuth } from "../../contexts/AuthContext";
 import { useSubscription } from "../../contexts/SubscriptionContext";
 import useSubreadit from "../../hooks/useSubreadit";
 
+function TopSubreadits() {
+  const [subreadits, setSubreadits] = useState([]);
+  const [isHovered, setIsHovered] = useState();
+  const {
+    getPopularSubreadits,
+    joinSubreadit,
+    leaveSubreadit,
+  } = useSubreadit();
+  const { subscriptions } = useSubscription();
+  const { currentUser } = useAuth();
+
+  useEffect(() => {
+    (async () => {
+      const subreadits = await getPopularSubreadits();
+      setSubreadits(subreadits);
+    })();
+  }, []);
+
+  return (
+    <>
+      {subreadits.length !== 0 && (
+        <Container>
+          <Heading>Most popular communities</Heading>
+          <SubreaditsList>
+            {subreadits.map((subreadit) => {
+              return (
+                <Subreadit key={subreadit.id}>
+                  <Icon src={subreadit.icon} alt={`${subreadit.name}'s Icon`} />
+                  <div>
+                    <Name to={`/b/${subreadit.name}`}>
+                      b/
+                      {subreadit.name}
+                    </Name>
+                    <Small>
+                      {subreadit.members} member
+                      {subreadit.members !== 1 && "s"}
+                    </Small>
+                  </div>
+                  {subscriptions.filter(
+                    (subscription) => subscription.id === subreadit.id
+                  ).length === 0 ? (
+                    <ButtonFilled
+                      type="button"
+                      onClick={() => joinSubreadit(currentUser.uid, subreadit)}
+                    >
+                      Join
+                    </ButtonFilled>
+                  ) : (
+                    <Button
+                      type="button"
+                      onMouseEnter={() => setIsHovered(subreadit.id)}
+                      onMouseLeave={() => setIsHovered("")}
+                      onClick={() => leaveSubreadit(currentUser.uid, subreadit)}
+                    >
+                      {isHovered === subreadit.id ? "Leave" : "Joined"}
+                    </Button>
+                  )}
+                </Subreadit>
+              );
+            })}
+          </SubreaditsList>
+        </Container>
+      )}
+    </>
+  );
+}
+
+export default TopSubreadits;
+
 const colors = {
   background: "white",
   secondary: "grey",
@@ -79,72 +148,3 @@ const ButtonFilled = styled(Button)`
     border: 1px solid ${colors.disabled};
   }
 `;
-
-function TopSubreadits() {
-  const [subreadits, setSubreadits] = useState([]);
-  const [isHovered, setIsHovered] = useState();
-  const {
-    getPopularSubreadits,
-    joinSubreadit,
-    leaveSubreadit,
-  } = useSubreadit();
-  const { subscriptions } = useSubscription();
-  const { currentUser } = useAuth();
-
-  useEffect(() => {
-    (async () => {
-      const subreadits = await getPopularSubreadits();
-      setSubreadits(subreadits);
-    })();
-  }, []);
-
-  return (
-    <>
-      {subreadits.length !== 0 && (
-        <Container>
-          <Heading>Most popular communities</Heading>
-          <SubreaditsList>
-            {subreadits.map((subreadit) => {
-              return (
-                <Subreadit key={subreadit.id}>
-                  <Icon src={subreadit.icon} alt={`${subreadit.name}'s Icon`} />
-                  <div>
-                    <Name to={`/b/${subreadit.name}`}>
-                      b/
-                      {subreadit.name}
-                    </Name>
-                    <Small>
-                      {subreadit.members} member
-                      {subreadit.members !== 1 && "s"}
-                    </Small>
-                  </div>
-                  {subscriptions.filter(
-                    (subscription) => subscription.id === subreadit.id
-                  ).length === 0 ? (
-                    <ButtonFilled
-                      type="button"
-                      onClick={() => joinSubreadit(currentUser.uid, subreadit)}
-                    >
-                      Join
-                    </ButtonFilled>
-                  ) : (
-                    <Button
-                      type="button"
-                      onMouseEnter={() => setIsHovered(subreadit.id)}
-                      onMouseLeave={() => setIsHovered("")}
-                      onClick={() => leaveSubreadit(currentUser.uid, subreadit)}
-                    >
-                      {isHovered === subreadit.id ? "Leave" : "Joined"}
-                    </Button>
-                  )}
-                </Subreadit>
-              );
-            })}
-          </SubreaditsList>
-        </Container>
-      )}
-    </>
-  );
-}
-
-export default TopSubreadits;

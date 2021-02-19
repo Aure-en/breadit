@@ -13,16 +13,6 @@ import { useAuth } from "../../contexts/AuthContext";
 import { ReactComponent as IconUp } from "../../assets/icons/general/icon-upvote.svg";
 import { ReactComponent as IconDown } from "../../assets/icons/general/icon-downvote.svg";
 
-const Container = styled.div`
-  & > * {
-    margin-left: 1rem;
-  }
-`;
-
-const Vote = styled.button`
-  color: ${(props) => (props.active ? "red" : "black")};
-`;
-
 const renderers = {
   inline: {
     // The key passed here is just an index based on rendering order inside a block
@@ -97,6 +87,7 @@ function Comment({ commentId }) {
   useEffect(() => {
     (async () => {
       const comment = await getComment(commentId);
+      console.log(comment.data())
       setComment(comment.data());
     })();
   }, []);
@@ -136,7 +127,7 @@ function Comment({ commentId }) {
             <div>
               {comment.author.name}
 {" "}
-              {redraft(JSON.parse(comment.text), renderers)}
+              {redraft(JSON.parse(comment.content), renderers)}
             </div>
             <button type="button" onClick={() => setIsReplying(!isReplying)}>
               Reply
@@ -168,3 +159,13 @@ Comment.propTypes = {
 };
 
 export default Comment;
+
+const Container = styled.div`
+  & > * {
+    margin-left: 1rem;
+  }
+`;
+
+const Vote = styled.button`
+  color: ${(props) => (props.active ? "red" : "black")};
+`;

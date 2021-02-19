@@ -4,6 +4,54 @@ import styled from "styled-components";
 import { useAuth } from "../../../contexts/AuthContext";
 import useUserSettings from "../../../hooks/useUserSettings";
 
+function About({ prevAbout }) {
+  const [about, setAbout] = useState(prevAbout);
+  const [message, setMessage] = useState("");
+  const { currentUser } = useAuth();
+  const { updateAbout } = useUserSettings();
+
+  const handleUpdateAbout = async () => {
+    try {
+      updateAbout(currentUser.uid, about);
+      setMessage("Your description was successfully updated.");
+    } catch (err) {
+      setMessage("Sorry, we were unable to update your description.");
+    }
+  };
+
+  return (
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        handleUpdateAbout();
+      }}
+    >
+      <label htmlFor="about">
+        <Textarea
+          id="about"
+          name="about"
+          value={about}
+          onChange={(e) => setAbout(e.target.value)}
+        />
+      </label>
+      <Message>{message}</Message>
+      <ButtonsRight>
+        <ButtonFilled type="submit">Save</ButtonFilled>
+      </ButtonsRight>
+    </form>
+  );
+}
+
+About.propTypes = {
+  prevAbout: PropTypes.string,
+};
+
+About.defaultProps = {
+  prevAbout: "",
+};
+
+export default About;
+
 const colors = {
   primary: "black",
   secondary: "grey",
@@ -56,51 +104,3 @@ const ButtonFilled = styled(Button)`
     border: 1px solid ${colors.disabled};
   }
 `;
-
-function About({ prevAbout }) {
-  const [about, setAbout] = useState(prevAbout);
-  const [message, setMessage] = useState("");
-  const { currentUser } = useAuth();
-  const { updateAbout } = useUserSettings();
-
-  const handleUpdateAbout = async () => {
-    try {
-      updateAbout(currentUser.uid, about);
-      setMessage("Your description was successfully updated.");
-    } catch (err) {
-      setMessage("Sorry, we were unable to update your description.");
-    }
-  };
-
-  return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        handleUpdateAbout();
-      }}
-    >
-      <label htmlFor="about">
-        <Textarea
-          id="about"
-          name="about"
-          value={about}
-          onChange={(e) => setAbout(e.target.value)}
-        />
-      </label>
-      <Message>{message}</Message>
-      <ButtonsRight>
-        <ButtonFilled type="submit">Save</ButtonFilled>
-      </ButtonsRight>
-    </form>
-  );
-}
-
-About.propTypes = {
-  prevAbout: PropTypes.string,
-};
-
-About.defaultProps = {
-  prevAbout: "",
-};
-
-export default About;

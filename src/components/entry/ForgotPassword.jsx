@@ -3,21 +3,6 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 import useForgotPassword from "../../hooks/useForgotPassword";
 
-const Field = styled.div``;
-
-const Label = styled.label`
-  position: absolute;
-  top: -9999px;
-`;
-
-const Input = styled.input``;
-
-const Message = styled.div``;
-
-const Button = styled.button``;
-
-const ChangeTab = styled.button``;
-
 function ForgotPassword({ changeTab }) {
   const {
     email,
@@ -73,3 +58,18 @@ ForgotPassword.defaultProps = {
 };
 
 export default ForgotPassword;
+
+const Field = styled.div``;
+
+const Label = styled.label`
+  position: absolute;
+  top: -9999px;
+`;
+
+const Input = styled.input``;
+
+const Message = styled.div``;
+
+const Button = styled.button``;
+
+const ChangeTab = styled.button``;

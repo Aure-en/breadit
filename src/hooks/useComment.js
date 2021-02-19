@@ -2,13 +2,13 @@ import firebase from "firebase";
 import { firestore } from "../firebase";
 
 function useComment() {
-  const createComment = async (postId, author, text, parentId = null) => {
+  const createComment = async (postId, author, content, parentId = null) => {
     const ref = await firestore.collection("comments").add({
       author: {
         id: author.uid,
         name: author.displayName,
       },
-      text,
+      content,
       date: new Date(),
       votes: {},
       parent: parentId,

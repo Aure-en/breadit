@@ -19,6 +19,270 @@ import { ReactComponent as IconPlus } from "../../assets/icons/general/icon-plus
 import { ReactComponent as IconCheck } from "../../assets/icons/general/icon-check.svg";
 import { ReactComponent as IconClose } from "../../assets/icons/general/icon-x.svg";
 
+function CreatePost() {
+  const [type, setType] = useState("post");
+  const [title, setTitle] = useState("");
+  const [post, setPost] = useState("");
+  const [images, setImages] = useState("");
+  const [link, setLink] = useState("");
+  const [linkError, setLinkError] = useState("");
+  const [spoiler, setSpoiler] = useState(false);
+  const [subreadits, setSubreadits] = useState([]);
+  const [isHovered, setIsHovered] = useState();
+
+  const { currentUser } = useAuth();
+  const { getSubreadits } = useSubreadit();
+  const { createPost } = usePost();
+  const { uploadImage } = useStorage();
+  const history = useHistory();
+  const {
+    inDragZone,
+    files,
+    deleteFile,
+    preview,
+    handleDragEnter,
+    handleDragLeave,
+    handleDragOver,
+    handleDrop,
+  } = useDragAndDrop();
+  const dropdownRef = useRef();
+  const {
+    isDropdownOpen,
+    setIsDropdownOpen,
+    current,
+    handleChoice,
+  } = useDropdown(dropdownRef);
+
+  // Get list of subreadits
+  useEffect(() => {
+    (async () => {
+      const subreaditsList = await getSubreadits();
+      setSubreadits(subreaditsList);
+    })();
+  }, []);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    let content;
+    switch (type) {
+      case "image": {
+        // If the user wants to create an image post:
+        // Upload the images to the storage and turns them into links.
+        const imagesUrls = [];
+        await Promise.all(
+          files.map(async (file) => {
+            const imageUrl = await uploadImage(file);
+            imagesUrls.push(imageUrl);
+          })
+        );
+        content = imagesUrls;
+        break;
+      }
+
+      case "link":
+        // Checks if the link is valid.
+        if (
+          !/((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/.test(
+            link
+          )
+        ) {
+          setLinkError("This link doesn't seem to be valid.");
+          return;
+        }
+        content = link;
+
+        break;
+
+      case "post":
+        content = post;
+        break;
+      default:
+    }
+    const postId = await createPost(
+      currentUser,
+      current,
+      title,
+      type,
+      content,
+      spoiler
+    );
+    history.push(`/${postId}`);
+  };
+
+  return (
+    <Wrapper>
+      <Container>
+        <div>
+          <Heading>Create a post</Heading>
+        </div>
+
+        <Dropdown ref={dropdownRef}>
+          <DropdownHeader
+            isDropdownOpen={isDropdownOpen}
+            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+          >
+            {current ? current.name : "Choose a community"}
+            <IconCaretDown />
+          </DropdownHeader>
+          {isDropdownOpen && (
+            <DropdownList>
+              {subreadits.map((subreadit) => {
+                return (
+                  <li key={subreadit.id}>
+                    <DropdownChoice onClick={() => handleChoice(subreadit)}>
+                      <SubreaditIcon
+                        src={subreadit.icon}
+                        alt={subreadit.name}
+                      />
+                      <div>
+                        <Bold>b/{subreadit.name}</Bold>
+                        <Small>
+                          {subreadit.members} member
+                          {subreadit.members !== 1 && "s"}
+                        </Small>
+                      </div>
+                    </DropdownChoice>
+                  </li>
+                );
+              })}
+            </DropdownList>
+          )}
+        </Dropdown>
+
+        <Main>
+          <Tabs>
+            <Tab
+              type="button"
+              onClick={() => setType("post")}
+              isSelected={type === "post"}
+            >
+              <IconPost /> Post
+            </Tab>
+            <Tab
+              type="button"
+              onClick={() => setType("image")}
+              isSelected={type === "image"}
+            >
+              <IconImage /> Image
+            </Tab>
+            <Tab
+              type="button"
+              onClick={() => setType("link")}
+              isSelected={type === "link"}
+            >
+              <IconLink /> Link
+            </Tab>
+          </Tabs>
+          <Form onSubmit={handleSubmit}>
+            <Field>
+              <label htmlFor="title">
+                <Input
+                  type="text"
+                  value={title}
+                  id="title"
+                  name="title"
+                  onChange={(e) => {
+                    e.target.value.length > 300
+                      ? setTitle(e.target.value.slice(0, 300))
+                      : setTitle(e.target.value);
+                  }}
+                  placeholder="Title"
+                />
+              </label>
+              <TitleLength>{title.length}/300</TitleLength>
+            </Field>
+
+            {type === "post" && (
+              <Field>
+                <TextEditor type="post" sendContent={setPost} />
+              </Field>
+            )}
+
+            {type === "image" && (
+              <Field>
+                <DropArea
+                  onDragOver={handleDragOver}
+                  onDragEnter={handleDragEnter}
+                  onDragLeave={handleDragLeave}
+                  onDrop={handleDrop}
+                  areFilesDragged={inDragZone}
+                  center={files.length === 0}
+                >
+                  {files.length !== 0 ? (
+                    <Preview>
+                      {preview.map((image, index) => {
+                        return (
+                          <ImageContainer
+                            key={image}
+                            onMouseEnter={() => setIsHovered(index)}
+                            onMouseLeave={() => setIsHovered(null)}
+                          >
+                            <Image src={image} alt="preview" />
+                            {isHovered === index && (
+                              <DeleteButton onClick={() => deleteFile(index)}>
+                                <IconClose />
+                              </DeleteButton>
+                            )}
+                          </ImageContainer>
+                        );
+                      })}
+                    </Preview>
+                  ) : (
+                    <div>
+                      Drag and drop or{" "}
+                      <Upload>
+                        <HiddenInput type="file" />
+                        Upload
+                      </Upload>
+                    </div>
+                  )}
+                </DropArea>
+              </Field>
+            )}
+
+            {type === "link" && (
+              <Field>
+                <label htmlFor="link">
+                  <Textarea
+                    id="link"
+                    name="link"
+                    value={link}
+                    onChange={(e) => setLink(e.target.value)}
+                    placeholder="Url"
+                  />
+                </label>
+              </Field>
+            )}
+
+            <Buttons>
+              <ButtonBool
+                type="button"
+                onClick={() => setSpoiler(!spoiler)}
+                isChecked={spoiler === true}
+              >
+                {spoiler ? <IconCheck /> : <IconPlus />}
+                Spoiler
+              </ButtonBool>
+              <SubmitBtn
+                type="submit"
+                disabled={
+                  (type === "post" && (!title || !current)) ||
+                  (type === "link" && (!title || !link || !current)) ||
+                  (type === "media" && (!title || !images || !current))
+                }
+              >
+                Post
+              </SubmitBtn>
+            </Buttons>
+          </Form>
+        </Main>
+      </Container>
+    </Wrapper>
+  );
+}
+
+export default CreatePost;
+
 const colors = {
   primary: "rgb(179, 72, 54)",
   secondary: "rgb(255, 255, 255)",
@@ -287,267 +551,3 @@ const SubmitBtn = styled(Button)`
   background: ${(props) => (props.disabled ? colors.disabled : colors.primary)};
   border: 1px solid transparent;
 `;
-
-function CreatePost() {
-  const [type, setType] = useState("post");
-  const [title, setTitle] = useState("");
-  const [post, setPost] = useState("");
-  const [images, setImages] = useState("");
-  const [link, setLink] = useState("");
-  const [linkError, setLinkError] = useState("");
-  const [spoiler, setSpoiler] = useState(false);
-  const [subreadits, setSubreadits] = useState([]);
-  const [isHovered, setIsHovered] = useState();
-
-  const { currentUser } = useAuth();
-  const { getSubreadits } = useSubreadit();
-  const { createPost } = usePost();
-  const { uploadImage } = useStorage();
-  const history = useHistory();
-  const {
-    inDragZone,
-    files,
-    deleteFile,
-    preview,
-    handleDragEnter,
-    handleDragLeave,
-    handleDragOver,
-    handleDrop,
-  } = useDragAndDrop();
-  const dropdownRef = useRef();
-  const {
-    isDropdownOpen,
-    setIsDropdownOpen,
-    current,
-    handleChoice,
-  } = useDropdown(dropdownRef);
-
-  // Get list of subreadits
-  useEffect(() => {
-    (async () => {
-      const subreaditsList = await getSubreadits();
-      setSubreadits(subreaditsList);
-    })();
-  }, []);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    let content;
-    switch (type) {
-      case "image": {
-        // If the user wants to create an image post:
-        // Upload the images to the storage and turns them into links.
-        const imagesUrls = [];
-        await Promise.all(
-          files.map(async (file) => {
-            const imageUrl = await uploadImage(file);
-            imagesUrls.push(imageUrl);
-          })
-        );
-        content = imagesUrls;
-        break;
-      }
-
-      case "link":
-        // Checks if the link is valid.
-        if (
-          !/((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/.test(
-            link
-          )
-        ) {
-          setLinkError("This link doesn't seem to be valid.");
-          return;
-        }
-        content = link;
-
-        break;
-
-      case "post":
-        content = post;
-        break;
-      default:
-    }
-    const postId = await createPost(
-      currentUser,
-      current,
-      title,
-      type,
-      content,
-      spoiler
-    );
-    history.push(`/${postId}`);
-  };
-
-  return (
-    <Wrapper>
-      <Container>
-        <div>
-          <Heading>Create a post</Heading>
-        </div>
-
-        <Dropdown ref={dropdownRef}>
-          <DropdownHeader
-            isDropdownOpen={isDropdownOpen}
-            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-          >
-            {current ? current.name : "Choose a community"}
-            <IconCaretDown />
-          </DropdownHeader>
-          {isDropdownOpen && (
-            <DropdownList>
-              {subreadits.map((subreadit) => {
-                return (
-                  <li key={subreadit.id}>
-                    <DropdownChoice onClick={() => handleChoice(subreadit)}>
-                      <SubreaditIcon
-                        src={subreadit.icon}
-                        alt={subreadit.name}
-                      />
-                      <div>
-                        <Bold>b/{subreadit.name}</Bold>
-                        <Small>
-                          {subreadit.members} member
-                          {subreadit.members !== 1 && "s"}
-                        </Small>
-                      </div>
-                    </DropdownChoice>
-                  </li>
-                );
-              })}
-            </DropdownList>
-          )}
-        </Dropdown>
-
-        <Main>
-          <Tabs>
-            <Tab
-              type="button"
-              onClick={() => setType("post")}
-              isSelected={type === "post"}
-            >
-              <IconPost /> Post
-            </Tab>
-            <Tab
-              type="button"
-              onClick={() => setType("image")}
-              isSelected={type === "image"}
-            >
-              <IconImage /> Image
-            </Tab>
-            <Tab
-              type="button"
-              onClick={() => setType("link")}
-              isSelected={type === "link"}
-            >
-              <IconLink /> Link
-            </Tab>
-          </Tabs>
-          <Form onSubmit={handleSubmit}>
-            <Field>
-              <label htmlFor="title">
-                <Input
-                  type="text"
-                  value={title}
-                  id="title"
-                  name="title"
-                  onChange={(e) => {
-                    e.target.value.length > 300
-                      ? setTitle(e.target.value.slice(0, 300))
-                      : setTitle(e.target.value);
-                  }}
-                  placeholder="Title"
-                />
-              </label>
-              <TitleLength>{title.length}/300</TitleLength>
-            </Field>
-
-            {type === "post" && (
-              <Field>
-                <TextEditor type="post" sendContent={setPost} />
-              </Field>
-            )}
-
-            {type === "image" && (
-              <Field>
-                <DropArea
-                  onDragOver={handleDragOver}
-                  onDragEnter={handleDragEnter}
-                  onDragLeave={handleDragLeave}
-                  onDrop={handleDrop}
-                  areFilesDragged={inDragZone}
-                  center={files.length === 0}
-                >
-                  {files.length !== 0 ? (
-                    <Preview>
-                      {preview.map((image, index) => {
-                        return (
-                          <ImageContainer
-                            key={image}
-                            onMouseEnter={() => setIsHovered(index)}
-                            onMouseLeave={() => setIsHovered(null)}
-                          >
-                            <Image src={image} alt="preview" />
-                            {isHovered === index && (
-                              <DeleteButton onClick={() => deleteFile(index)}>
-                                <IconClose />
-                              </DeleteButton>
-                            )}
-                          </ImageContainer>
-                        );
-                      })}
-                    </Preview>
-                  ) : (
-                    <div>
-                      Drag and drop or{" "}
-                      <Upload>
-                        <HiddenInput type="file" />
-                        Upload
-                      </Upload>
-                    </div>
-                  )}
-                </DropArea>
-              </Field>
-            )}
-
-            {type === "link" && (
-              <Field>
-                <label htmlFor="link">
-                  <Textarea
-                    id="link"
-                    name="link"
-                    value={link}
-                    onChange={(e) => setLink(e.target.value)}
-                    placeholder="Url"
-                  />
-                </label>
-              </Field>
-            )}
-
-            <Buttons>
-              <ButtonBool
-                type="button"
-                onClick={() => setSpoiler(!spoiler)}
-                isChecked={spoiler === true}
-              >
-                {spoiler ? <IconCheck /> : <IconPlus />}
-                Spoiler
-              </ButtonBool>
-              <SubmitBtn
-                type="submit"
-                disabled={
-                  (type === "post" && (!title || !current)) ||
-                  (type === "link" && (!title || !link || !current)) ||
-                  (type === "media" && (!title || !images || !current))
-                }
-              >
-                Post
-              </SubmitBtn>
-            </Buttons>
-          </Form>
-        </Main>
-      </Container>
-    </Wrapper>
-  );
-}
-
-export default CreatePost;

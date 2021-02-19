@@ -8,7 +8,102 @@ import useUserSettings from "../../../hooks/useUserSettings";
 import { ReactComponent as IconClose } from "../../../assets/icons/general/icon-x.svg";
 import { ReactComponent as IconDelete } from "../../../assets/icons/settings/icon-delete.svg";
 
-// Styled Components
+function DeleteAccount() {
+  const [password, setPassword] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { checkPassword, deleteAccount } = useUserSettings();
+  const { currentUser } = useAuth();
+
+  const clear = () => {
+    setPasswordError("");
+  };
+
+  const closeModal = () => {
+    setPassword("");
+    clear();
+    setIsModalOpen(false);
+  };
+
+  const handleDeleteAccount = async () => {
+    try {
+      await checkPassword(currentUser, currentUser.email, password);
+    } catch (err) {
+      switch (err) {
+        case "auth/wrong-password":
+          setPasswordError("The password is incorrect.");
+          break;
+        default:
+          setPasswordError("The credential is invalid.");
+      }
+    }
+    deleteAccount(currentUser);
+  };
+
+  return (
+    <>
+      <Button type="button" onClick={() => setIsModalOpen(true)}>
+        Delete
+      </Button>
+
+      <SettingsModal
+        isOpen={isModalOpen}
+        onRequestClose={closeModal}
+        style={{
+          overlay: {
+            backgroundColor: colors.overlay,
+          },
+        }}
+      >
+        <ButtonClose onClick={closeModal}>
+          <IconClose />
+        </ButtonClose>
+        <Subheading>
+          <IconDelete />
+          Delete your account
+        </Subheading>
+        <ModalText>
+          Are you sure you would like to delete your account? <br />
+          You will be unable to recover it.
+        </ModalText>
+        <Message>
+          Deactivating your account will not delete the content of posts and
+          comments you've made on Breadit. To do so please delete them
+          individually.
+        </Message>
+
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleDeleteAccount();
+          }}
+        >
+          <div>
+            <label htmlFor="delete_password">
+              <Input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                id="delete_password"
+                name="delete_password"
+                placeholder="Current Password"
+              />
+            </label>
+            <MessageError>{passwordError}</MessageError>
+          </div>
+
+          <ButtonsRight>
+            <Button type="button">Cancel</Button>
+            <ButtonFilled type="submit">Delete</ButtonFilled>
+          </ButtonsRight>
+        </form>
+      </SettingsModal>
+    </>
+  );
+}
+
+export default DeleteAccount;
+
 const colors = {
   primary: "black",
   secondary: "grey",
@@ -121,99 +216,3 @@ const MessageError = styled(Message)`
   color: ${colors.error};
   top: -0.5rem;
 `;
-
-function DeleteAccount() {
-  const [password, setPassword] = useState("");
-  const [passwordError, setPasswordError] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const { checkPassword, deleteAccount } = useUserSettings();
-  const { currentUser } = useAuth();
-
-  const clear = () => {
-    setPasswordError("");
-  };
-
-  const closeModal = () => {
-    setPassword("");
-    clear();
-    setIsModalOpen(false);
-  };
-
-  const handleDeleteAccount = async () => {
-    try {
-      await checkPassword(currentUser, currentUser.email, password);
-    } catch (err) {
-      switch (err) {
-        case "auth/wrong-password":
-          setPasswordError("The password is incorrect.");
-          break;
-        default:
-          setPasswordError("The credential is invalid.");
-      }
-    }
-    deleteAccount(currentUser);
-  };
-
-  return (
-    <>
-      <Button type="button" onClick={() => setIsModalOpen(true)}>
-        Delete
-      </Button>
-
-      <SettingsModal
-        isOpen={isModalOpen}
-        onRequestClose={closeModal}
-        style={{
-          overlay: {
-            backgroundColor: colors.overlay,
-          },
-        }}
-      >
-        <ButtonClose onClick={closeModal}>
-          <IconClose />
-        </ButtonClose>
-        <Subheading>
-          <IconDelete />
-          Delete your account
-        </Subheading>
-        <ModalText>
-          Are you sure you would like to delete your account? <br />
-          You will be unable to recover it.
-        </ModalText>
-        <Message>
-          Deactivating your account will not delete the content of posts and
-          comments you've made on Breadit. To do so please delete them
-          individually.
-        </Message>
-
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            handleDeleteAccount();
-          }}
-        >
-          <div>
-            <label htmlFor="delete_password">
-              <Input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                id="delete_password"
-                name="delete_password"
-                placeholder="Current Password"
-              />
-            </label>
-            <MessageError>{passwordError}</MessageError>
-          </div>
-
-          <ButtonsRight>
-            <Button type="button">Cancel</Button>
-            <ButtonFilled type="submit">Delete</ButtonFilled>
-          </ButtonsRight>
-        </form>
-      </SettingsModal>
-    </>
-  );
-}
-
-export default DeleteAccount;

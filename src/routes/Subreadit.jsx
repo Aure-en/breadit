@@ -6,37 +6,6 @@ import PostPreview from "../components/posts/PostPreview";
 import SubreaditInfo from "../components/aside/SubreaditInfo";
 import SubreaditRules from "../components/aside/SubreaditRules";
 
-const colors = {
-  background: "rgb(241, 236, 230)",
-};
-
-const Wrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  background: ${colors.background};
-  padding: 3rem;
-  height: 100%;
-  flex: 1;
-`;
-
-const Container = styled.main`
-  max-width: 40rem;
-  flex: 1;
-
-  & > * {
-    margin-bottom: 1rem;
-  }
-
-  & > *:last-child {
-    margin-bottom: 0;
-  }
-`;
-
-const Aside = styled.aside`
-  max-width: 20rem;
-  margin-left: 3rem;
-`;
-
 function Subreadit({ match }) {
   const [subreadit, setSubreadit] = useState();
   const [posts, setPosts] = useState([]);
@@ -48,7 +17,6 @@ function Subreadit({ match }) {
     (async () => {
       const subreadit = await getSubreaditByName(subreaditName);
       const posts = await getSubreaditPosts(subreadit.id, limit);
-      console.log(subreadit);
       setSubreadit(subreadit);
       setPosts(posts);
     })();
@@ -82,3 +50,34 @@ Subreadit.propTypes = {
 };
 
 export default Subreadit;
+
+const colors = {
+  background: "rgb(241, 236, 230)",
+};
+
+const Wrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  background: ${colors.background};
+  padding: 3rem;
+  height: 100%;
+  flex: 1;
+`;
+
+const Container = styled.main`
+  max-width: 40rem;
+  flex: 1;
+
+  & > * {
+    margin-bottom: 1rem;
+  }
+
+  & > *:last-child {
+    margin-bottom: 0;
+  }
+`;
+
+const Aside = styled.aside`
+  max-width: 20rem;
+  margin-left: 3rem;
+`;

@@ -7,6 +7,58 @@ import useCarousel from "../../hooks/useCarousel";
 import { ReactComponent as IconLeft } from "../../assets/icons/general/icon-left.svg";
 import { ReactComponent as IconRight } from "../../assets/icons/general/icon-right.svg";
 
+function Carousel({ images, title }) {
+  const {
+    slides,
+    currentSlide,
+    transition,
+    transitionDuration,
+    previous,
+    next,
+    handleTransitionEnd,
+  } = useCarousel(images);
+  useCarousel(images);
+
+  return (
+    <Container>
+      <SlideNumber>
+        {currentSlide + 1}/{slides.length}
+      </SlideNumber>
+      <ButtonLeft type="button" onClick={previous}>
+        <IconLeft />
+      </ButtonLeft>
+      <Slides
+        onTransitionEnd={handleTransitionEnd}
+        transition={transition}
+        transitionDuration={transitionDuration}
+        slides={slides.length}
+      >
+        {slides.map((image, index) => {
+          return (
+            <ImageContainer key={`${image}-${index}`}>
+              <Image src={image} alt={title} />
+            </ImageContainer>
+          );
+        })}
+      </Slides>
+      <ButtonRight type="button" onClick={next}>
+        <IconRight />
+      </ButtonRight>
+    </Container>
+  );
+}
+
+Carousel.propTypes = {
+  images: PropTypes.arrayOf(PropTypes.images).isRequired,
+  title: PropTypes.string,
+};
+
+Carousel.defaultProps = {
+  title: "",
+};
+
+export default Carousel;
+
 const colors = {
   "button-shadow": "rgba(0, 0, 0, .2)",
   "background": "rgba(255, 255, 255)",
@@ -77,55 +129,3 @@ const SlideNumber = styled.span`
   border-radius: 50px;
   z-index: 1;
 `;
-
-function Carousel({ images, title }) {
-  const {
-    slides,
-    currentSlide,
-    transition,
-    transitionDuration,
-    previous,
-    next,
-    handleTransitionEnd,
-  } = useCarousel(images);
-  useCarousel(images);
-
-  return (
-    <Container>
-      <SlideNumber>
-        {currentSlide + 1}/{slides.length}
-      </SlideNumber>
-      <ButtonLeft type="button" onClick={previous}>
-        <IconLeft />
-      </ButtonLeft>
-      <Slides
-        onTransitionEnd={handleTransitionEnd}
-        transition={transition}
-        transitionDuration={transitionDuration}
-        slides={slides.length}
-      >
-        {slides.map((image, index) => {
-          return (
-            <ImageContainer key={`${image}-${index}`}>
-              <Image src={image} alt={title} />
-            </ImageContainer>
-          );
-        })}
-      </Slides>
-      <ButtonRight type="button" onClick={next}>
-        <IconRight />
-      </ButtonRight>
-    </Container>
-  );
-}
-
-Carousel.propTypes = {
-  images: PropTypes.arrayOf(PropTypes.images).isRequired,
-  title: PropTypes.string,
-};
-
-Carousel.defaultProps = {
-  title: "",
-};
-
-export default Carousel;
