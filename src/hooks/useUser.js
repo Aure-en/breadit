@@ -119,6 +119,17 @@ function useUser() {
     return comments;
   };
 
+  const getUserSubscriptions = async (userId) => {
+    const subreadits = [];
+    const query = await firestore
+      .collection("users")
+      .doc(userId)
+      .collection("subreadits")
+      .get();
+    query.docs.forEach((doc) => subreadits.push(doc.id));
+    return subreadits;
+  };
+
   return {
     createUser,
     getUser,
@@ -130,6 +141,7 @@ function useUser() {
     getUserComments,
     getUserCommentsByVotes,
     getUserCommentsByDate,
+    getUserSubscriptions,
   };
 }
 

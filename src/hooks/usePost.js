@@ -70,6 +70,32 @@ function usePost() {
     return posts;
   };
 
+  // According to the Firebase documentation, "in" only combines up to 10 equality clauses.
+  // So it might be problematic if subscriptions.length > 10.
+  const getSubscriptionsPostsByVotes = async (subscriptions, limit) => {
+    const posts = [];
+    const postsDocs = await firestore
+      .collection("posts")
+      .where("subreadit.id", "in", subscriptions)
+      .orderBy("votes.sum", "desc")
+      .limit(limit)
+      .get();
+    postsDocs.docs.forEach((doc) => posts.push(doc.data().id));
+    return posts;
+  };
+
+  const getSubscriptionsPostsByDate = async (subscriptions, limit) => {
+    const posts = [];
+    const postsDocs = await firestore
+      .collection("posts")
+      .where("subreadit.id", "in", subscriptions)
+      .orderBy("date", "desc")
+      .limit(limit)
+      .get();
+    postsDocs.docs.forEach((doc) => posts.push(doc.data().id));
+    return posts;
+  };
+
   const getRecentPosts = async (limit) => {
     let posts = [];
     const postsDocs = await firestore
@@ -112,6 +138,8 @@ function usePost() {
     getPostsByVotes,
     getPostsByDate,
     getRecentPosts,
+    getSubscriptionsPostsByVotes,
+    getSubscriptionsPostsByDate,
   };
 }
 
