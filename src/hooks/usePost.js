@@ -32,6 +32,10 @@ function usePost() {
     return ref.id;
   };
 
+  const editPost = (postId, content) => {
+    return firestore.collection("posts").doc(postId).update({ content });
+  }
+
   const deletePost = (postId) => {
     // Delete the post id from the subreadit's posts.
     return firestore.collection("posts").doc(postId).delete();
@@ -133,6 +137,7 @@ function usePost() {
   return {
     createPost,
     deletePost,
+    editPost,
     getPost,
     getPosts,
     getPostsByVotes,

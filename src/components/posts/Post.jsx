@@ -12,7 +12,7 @@ import usePost from "../../hooks/usePost";
 import Entry from "../entry/Entry";
 import Carousel from "./Carousel";
 import LinkPreview from "./LinkPreview";
-import { renderers } from "../TextEditor";
+import TextEditor, { renderers } from "../TextEditor";
 import "../../styles/textEditor.css";
 
 // Icons
@@ -24,7 +24,7 @@ import { ReactComponent as IconLink } from "../../assets/icons/general/icon-link
 
 function Post({ postId, subreadit }) {
   const { currentUser } = useAuth();
-  const { getPost } = usePost();
+  const { getPost, editPost } = usePost();
   const { getCommentsNumber } = useComment();
   const { vote, votes, handleUpvote, handleDownvote } = useVote(
     "posts",
@@ -33,6 +33,8 @@ function Post({ postId, subreadit }) {
   );
   const [post, setPost] = useState();
   const [isEntryOpen, setIsEntryOpen] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [edit, setEdit] = useState("");
   const [commentsNumber, setCommentsNumber] = useState(0);
   const copyRef = useRef();
 
@@ -44,6 +46,14 @@ function Post({ postId, subreadit }) {
       setCommentsNumber(comments);
     })();
   }, []);
+
+  const handleEdit = () => {
+    editPost(postId, edit);
+    setIsEditing(false);
+    setPost((prev) => {
+      return { ...prev, content: edit };
+    });
+  };
 
   // Helper functions to render content depending on its type
   const renderText = (content, subreaditName, postId) => {
@@ -128,9 +138,7 @@ function Post({ postId, subreadit }) {
                         {formatDistanceStrict(
                           new Date(post.date.seconds * 1000),
                           new Date()
-                        )}
-{" "}
-                        ago
+                        )} ago
                       </Link>
                     </Informations>
                     {post.type !== "link" && (
@@ -139,7 +147,26 @@ function Post({ postId, subreadit }) {
                       </Link>
                     )}
                     <>
+                      {post.type === "post" && isEditing && (
+                        <>
+                          <TextEditor
+                            type="post"
+                            sendContent={setEdit}
+                            prevContent={post.content}
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setIsEditing(false)}
+                          >
+                            Cancel
+                          </button>
+                          <button type="button" onClick={handleEdit}>
+                            Save Changes
+                          </button>
+                        </>
+                      )}
                       {post.type === "post" &&
+                        !isEditing &&
                         renderText(post.content, subreadit, postId)}
                       {post.type === "image" &&
                         renderImages(post.content, post.title)}
@@ -166,6 +193,14 @@ function Post({ postId, subreadit }) {
                           readOnly
                         />
                       </Button>
+                      {post.type === "post" && (
+                        <Button
+                          type="button"
+                          onClick={() => setIsEditing(!isEditing)}
+                        >
+                          Edit
+                        </Button>
+                      )}
                     </Buttons>
                   </>
                 )}
