@@ -1,5 +1,5 @@
 /* eslint-disable react/display-name */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import ReactTooltip from "react-tooltip";
 import {
@@ -8,6 +8,7 @@ import {
   RichUtils,
   CompositeDecorator,
   convertToRaw,
+  convertFromRaw,
 } from "draft-js";
 import styled from "styled-components";
 import "draft-js/dist/Draft.css";
@@ -63,12 +64,19 @@ const styleMap = {
   },
 };
 
-function TextEditor({ type, sendContent }) {
+function TextEditor({ type, sendContent, prevContent }) {
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty(decorator)
   );
   const [isLinkEditorOpen, setIsLinkEditorOpen] = useState(false);
   const [link, setLink] = useState("");
+
+  // If we provide a previous content (i.e : we are editing a comment / post), it is loaded in the Text Editor.
+  useEffect(() => {
+    if (!prevContent) return;
+    const content = convertFromRaw(JSON.parse(prevContent));
+    setEditorState(EditorState.createWithContent(content));
+  }, []);
 
   // Allows the user to use keyboard shortcuts (ex: Ctrl + B to bold)
   const handleKeyCommand = (command) => {
@@ -331,14 +339,16 @@ function TextEditor({ type, sendContent }) {
 }
 
 TextEditor.propTypes = {
-  // Type is either "post" or "comment" (style changes depending on the type)
+  // Type is either "post" or "comment" (appearance changes depending on the type)
   type: PropTypes.string,
   sendContent: PropTypes.func,
+  prevContent: PropTypes.string,
 };
 
 TextEditor.defaultProps = {
   type: "post",
   sendContent: () => {},
+  prevContent: "",
 };
 
 export const renderers = {

@@ -5,7 +5,7 @@ import ReactTooltip from "react-tooltip";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import Entry from "../entry/Entry";
-import SubreaditDropdown from "./SubreaditDropdown";
+import NavDropdown from "./NavDropdown";
 import UserDropdown from "./UserDropdown";
 
 // Icons
@@ -22,7 +22,7 @@ function Header() {
     <Container>
       <div>{/* TO-DO : Add Breadit Icon */}</div>
 
-      {currentUser && <SubreaditDropdown />}
+      {currentUser && <NavDropdown />}
 
       <Buttons>
         {currentUser ? (

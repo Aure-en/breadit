@@ -12,7 +12,7 @@ import { ReactComponent as IconHome } from "../../assets/icons/header/icon-home.
 import { ReactComponent as IconSettings } from "../../assets/icons/header/icon-settings.svg";
 import { ReactComponent as IconPost } from "../../assets/icons/header/icon-post.svg";
 
-function SubreaditDropdown() {
+function NavDropdown() {
   const [mySubreadits, setMySubreadits] = useState([]);
   const [topSubreadits, setTopSubreadits] = useState([]);
   const dropdownRef = useRef();
@@ -30,17 +30,18 @@ function SubreaditDropdown() {
       const popular = await getPopularSubreadits(5);
       setTopSubreadits(popular);
 
-      const subreadits = [];
+      let subreadits = [];
       await Promise.all(
         subscriptions.map(async (subscription) => {
-          const subreadit = await getSubreaditById(subscription.id);
+          const subreadit = await getSubreaditById(subscription);
           subreadits.push({
-            id: subreadit.id,
-            name: subreadit.name,
-            icon: subreadit.icon,
+            id: subreadit.data().id,
+            name: subreadit.data().name,
+            icon: subreadit.data().icon,
           });
         })
       );
+      subreadits = subreadits.sort((a, b) => b.name - a.name);
       setMySubreadits(subreadits);
     })();
   }, []);
@@ -125,7 +126,7 @@ function SubreaditDropdown() {
   );
 }
 
-export default SubreaditDropdown;
+export default NavDropdown;
 
 const colors = {
   background: "white",

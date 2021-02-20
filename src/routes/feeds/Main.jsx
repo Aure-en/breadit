@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { useAuth } from "../../contexts/AuthContext";
+import { useSubscription } from "../../contexts/SubscriptionContext";
 import usePost from "../../hooks/usePost";
-import useUser from "../../hooks/useUser";
 import PostPreview from "../../components/posts/PostPreview";
 import TopSubreadits from "../../components/aside/TopSubreadits";
 import Create from "../../components/aside/Create";
@@ -14,19 +13,11 @@ function Main() {
   const [posts, setPosts] = useState([]);
   const [limit, setLimit] = useState(20);
   const [sort, setSort] = useState("top");
-  const [subscriptions, setSubscriptions] = useState([]);
-  const { currentUser } = useAuth();
-  const { getUserSubscriptions } = useUser();
-  const { getSubscriptionsPostsByVotes, getSubscriptionsPostsByDate } = usePost();
-
-  // Get the user subscriptions
-  useEffect(() => {
-    if (!currentUser) return;
-    (async () => {
-      const subscriptions = await getUserSubscriptions(currentUser.uid);
-      setSubscriptions(subscriptions);
-    })();
-  }, [currentUser]);
+  const { subscriptions } = useSubscription();
+  const {
+    getSubscriptionsPostsByVotes,
+    getSubscriptionsPostsByDate,
+  } = usePost();
 
   // Loads the subscriptions posts depending on sort / limit.
   useEffect(() => {

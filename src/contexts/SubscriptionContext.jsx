@@ -20,9 +20,7 @@ export function SubscriptionProvider({ children }) {
       .doc(userId)
       .collection("subreadits")
       .get();
-    subreadits.docs.forEach((subreadit) =>
-      subscriptionsArr.push(subreadit.data())
-    );
+    subreadits.docs.forEach((subreadit) => subscriptionsArr.push(subreadit.id));
     return subscriptionsArr;
   };
 

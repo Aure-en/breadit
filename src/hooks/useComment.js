@@ -111,6 +111,10 @@ function useComment() {
     return firestore.collection("comments").doc(commentId).get();
   };
 
+  const commentListener = (commentId, callback) => {
+    return firestore.collection("comments").doc(commentId).onSnapshot(callback);
+  };
+
   return {
     createComment,
     deleteComment,
@@ -120,6 +124,7 @@ function useComment() {
     getCommentsByDate,
     getCommentsNumber,
     getComment,
+    commentListener,
   };
 }
 
