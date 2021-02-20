@@ -18,7 +18,10 @@ function usePost() {
       title,
       content,
       date: new Date(),
-      votes: {},
+      votes: {
+        list: {},
+        sum: 0,
+      },
       subreadit: {
         id: subreadit.id,
         name: subreadit.name,
@@ -45,11 +48,33 @@ function usePost() {
     return posts;
   };
 
+  const getPostsByVotes = async (limit) => {
+    const posts = [];
+    const postsDocs = await firestore
+      .collection("posts")
+      .orderBy("votes.sum", "desc")
+      .limit(limit)
+      .get();
+    postsDocs.docs.forEach((doc) => posts.push(doc.data().id));
+    return posts;
+  };
+
+  const getPostsByDate = async (limit) => {
+    const posts = [];
+    const postsDocs = await firestore
+      .collection("posts")
+      .orderBy("date", "desc")
+      .limit(limit)
+      .get();
+    postsDocs.docs.forEach((doc) => posts.push(doc.data().id));
+    return posts;
+  };
+
   const getRecentPosts = async (limit) => {
     let posts = [];
     const postsDocs = await firestore
       .collection("posts")
-      .orderBy("date")
+      .orderBy("date", "desc")
       .limit(limit)
       .get();
     postsDocs.docs.forEach((doc) => posts.push(doc.data()));
@@ -84,6 +109,8 @@ function usePost() {
     deletePost,
     getPost,
     getPosts,
+    getPostsByVotes,
+    getPostsByDate,
     getRecentPosts,
   };
 }

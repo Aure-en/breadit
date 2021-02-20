@@ -13,7 +13,7 @@ function useVote(type, id, userId) {
       .collection(type)
       .doc(id)
       .update({
-        [`votes.${userId}`]: 1,
+        [`votes.list.${userId}`]: 1,
       });
   };
 
@@ -22,7 +22,7 @@ function useVote(type, id, userId) {
       .collection(type)
       .doc(id)
       .update({
-        [`votes.${userId}`]: -1,
+        [`votes.list.${userId}`]: -1,
       });
   };
 
@@ -31,32 +31,32 @@ function useVote(type, id, userId) {
       .collection(type)
       .doc(id)
       .update({
-        [`votes.${userId}`]: firebase.firestore.FieldValue.delete(),
+        [`votes.list.${userId}`]: firebase.firestore.FieldValue.delete(),
+      });
+  };
+
+  // Update sum of all votes
+  const updateVote = (type, id, number) => {
+    return firestore
+      .collection(type)
+      .doc(id)
+      .update({
+        "votes.sum": firebase.firestore.FieldValue.increment(number),
       });
   };
 
   const getVote = async (type, id, userId) => {
     const doc = await firestore.collection(type).doc(id).get();
-    return doc.data().votes[userId];
+    return doc.data().votes.list[userId];
   };
 
   const countVotes = async (type, id) => {
     const doc = await firestore.collection(type).doc(id).get();
     if (!doc) return 0;
-    return Object.values(doc.data().votes).reduce(
+    return Object.values(doc.data().votes.list).reduce(
       (sum, current) => sum + current,
       0
     );
-  };
-
-  const getRatio = async (type, id) => {
-    const doc = await firestore.collection(type).doc(id).get();
-    if (!doc) return 0;
-    const upvotes = Object.values(doc.data().votes).reduce((sum, current) => {
-      if (current === 1) return sum + current;
-      return 0;
-    }, 0);
-    return Math.round(upvotes / Object.keys(doc.data().votes).length);
   };
 
   const handleUpvote = async (type, id, userId, vote) => {
@@ -68,6 +68,7 @@ function useVote(type, id, userId) {
         removeVote(type, id, userId);
         setVote(null);
         setVotes((prev) => prev - 1);
+        updateVote(type, id, -1);
         break;
 
       // User downvoted the post:
@@ -78,11 +79,13 @@ function useVote(type, id, userId) {
         upvote(type, id, userId);
         setVote(1);
         setVotes((prev) => prev + 2);
+        updateVote(type, id, 2);
         break;
       default:
         upvote(type, id, userId);
         setVote(1);
         setVotes((prev) => prev + 1);
+        updateVote(type, id, 1);
     }
   };
 
@@ -95,6 +98,7 @@ function useVote(type, id, userId) {
         removeVote(type, id, userId);
         setVote(null);
         setVotes((prev) => prev + 1);
+        updateVote(type, id, 1);
         break;
 
       // User upvoted the post:
@@ -105,11 +109,13 @@ function useVote(type, id, userId) {
         downvote(type, id, userId);
         setVote(-1);
         setVotes((prev) => prev - 2);
+        updateVote(type, id, -2);
         break;
       default:
         downvote(type, id, userId);
         setVote(-1);
         setVotes((prev) => prev - 1);
+        updateVote(type, id, -1);
     }
   };
 
@@ -136,7 +142,6 @@ function useVote(type, id, userId) {
     handleUpvote,
     handleDownvote,
     countVotes,
-    getRatio,
   };
 }
 

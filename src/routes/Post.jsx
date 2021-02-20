@@ -7,13 +7,16 @@ import useComment from "../hooks/useComment";
 import PostContent from "../components/posts/Post";
 import TextEditor from "../components/TextEditor";
 import Comment from "../components/posts/Comment";
+import SortDropdown from "../components/sort/SortDropdown";
 
 function Post({ match }) {
   const [post, setPost] = useState();
   const [comments, setComments] = useState([]);
   const [comment, setComment] = useState("");
+  const [limit, setLimit] = useState(20);
+  const [sort, setSort] = useState("top");
   const { getPost } = usePost();
-  const { createComment, getComments } = useComment();
+  const { createComment, getCommentsByVotes, getCommentsByDate } = useComment();
   const { currentUser } = useAuth();
   const { postId, subreadit } = match.params;
 
@@ -28,10 +31,15 @@ function Post({ match }) {
   // Loads the comments
   useEffect(() => {
     (async () => {
-      const comments = await getComments(postId);
+      let comments;
+      if (sort === "top") {
+        comments = await getCommentsByVotes(postId, limit);
+      } else {
+        comments = await getCommentsByDate(postId, limit);
+      }
       setComments(comments);
     })();
-  }, []);
+  }, [limit, sort]);
 
   return (
     <div>
@@ -48,6 +56,7 @@ function Post({ match }) {
       </form>
 
       <div>
+        <SortDropdown setSort={setSort} sort={sort} />
         {comments.map((commentId) => {
           return <Comment key={commentId} commentId={commentId} />;
         })}

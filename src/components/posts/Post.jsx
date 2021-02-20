@@ -9,10 +9,11 @@ import { useAuth } from "../../contexts/AuthContext";
 import useComment from "../../hooks/useComment";
 import useVote from "../../hooks/useVote";
 import usePost from "../../hooks/usePost";
-import "../../styles/textEditor.css";
 import Entry from "../entry/Entry";
 import Carousel from "./Carousel";
 import LinkPreview from "./LinkPreview";
+import { renderers } from "../TextEditor";
+import "../../styles/textEditor.css";
 
 // Icons
 import { ReactComponent as IconUp } from "../../assets/icons/general/icon-upvote.svg";
@@ -20,64 +21,6 @@ import { ReactComponent as IconDown } from "../../assets/icons/general/icon-down
 import { ReactComponent as IconComment } from "../../assets/icons/general/icon-comment.svg";
 import { ReactComponent as IconSave } from "../../assets/icons/general/icon-save.svg";
 import { ReactComponent as IconLink } from "../../assets/icons/general/icon-link-small.svg";
-
-const renderers = {
-  inline: {
-    // The key passed here is just an index based on rendering order inside a block
-    BOLD: (children, { key }) => <strong key={key}>{children}</strong>,
-    ITALIC: (children, { key }) => <em key={key}>{children}</em>,
-    UNDERLINE: (children, { key }) => <u key={key}>{children}</u>,
-    CODE: (children, { key }) => (
-      <span key={key} className="code">
-        {children}
-      </span>
-    ),
-    HEADING: (children, { key }) => (
-      <div className="heading" key={key}>
-        {children}
-      </div>
-    ),
-    STRIKETHROUGH: (children, { key }) => (
-      <span key={key} className="strikethrough">
-        {children}
-      </span>
-    ),
-  },
-  blocks: {
-    unstyled: (children, { key }) =>
-      children.map((child) => (
-        <div key={key} className="block">
-          {child}
-        </div>
-      )),
-    codeBlock: (children, { key }) =>
-      children.map((child) => (
-        <pre key={key} className="codeBlock">
-          {child}
-        </pre>
-      )),
-    quoteBlock: (children, { key }) =>
-      children.map((child) => (
-        <div key={key} className="quoteBlock">
-          {child}
-        </div>
-      )),
-    "unordered-list-item": (children, { keys }) => (
-      <ul key={keys[keys.length - 1]}>
-        {children.map((child) => (
-          <li key={keys[keys.length - 1]}>{child}</li>
-        ))}
-      </ul>
-    ),
-    "ordered-list-item": (children, { keys }) => (
-      <ol key={keys.join("|")}>
-        {children.map((child, index) => (
-          <li key={keys[index]}>{child}</li>
-        ))}
-      </ol>
-    ),
-  },
-};
 
 function Post({ postId, subreadit }) {
   const { currentUser } = useAuth();

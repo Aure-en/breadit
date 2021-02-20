@@ -4,17 +4,26 @@ import styled from "styled-components";
 import useUser from "../../hooks/useUser";
 import usePost from "../../hooks/usePost";
 import Comment from "../../components/user/Comment";
+import Sort from "../../components/sort/Sort";
 
 function Comments({ userId }) {
   const [comments, setComments] = useState([]);
   const [limit, setLimit] = useState(20);
-  const { getUserComments } = useUser();
+  const [sort, setSort] = useState("top");
+  const { getUserCommentsByVotes, getUserCommentsByDate } = useUser();
   const { getPost } = usePost();
 
   // Get comments
   useEffect(() => {
     (async () => {
-      let userComments = await getUserComments(userId, limit);
+      let userComments;
+
+      if (sort === "top") {
+        userComments = await getUserCommentsByVotes(userId, limit);
+      } else {
+        userComments = await getUserCommentsByDate(userId, limit);
+      }
+
       userComments = await Promise.all(
         userComments.map(async (comment) => {
           const post = await getPost(comment.post);
@@ -38,23 +47,26 @@ function Comments({ userId }) {
       });
       setComments(userComments);
     })();
-  }, [limit]);
+  }, [limit, sort]);
 
   return (
-    <CommentsList>
-      {comments.map((comment) => {
-        return (
-          <Comment
-            key={comment.id}
-            id={comment.id}
-            author={comment.author}
-            content={comment.content}
-            date={comment.date}
-            post={comment.post}
-          />
-        );
-      })}
-    </CommentsList>
+    <>
+      <Sort setSort={setSort} sort={sort} />
+      <CommentsList>
+        {comments.map((comment) => {
+          return (
+            <Comment
+              key={comment.id}
+              id={comment.id}
+              author={comment.author}
+              content={comment.content}
+              date={comment.date}
+              post={comment.post}
+            />
+          );
+        })}
+      </CommentsList>
+    </>
   );
 }
 

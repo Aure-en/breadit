@@ -39,7 +39,7 @@ function LatestPosts() {
                   <Text>
                     <Title title={post.title}>{post.title}</Title>
                     <Informations>
-                      {post.upvotes} points • {post.comments} comments • {formatDistanceStrict(
+                      {post.votes.sum} point{post.votes.sum !== 1 && post.votes.sum !== -1 && "s"} • {post.comments} comments • {formatDistanceStrict(
                         new Date(post.date.seconds * 1000),
                         new Date()
                       )}

@@ -62,6 +62,6 @@ const Wrapper = styled.div`
 `;
 
 const Container = styled.div`
-  max-width: 40rem;
   flex: 1;
+  max-width: 40rem;
 `;

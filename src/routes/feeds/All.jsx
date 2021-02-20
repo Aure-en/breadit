@@ -6,23 +6,30 @@ import TopSubreadits from "../../components/aside/TopSubreadits";
 import Create from "../../components/aside/Create";
 import LatestPosts from "../../components/aside/LatestPosts";
 import Footer from "../../components/aside/Footer";
-import "../../styles/styles.css";
+import Sort from "../../components/sort/Sort";
 
 function All() {
   const [posts, setPosts] = useState([]);
   const [limit, setLimit] = useState(20);
-  const { getPosts } = usePost();
+  const [sort, setSort] = useState("top");
+  const { getPostsByVotes, getPostsByDate } = usePost();
 
   useEffect(() => {
     (async () => {
-      const posts = await getPosts(limit);
-      setPosts(posts);
+      if (sort === "top") {
+        const posts = await getPostsByVotes(limit);
+        setPosts(() => posts);
+      } else {
+        const posts = await getPostsByDate(limit);
+        setPosts(() => posts);
+      }
     })();
-  }, [limit]);
+  }, [sort, limit]);
 
   return (
     <Wrapper>
       <Container>
+        <Sort setSort={setSort} sort={sort} />
         {posts.map((post) => {
           return <PostPreview key={post} postId={post} />;
         })}

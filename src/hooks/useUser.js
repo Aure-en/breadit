@@ -28,20 +28,15 @@ function useUser() {
       .where("author.id", "==", userId)
       .get();
     posts.docs.forEach((post) => {
-      karma += Object.values(post.data().votes).reduce(
-        (sum, current) => sum + current,
-        0
-      );
+      karma += post.data().votes.sum;
     });
+
     const comments = await firestore
       .collection("comments")
       .where("author.id", "==", userId)
       .get();
     comments.docs.forEach((post) => {
-      karma += Object.values(post.data().votes).reduce(
-        (sum, current) => sum + current,
-        0
-      );
+      karma += post.data().votes.sum;
     });
     return karma;
   };
@@ -65,11 +60,59 @@ function useUser() {
     return posts;
   };
 
+  const getUserPostsByVotes = async (userId, limit) => {
+    const posts = [];
+    const query = await firestore
+      .collection("posts")
+      .where("author.id", "==", userId)
+      .orderBy("votes.sum", "desc")
+      .limit(limit)
+      .get();
+    query.docs.forEach((post) => posts.push(post.data()));
+    return posts;
+  };
+
+  const getUserPostsByDate = async (userId, limit) => {
+    const posts = [];
+    const query = await firestore
+      .collection("posts")
+      .where("author.id", "==", userId)
+      .orderBy("date", "desc")
+      .limit(limit)
+      .get();
+    query.docs.forEach((post) => posts.push(post.data()));
+    return posts;
+  };
+
   const getUserComments = async (userId, limit) => {
     const comments = [];
     const query = await firestore
       .collection("comments")
       .where("author.id", "==", userId)
+      .limit(limit)
+      .get();
+    query.docs.forEach((comment) => comments.push(comment.data()));
+    return comments;
+  };
+
+  const getUserCommentsByVotes = async (userId, limit) => {
+    const comments = [];
+    const query = await firestore
+      .collection("comments")
+      .where("author.id", "==", userId)
+      .orderBy("votes.sum", "desc")
+      .limit(limit)
+      .get();
+    query.docs.forEach((comment) => comments.push(comment.data()));
+    return comments;
+  };
+
+  const getUserCommentsByDate = async (userId, limit) => {
+    const comments = [];
+    const query = await firestore
+      .collection("comments")
+      .where("author.id", "==", userId)
+      .orderBy("date", "desc")
       .limit(limit)
       .get();
     query.docs.forEach((comment) => comments.push(comment.data()));
@@ -82,7 +125,11 @@ function useUser() {
     isUsernameAvailable,
     getKarma,
     getUserPosts,
+    getUserPostsByVotes,
+    getUserPostsByDate,
     getUserComments,
+    getUserCommentsByVotes,
+    getUserCommentsByDate,
   };
 }
 

@@ -13,6 +13,7 @@ function useSubreadit() {
       },
       members: 1,
       date: new Date(),
+      rules: [],
     });
     ref.update({ id: ref.id });
   };
@@ -38,6 +39,30 @@ function useSubreadit() {
     const postsDocs = await firestore
       .collection("posts")
       .where("subreadit.id", "==", subreaditId)
+      .limit(limit)
+      .get();
+    postsDocs.docs.forEach((doc) => posts.push(doc.data()));
+    return posts;
+  };
+
+  const getSubreaditPostsByVotes = async (subreaditId, limit) => {
+    const posts = [];
+    const postsDocs = await firestore
+      .collection("posts")
+      .where("subreadit.id", "==", subreaditId)
+      .orderBy("votes.sum", "desc")
+      .limit(limit)
+      .get();
+    postsDocs.docs.forEach((doc) => posts.push(doc.data()));
+    return posts;
+  };
+
+  const getSubreaditPostsByDate = async (subreaditId, limit) => {
+    const posts = [];
+    const postsDocs = await firestore
+      .collection("posts")
+      .where("subreadit.id", "==", subreaditId)
+      .orderBy("date", "desc")
       .limit(limit)
       .get();
     postsDocs.docs.forEach((doc) => posts.push(doc.data()));
@@ -129,6 +154,8 @@ function useSubreadit() {
     getSubreaditById,
     getSubreaditByName,
     getSubreaditPosts,
+    getSubreaditPostsByVotes,
+    getSubreaditPostsByDate,
     isNameAvailable,
     getSubreadits,
     getPopularSubreadits,

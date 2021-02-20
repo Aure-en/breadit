@@ -10,7 +10,10 @@ function useComment() {
       },
       content,
       date: new Date(),
-      votes: {},
+      votes: {
+        list: {},
+        sum: 0,
+      },
       parent: parentId,
       children: [],
       post: postId,
@@ -51,7 +54,7 @@ function useComment() {
 
   const editComment = (commentId, update) => {
     return firestore.collection("comments").doc(commentId).update({
-      text: update,
+      content: update,
     });
   };
 
@@ -62,6 +65,32 @@ function useComment() {
       .collection("comments")
       .where("post", "==", postId)
       .where("parent", "==", null)
+      .get();
+    comments.forEach((comment) => commentsList.push(comment.data().id));
+    return commentsList;
+  };
+
+  const getCommentsByVotes = async (postId, limit) => {
+    const commentsList = [];
+    const comments = await firestore
+      .collection("comments")
+      .where("post", "==", postId)
+      .where("parent", "==", null)
+      .orderBy("votes.sum", "desc")
+      .limit(limit)
+      .get();
+    comments.forEach((comment) => commentsList.push(comment.data().id));
+    return commentsList;
+  };
+
+  const getCommentsByDate = async (postId, limit) => {
+    const commentsList = [];
+    const comments = await firestore
+      .collection("comments")
+      .where("post", "==", postId)
+      .where("parent", "==", null)
+      .orderBy("date", "desc")
+      .limit(limit)
       .get();
     comments.forEach((comment) => commentsList.push(comment.data().id));
     return commentsList;
@@ -87,6 +116,8 @@ function useComment() {
     deleteComment,
     editComment,
     getComments,
+    getCommentsByVotes,
+    getCommentsByDate,
     getCommentsNumber,
     getComment,
   };

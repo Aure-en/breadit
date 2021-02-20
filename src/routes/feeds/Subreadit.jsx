@@ -1,33 +1,52 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import useSubreadit from "../hooks/useSubreadit";
-import PostPreview from "../components/posts/PostPreview";
-import SubreaditInfo from "../components/aside/SubreaditInfo";
-import SubreaditRules from "../components/aside/SubreaditRules";
+import useSubreadit from "../../hooks/useSubreadit";
+import PostPreview from "../../components/posts/PostPreview";
+import SubreaditInfo from "../../components/aside/SubreaditInfo";
+import SubreaditRules from "../../components/aside/SubreaditRules";
+import Sort from "../../components/sort/Sort";
 
 function Subreadit({ match }) {
   const [subreadit, setSubreadit] = useState();
+  const [sort, setSort] = useState("top");
   const [posts, setPosts] = useState([]);
   const [limit, setLimit] = useState(20);
-  const { getSubreaditByName, getSubreaditPosts } = useSubreadit();
+  const {
+    getSubreaditByName,
+    getSubreaditPostsByVotes,
+    getSubreaditPostsByDate,
+  } = useSubreadit();
   const subreaditName = match.params.subreadit;
 
   useEffect(() => {
     (async () => {
       const subreadit = await getSubreaditByName(subreaditName);
-      const posts = await getSubreaditPosts(subreadit.id, limit);
       setSubreadit(subreadit);
-      setPosts(posts);
     })();
   }, []);
+
+  useEffect(() => {
+    (async () => {
+      if (!subreadit) return;
+      if (sort === "top") {
+        const posts = await getSubreaditPostsByVotes(subreadit.id, limit);
+        setPosts(() => posts);
+      } else {
+        const posts = await getSubreaditPostsByDate(subreadit.id, limit);
+        setPosts(() => posts);
+      }
+    })();
+  }, [subreadit, sort, limit]);
 
   return (
     <Wrapper>
       <Container>
-      {posts.map((post) => {
-        return <PostPreview key={post.id} postId={post.id} />;
-      })}
+        <Sort setSort={setSort} sort={sort} />
+
+        {posts.map((post) => {
+          return <PostPreview key={post.id} postId={post.id} />;
+        })}
       </Container>
       <Aside>
         {subreadit && (
