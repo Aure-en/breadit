@@ -11,12 +11,17 @@ import SortDropdown from "../components/sort/SortDropdown";
 
 function Post({ match }) {
   const [post, setPost] = useState();
-  const [comments, setComments] = useState([]);
+  const [comments, setComments] = useState();
   const [comment, setComment] = useState("");
   const [limit, setLimit] = useState(20);
   const [sort, setSort] = useState("top");
   const { getPost } = usePost();
-  const { createComment, getCommentsByVotes, getCommentsByDate } = useComment();
+  const {
+    createComment,
+    getCommentsByVotes,
+    getCommentsByDate,
+    commentListener,
+  } = useComment();
   const { currentUser } = useAuth();
   const { postId, subreadit } = match.params;
 
@@ -41,6 +46,29 @@ function Post({ match }) {
     })();
   }, [limit, sort]);
 
+  // Listen to comments
+  // - When a new comment is added to the post by the user, update comments
+  // so that the new comment appears without having to refresh the page.
+  useEffect(() => {
+    const unsubscribe = commentListener(postId, (snapshot) => {
+      snapshot.docChanges().forEach(async (change) => {
+        if (
+          change.doc.data().author.id === currentUser.uid &&
+          change.type === "added"
+        ) {
+          let comments;
+          if (sort === "top") {
+            comments = await getCommentsByVotes(postId, limit);
+          } else {
+            comments = await getCommentsByDate(postId, limit);
+          }
+          setComments(comments);
+        }
+      });
+    });
+    return unsubscribe;
+  }, []);
+
   return (
     <div>
       {post && <PostContent postId={post.id} subreadit={subreadit} />}
@@ -57,9 +85,10 @@ function Post({ match }) {
 
       <div>
         <SortDropdown setSort={setSort} sort={sort} />
-        {comments.map((commentId) => {
-          return <Comment key={commentId} commentId={commentId} />;
-        })}
+        {comments &&
+          comments.map((commentId) => {
+            return <Comment key={comment.id} commentId={commentId} />;
+          })}
       </div>
     </div>
   );

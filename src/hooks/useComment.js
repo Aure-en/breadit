@@ -3,7 +3,8 @@ import { firestore } from "../firebase";
 
 function useComment() {
   const createComment = async (postId, author, content, parentId = null) => {
-    const ref = await firestore.collection("comments").add({
+    const ref = await firestore.collection("comments").doc();
+    ref.set({
       author: {
         id: author.uid,
         name: author.displayName,
@@ -17,8 +18,8 @@ function useComment() {
       parent: parentId,
       children: [],
       post: postId,
+      id: ref.id,
     });
-    ref.update({ id: ref.id });
 
     // If our comment is a reply to another comment:
     // Update the parent document to add the new comment to their children.
@@ -111,7 +112,14 @@ function useComment() {
     return firestore.collection("comments").doc(commentId).get();
   };
 
-  const commentListener = (commentId, callback) => {
+  const commentListener = (postId, callback) => {
+    return firestore
+      .collection("comments")
+      .where("post", "==", postId)
+      .onSnapshot(callback);
+  };
+
+  const nestedCommentListener = (commentId, callback) => {
     return firestore.collection("comments").doc(commentId).onSnapshot(callback);
   };
 
@@ -125,6 +133,7 @@ function useComment() {
     getCommentsNumber,
     getComment,
     commentListener,
+    nestedCommentListener,
   };
 }
 

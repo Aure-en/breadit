@@ -21,13 +21,14 @@ function Comment({ commentId }) {
   const [edit, setEdit] = useState("");
   const [isEntryOpen, setIsEntryOpen] = useState(false);
   const { currentUser } = useAuth();
-  const { getComment, createComment, editComment } = useComment();
-  const { vote, votes, handleUpvote, handleDownvote } = useVote(
-    "comments",
-    commentId,
-    currentUser && currentUser.uid
-  );
+  const {
+    getComment,
+    createComment,
+    editComment,
+    nestedCommentListener,
+  } = useComment();
 
+  // Get the comment's data from the Firestore.
   useEffect(() => {
     (async () => {
       const comment = await getComment(commentId);
@@ -35,24 +36,33 @@ function Comment({ commentId }) {
     })();
   }, []);
 
+  // Listen to the comment:
+  // - When the user replies to the comment, its children are updated.
+  // - The listener then fetches the new comment (with updated children)
+  // and updates the comment state, which triggers a rerender.
+  useEffect(() => {
+    const unsubscribe = nestedCommentListener(commentId, (snapshot) => {
+      setComment(snapshot.data());
+    });
+    return unsubscribe;
+  }, []);
+
+  const { vote, votes, handleUpvote, handleDownvote } = useVote(
+    "comments",
+    commentId,
+    currentUser && currentUser.uid
+  );
+
   const handleEdit = () => {
     editComment(commentId, edit);
     setIsEditing(false);
-
-    // I chose to edit the comment state instead of
-    // fetching the new comment from Firestore with
-    // onSnapshot, as I did not want the comment to
-    // reload every time someone replied to it.
-    setComment((prev) => {
-      return { ...prev, content: edit };
-    });
   };
 
   return (
     <>
-      <Container>
-        {comment && (
-          <>
+      {comment && (
+        <>
+          <Container>
             <div>{comment.author.name}</div>
 
             {isEditing ? (
@@ -127,7 +137,7 @@ function Comment({ commentId }) {
                   <form
                     onSubmit={(e) => {
                       e.preventDefault();
-                      createComment(comment.id, currentUser, reply, commentId);
+                      createComment(commentId, currentUser, reply, commentId);
                     }}
                   >
                     <TextEditor type="comment" sendContent={setReply} />
@@ -137,13 +147,13 @@ function Comment({ commentId }) {
               </>
             )}
 
-            {comment.children.map((child) => {
-              return <Comment key={child} commentId={child} />;
+            {comment.children.map((childId) => {
+              return <Comment key={childId} commentId={childId} />;
             })}
-          </>
-        )}
-      </Container>
-      {isEntryOpen && <Entry close={() => setIsEntryOpen(false)} />}
+          </Container>
+          {isEntryOpen && <Entry close={() => setIsEntryOpen(false)} />}
+        </>
+      )}
     </>
   );
 }
