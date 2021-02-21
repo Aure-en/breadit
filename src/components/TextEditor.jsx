@@ -1,5 +1,10 @@
 /* eslint-disable react/display-name */
-import React, { useState, useEffect } from "react";
+import React, {
+  useState,
+  useEffect,
+  forwardRef,
+  useImperativeHandle,
+} from "react";
 import PropTypes from "prop-types";
 import ReactTooltip from "react-tooltip";
 import {
@@ -9,6 +14,7 @@ import {
   CompositeDecorator,
   convertToRaw,
   convertFromRaw,
+  ContentState,
 } from "draft-js";
 import styled from "styled-components";
 import "draft-js/dist/Draft.css";
@@ -64,12 +70,25 @@ const styleMap = {
   },
 };
 
-function TextEditor({ type, sendContent, prevContent }) {
+const TextEditor = forwardRef(({ type, sendContent, prevContent }, ref) => {
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty(decorator)
   );
   const [isLinkEditorOpen, setIsLinkEditorOpen] = useState(false);
   const [link, setLink] = useState("");
+
+  // Reset the text editor after the user posts a comment.
+  useImperativeHandle(ref, () => ({
+    reset() {
+      setEditorState(
+        EditorState.push(
+          editorState,
+          ContentState.createFromText(""),
+          "remove-range"
+        )
+      );
+    },
+  }));
 
   // If we provide a previous content (i.e : we are editing a comment / post), it is loaded in the Text Editor.
   useEffect(() => {
@@ -336,7 +355,7 @@ function TextEditor({ type, sendContent, prevContent }) {
       )}
     </Wrapper>
   );
-}
+});
 
 TextEditor.propTypes = {
   // Type is either "post" or "comment" (appearance changes depending on the type)

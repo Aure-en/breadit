@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { useAuth } from "../contexts/AuthContext";
@@ -24,6 +24,7 @@ function Post({ match }) {
   } = useComment();
   const { currentUser } = useAuth();
   const { postId, subreadit } = match.params;
+  const textEditorRef = useRef();
 
   // Loads the post itself
   useEffect(() => {
@@ -77,9 +78,14 @@ function Post({ match }) {
         onSubmit={(e) => {
           e.preventDefault();
           createComment(postId, currentUser, comment);
+          textEditorRef.current.reset();
         }}
       >
-        <TextEditor type="comment" sendContent={setComment} />
+        <TextEditor
+          type="comment"
+          sendContent={setComment}
+          ref={textEditorRef}
+        />
         <button type="submit">Comment</button>
       </form>
 

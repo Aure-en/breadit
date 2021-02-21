@@ -138,6 +138,7 @@ function Comment({ commentId }) {
                     onSubmit={(e) => {
                       e.preventDefault();
                       createComment(commentId, currentUser, reply, commentId);
+                      setIsReplying(false);
                     }}
                   >
                     <TextEditor type="comment" sendContent={setReply} />
