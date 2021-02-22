@@ -18,6 +18,7 @@ function useComment() {
       parent: parentId,
       children: [],
       post: postId,
+      isDeleted: false,
       id: ref.id,
     });
 
@@ -34,23 +35,11 @@ function useComment() {
   };
 
   const deleteComment = async (commentId) => {
-    // If our comment was a reply to another comment:
-    // Delete the comment from the parent's children.
-
-    const commentsRef = firestore.collection("comments").doc(commentId);
-    const comment = await commentsRef.doc(commentId).get();
-
-    if (comment.data().parent) {
-      firestore
-        .collection("comments")
-        .doc(comment.data().parent)
-        .update({
-          children: firebase.firestore.FieldValue.arrayRemove(commentId),
-        });
-    }
-
-    // Delete the comment itself.
-    commentsRef.doc(commentId).delete();
+    return firestore.collection("comments").doc(commentId).update({
+      "author.name": "[deleted]",
+      content: "[deleted]",
+      isDeleted: true,
+    });
   };
 
   const editComment = (commentId, update) => {

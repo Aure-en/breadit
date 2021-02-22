@@ -10,7 +10,6 @@ import Post from "./routes/Post";
 import All from "./routes/feeds/All";
 import Subreadit from "./routes/feeds/Subreadit";
 import CreatePost from "./routes/create/CreatePost";
-import Nav from "./components/Nav";
 import Header from "./components/header/Header";
 import UserSettings from "./routes/settings/UserSettings";
 import SubreaditSettings from "./routes/settings/SubreaditSettings";
@@ -38,9 +37,6 @@ function App() {
         <AuthProvider>
           <SubscriptionProvider>
             <Header />
-            <header>
-              <Nav />
-            </header>
 
             <Container>
               <Switch>

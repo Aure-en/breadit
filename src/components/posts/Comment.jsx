@@ -2,10 +2,12 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
+import Modal from "react-modal";
 import redraft from "redraft";
 import useComment from "../../hooks/useComment";
 import useVote from "../../hooks/useVote";
 import Entry from "../entry/Entry";
+
 import TextEditor, { renderers } from "../TextEditor";
 import { useAuth } from "../../contexts/AuthContext";
 
@@ -26,6 +28,7 @@ function Comment({ commentId }) {
     createComment,
     editComment,
     nestedCommentListener,
+    deleteComment,
   } = useComment();
 
   // Get the comment's data from the Firestore.
@@ -63,7 +66,13 @@ function Comment({ commentId }) {
       {comment && (
         <>
           <Container>
-            <div>{comment.author.name}</div>
+            <>
+              {comment.isDeleted ? (
+                <div>[deleted]</div>
+              ) : (
+                <div>{comment.author.name}</div>
+              )}
+            </>
 
             {isEditing ? (
               <>
@@ -81,7 +90,13 @@ function Comment({ commentId }) {
               </>
             ) : (
               <>
-                <div>{redraft(JSON.parse(comment.content), renderers)}</div>
+                <>
+                  {comment.isDeleted ? (
+                    <div>[deleted]</div>
+                  ) : (
+                    <div>{redraft(JSON.parse(comment.content), renderers)}</div>
+                  )}
+                </>
                 <Buttons>
                   <Vote
                     type="button"
@@ -127,9 +142,18 @@ function Comment({ commentId }) {
                   <button type="button">Save</button>
                   <button
                     type="button"
-                    onClick={() => setIsEditing(!isEditing)}
+                    onClick={() => {
+                      setIsEditing(true);
+                      setEdit(comment.content);
+                    }}
                   >
                     Edit
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => deleteComment(commentId)}
+                  >
+                    Delete
                   </button>
                 </Buttons>
 
@@ -152,7 +176,12 @@ function Comment({ commentId }) {
               return <Comment key={childId} commentId={childId} />;
             })}
           </Container>
-          {isEntryOpen && <Entry close={() => setIsEntryOpen(false)} />}
+          <EntryModal
+            isOpen={isEntryOpen}
+            onRequestClose={() => setIsEntryOpen(false)}
+          >
+            <Entry close={() => setIsEntryOpen(false)} />
+          </EntryModal>
         </>
       )}
     </>
@@ -176,3 +205,13 @@ const Vote = styled.button`
 `;
 
 const Buttons = styled.div``;
+
+const EntryModal = styled(Modal)`
+  width: 30rem;
+  height: 30rem;
+  border: 1px solid red;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+`;

@@ -24,7 +24,7 @@ import { ReactComponent as IconLink } from "../../assets/icons/general/icon-link
 
 function Post({ postId, subreadit }) {
   const { currentUser } = useAuth();
-  const { getPost, editPost } = usePost();
+  const { getPost, editPost, deletePost } = usePost();
   const { getCommentsNumber } = useComment();
   const { vote, votes, handleUpvote, handleDownvote } = useVote(
     "posts",
@@ -138,7 +138,9 @@ function Post({ postId, subreadit }) {
                         {formatDistanceStrict(
                           new Date(post.date.seconds * 1000),
                           new Date()
-                        )} ago
+                        )}
+{" "}
+                        ago
                       </Link>
                     </Informations>
                     {post.type !== "link" && (
@@ -201,6 +203,9 @@ function Post({ postId, subreadit }) {
                           Edit
                         </Button>
                       )}
+                      <Button type="button" onClick={() => deletePost(postId)}>
+                        Delete
+                      </Button>
                     </Buttons>
                   </>
                 )}

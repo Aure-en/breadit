@@ -34,11 +34,22 @@ function usePost() {
 
   const editPost = (postId, content) => {
     return firestore.collection("posts").doc(postId).update({ content });
-  }
+  };
 
-  const deletePost = (postId) => {
-    // Delete the post id from the subreadit's posts.
-    return firestore.collection("posts").doc(postId).delete();
+  const deletePost = async (postId) => {
+    // Delete the post document.
+    firestore.collection("posts").doc(postId).delete();
+
+    // Delete all the comments written on that post.
+    const commentsId = [];
+    const comments = await firestore
+      .collection("comments")
+      .where("post", "==", postId)
+      .get();
+    comments.docs.forEach((comment) => commentsId.push(comment.data().id));
+    commentsId.forEach((id) => {
+      firestore.collection("comments").doc(id).delete();
+    });
   };
 
   const getPost = (postId) => {

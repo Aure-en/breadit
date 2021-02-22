@@ -53,10 +53,7 @@ function Post({ match }) {
   useEffect(() => {
     const unsubscribe = commentListener(postId, (snapshot) => {
       snapshot.docChanges().forEach(async (change) => {
-        if (
-          change.doc.data().author.id === currentUser.uid &&
-          change.type === "added"
-        ) {
+        if (change.doc.data().author.id === currentUser.uid) {
           let comments;
           if (sort === "top") {
             comments = await getCommentsByVotes(postId, limit);
