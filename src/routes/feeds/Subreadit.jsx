@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
+import useScroll from "../../hooks/useScroll";
 import useSubreadit from "../../hooks/useSubreadit";
 import PostPreview from "../../components/posts/PostPreview";
 import SubreaditInfo from "../../components/aside/SubreaditInfo";
@@ -11,13 +12,14 @@ function Subreadit({ match }) {
   const [subreadit, setSubreadit] = useState();
   const [sort, setSort] = useState("top");
   const [posts, setPosts] = useState([]);
-  const [limit, setLimit] = useState(20);
   const {
     getSubreaditByName,
     getSubreaditPostsByVotes,
     getSubreaditPostsByDate,
   } = useSubreadit();
   const subreaditName = match.params.subreadit;
+  const postsRef = useRef();
+  const { limit } = useScroll(postsRef, 10, 5);
 
   useEffect(() => {
     (async () => {
@@ -43,10 +45,11 @@ function Subreadit({ match }) {
     <Wrapper>
       <Container>
         <Sort setSort={setSort} sort={sort} />
-
-        {posts.map((post) => {
-          return <PostPreview key={post.id} postId={post.id} />;
-        })}
+        <PostsList ref={postsRef}>
+          {posts.map((post) => {
+            return <PostPreview key={post.id} postId={post.id} />;
+          })}
+        </PostsList>
       </Container>
       <Aside>
         {subreadit && (
@@ -86,7 +89,9 @@ const Wrapper = styled.div`
 const Container = styled.main`
   max-width: 40rem;
   flex: 1;
+`;
 
+const PostsList = styled.div`
   & > * {
     margin-bottom: 1rem;
   }

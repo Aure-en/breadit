@@ -157,6 +157,7 @@ function PostPreview({ postId }) {
                 )}
                 <>
                   {post.type === "post" &&
+                    post.content &&
                     renderText(post.content, post.subreadit.name, postId)}
                   {post.type === "image" &&
                     renderImages(post.content, post.title)}

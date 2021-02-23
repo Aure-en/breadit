@@ -169,6 +169,7 @@ function Post({ postId, subreadit }) {
                       )}
                       {post.type === "post" &&
                         !isEditing &&
+                        post.content &&
                         renderText(post.content, subreadit, postId)}
                       {post.type === "image" &&
                         renderImages(post.content, post.title)}

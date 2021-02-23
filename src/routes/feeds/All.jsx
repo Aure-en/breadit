@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import usePost from "../../hooks/usePost";
+import useScroll from "../../hooks/useScroll";
 import PostPreview from "../../components/posts/PostPreview";
 import TopSubreadits from "../../components/aside/TopSubreadits";
 import Create from "../../components/aside/Create";
@@ -10,18 +11,20 @@ import Sort from "../../components/sort/Sort";
 
 function All() {
   const [posts, setPosts] = useState([]);
-  const [limit, setLimit] = useState(20);
   const [sort, setSort] = useState("top");
   const { getPostsByVotes, getPostsByDate } = usePost();
+  const postsRef = useRef();
+  const { limit } = useScroll(postsRef, 10, 5);
 
   useEffect(() => {
+    console.log(limit);
     (async () => {
       if (sort === "top") {
         const posts = await getPostsByVotes(limit);
-        setPosts(() => posts);
+        setPosts(posts);
       } else {
         const posts = await getPostsByDate(limit);
-        setPosts(() => posts);
+        setPosts(posts);
       }
     })();
   }, [sort, limit]);
@@ -30,9 +33,11 @@ function All() {
     <Wrapper>
       <Container>
         <Sort setSort={setSort} sort={sort} />
-        {posts.map((post) => {
-          return <PostPreview key={post} postId={post} />;
-        })}
+        <PostsList ref={postsRef}>
+          {posts.map((post) => {
+            return <PostPreview key={post} postId={post} />;
+          })}
+        </PostsList>
       </Container>
       <Aside>
         <TopSubreadits />
@@ -61,7 +66,9 @@ const Wrapper = styled.div`
 const Container = styled.div`
   max-width: 40rem;
   flex: 1;
+`;
 
+const PostsList = styled.div`
   & > * {
     margin-bottom: 1rem;
   }

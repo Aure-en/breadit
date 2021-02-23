@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { useSubscription } from "../../contexts/SubscriptionContext";
 import usePost from "../../hooks/usePost";
+import useScroll from "../../hooks/useScroll";
 import PostPreview from "../../components/posts/PostPreview";
 import TopSubreadits from "../../components/aside/TopSubreadits";
 import Create from "../../components/aside/Create";
@@ -11,13 +12,14 @@ import Sort from "../../components/sort/Sort";
 
 function Main() {
   const [posts, setPosts] = useState([]);
-  const [limit, setLimit] = useState(20);
   const [sort, setSort] = useState("top");
   const { subscriptions } = useSubscription();
   const {
     getSubscriptionsPostsByVotes,
     getSubscriptionsPostsByDate,
   } = usePost();
+  const postsRef = useRef();
+  const { limit } = useScroll(postsRef, 10, 5);
 
   // Loads the subscriptions posts depending on sort / limit.
   useEffect(() => {
@@ -37,9 +39,11 @@ function Main() {
     <Wrapper>
       <Container>
         <Sort setSort={setSort} sort={sort} />
-        {posts.map((post) => {
-          return <PostPreview key={post} postId={post} />;
-        })}
+        <PostsList ref={postsRef}>
+          {posts.map((post) => {
+            return <PostPreview key={post} postId={post} />;
+          })}
+        </PostsList>
       </Container>
       <Aside>
         <TopSubreadits />
@@ -69,7 +73,9 @@ const Wrapper = styled.div`
 const Container = styled.div`
   max-width: 40rem;
   flex: 1;
+`;
 
+const PostsList = styled.div`
   & > * {
     margin-bottom: 1rem;
   }

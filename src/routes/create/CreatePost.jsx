@@ -106,7 +106,7 @@ function CreatePost() {
       content,
       spoiler
     );
-    history.push(`/b/${current}/${postId}`);
+    history.push(`/b/${current.name}/${postId}`);
   };
 
   return (

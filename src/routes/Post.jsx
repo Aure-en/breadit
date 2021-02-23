@@ -10,6 +10,7 @@ import Comment from "../components/posts/Comment";
 import SortDropdown from "../components/sort/SortDropdown";
 
 function Post({ match }) {
+  const { postId, subreadit } = match.params;
   const [post, setPost] = useState();
   const [comments, setComments] = useState();
   const [comment, setComment] = useState("");
@@ -23,7 +24,6 @@ function Post({ match }) {
     commentListener,
   } = useComment();
   const { currentUser } = useAuth();
-  const { postId, subreadit } = match.params;
   const textEditorRef = useRef();
 
   // Loads the post itself
@@ -69,7 +69,7 @@ function Post({ match }) {
 
   return (
     <div>
-      {post && <PostContent postId={post.id} subreadit={subreadit} />}
+      {post && <PostContent postId={postId} subreadit={subreadit} />}
 
       <form
         onSubmit={(e) => {
