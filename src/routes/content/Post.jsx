@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import { useAuth } from "../contexts/AuthContext";
-import usePost from "../hooks/usePost";
-import useComment from "../hooks/useComment";
-import PostContent from "../components/posts/Post";
-import TextEditor from "../components/TextEditor";
-import Comment from "../components/posts/Comment";
-import SortDropdown from "../components/sort/SortDropdown";
+import { useAuth } from "../../contexts/AuthContext";
+import usePost from "../../hooks/usePost";
+import useComment from "../../hooks/useComment";
+import PostContent from "../../components/posts/Post";
+import TextEditor from "../../components/TextEditor";
+import Comment from "../../components/posts/Comment";
+import SortDropdown from "../../components/sort/SortDropdown";
 
 function Post({ match }) {
   const { postId, subreadit } = match.params;
@@ -26,7 +26,7 @@ function Post({ match }) {
   const { currentUser } = useAuth();
   const textEditorRef = useRef();
 
-  // Loads the post itself
+  // Load the post itself
   useEffect(() => {
     (async () => {
       const post = await getPost(postId);
@@ -34,7 +34,7 @@ function Post({ match }) {
     })();
   }, []);
 
-  // Loads the comments
+  // Load the comments
   useEffect(() => {
     (async () => {
       let comments;

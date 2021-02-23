@@ -6,7 +6,8 @@ import { AuthProvider } from "./contexts/AuthContext";
 import { SubscriptionProvider } from "./contexts/SubscriptionContext";
 import CreateSubreadit from "./routes/create/CreateSubreadit";
 import Main from "./routes/feeds/Main";
-import Post from "./routes/Post";
+import Post from "./routes/content/Post";
+import Comment from "./routes/content/Comment";
 import All from "./routes/feeds/All";
 import Subreadit from "./routes/feeds/Subreadit";
 import CreatePost from "./routes/create/CreatePost";
@@ -56,6 +57,11 @@ function App() {
                   component={SubreaditSettings}
                 />
                 <Route exact path="/b/:subreadit/:postId" component={Post} />
+                <Route
+                  exact
+                  path="/b/:subreadit/:postId/:commentId"
+                  component={Comment}
+                />
                 <Route path="/u/:user" component={User} />
               </Switch>
             </Container>
