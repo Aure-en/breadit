@@ -40,15 +40,34 @@ function usePost() {
     // Delete the post document.
     firestore.collection("posts").doc(postId).delete();
 
-    // Delete all the comments written on that post.
+    // Delete the post from the users' saved posts/comments.
+    const savedPost = await firestore
+      .collectionGroup("saved")
+      .where("id", "==", postId)
+      .get();
+    savedPost.forEach((doc) => doc.ref.delete());
+
     const commentsId = [];
     const comments = await firestore
       .collection("comments")
       .where("post", "==", postId)
       .get();
     comments.docs.forEach((comment) => commentsId.push(comment.data().id));
-    commentsId.forEach((id) => {
-      firestore.collection("comments").doc(id).delete();
+
+    // Delete the comments from the users' saved comments.
+    await Promise.all(
+      commentsId.map(async (commentId) => {
+        const savedComment = await firestore
+          .collectionGroup("saved")
+          .where("id", "==", commentId)
+          .get();
+        savedComment.forEach((doc) => doc.ref.delete());
+      })
+    );
+
+    // Delete all the comments written on that post.
+    commentsId.forEach(async (id) => {
+      await firestore.collection("comments").doc(id).delete();
     });
   };
 

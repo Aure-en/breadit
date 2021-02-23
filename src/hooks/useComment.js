@@ -35,11 +35,25 @@ function useComment() {
   };
 
   const deleteComment = async (commentId) => {
-    return firestore.collection("comments").doc(commentId).update({
-      "author.name": "[deleted]",
-      content: "[deleted]",
-      isDeleted: true,
-    });
+    // Delete the post from the users' saved posts/comments.
+    const saved = await firestore
+      .collectionGroup("saved")
+      .where("id", "==", commentId)
+      .get();
+    saved.forEach((doc) => doc.ref.delete());
+
+    // Replace the comment's content and author.
+    return firestore
+      .collection("comments")
+      .doc(commentId)
+      .update({
+        author: {
+          name: "[deleted]",
+          id: "[deleted]",
+        },
+        content: "[deleted]",
+        isDeleted: true,
+      });
   };
 
   const editComment = (commentId, update) => {
