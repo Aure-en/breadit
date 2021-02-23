@@ -90,7 +90,9 @@ function Post({ match }) {
         <SortDropdown setSort={setSort} sort={sort} />
         {comments &&
           comments.map((commentId) => {
-            return <Comment key={comment.id} commentId={commentId} />;
+            return (
+              <Comment key={commentId} commentId={commentId} postId={postId} />
+            );
           })}
       </div>
     </div>

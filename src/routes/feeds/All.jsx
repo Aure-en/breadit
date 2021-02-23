@@ -17,7 +17,6 @@ function All() {
   const { limit } = useScroll(postsRef, 10, 5);
 
   useEffect(() => {
-    console.log(limit);
     (async () => {
       if (sort === "top") {
         const posts = await getPostsByVotes(limit);

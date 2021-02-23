@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import useUser from "../../hooks/useUser";
 import usePost from "../../hooks/usePost";
+import useScroll from "../../hooks/useScroll";
 import useComment from "../../hooks/useComment";
 import Post from "../../components/user/Post";
 import Comment from "../../components/user/Comment";
@@ -11,10 +12,11 @@ function Overview({ userId }) {
   const [comments, setComments] = useState([]);
   const [posts, setPosts] = useState([]);
   const [overview, setOverview] = useState([]);
-  const [limit, setLimit] = useState(20);
   const { getUserComments, getUserPosts } = useUser();
   const { getCommentsNumber } = useComment();
   const { getPost } = usePost();
+  const docsRef = useRef();
+  const { limit } = useScroll(docsRef, 20, 10);
 
   // Get comments
   useEffect(() => {
@@ -76,7 +78,7 @@ function Overview({ userId }) {
   }, [comments, posts]);
 
   return (
-    <List>
+    <List ref={docsRef}>
       {overview.map((article) => {
         return article.type === "post" ? (
           <Post

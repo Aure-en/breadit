@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
 import { SubscriptionProvider } from "./contexts/SubscriptionContext";
+import { SaveProvider } from "./contexts/SaveContext";
 import CreateSubreadit from "./routes/create/CreateSubreadit";
 import Main from "./routes/feeds/Main";
 import Post from "./routes/content/Post";
@@ -37,34 +38,36 @@ function App() {
       <Wrapper>
         <AuthProvider>
           <SubscriptionProvider>
-            <Header />
+            <SaveProvider>
+              <Header />
 
-            <Container>
-              <Switch>
-                <Route exact path="/" component={Main} />
-                <Route exact path="/settings" component={UserSettings} />
-                <Route exact path="/submit" component={CreatePost} />
-                <Route
-                  exact
-                  path="/create/subreadit"
-                  component={CreateSubreadit}
-                />
-                <Route exact path="/b/all" component={All} />
-                <Route exact path="/b/:subreadit" component={Subreadit} />
-                <Route
-                  exact
-                  path="/b/:subreadit/settings"
-                  component={SubreaditSettings}
-                />
-                <Route exact path="/b/:subreadit/:postId" component={Post} />
-                <Route
-                  exact
-                  path="/b/:subreadit/:postId/:commentId"
-                  component={Comment}
-                />
-                <Route path="/u/:user" component={User} />
-              </Switch>
-            </Container>
+              <Container>
+                <Switch>
+                  <Route exact path="/" component={Main} />
+                  <Route exact path="/settings" component={UserSettings} />
+                  <Route exact path="/submit" component={CreatePost} />
+                  <Route
+                    exact
+                    path="/create/subreadit"
+                    component={CreateSubreadit}
+                  />
+                  <Route exact path="/b/all" component={All} />
+                  <Route exact path="/b/:subreadit" component={Subreadit} />
+                  <Route
+                    exact
+                    path="/b/:subreadit/settings"
+                    component={SubreaditSettings}
+                  />
+                  <Route exact path="/b/:subreadit/:postId" component={Post} />
+                  <Route
+                    exact
+                    path="/b/:subreadit/:postId/:commentId"
+                    component={Comment}
+                  />
+                  <Route path="/u/:user" component={User} />
+                </Switch>
+              </Container>
+            </SaveProvider>
           </SubscriptionProvider>
         </AuthProvider>
       </Wrapper>

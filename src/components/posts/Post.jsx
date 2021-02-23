@@ -6,6 +6,7 @@ import formatDistanceStrict from "date-fns/formatDistanceStrict";
 import { Link } from "react-router-dom";
 import redraft from "redraft";
 import { useAuth } from "../../contexts/AuthContext";
+import { useSave } from "../../contexts/SaveContext";
 import useComment from "../../hooks/useComment";
 import useVote from "../../hooks/useVote";
 import usePost from "../../hooks/usePost";
@@ -20,10 +21,12 @@ import { ReactComponent as IconUp } from "../../assets/icons/general/icon-upvote
 import { ReactComponent as IconDown } from "../../assets/icons/general/icon-downvote.svg";
 import { ReactComponent as IconComment } from "../../assets/icons/general/icon-comment.svg";
 import { ReactComponent as IconSave } from "../../assets/icons/general/icon-save.svg";
+import { ReactComponent as IconSaved } from "../../assets/icons/general/icon-save-filled.svg";
 import { ReactComponent as IconLink } from "../../assets/icons/general/icon-link-small.svg";
 
 function Post({ postId, subreadit }) {
   const { currentUser } = useAuth();
+  const { saved, handleSave } = useSave();
   const { getPost, editPost, deletePost } = usePost();
   const { getCommentsNumber } = useComment();
   const { vote, votes, handleUpvote, handleDownvote } = useVote(
@@ -182,8 +185,12 @@ function Post({ postId, subreadit }) {
                         {commentsNumber} Comment
                         {commentsNumber !== 1 && "s"}
                       </ButtonLink>
-                      <Button type="button">
-                        <IconSave />
+                      <Button
+                        type="button"
+                        onClick={() =>
+                          handleSave(currentUser.uid, postId, "post")}
+                      >
+                        {saved.includes(postId) ? <IconSaved /> : <IconSave />}
                         Save
                       </Button>
                       <Button type="button" onClick={copyLink}>

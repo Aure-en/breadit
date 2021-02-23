@@ -1,17 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import useUser from "../../hooks/useUser";
 import usePost from "../../hooks/usePost";
+import useScroll from "../../hooks/useScroll";
 import Comment from "../../components/user/Comment";
 import Sort from "../../components/sort/Sort";
 
 function Comments({ userId }) {
   const [comments, setComments] = useState([]);
-  const [limit, setLimit] = useState(20);
   const [sort, setSort] = useState("top");
   const { getUserCommentsByVotes, getUserCommentsByDate } = useUser();
   const { getPost } = usePost();
+  const commentsRef = useRef();
+  const { limit } = useScroll(commentsRef, 20, 10);
 
   // Get comments
   useEffect(() => {
@@ -52,7 +54,7 @@ function Comments({ userId }) {
   return (
     <>
       <Sort setSort={setSort} sort={sort} />
-      <CommentsList>
+      <CommentsList ref={commentsRef}>
         {comments.map((comment) => {
           return (
             <Comment

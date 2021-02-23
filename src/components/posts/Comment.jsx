@@ -7,15 +7,17 @@ import redraft from "redraft";
 import useComment from "../../hooks/useComment";
 import useVote from "../../hooks/useVote";
 import Entry from "../entry/Entry";
-
 import TextEditor, { renderers } from "../TextEditor";
 import { useAuth } from "../../contexts/AuthContext";
+import { useSave } from "../../contexts/SaveContext";
 
 // Icons
 import { ReactComponent as IconUp } from "../../assets/icons/general/icon-upvote.svg";
 import { ReactComponent as IconDown } from "../../assets/icons/general/icon-downvote.svg";
+import { ReactComponent as IconSave } from "../../assets/icons/general/icon-save.svg";
+import { ReactComponent as IconSaved } from "../../assets/icons/general/icon-save-filled.svg";
 
-function Comment({ commentId }) {
+function Comment({ commentId, postId }) {
   const [comment, setComment] = useState();
   const [reply, setReply] = useState("");
   const [isReplying, setIsReplying] = useState(false);
@@ -23,6 +25,7 @@ function Comment({ commentId }) {
   const [edit, setEdit] = useState("");
   const [isEntryOpen, setIsEntryOpen] = useState(false);
   const { currentUser } = useAuth();
+  const { saved, handleSave } = useSave();
   const {
     getComment,
     createComment,
@@ -139,7 +142,14 @@ function Comment({ commentId }) {
                   >
                     Reply
                   </button>
-                  <button type="button">Save</button>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      handleSave(currentUser.uid, commentId, "comment")}
+                  >
+                    {saved.includes(commentId) ? <IconSaved /> : <IconSave />}
+                    Save
+                  </button>
                   <button
                     type="button"
                     onClick={() => {
@@ -161,7 +171,7 @@ function Comment({ commentId }) {
                   <form
                     onSubmit={(e) => {
                       e.preventDefault();
-                      createComment(commentId, currentUser, reply, commentId);
+                      createComment(postId, currentUser, reply, commentId);
                       setIsReplying(false);
                     }}
                   >
@@ -173,7 +183,9 @@ function Comment({ commentId }) {
             )}
 
             {comment.children.map((childId) => {
-              return <Comment key={childId} commentId={childId} />;
+              return (
+                <Comment key={childId} commentId={childId} postId={postId} />
+              );
             })}
           </Container>
           <EntryModal
@@ -190,6 +202,7 @@ function Comment({ commentId }) {
 
 Comment.propTypes = {
   commentId: PropTypes.string.isRequired,
+  postId: PropTypes.string.isRequired,
 };
 
 export default Comment;

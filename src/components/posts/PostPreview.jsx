@@ -7,6 +7,7 @@ import redraft from "redraft";
 import Modal from "react-modal";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
+import { useSave } from "../../contexts/SaveContext";
 import { useSubscription } from "../../contexts/SubscriptionContext";
 import useComment from "../../hooks/useComment";
 import useVote from "../../hooks/useVote";
@@ -23,11 +24,13 @@ import { ReactComponent as IconUp } from "../../assets/icons/general/icon-upvote
 import { ReactComponent as IconDown } from "../../assets/icons/general/icon-downvote.svg";
 import { ReactComponent as IconComment } from "../../assets/icons/general/icon-comment.svg";
 import { ReactComponent as IconSave } from "../../assets/icons/general/icon-save.svg";
+import { ReactComponent as IconSaved } from "../../assets/icons/general/icon-save-filled.svg";
 import { ReactComponent as IconHide } from "../../assets/icons/general/icon-hide.svg";
 import { ReactComponent as IconLink } from "../../assets/icons/general/icon-link-small.svg";
 
 function PostPreview({ postId }) {
   const { currentUser } = useAuth();
+  const { saved, handleSave } = useSave();
   const { getPost } = usePost();
   const { getCommentsNumber } = useComment();
   const { joinSubreadit } = useSubreadit();
@@ -173,13 +176,11 @@ function PostPreview({ postId }) {
                 <Button
                   type="button"
                   onClick={(e) => {
-                    {
-                      /* Avoid Link */
-                    }
                     e.preventDefault();
+                    handleSave(currentUser.uid, postId, "post");
                   }}
                 >
-                  <IconSave />
+                  {saved.includes(postId) ? <IconSaved /> : <IconSave />}
                   Save
                 </Button>
                 <Button

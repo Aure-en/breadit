@@ -5,6 +5,7 @@ import { Switch, Route } from "react-router-dom";
 import Overview from "./Overview";
 import Posts from "./Posts";
 import Comments from "./Comments";
+import Saved from "./Saved";
 import Profile from "../../components/user/Profile";
 import Nav from "../../components/user/Nav";
 
@@ -29,6 +30,7 @@ function User({ match }) {
             path={`${match.path}/comments`}
             render={() => <Comments userId={match.params.user} />}
           />
+          <Route exact path={`${match.path}/saved`} component={Saved} />
         </Switch>
       </Container>
       <Profile userId={match.params.user} />

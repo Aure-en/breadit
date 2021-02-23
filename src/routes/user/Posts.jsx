@@ -1,17 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import useUser from "../../hooks/useUser";
+import useScroll from "../../hooks/useScroll";
 import useComment from "../../hooks/useComment";
 import Post from "../../components/user/Post";
 import Sort from "../../components/sort/Sort";
 
 function Posts({ userId }) {
   const [posts, setPosts] = useState([]);
-  const [limit, setLimit] = useState(20);
   const [sort, setSort] = useState("top");
   const { getUserPostsByVotes, getUserPostsByDate } = useUser();
   const { getCommentsNumber } = useComment();
+  const postsRef = useRef();
+  const { limit } = useScroll(postsRef, 20, 10);
 
   useEffect(() => {
     (async () => {
@@ -35,7 +37,7 @@ function Posts({ userId }) {
   return (
     <>
       <Sort setSort={setSort} sort={sort} />
-      <PostList>
+      <PostList ref={postsRef}>
         {posts.map((post) => {
           return (
             <Post

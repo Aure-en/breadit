@@ -9,7 +9,8 @@ function usePost() {
     content,
     spoiler
   ) => {
-    const ref = await firestore.collection("posts").add({
+    const ref = await firestore.collection("posts").doc();
+    return ref.set({
       author: {
         id: author.uid,
         name: author.displayName,
@@ -27,9 +28,8 @@ function usePost() {
         name: subreadit.name,
       },
       spoiler,
+      id: ref.id,
     });
-    ref.update({ id: ref.id });
-    return ref.id;
   };
 
   const editPost = (postId, content) => {

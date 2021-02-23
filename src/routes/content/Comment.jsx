@@ -34,7 +34,7 @@ function Comment({ match }) {
     <Container>
       {post && <PostContent postId={postId} subreadit={subreadit} />}
       <Link to={`/b/${subreadit}/${postId}`}>View all comments</Link>
-      {comment && <CommentTree commentId={commentId} />}
+      {comment && <CommentTree commentId={commentId} postId={postId} />}
     </Container>
   );
 }

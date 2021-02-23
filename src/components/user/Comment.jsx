@@ -10,42 +10,44 @@ import { renderers } from "../TextEditor";
 // Icon
 import { ReactComponent as IconComment } from "../../assets/icons/general/icon-comment.svg";
 
-function Comment({ author, content, date, post }) {
+function Comment({ author, content, date, post, id }) {
   return (
-    <Container>
-      <TopInformations>
-        <IconComment />
-        <AccentLink to={`/u/${author.id}`}>
-          {author.name}
-          &nbsp;
-        </AccentLink>
-        commented on&nbsp;
-        <PostLink to={`/b/${post.subreadit.name}/${post.id}`}>
-          {post.title}
-        </PostLink>
-        &nbsp;•&nbsp;
-        <StrongLink to={`/b/${post.subreadit.name}`}>
-          b/
-          {post.subreadit.name}
-        </StrongLink>
-        &nbsp;• Posted by&nbsp;
-        <UnderlineLink to={`/u/${post.author.id}`}>
-          {post.author.name}
-        </UnderlineLink>
-      </TopInformations>
+    <article>
+      <Container to={`/b/${post.subreadit.name}/${post.id}/${id}`}>
+        <TopInformations>
+          <IconComment />
+          <AccentLink to={`/u/${author.id}`}>
+            {author.name}
+            &nbsp;
+          </AccentLink>
+          commented on&nbsp;
+          <PostLink to={`/b/${post.subreadit.name}/${post.id}`}>
+            {post.title}
+          </PostLink>
+          &nbsp;•&nbsp;
+          <StrongLink to={`/b/${post.subreadit.name}`}>
+            b/
+            {post.subreadit.name}
+          </StrongLink>
+          &nbsp;• Posted by&nbsp;
+          <UnderlineLink to={`/u/${post.author.id}`}>
+            {post.author.name}
+          </UnderlineLink>
+        </TopInformations>
 
-      <Main>
-        <div>
-          <Informations>
-            <StrongLink to={`/u/${author.id}`}>{author.name}</StrongLink>
-            &nbsp;•&nbsp;
-            {formatDistanceStrict(new Date(date.seconds * 1000), new Date())}
-            &nbsp;ago
-          </Informations>
-          <Content>{redraft(JSON.parse(content), renderers)}</Content>
-        </div>
-      </Main>
-    </Container>
+        <Main>
+          <div>
+            <Informations>
+              <StrongLink to={`/u/${author.id}`}>{author.name}</StrongLink>
+              &nbsp;•&nbsp;
+              {formatDistanceStrict(new Date(date.seconds * 1000), new Date())}
+              &nbsp;ago
+            </Informations>
+            <Content>{redraft(JSON.parse(content), renderers)}</Content>
+          </div>
+        </Main>
+      </Container>
+    </article>
   );
 }
 
@@ -58,6 +60,7 @@ Comment.propTypes = {
   date: PropTypes.shape({
     seconds: PropTypes.number,
   }).isRequired,
+  id: PropTypes.string.isRequired,
   post: PropTypes.shape({
     id: PropTypes.string,
     author: PropTypes.shape({
@@ -83,7 +86,8 @@ const colors = {
   neutral: "rgb(209, 163, 155)",
 };
 
-const Container = styled.article`
+const Container = styled(Link)`
+  display: block;
   border: 1px solid ${colors.border};
   background: ${colors.background};
   cursor: pointer;
