@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useAuth } from "../../contexts/AuthContext";
 import useUser from "../../hooks/useUser";
-import Email from "../../components/settings/user/Email";
-import Password from "../../components/settings/user/Password";
-import About from "../../components/settings/user/About";
-import Images from "../../components/settings/user/Images";
-import DeleteAccount from "../../components/settings/user/DeleteAccount";
+import Email from "../../components/user/settings/Email";
+import Password from "../../components/user/settings/Password";
+import About from "../../components/user/settings/About";
+import Images from "../../components/user/settings/Images";
+import DeleteAccount from "../../components/user/settings/DeleteAccount";
 
 function UserSettings() {
   const { currentUser } = useAuth();
