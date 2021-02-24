@@ -18,6 +18,7 @@ import {
   ContentState,
 } from "draft-js";
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 import "draft-js/dist/Draft.css";
 import "../styles/textEditor.css";
 
@@ -43,7 +44,8 @@ const findLinkEntities = (contentBlock, callback, contentState) => {
     );
   }, callback);
 };
-const Link = ({ contentState, entityKey, children }) => {
+
+const LinkEntity = ({ contentState, entityKey, children }) => {
   const { url } = contentState.getEntity(entityKey).getData();
   // Must add a on click event because links in contentEditable don't work by default.
   return (
@@ -58,10 +60,40 @@ const Link = ({ contentState, entityKey, children }) => {
   );
 };
 
+const findWithRegex = (regex, contentBlock, callback) => {
+  const text = contentBlock.getText();
+  let match;
+  while ((match = regex.exec(text))) {
+    callback(match.index, match.index + match[0].length);
+  }
+};
+
+const mentionStrategy = (contentBlock, callback, contentState) => {
+  findWithRegex(/\bu\/[-_a-zA-Z0-9]+\b/gi, contentBlock, callback);
+};
+
+const Mention = ({ children }) => {
+  return (
+    // Must add a on click event because links in contentEditable don't work by default.
+    <LinkToUser
+      to={children}
+      onClick={() => {
+        window.open(`https://breadit-296d8.web.app/${children[0].props.text}`);
+      }}
+    >
+      {children}
+    </LinkToUser>
+  );
+};
+
 const decorator = new CompositeDecorator([
   {
     strategy: findLinkEntities,
-    component: Link,
+    component: LinkEntity,
+  },
+  {
+    strategy: mentionStrategy,
+    component: Mention,
   },
 ]);
 
@@ -561,6 +593,15 @@ const LinkBox = styled.div`
 `;
 
 const StyledLink = styled.a`
+  color: ${colors.border};
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
+const LinkToUser = styled(Link)`
   color: ${colors.border};
   cursor: pointer;
 
