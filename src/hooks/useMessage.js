@@ -19,12 +19,21 @@ function useMessage() {
     });
   };
 
+  const readMessages = async (userId) => {
+    const query = await firestore
+      .collection("messages")
+      .where("recipient.id", "==", userId)
+      .get();
+    query.forEach((doc) => doc.ref.update({ read: true }));
+  };
+
   const deleteMessage = (id) => {
     return firestore.collection("messages").doc(id).delete();
   };
 
   return {
     sendMessage,
+    readMessages,
     deleteMessage,
   };
 }
