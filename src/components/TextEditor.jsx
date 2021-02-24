@@ -2,6 +2,7 @@
 import React, {
   useState,
   useEffect,
+  useRef,
   forwardRef,
   useImperativeHandle,
 } from "react";
@@ -46,14 +47,14 @@ const Link = ({ contentState, entityKey, children }) => {
   const { url } = contentState.getEntity(entityKey).getData();
   // Must add a on click event because links in contentEditable don't work by default.
   return (
-    <a
+    <StyledLink
       href={url}
       onClick={(e) => {
         window.open(e.target.closest("a").href);
       }}
     >
       {children}
-    </a>
+    </StyledLink>
   );
 };
 
@@ -76,6 +77,11 @@ const TextEditor = forwardRef(({ type, sendContent, prevContent }, ref) => {
   );
   const [isLinkEditorOpen, setIsLinkEditorOpen] = useState(false);
   const [link, setLink] = useState("");
+  // Gets the selection position so that the link window opens under it.
+  const [selection, setSelection] = useState();
+  // Gets coordinates to place the link window properly.
+  const wrapperRef = useRef();
+  const linkRef = useRef();
 
   // Reset the text editor after the user posts a comment.
   useImperativeHandle(ref, () => ({
@@ -186,7 +192,7 @@ const TextEditor = forwardRef(({ type, sendContent, prevContent }, ref) => {
   };
 
   return (
-    <Wrapper isActive={editorState.getSelection().hasFocus}>
+    <Wrapper isActive={editorState.getSelection().hasFocus} ref={wrapperRef}>
       {type === "comment" && (
         <Container>
           <Editor
@@ -238,31 +244,46 @@ const TextEditor = forwardRef(({ type, sendContent, prevContent }, ref) => {
           <IconUnderline data-tip="Underline" />
         </Button>
 
-        <LinkContainer>
+        <div>
           <Button
+            ref={linkRef}
             type="button"
             onMouseDown={(e) => {
               e.preventDefault();
+              let coords;
+              const selection = window.getSelection();
+              if (!selection.isCollapsed) {
+                const selectionCoords = selection
+                  .getRangeAt(0)
+                  .getBoundingClientRect();
+                coords = {
+                  top:
+                    selectionCoords.bottom -
+                    wrapperRef.current.getBoundingClientRect().top,
+                  left:
+                    (selectionCoords.right - selectionCoords.left) / 2 +
+                    selectionCoords.left -
+                    wrapperRef.current.getBoundingClientRect().left,
+                };
+              } else {
+                const linkCoords = linkRef.current.getBoundingClientRect();
+                coords = {
+                  top:
+                    linkCoords.bottom -
+                    wrapperRef.current.getBoundingClientRect().top,
+                  left:
+                    (linkCoords.right - linkCoords.left) / 2 +
+                    linkCoords.left -
+                    wrapperRef.current.getBoundingClientRect().left,
+                };
+              }
+              setSelection(coords);
               setIsLinkEditorOpen(!isLinkEditorOpen);
             }}
           >
             <IconLink data-tip="Link" />
           </Button>
-
-          {isLinkEditorOpen && (
-            <LinkBox>
-              <Input
-                type="text"
-                value={link}
-                onChange={(e) => setLink(e.target.value)}
-                placeholder="Paste or type a link"
-              />
-              <Button type="button" onMouseDown={handleInsertLink}>
-                Insert
-              </Button>
-            </LinkBox>
-          )}
-        </LinkContainer>
+        </div>
 
         <Button
           type="button"
@@ -333,6 +354,38 @@ const TextEditor = forwardRef(({ type, sendContent, prevContent }, ref) => {
         >
           <IconBlockCode data-tip="Code Block" />
         </Button>
+        <button
+          type="button"
+          onMouseDown={(e) => {
+            e.preventDefault();
+            let coords;
+            const selection = window.getSelection();
+            if (!selection.isCollapsed) {
+              const selectionCoords = selection
+                .getRangeAt(0)
+                .getBoundingClientRect();
+              coords = {
+                top:
+                  selectionCoords.bottom -
+                  wrapperRef.current.getBoundingClientRect().top,
+                left:
+                  selectionCoords.right -
+                  selectionCoords.left -
+                  wrapperRef.current.getBoundingClientRect().left,
+              };
+              console.log(
+                "right:",
+                selectionCoords.right,
+                "left:",
+                selectionCoords.left,
+                "wrapper:",
+                wrapperRef.current.getBoundingClientRect().left
+              );
+            }
+          }}
+        >
+          selection
+        </button>
       </Buttons>
 
       {type === "post" && (
@@ -352,6 +405,20 @@ const TextEditor = forwardRef(({ type, sendContent, prevContent }, ref) => {
             placeholder="Text (optional)"
           />
         </Container>
+      )}
+
+      {isLinkEditorOpen && (
+        <LinkBox selection={selection}>
+          <Input
+            type="text"
+            value={link}
+            onChange={(e) => setLink(e.target.value)}
+            placeholder="Paste or type a link"
+          />
+          <Button type="button" onMouseDown={handleInsertLink}>
+            Insert
+          </Button>
+        </LinkBox>
       )}
     </Wrapper>
   );
@@ -471,17 +538,14 @@ const Button = styled.button`
   }
 `;
 
-const LinkContainer = styled.div`
-  position: relative;
-`;
-
 const LinkBox = styled.div`
   position: absolute;
   background: ${colors.buttons};
   padding: 1rem;
   border-radius: 5px;
-  left: 50%;
-  transform: translate(-50%, 1rem);
+  top: ${(props) => props.selection && `calc(${props.selection.top}px + 1rem)`};
+  left: ${(props) => props.selection && `${props.selection.left}px`};
+  transform: translateX(-50%);
   z-index: 2;
 
   &:before {
@@ -493,6 +557,15 @@ const LinkBox = styled.div`
     top: calc(-0.75rem - 5px);
     left: 50%;
     transform: translateX(-50%);
+  }
+`;
+
+const StyledLink = styled.a`
+  color: ${colors.border};
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
   }
 `;
 
