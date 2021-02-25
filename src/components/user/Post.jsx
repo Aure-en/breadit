@@ -105,9 +105,7 @@ function Post({ author, id, title, subreadit, type, content, comments, date }) {
                 <Button
                   type="button"
                   onClick={(e) => {
-                    {
-                      /* Avoid Link */
-                    }
+                    /* Avoid Link */
                     e.preventDefault();
                   }}
                 >

@@ -1,4 +1,3 @@
-/* eslint-disable react/display-name */
 import React from "react";
 import redraft from "redraft";
 import PropTypes from "prop-types";
@@ -7,24 +6,25 @@ import formatDistanceStrict from "date-fns/formatDistanceStrict";
 import { Link } from "react-router-dom";
 import { renderers } from "../TextEditor";
 
-// Icon
-import { ReactComponent as IconComment } from "../../assets/icons/general/icon-comment.svg";
-
-function Comment({ author, content, date, post, id }) {
+function CommentNotification({ id, type, date, content, post }) {
   return (
     <article>
-      <Container to={`/b/${post.subreadit.name}/${post.id}/${id}`}>
+      <Container to={`/b/${post.subreadit.name}/${post.id}`}>
         <Header>
-          <IconComment />
-          <AccentLink to={`/u/${author.id}`}>
-            {author.name}
+          <AccentLink to={`/u/${content.author.name}`}>
+            {content.author.name}
             &nbsp;
           </AccentLink>
-          commented on&nbsp;
+          <span>
+            {type === "comment" && "commented on your post"}
+            {type === "reply" && "replied to your comment on"}
+            {type === "mention" && "mentioned you on"}
+            &nbsp;
+          </span>
           <PostLink to={`/b/${post.subreadit.name}/${post.id}`}>
             {post.title}
           </PostLink>
-          &nbsp;•&nbsp;
+          <span>&nbsp;•&nbsp;</span>
           <StrongLink to={`/b/${post.subreadit.name}`}>
             b/
             {post.subreadit.name}
@@ -33,49 +33,88 @@ function Comment({ author, content, date, post, id }) {
           <UnderlineLink to={`/u/${post.author.id}`}>
             {post.author.name}
           </UnderlineLink>
+          <span> • </span>
+          <UnderlineLink to={`/b/${post.subreadit.name}/${post.id}`}>
+            {formatDistanceStrict(new Date(date.seconds * 1000), new Date())}
+          </UnderlineLink>
         </Header>
 
         <Main>
           <div>
             <Informations>
-              <StrongLink to={`/u/${author.id}`}>{author.name}</StrongLink>
+              <StrongLink to={`/u/${content.author.id}`}>
+                {content.author.name}
+              </StrongLink>
               &nbsp;•&nbsp;
-              {formatDistanceStrict(new Date(date.seconds * 1000), new Date())}
+              {formatDistanceStrict(
+                new Date(content.date.seconds * 1000),
+                new Date()
+              )}
               &nbsp;ago
             </Informations>
-            <Content>{redraft(JSON.parse(content), renderers)}</Content>
+            <Content>{redraft(JSON.parse(content.content), renderers)}</Content>
           </div>
+
+          <Buttons>
+            <Button as={Link} to={`/b/${post.subreadit.name}/${post.id}`}>
+              View Post
+            </Button>
+            <Button type="button">Delete</Button>
+          </Buttons>
         </Main>
       </Container>
     </article>
   );
 }
 
-Comment.propTypes = {
-  author: PropTypes.shape({
+export default CommentNotification;
+
+CommentNotification.propTypes = {
+  id: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired,
+  document: PropTypes.shape({
     id: PropTypes.string,
-    name: PropTypes.string,
+    type: PropTypes.string,
   }).isRequired,
-  content: PropTypes.string.isRequired,
   date: PropTypes.shape({
     seconds: PropTypes.number,
   }).isRequired,
-  id: PropTypes.string.isRequired,
-  post: PropTypes.shape({
-    id: PropTypes.string,
+  content: PropTypes.shape({
     author: PropTypes.shape({
       id: PropTypes.string,
       name: PropTypes.string,
     }),
+    content: PropTypes.string,
+    date: PropTypes.shape({
+      seconds: PropTypes.number,
+    }),
+    id: PropTypes.string,
+    postId: PropTypes.string,
     subreadit: PropTypes.shape({
       id: PropTypes.string,
       name: PropTypes.string,
     }),
     title: PropTypes.string,
   }).isRequired,
+  post: PropTypes.shape({
+    author: PropTypes.string.isRequired,
+    id: PropTypes.string.isRequired,
+    subreadit: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    type: PropTypes.string.isRequired,
+    content: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.arrayOf(PropTypes.string),
+    ]).isRequired,
+    date: PropTypes.shape({
+      seconds: PropTypes.number,
+    }).isRequired,
+  }),
 };
 
-export default Comment;
+CommentNotification.defaultProps = {
+  post: null,
+};
 
 const colors = {
   background: "white",
@@ -146,3 +185,7 @@ const StrongLink = styled(UnderlineLink)`
   font-weight: 500;
   color: ${colors.primary};
 `;
+
+const Buttons = styled.div``;
+
+const Button = styled.button``;

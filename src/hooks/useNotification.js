@@ -32,14 +32,16 @@ function useNotification() {
     query.forEach((doc) => doc.ref.update({ read: true }));
   };
 
-  const getNotifications = async (userId) => {
+  const getNotifications = async (userId, limit) => {
     const notificationsArr = [];
     const notifications = await firestore
       .collection("notifications")
       .where("user.id", "==", userId)
+      .orderBy("date")
+      .limit(limit)
       .get();
-    notifications.forEach((notification) =>
-      notificationsArr.push(notification)
+    notifications.docs.forEach((notification) =>
+      notificationsArr.push(notification.data())
     );
     return notificationsArr;
   };

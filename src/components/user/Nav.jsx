@@ -8,20 +8,20 @@ function Nav({ userId }) {
   const { currentUser } = useAuth();
 
   return (
-    <UserNav>
+    <Container>
       <NavLink to={`/u/${userId}`}>Overview</NavLink>
       <NavLink to={`/u/${userId}/posts`}>Posts</NavLink>
       <NavLink to={`/u/${userId}/comments`}>Comments</NavLink>
       {currentUser.uid === userId && (
         <NavLink to={`/u/${userId}/saved`}>Saved</NavLink>
       )}
-    </UserNav>
+    </Container>
   );
 }
 
 export default Nav;
 
-const UserNav = styled.nav`
+const Container = styled.nav`
   display: flex;
 
   & > * {

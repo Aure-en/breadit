@@ -16,6 +16,7 @@ import Header from "./components/header/Header";
 import UserSettings from "./routes/settings/UserSettings";
 import SubreaditSettings from "./routes/settings/SubreaditSettings";
 import User from "./routes/user/User";
+import Inbox from "./routes/inbox/Inbox";
 import "./styles/styles.css";
 
 const Wrapper = styled.div`
@@ -65,6 +66,7 @@ function App() {
                     component={Comment}
                   />
                   <Route path="/u/:user" component={User} />
+                  <Route path="/inbox" component={Inbox} />
                 </Switch>
               </Container>
             </SaveProvider>
