@@ -1,6 +1,8 @@
 import { firestore } from "../firebase";
+import useNotification from "./useNotification";
 
 function usePost() {
+  const { notifyMention } = useNotification();
   const createPost = async (
     author,
     subreadit,
@@ -10,7 +12,7 @@ function usePost() {
     spoiler
   ) => {
     const ref = await firestore.collection("posts").doc();
-    return ref.set({
+    const data = {
       author: {
         id: author.uid,
         name: author.displayName,
@@ -29,7 +31,12 @@ function usePost() {
       },
       spoiler,
       id: ref.id,
-    });
+    };
+    ref.set(data);
+
+    // If some users are mentioned, notify them.
+    notifyMention(author.displayName, content, ref.id, data, "post");
+    return ref.id;
   };
 
   const editPost = (postId, content) => {

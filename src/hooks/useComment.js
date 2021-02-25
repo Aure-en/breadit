@@ -1,10 +1,20 @@
 import firebase from "firebase";
 import { firestore } from "../firebase";
+import usePost from "./usePost";
+import useNotification from "./useNotification";
 
 function useComment() {
+  const { createNotification, notifyMention } = useNotification();
+  const { getPost } = usePost();
+
+  // Get a comment from an id
+  const getComment = (commentId) => {
+    return firestore.collection("comments").doc(commentId).get();
+  };
+
   const createComment = async (postId, author, content, parentId = null) => {
     const ref = await firestore.collection("comments").doc();
-    ref.set({
+    const data = {
       author: {
         id: author.uid,
         name: author.displayName,
@@ -20,18 +30,48 @@ function useComment() {
       post: postId,
       isDeleted: false,
       id: ref.id,
-    });
+    };
+    ref.set(data);
 
-    // If our comment is a reply to another comment:
-    // Update the parent document to add the new comment to their children.
+    // If the comment is not a reply to another comment:
+    // Notify the post author.
+    if (!parentId) {
+      const post = await getPost(postId);
+      if (post.data().author.id !== author.uid) {
+        createNotification(
+          {
+            id: post.data().author.id,
+            name: post.data().author.name,
+          },
+          "comment",
+          { type: "comment", id: ref.id },
+          data
+        );
+      }
+    }
+
+    // If the comment is a reply to another comment:
     if (parentId) {
+      // Update the parent document to add the new comment to their children.
       firestore
         .collection("comments")
         .doc(parentId)
         .update({
           children: firebase.firestore.FieldValue.arrayUnion(ref.id),
         });
+
+      // Notify the author of the parent.
+      const parent = await getComment(parentId);
+      if (parent.data().author.id !== author.uid) {
+        createNotification(
+          parent.data().author,
+          "reply",
+          { type: "comment", id: ref.id },
+          data
+        );
+      }
     }
+    notifyMention(author.displayName, content, ref.id, data, "comment");
   };
 
   const deleteComment = async (commentId) => {
@@ -108,11 +148,6 @@ function useComment() {
       .where("parent", "==", null)
       .get();
     return comments.docs.length;
-  };
-
-  // Get a comment from an id
-  const getComment = (commentId) => {
-    return firestore.collection("comments").doc(commentId).get();
   };
 
   const commentListener = (postId, callback) => {

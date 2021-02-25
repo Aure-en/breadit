@@ -31,10 +31,27 @@ function useMessage() {
     return firestore.collection("messages").doc(id).delete();
   };
 
+  const getMessages = async (userId) => {
+    const messagesArr = [];
+    const messages = await firestore
+      .collection("messages")
+      .where("user.id", "==", userId)
+      .get();
+    messages.forEach((notification) => messagesArr.push(notification));
+    return messagesArr;
+  };
+
+  const getMessagesNumber = async (userId) => {
+    const messages = await getMessages(userId);
+    return messages.length;
+  };
+
   return {
     sendMessage,
     readMessages,
     deleteMessage,
+    getMessages,
+    getMessagesNumber,
   };
 }
 

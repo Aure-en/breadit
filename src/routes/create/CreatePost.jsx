@@ -106,7 +106,7 @@ function CreatePost() {
       content,
       spoiler
     );
-    history.push(`/b/${current.name}/${postId}`);
+    setTimeout(() => history.push(`/b/${current.name}/${postId}`), 1000);
   };
 
   return (

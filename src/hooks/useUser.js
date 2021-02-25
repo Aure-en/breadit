@@ -21,6 +21,18 @@ function useUser() {
     return user.data();
   };
 
+  const getUserByName = async (username) => {
+    let user;
+    const query = await firestore
+      .collection("users")
+      .where("username_lowercase", "==", username.toLowerCase())
+      .get();
+    query.forEach((doc) => {
+      user = doc.data();
+    });
+    return user;
+  };
+
   const getKarma = async (userId) => {
     let karma = 0;
     const posts = await firestore
@@ -133,6 +145,7 @@ function useUser() {
   return {
     createUser,
     getUser,
+    getUserByName,
     isUsernameAvailable,
     getKarma,
     getUserPosts,

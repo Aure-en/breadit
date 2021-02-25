@@ -69,7 +69,7 @@ const findWithRegex = (regex, contentBlock, callback) => {
 };
 
 const mentionStrategy = (contentBlock, callback, contentState) => {
-  findWithRegex(/\bu\/[-_a-zA-Z0-9]+\b/gi, contentBlock, callback);
+  findWithRegex(/\bu\/[-_a-zA-Z0-9]+\b/ig, contentBlock, callback);
 };
 
 const Mention = ({ children }) => {
@@ -525,6 +525,23 @@ export const renderers = {
       </ol>
     ),
   },
+  entities: {
+    LINK: (children, data, { key }) => (
+      <StyledLink key={key} to={data.url}>
+        {children}
+      </StyledLink>
+    ),
+  },
+  decorators: [
+    {
+      strategy: mentionStrategy,
+      component: ({ children, decoratedText }) => (
+        <StyledLink href={`https://breadit-296d8.web.app/${decoratedText}`}>
+          {children}
+        </StyledLink>
+      ),
+    },
+  ],
 };
 
 export default TextEditor;
