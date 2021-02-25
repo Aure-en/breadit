@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
-import { useAuth } from "../../contexts/AuthContext";
 import styled from "styled-components";
+import { useAuth } from "../../contexts/AuthContext";
 import useSubreadit from "../../hooks/useSubreadit";
 
 function CreateSubreadit() {

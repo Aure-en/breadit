@@ -69,7 +69,7 @@ const findWithRegex = (regex, contentBlock, callback) => {
 };
 
 const mentionStrategy = (contentBlock, callback, contentState) => {
-  findWithRegex(/\bu\/[-_a-zA-Z0-9]+\b/ig, contentBlock, callback);
+  findWithRegex(/\bu\/[-_a-zA-Z0-9]+\b/gi, contentBlock, callback);
 };
 
 const Mention = ({ children }) => {
@@ -103,182 +103,293 @@ const styleMap = {
   },
 };
 
-const TextEditor = forwardRef(({ type, sendContent, prevContent }, ref) => {
-  const [editorState, setEditorState] = useState(() =>
-    EditorState.createEmpty(decorator)
-  );
-  const [isLinkEditorOpen, setIsLinkEditorOpen] = useState(false);
-  const [link, setLink] = useState("");
-  // Gets the selection position so that the link window opens under it.
-  const [selection, setSelection] = useState();
-  // Gets coordinates to place the link window properly.
-  const wrapperRef = useRef();
-  const linkRef = useRef();
+const TextEditor = forwardRef(
+  ({ type, sendContent, prevContent, placeholder }, ref) => {
+    const [editorState, setEditorState] = useState(() =>
+      EditorState.createEmpty(decorator)
+    );
+    const [isLinkEditorOpen, setIsLinkEditorOpen] = useState(false);
+    const [link, setLink] = useState("");
+    // Gets the selection position so that the link window opens under it.
+    const [selection, setSelection] = useState();
+    // Gets coordinates to place the link window properly.
+    const wrapperRef = useRef();
+    const linkRef = useRef();
 
-  // Reset the text editor after the user posts a comment.
-  useImperativeHandle(ref, () => ({
-    reset() {
+    // Reset the text editor after the user posts a comment.
+    useImperativeHandle(ref, () => ({
+      reset() {
+        setEditorState(
+          EditorState.push(
+            editorState,
+            ContentState.createFromText(""),
+            "remove-range"
+          )
+        );
+      },
+    }));
+
+    // If we provide a previous content (i.e : we are editing a comment / post), it is loaded in the Text Editor.
+    useEffect(() => {
+      if (!prevContent) return;
+      const content = convertFromRaw(JSON.parse(prevContent));
+      setEditorState(EditorState.createWithContent(content));
+    }, []);
+
+    // Allows the user to use keyboard shortcuts (ex: Ctrl + B to bold)
+    const handleKeyCommand = (command) => {
+      const newState = RichUtils.handleKeyCommand(editorState, command);
+      if (newState) setEditorState(newState);
+    };
+
+    // Allows the user to use Buttons to modify his text's style
+    const onItalicClick = () => {
+      setEditorState(RichUtils.toggleInlineStyle(editorState, "ITALIC"));
+    };
+
+    const onBoldClick = () => {
+      setEditorState(RichUtils.toggleInlineStyle(editorState, "BOLD"));
+    };
+
+    const onUnderlineClick = () => {
+      setEditorState(RichUtils.toggleInlineStyle(editorState, "UNDERLINE"));
+    };
+
+    const onCodeClick = () => {
+      setEditorState(RichUtils.toggleInlineStyle(editorState, "CODE"));
+    };
+
+    const onStrikeThroughClick = () => {
+      setEditorState(RichUtils.toggleInlineStyle(editorState, "STRIKETHROUGH"));
+    };
+
+    const onHeadingClick = () => {
+      setEditorState(RichUtils.toggleInlineStyle(editorState, "HEADING"));
+    };
+
+    const onUnorderedListClick = () => {
       setEditorState(
-        EditorState.push(
-          editorState,
-          ContentState.createFromText(""),
-          "remove-range"
+        RichUtils.toggleBlockType(editorState, "unordered-list-item")
+      );
+    };
+
+    const onOrderedListClick = () => {
+      setEditorState(
+        RichUtils.toggleBlockType(editorState, "ordered-list-item")
+      );
+    };
+
+    const onQuoteBlockClick = () => {
+      setEditorState(RichUtils.toggleBlockType(editorState, "quoteBlock"));
+    };
+
+    const onCodeBlockClick = () => {
+      setEditorState(RichUtils.toggleBlockType(editorState, "codeBlock"));
+    };
+
+    const handleInsertLink = () => {
+      const contentState = editorState.getCurrentContent();
+      const contentStateWithEntity = contentState.createEntity(
+        "LINK",
+        "MUTABLE",
+        { url: link }
+      );
+      const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
+      const newEditorState = EditorState.set(editorState, {
+        currentContent: contentStateWithEntity,
+      });
+      setEditorState(
+        RichUtils.toggleLink(
+          newEditorState,
+          newEditorState.getSelection(),
+          entityKey
         )
       );
-    },
-  }));
+    };
 
-  // If we provide a previous content (i.e : we are editing a comment / post), it is loaded in the Text Editor.
-  useEffect(() => {
-    if (!prevContent) return;
-    const content = convertFromRaw(JSON.parse(prevContent));
-    setEditorState(EditorState.createWithContent(content));
-  }, []);
+    // Nest lists
+    const handleTab = (e) => {
+      e.preventDefault(); // Prevents focus from going to another element
+      const newState = RichUtils.onTab(e, editorState, 5);
+      if (newState) setEditorState(newState);
+    };
 
-  // Allows the user to use keyboard shortcuts (ex: Ctrl + B to bold)
-  const handleKeyCommand = (command) => {
-    const newState = RichUtils.handleKeyCommand(editorState, command);
-    if (newState) setEditorState(newState);
-  };
+    // Blocks custom styles
+    const customBlockFn = (contentBlock) => {
+      const type = contentBlock.getType();
+      if (type === "quoteBlock") {
+        return "quoteBlock";
+      }
+      if (type === "codeBlock") {
+        return "codeBlock";
+      }
+      return "";
+    };
 
-  // Allows the user to use Buttons to modify his text's style
-  const onItalicClick = () => {
-    setEditorState(RichUtils.toggleInlineStyle(editorState, "ITALIC"));
-  };
+    return (
+      <Wrapper isActive={editorState.getSelection().hasFocus} ref={wrapperRef}>
+        {type === "comment" && (
+          <Container>
+            <Editor
+              editorState={editorState}
+              onChange={(editorState) => {
+                setEditorState(editorState);
+                sendContent(
+                  JSON.stringify(convertToRaw(editorState.getCurrentContent()))
+                );
+              }}
+              customStyleMap={styleMap}
+              handleKeyCommand={handleKeyCommand}
+              onTab={handleTab}
+              blockStyleFn={customBlockFn}
+              placeholder={placeholder}
+            />
+          </Container>
+        )}
 
-  const onBoldClick = () => {
-    setEditorState(RichUtils.toggleInlineStyle(editorState, "BOLD"));
-  };
-
-  const onUnderlineClick = () => {
-    setEditorState(RichUtils.toggleInlineStyle(editorState, "UNDERLINE"));
-  };
-
-  const onCodeClick = () => {
-    setEditorState(RichUtils.toggleInlineStyle(editorState, "CODE"));
-  };
-
-  const onStrikeThroughClick = () => {
-    setEditorState(RichUtils.toggleInlineStyle(editorState, "STRIKETHROUGH"));
-  };
-
-  const onHeadingClick = () => {
-    setEditorState(RichUtils.toggleInlineStyle(editorState, "HEADING"));
-  };
-
-  const onUnorderedListClick = () => {
-    setEditorState(
-      RichUtils.toggleBlockType(editorState, "unordered-list-item")
-    );
-  };
-
-  const onOrderedListClick = () => {
-    setEditorState(RichUtils.toggleBlockType(editorState, "ordered-list-item"));
-  };
-
-  const onQuoteBlockClick = () => {
-    setEditorState(RichUtils.toggleBlockType(editorState, "quoteBlock"));
-  };
-
-  const onCodeBlockClick = () => {
-    setEditorState(RichUtils.toggleBlockType(editorState, "codeBlock"));
-  };
-
-  const handleInsertLink = () => {
-    const contentState = editorState.getCurrentContent();
-    const contentStateWithEntity = contentState.createEntity(
-      "LINK",
-      "MUTABLE",
-      { url: link }
-    );
-    const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
-    const newEditorState = EditorState.set(editorState, {
-      currentContent: contentStateWithEntity,
-    });
-    setEditorState(
-      RichUtils.toggleLink(
-        newEditorState,
-        newEditorState.getSelection(),
-        entityKey
-      )
-    );
-  };
-
-  // Nest lists
-  const handleTab = (e) => {
-    e.preventDefault(); // Prevents focus from going to another element
-    const newState = RichUtils.onTab(e, editorState, 5);
-    if (newState) setEditorState(newState);
-  };
-
-  // Blocks custom styles
-  const customBlockFn = (contentBlock) => {
-    const type = contentBlock.getType();
-    if (type === "quoteBlock") {
-      return "quoteBlock";
-    }
-    if (type === "codeBlock") {
-      return "codeBlock";
-    }
-    return "";
-  };
-
-  return (
-    <Wrapper isActive={editorState.getSelection().hasFocus} ref={wrapperRef}>
-      {type === "comment" && (
-        <Container>
-          <Editor
-            editorState={editorState}
-            onChange={(editorState) => {
-              setEditorState(editorState);
-              sendContent(
-                JSON.stringify(convertToRaw(editorState.getCurrentContent()))
-              );
-            }}
-            customStyleMap={styleMap}
-            handleKeyCommand={handleKeyCommand}
-            onTab={handleTab}
-            blockStyleFn={customBlockFn}
-            placeholder="What are your thoughts?"
-          />
-        </Container>
-      )}
-
-      <Buttons>
-        <Button
-          type="button"
-          // Using onMouseDown with e.preventDefault() prevents the text from being unselected when clicking on the Button.
-          onMouseDown={(e) => {
-            e.preventDefault();
-            onBoldClick();
-          }}
-        >
-          <IconBold data-tip="Bold" />
-          <ReactTooltip effect="solid" delayShow={300} />
-        </Button>
-
-        <Button
-          type="button"
-          onMouseDown={(e) => {
-            e.preventDefault();
-            onItalicClick();
-          }}
-        >
-          <IconItalic data-tip="Italic" />
-        </Button>
-        <Button
-          type="button"
-          onMouseDown={(e) => {
-            e.preventDefault();
-            onUnderlineClick();
-          }}
-        >
-          <IconUnderline data-tip="Underline" />
-        </Button>
-
-        <div>
+        <Buttons>
           <Button
-            ref={linkRef}
+            type="button"
+            // Using onMouseDown with e.preventDefault() prevents the text from being unselected when clicking on the Button.
+            onMouseDown={(e) => {
+              e.preventDefault();
+              onBoldClick();
+            }}
+          >
+            <IconBold data-tip="Bold" />
+            <ReactTooltip effect="solid" delayShow={300} />
+          </Button>
+
+          <Button
+            type="button"
+            onMouseDown={(e) => {
+              e.preventDefault();
+              onItalicClick();
+            }}
+          >
+            <IconItalic data-tip="Italic" />
+          </Button>
+          <Button
+            type="button"
+            onMouseDown={(e) => {
+              e.preventDefault();
+              onUnderlineClick();
+            }}
+          >
+            <IconUnderline data-tip="Underline" />
+          </Button>
+
+          <div>
+            <Button
+              ref={linkRef}
+              type="button"
+              onMouseDown={(e) => {
+                e.preventDefault();
+                let coords;
+                const selection = window.getSelection();
+                if (!selection.isCollapsed) {
+                  const selectionCoords = selection
+                    .getRangeAt(0)
+                    .getBoundingClientRect();
+                  coords = {
+                    top:
+                      selectionCoords.bottom -
+                      wrapperRef.current.getBoundingClientRect().top,
+                    left:
+                      (selectionCoords.right - selectionCoords.left) / 2 +
+                      selectionCoords.left -
+                      wrapperRef.current.getBoundingClientRect().left,
+                  };
+                } else {
+                  const linkCoords = linkRef.current.getBoundingClientRect();
+                  coords = {
+                    top:
+                      linkCoords.bottom -
+                      wrapperRef.current.getBoundingClientRect().top,
+                    left:
+                      (linkCoords.right - linkCoords.left) / 2 +
+                      linkCoords.left -
+                      wrapperRef.current.getBoundingClientRect().left,
+                  };
+                }
+                setSelection(coords);
+                setIsLinkEditorOpen(!isLinkEditorOpen);
+              }}
+            >
+              <IconLink data-tip="Link" />
+            </Button>
+          </div>
+
+          <Button
+            type="button"
+            onMouseDown={(e) => {
+              e.preventDefault();
+              onCodeClick();
+            }}
+          >
+            <IconCode data-tip="Code" />
+          </Button>
+
+          <Button
+            type="button"
+            onMouseDown={(e) => {
+              e.preventDefault();
+              onHeadingClick();
+            }}
+          >
+            <IconHeading data-tip="Heading" />
+          </Button>
+
+          <Button
+            type="button"
+            onMouseDown={(e) => {
+              e.preventDefault();
+              onStrikeThroughClick();
+            }}
+          >
+            <IconStrike data-tip="Strikethrough" />
+          </Button>
+
+          <Button
+            type="button"
+            onMouseDown={(e) => {
+              e.preventDefault();
+              onUnorderedListClick();
+            }}
+          >
+            <IconUL data-tip="Bulleted List" />
+          </Button>
+
+          <Button
+            type="button"
+            onMouseDown={(e) => {
+              e.preventDefault();
+              onOrderedListClick();
+            }}
+          >
+            <IconOL data-tip="Numbered List" />
+          </Button>
+
+          <Button
+            type="button"
+            onMouseDown={(e) => {
+              e.preventDefault();
+              onQuoteBlockClick();
+            }}
+          >
+            <IconBlockQuote data-tip="Quote Block" />
+          </Button>
+
+          <Button
+            type="button"
+            onMouseDown={(e) => {
+              e.preventDefault();
+              onCodeBlockClick();
+            }}
+          >
+            <IconBlockCode data-tip="Code Block" />
+          </Button>
+          <button
             type="button"
             onMouseDown={(e) => {
               e.preventDefault();
@@ -293,180 +404,75 @@ const TextEditor = forwardRef(({ type, sendContent, prevContent }, ref) => {
                     selectionCoords.bottom -
                     wrapperRef.current.getBoundingClientRect().top,
                   left:
-                    (selectionCoords.right - selectionCoords.left) / 2 +
+                    selectionCoords.right -
                     selectionCoords.left -
                     wrapperRef.current.getBoundingClientRect().left,
                 };
-              } else {
-                const linkCoords = linkRef.current.getBoundingClientRect();
-                coords = {
-                  top:
-                    linkCoords.bottom -
-                    wrapperRef.current.getBoundingClientRect().top,
-                  left:
-                    (linkCoords.right - linkCoords.left) / 2 +
-                    linkCoords.left -
-                    wrapperRef.current.getBoundingClientRect().left,
-                };
+                console.log(
+                  "right:",
+                  selectionCoords.right,
+                  "left:",
+                  selectionCoords.left,
+                  "wrapper:",
+                  wrapperRef.current.getBoundingClientRect().left
+                );
               }
-              setSelection(coords);
-              setIsLinkEditorOpen(!isLinkEditorOpen);
             }}
           >
-            <IconLink data-tip="Link" />
-          </Button>
-        </div>
+            selection
+          </button>
+        </Buttons>
 
-        <Button
-          type="button"
-          onMouseDown={(e) => {
-            e.preventDefault();
-            onCodeClick();
-          }}
-        >
-          <IconCode data-tip="Code" />
-        </Button>
+        {type === "post" && (
+          <Container>
+            <Editor
+              editorState={editorState}
+              onChange={(editorState) => {
+                setEditorState(editorState);
+                sendContent(
+                  JSON.stringify(convertToRaw(editorState.getCurrentContent()))
+                );
+              }}
+              customStyleMap={styleMap}
+              handleKeyCommand={handleKeyCommand}
+              onTab={handleTab}
+              blockStyleFn={customBlockFn}
+              placeholder={placeholder}
+            />
+          </Container>
+        )}
 
-        <Button
-          type="button"
-          onMouseDown={(e) => {
-            e.preventDefault();
-            onHeadingClick();
-          }}
-        >
-          <IconHeading data-tip="Heading" />
-        </Button>
-
-        <Button
-          type="button"
-          onMouseDown={(e) => {
-            e.preventDefault();
-            onStrikeThroughClick();
-          }}
-        >
-          <IconStrike data-tip="Strikethrough" />
-        </Button>
-
-        <Button
-          type="button"
-          onMouseDown={(e) => {
-            e.preventDefault();
-            onUnorderedListClick();
-          }}
-        >
-          <IconUL data-tip="Bulleted List" />
-        </Button>
-
-        <Button
-          type="button"
-          onMouseDown={(e) => {
-            e.preventDefault();
-            onOrderedListClick();
-          }}
-        >
-          <IconOL data-tip="Numbered List" />
-        </Button>
-
-        <Button
-          type="button"
-          onMouseDown={(e) => {
-            e.preventDefault();
-            onQuoteBlockClick();
-          }}
-        >
-          <IconBlockQuote data-tip="Quote Block" />
-        </Button>
-
-        <Button
-          type="button"
-          onMouseDown={(e) => {
-            e.preventDefault();
-            onCodeBlockClick();
-          }}
-        >
-          <IconBlockCode data-tip="Code Block" />
-        </Button>
-        <button
-          type="button"
-          onMouseDown={(e) => {
-            e.preventDefault();
-            let coords;
-            const selection = window.getSelection();
-            if (!selection.isCollapsed) {
-              const selectionCoords = selection
-                .getRangeAt(0)
-                .getBoundingClientRect();
-              coords = {
-                top:
-                  selectionCoords.bottom -
-                  wrapperRef.current.getBoundingClientRect().top,
-                left:
-                  selectionCoords.right -
-                  selectionCoords.left -
-                  wrapperRef.current.getBoundingClientRect().left,
-              };
-              console.log(
-                "right:",
-                selectionCoords.right,
-                "left:",
-                selectionCoords.left,
-                "wrapper:",
-                wrapperRef.current.getBoundingClientRect().left
-              );
-            }
-          }}
-        >
-          selection
-        </button>
-      </Buttons>
-
-      {type === "post" && (
-        <Container>
-          <Editor
-            editorState={editorState}
-            onChange={(editorState) => {
-              setEditorState(editorState);
-              sendContent(
-                JSON.stringify(convertToRaw(editorState.getCurrentContent()))
-              );
-            }}
-            customStyleMap={styleMap}
-            handleKeyCommand={handleKeyCommand}
-            onTab={handleTab}
-            blockStyleFn={customBlockFn}
-            placeholder="Text (optional)"
-          />
-        </Container>
-      )}
-
-      {isLinkEditorOpen && (
-        <LinkBox selection={selection}>
-          <Input
-            type="text"
-            value={link}
-            onChange={(e) => setLink(e.target.value)}
-            placeholder="Paste or type a link"
-          />
-          <Button type="button" onMouseDown={handleInsertLink}>
-            Insert
-          </Button>
-        </LinkBox>
-      )}
-    </Wrapper>
-  );
-});
+        {isLinkEditorOpen && (
+          <LinkBox selection={selection}>
+            <Input
+              type="text"
+              value={link}
+              onChange={(e) => setLink(e.target.value)}
+              placeholder="Paste or type a link"
+            />
+            <Button type="button" onMouseDown={handleInsertLink}>
+              Insert
+            </Button>
+          </LinkBox>
+        )}
+      </Wrapper>
+    );
+  }
+);
 
 TextEditor.propTypes = {
   // Type is either "post" or "comment" (appearance changes depending on the type)
   type: PropTypes.string,
   sendContent: PropTypes.func,
   prevContent: PropTypes.string,
+  placeholder: PropTypes.string,
 };
 
 TextEditor.defaultProps = {
   type: "post",
   sendContent: () => {},
   prevContent: "",
+  placeholder: "",
 };
 
 export const renderers = {

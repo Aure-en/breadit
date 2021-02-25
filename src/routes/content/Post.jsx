@@ -82,6 +82,7 @@ function Post({ match }) {
           type="comment"
           sendContent={setComment}
           ref={textEditorRef}
+          placeholder="What are your thoughts?"
         />
         <button type="submit">Comment</button>
       </form>

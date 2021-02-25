@@ -6,12 +6,13 @@ import { AuthProvider } from "./contexts/AuthContext";
 import { SubscriptionProvider } from "./contexts/SubscriptionContext";
 import { SaveProvider } from "./contexts/SaveContext";
 import CreateSubreadit from "./routes/create/CreateSubreadit";
+import CreatePost from "./routes/create/CreatePost";
+import CreateMessage from "./routes/create/CreateMessage";
+import All from "./routes/feeds/All";
+import Subreadit from "./routes/feeds/Subreadit";
 import Main from "./routes/feeds/Main";
 import Post from "./routes/content/Post";
 import Comment from "./routes/content/Comment";
-import All from "./routes/feeds/All";
-import Subreadit from "./routes/feeds/Subreadit";
-import CreatePost from "./routes/create/CreatePost";
 import Header from "./components/header/Header";
 import UserSettings from "./routes/settings/UserSettings";
 import SubreaditSettings from "./routes/settings/SubreaditSettings";
@@ -51,6 +52,11 @@ function App() {
                     exact
                     path="/create/subreadit"
                     component={CreateSubreadit}
+                  />
+                  <Route
+                    exact
+                    path="/message/compose"
+                    component={CreateMessage}
                   />
                   <Route exact path="/b/all" component={All} />
                   <Route exact path="/b/:subreadit" component={Subreadit} />

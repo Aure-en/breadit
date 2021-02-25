@@ -83,6 +83,7 @@ function Comment({ commentId, postId }) {
                   type="comment"
                   sendContent={setEdit}
                   prevContent={comment.content}
+                  placeholder="What are your thoughts?"
                 />
                 <button type="button" onClick={() => setIsEditing(false)}>
                   Cancel

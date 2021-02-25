@@ -194,7 +194,11 @@ function CreatePost() {
 
             {type === "post" && (
               <Field>
-                <TextEditor type="post" sendContent={setPost} />
+                <TextEditor
+                  type="post"
+                  sendContent={setPost}
+                  placeholder="Text (optional)"
+                />
               </Field>
             )}
 
