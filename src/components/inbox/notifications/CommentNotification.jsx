@@ -62,7 +62,13 @@ function CommentNotification({ id, type, date, content, post }) {
             <Button as={Link} to={`/b/${post.subreadit.name}/${post.id}`}>
               View Post
             </Button>
-            <Button type="button" onClick={() => deleteNotification(id)}>
+            <Button
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                deleteNotification(id);
+              }}
+            >
               Delete
             </Button>
           </Buttons>
@@ -77,10 +83,6 @@ export default CommentNotification;
 CommentNotification.propTypes = {
   id: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
-  document: PropTypes.shape({
-    id: PropTypes.string,
-    type: PropTypes.string,
-  }).isRequired,
   date: PropTypes.shape({
     seconds: PropTypes.number,
   }).isRequired,
@@ -102,9 +104,15 @@ CommentNotification.propTypes = {
     title: PropTypes.string,
   }).isRequired,
   post: PropTypes.shape({
-    author: PropTypes.string.isRequired,
+    author: PropTypes.shape({
+      id: PropTypes.string,
+      name: PropTypes.string,
+    }),
     id: PropTypes.string.isRequired,
-    subreadit: PropTypes.string.isRequired,
+    subreadit: PropTypes.shape({
+      id: PropTypes.string,
+      name: PropTypes.string,
+    }),
     title: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired,
     content: PropTypes.oneOfType([
