@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Switch, Route } from "react-router-dom";
 import Nav from "../../components/inbox/Nav";
 import Overview from "./Overview";
-import Messages from "./Messages";
+import Messages from "./messages/Messages";
 import Notifications from "./Notifications";
 
 function Inbox() {
@@ -14,7 +14,7 @@ function Inbox() {
         <Switch>
           <Route exact path="/inbox" component={Overview} />
           <Route exact path="/inbox/notifications" component={Notifications} />
-          <Route exact path="/inbox/messages" component={Messages} />
+          <Route path="/inbox/messages" component={Messages} />
         </Switch>
       </Container>
     </Wrapper>

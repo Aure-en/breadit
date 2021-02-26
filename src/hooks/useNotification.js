@@ -32,6 +32,19 @@ function useNotification() {
     query.forEach((doc) => doc.ref.update({ read: true }));
   };
 
+  const getAllNotifications = async (userId) => {
+    const notificationsArr = [];
+    const notifications = await firestore
+      .collection("notifications")
+      .where("user.id", "==", userId)
+      .orderBy("date")
+      .get();
+    notifications.docs.forEach((notification) =>
+      notificationsArr.push(notification.data())
+    );
+    return notificationsArr;
+  };
+
   const getNotifications = async (userId, limit) => {
     const notificationsArr = [];
     const notifications = await firestore
@@ -82,13 +95,22 @@ function useNotification() {
     });
   };
 
+  const deleteNotificationListener = (userId, callback) => {
+    return firestore
+      .collection("notifications")
+      .where("user.id", "==", userId)
+      .onSnapshot(callback);
+  };
+
   return {
     createNotification,
     deleteNotification,
     readNotifications,
     getNotifications,
+    getAllNotifications,
     getNotificationsNumber,
     notifyMention,
+    deleteNotificationListener,
   };
 }
 

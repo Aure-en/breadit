@@ -4,9 +4,12 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 import formatDistanceStrict from "date-fns/formatDistanceStrict";
 import { Link } from "react-router-dom";
-import { renderers } from "../TextEditor";
+import { renderers } from "../../TextEditor";
+import useNotification from "../../../hooks/useNotification";
 
 function PostNotification({ id, content }) {
+  const { deleteNotification } = useNotification();
+
   return (
     <article>
       <Container>
@@ -19,7 +22,7 @@ function PostNotification({ id, content }) {
           <PostLink to={`/b/${content.subreadit.name}/${content.id}`}>
             {content.title}
           </PostLink>
-          <span> • </span>
+          <span>&nbsp;•&nbsp;</span>
           <StrongLink to={`/b/${content.subreadit.name}`}>
             b/
             {content.subreadit.name}
@@ -28,7 +31,7 @@ function PostNotification({ id, content }) {
           <UnderlineLink to={`/u/${content.author.id}`}>
             {content.author.name}
           </UnderlineLink>
-          <span> • </span>
+          <span>&nbsp;•&nbsp;</span>
           <UnderlineLink to={`/b/${content.subreadit.name}/${content.id}`}>
             {formatDistanceStrict(
               new Date(content.date.seconds * 1000),
@@ -45,7 +48,9 @@ function PostNotification({ id, content }) {
           <Button as={Link} to={`/b/${content.subreadit.name}/${content.id}`}>
             View Post
           </Button>
-          <Button type="button">Delete</Button>
+          <Button type="button" onClick={() => deleteNotification(id)}>
+            Delete
+          </Button>
         </Buttons>
       </Container>
     </article>

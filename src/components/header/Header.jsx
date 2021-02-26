@@ -76,7 +76,7 @@ export default Header;
 
 const Container = styled.header`
   display: flex;
-  z-index: 1;
+  z-index: 5;
 `;
 
 const EntryModal = styled(Modal)`

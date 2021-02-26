@@ -389,38 +389,6 @@ const TextEditor = forwardRef(
           >
             <IconBlockCode data-tip="Code Block" />
           </Button>
-          <button
-            type="button"
-            onMouseDown={(e) => {
-              e.preventDefault();
-              let coords;
-              const selection = window.getSelection();
-              if (!selection.isCollapsed) {
-                const selectionCoords = selection
-                  .getRangeAt(0)
-                  .getBoundingClientRect();
-                coords = {
-                  top:
-                    selectionCoords.bottom -
-                    wrapperRef.current.getBoundingClientRect().top,
-                  left:
-                    selectionCoords.right -
-                    selectionCoords.left -
-                    wrapperRef.current.getBoundingClientRect().left,
-                };
-                console.log(
-                  "right:",
-                  selectionCoords.right,
-                  "left:",
-                  selectionCoords.left,
-                  "wrapper:",
-                  wrapperRef.current.getBoundingClientRect().left
-                );
-              }
-            }}
-          >
-            selection
-          </button>
         </Buttons>
 
         {type === "post" && (

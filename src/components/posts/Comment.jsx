@@ -178,6 +178,9 @@ function Comment({ commentId, postId }) {
                   >
                     <TextEditor type="comment" sendContent={setReply} />
                     <button type="submit">Comment</button>
+                    <button type="button" onClick={() => setIsReplying(false)}>
+                      Cancel
+                    </button>
                   </form>
                 )}
               </>

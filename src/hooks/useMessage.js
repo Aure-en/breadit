@@ -16,6 +16,7 @@ function useMessage() {
       id: ref.id,
       date: new Date(),
       read: false,
+      deleted: false,
     });
   };
 
@@ -28,22 +29,60 @@ function useMessage() {
   };
 
   const deleteMessage = (id) => {
-    return firestore.collection("messages").doc(id).delete();
+    return firestore.collection("messages").doc(id).update({ deleted: true });
   };
 
-  const getMessages = async (userId) => {
+  const getSentMessages = async (userId, limit) => {
     const messagesArr = [];
     const messages = await firestore
       .collection("messages")
-      .where("user.id", "==", userId)
+      .where("sender.id", "==", userId)
+      .orderBy("date", "desc")
+      .limit(limit)
       .get();
-    messages.forEach((notification) => messagesArr.push(notification));
+    messages.forEach((notification) => messagesArr.push(notification.data()));
     return messagesArr;
   };
 
-  const getMessagesNumber = async (userId) => {
-    const messages = await getMessages(userId);
+  const getMessages = async (userId, limit) => {
+    const messagesArr = [];
+    const messages = await firestore
+      .collection("messages")
+      .where("recipient.id", "==", userId)
+      .where("deleted", "==", false)
+      .orderBy("date", "desc")
+      .limit(limit)
+      .get();
+    messages.forEach((notification) => messagesArr.push(notification.data()));
+    return messagesArr;
+  };
+
+  const getAllMessages = async (userId) => {
+    const messagesArr = [];
+    const messages = await firestore
+      .collection("messages")
+      .where("recipient.id", "==", userId)
+      .where("deleted", "==", false)
+      .orderBy("date", "desc")
+      .get();
+    messages.forEach((notification) => messagesArr.push(notification.data()));
+    return messagesArr;
+  };
+
+  const getUnreadNumber = async (userId) => {
+    const messages = await firestore
+      .collection("messages")
+      .where("recipient.id", "==", userId)
+      .where("read", "==", false)
+      .get();
     return messages.length;
+  };
+
+  const deleteMessageListener = (userId, callback) => {
+    return firestore
+      .collection("messages")
+      .where("recipient.id", "==", userId)
+      .onSnapshot(callback);
   };
 
   return {
@@ -51,7 +90,10 @@ function useMessage() {
     readMessages,
     deleteMessage,
     getMessages,
-    getMessagesNumber,
+    getAllMessages,
+    getSentMessages,
+    getUnreadNumber,
+    deleteMessageListener,
   };
 }
 

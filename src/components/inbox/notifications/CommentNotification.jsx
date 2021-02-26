@@ -4,9 +4,12 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 import formatDistanceStrict from "date-fns/formatDistanceStrict";
 import { Link } from "react-router-dom";
-import { renderers } from "../TextEditor";
+import { renderers } from "../../TextEditor";
+import useNotification from "../../../hooks/useNotification";
 
 function CommentNotification({ id, type, date, content, post }) {
+  const { deleteNotification } = useNotification();
+
   return (
     <article>
       <Container to={`/b/${post.subreadit.name}/${post.id}`}>
@@ -59,7 +62,9 @@ function CommentNotification({ id, type, date, content, post }) {
             <Button as={Link} to={`/b/${post.subreadit.name}/${post.id}`}>
               View Post
             </Button>
-            <Button type="button">Delete</Button>
+            <Button type="button" onClick={() => deleteNotification(id)}>
+              Delete
+            </Button>
           </Buttons>
         </Main>
       </Container>
