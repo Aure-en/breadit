@@ -7,21 +7,22 @@ import useComment from "../../hooks/useComment";
 import Post from "../../components/user/Post";
 import Sort from "../../components/sort/Sort";
 
-function Posts({ userId }) {
+function Posts({ username }) {
   const [posts, setPosts] = useState([]);
   const [sort, setSort] = useState("top");
-  const { getUserPostsByVotes, getUserPostsByDate } = useUser();
+  const { getUserByName, getUserPostsByVotes, getUserPostsByDate } = useUser();
   const { getCommentsNumber } = useComment();
   const postsRef = useRef();
   const { limit } = useScroll(postsRef, 20, 10);
 
   useEffect(() => {
     (async () => {
+      const user = await getUserByName(username);
       let posts;
       if (sort === "top") {
-        posts = await getUserPostsByVotes(userId, limit);
+        posts = await getUserPostsByVotes(user.id, limit);
       } else {
-        posts = await getUserPostsByDate(userId, limit);
+        posts = await getUserPostsByDate(user.id, limit);
       }
 
       posts = await Promise.all(
@@ -59,7 +60,7 @@ function Posts({ userId }) {
 }
 
 Posts.propTypes = {
-  userId: PropTypes.string.isRequired,
+  username: PropTypes.string.isRequired,
 };
 
 export default Posts;

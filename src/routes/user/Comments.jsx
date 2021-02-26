@@ -7,10 +7,14 @@ import useScroll from "../../hooks/useScroll";
 import Comment from "../../components/user/Comment";
 import Sort from "../../components/sort/Sort";
 
-function Comments({ userId }) {
+function Comments({ username }) {
   const [comments, setComments] = useState([]);
   const [sort, setSort] = useState("top");
-  const { getUserCommentsByVotes, getUserCommentsByDate } = useUser();
+  const {
+    getUserByName,
+    getUserCommentsByVotes,
+    getUserCommentsByDate,
+  } = useUser();
   const { getPost } = usePost();
   const commentsRef = useRef();
   const { limit } = useScroll(commentsRef, 20, 10);
@@ -18,12 +22,12 @@ function Comments({ userId }) {
   // Get comments
   useEffect(() => {
     (async () => {
+      const user = await getUserByName(username);
       let userComments;
-
       if (sort === "top") {
-        userComments = await getUserCommentsByVotes(userId, limit);
+        userComments = await getUserCommentsByVotes(user.id, limit);
       } else {
-        userComments = await getUserCommentsByDate(userId, limit);
+        userComments = await getUserCommentsByDate(user.id, limit);
       }
 
       userComments = await Promise.all(
@@ -73,7 +77,7 @@ function Comments({ userId }) {
 }
 
 Comments.propTypes = {
-  userId: PropTypes.string.isRequired,
+  username: PropTypes.string.isRequired,
 };
 
 export default Comments;

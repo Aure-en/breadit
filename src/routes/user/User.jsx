@@ -13,27 +13,27 @@ function User({ match }) {
   return (
     <Wrapper>
       <Container>
-        <Nav userId={match.params.user} />
+        <Nav username={match.params.username} />
         <Switch>
           <Route
             exact
             path={`${match.path}`}
-            render={() => <Overview userId={match.params.user} />}
+            render={() => <Overview username={match.params.username} />}
           />
           <Route
             exact
             path={`${match.path}/posts`}
-            render={() => <Posts userId={match.params.user} />}
+            render={() => <Posts username={match.params.username} />}
           />
           <Route
             exact
             path={`${match.path}/comments`}
-            render={() => <Comments userId={match.params.user} />}
+            render={() => <Comments username={match.params.username} />}
           />
           <Route exact path={`${match.path}/saved`} component={Saved} />
         </Switch>
       </Container>
-      <Profile userId={match.params.user} />
+      <Profile username={match.params.username} />
     </Wrapper>
   );
 }
@@ -42,7 +42,7 @@ User.propTypes = {
   match: PropTypes.shape({
     path: PropTypes.string,
     params: PropTypes.shape({
-      user: PropTypes.string,
+      username: PropTypes.string,
     }),
   }).isRequired,
 };

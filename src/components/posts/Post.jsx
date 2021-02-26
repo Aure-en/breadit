@@ -133,7 +133,7 @@ function Post({ postId, subreadit }) {
                         </BoldPrimary>
                       </Link>
                       <span> • Posted by </span>
-                      <Link to={`/user/${post.author.id}`}>
+                      <Link to={`/user/${post.author.name}`}>
                         u/
                         {post.author.name}
                       </Link>{" "}

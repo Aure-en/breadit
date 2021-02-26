@@ -8,20 +8,22 @@ import useComment from "../../hooks/useComment";
 import Post from "../../components/user/Post";
 import Comment from "../../components/user/Comment";
 
-function Overview({ userId }) {
+function Overview({ username }) {
   const [comments, setComments] = useState([]);
   const [posts, setPosts] = useState([]);
   const [overview, setOverview] = useState([]);
-  const { getUserComments, getUserPosts } = useUser();
+  const { getUserByName, getUserComments, getUserPosts } = useUser();
   const { getCommentsNumber } = useComment();
   const { getPost } = usePost();
   const docsRef = useRef();
   const { limit } = useScroll(docsRef, 20, 10);
 
-  // Get comments
   useEffect(() => {
     (async () => {
-      let userComments = await getUserComments(userId, limit);
+      const user = await getUserByName(username);
+
+      // Get comments
+      let userComments = await getUserComments(user.id, limit);
       userComments = await Promise.all(
         userComments.map(async (comment) => {
           const post = await getPost(comment.post);
@@ -44,13 +46,9 @@ function Overview({ userId }) {
         return { ...comment, votes };
       });
       setComments(userComments);
-    })();
-  }, [limit]);
 
-  // Get posts
-  useEffect(() => {
-    (async () => {
-      let posts = await getUserPosts(userId, limit);
+      // Get posts
+      let posts = await getUserPosts(user.id, limit);
       posts = await Promise.all(
         posts.map(async (post) => {
           const comments = await getCommentsNumber(post.id);
@@ -108,7 +106,7 @@ function Overview({ userId }) {
 }
 
 Overview.propTypes = {
-  userId: PropTypes.string.isRequired,
+  username: PropTypes.string.isRequired,
 };
 
 export default Overview;

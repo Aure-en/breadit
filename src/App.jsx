@@ -71,7 +71,7 @@ function App() {
                     path="/b/:subreadit/:postId/:commentId"
                     component={Comment}
                   />
-                  <Route path="/u/:user" component={User} />
+                  <Route path="/u/:username" component={User} />
                   <Route path="/inbox" component={Inbox} />
                 </Switch>
               </Container>

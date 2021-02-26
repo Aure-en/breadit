@@ -58,7 +58,7 @@ function UserDropdown() {
             {currentUser && (
               <>
                 <Category>My stuff</Category>
-                <Choice to={`/u/${currentUser.uid}`}>
+                <Choice to={`/u/${currentUser.displayName}`}>
                   <IconUser />
                   <div>Profile</div>
                 </Choice>

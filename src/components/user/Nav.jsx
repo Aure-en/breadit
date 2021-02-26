@@ -4,16 +4,16 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 
-function Nav({ userId }) {
+function Nav({ username }) {
   const { currentUser } = useAuth();
 
   return (
     <Container>
-      <NavLink to={`/u/${userId}`}>Overview</NavLink>
-      <NavLink to={`/u/${userId}/posts`}>Posts</NavLink>
-      <NavLink to={`/u/${userId}/comments`}>Comments</NavLink>
-      {currentUser.uid === userId && (
-        <NavLink to={`/u/${userId}/saved`}>Saved</NavLink>
+      <NavLink to={`/u/${username}`}>Overview</NavLink>
+      <NavLink to={`/u/${username}/posts`}>Posts</NavLink>
+      <NavLink to={`/u/${username}/comments`}>Comments</NavLink>
+      {currentUser.uid === username && (
+        <NavLink to={`/u/${username}/saved`}>Saved</NavLink>
       )}
     </Container>
   );
@@ -35,5 +35,5 @@ const NavLink = styled(Link)`
 `;
 
 Nav.propTypes = {
-  userId: PropTypes.string.isRequired,
+  username: PropTypes.string.isRequired,
 };

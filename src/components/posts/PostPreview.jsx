@@ -128,7 +128,7 @@ function PostPreview({ postId }) {
                     </BoldPrimary>
                   </Link>
                   <span> • Posted by </span>
-                  <Link to={`/u/${post.author.id}`}>
+                  <Link to={`/u/${post.author.name}`}>
                     u/
                     {post.author.name}
                     &nbsp;
