@@ -28,6 +28,7 @@ function useNotification() {
     const query = await firestore
       .collection("notifications")
       .where("user.id", "==", userId)
+      .where("read", "==", false)
       .get();
     query.forEach((doc) => doc.ref.update({ read: true }));
   };
@@ -60,8 +61,12 @@ function useNotification() {
   };
 
   const getNotificationsNumber = async (userId) => {
-    const notifications = await getNotifications(userId);
-    return notifications.length;
+    const notifications = await firestore
+      .collection("notifications")
+      .where("user.id", "==", userId)
+      .where("read", "==", false)
+      .get();
+    return notifications.docs.length;
   };
 
   const notifyMention = async (author, content, id, data, type) => {

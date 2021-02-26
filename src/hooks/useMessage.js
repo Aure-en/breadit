@@ -24,6 +24,7 @@ function useMessage() {
     const query = await firestore
       .collection("messages")
       .where("recipient.id", "==", userId)
+      .where("read", "==", false)
       .get();
     query.forEach((doc) => doc.ref.update({ read: true }));
   };
@@ -75,7 +76,7 @@ function useMessage() {
       .where("recipient.id", "==", userId)
       .where("read", "==", false)
       .get();
-    return messages.length;
+    return messages.docs.length;
   };
 
   const deleteMessageListener = (userId, callback) => {

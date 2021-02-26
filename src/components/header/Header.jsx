@@ -7,6 +7,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import Entry from "../entry/Entry";
 import NavDropdown from "./NavDropdown";
 import UserDropdown from "./UserDropdown";
+import LinkInbox from "./LinkInbox";
 
 // Icons
 import { ReactComponent as IconHome } from "../../assets/icons/header/icon-home.svg";
@@ -36,6 +37,7 @@ function Header() {
             <LinkIcon to="/submit" data-tip="Create Post">
               <IconPost />
             </LinkIcon>
+            <LinkInbox />
             <ReactTooltip effect="solid" delayShow={300} />
           </>
         ) : (
