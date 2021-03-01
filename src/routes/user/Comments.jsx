@@ -4,7 +4,7 @@ import styled from "styled-components";
 import useUser from "../../hooks/useUser";
 import usePost from "../../hooks/usePost";
 import useScroll from "../../hooks/useScroll";
-import Comment from "../../components/user/Comment";
+import Comment from "../../components/user/content/Comment";
 import Sort from "../../components/sort/Sort";
 
 function Comments({ username }) {

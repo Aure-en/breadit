@@ -6,7 +6,7 @@ import Overview from "./Overview";
 import Posts from "./Posts";
 import Comments from "./Comments";
 import Saved from "./Saved";
-import Profile from "../../components/user/Profile";
+import Profile from "../../components/user/aside/Profile";
 import Nav from "../../components/user/Nav";
 
 function User({ match }) {

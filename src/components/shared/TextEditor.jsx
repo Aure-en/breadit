@@ -19,21 +19,23 @@ import {
 } from "draft-js";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import uniqid from "uniqid";
 import "draft-js/dist/Draft.css";
-import "../styles/textEditor.css";
+import "../../styles/textEditor.css";
 
 // Icons
-import { ReactComponent as IconBold } from "../assets/icons/text_editor/icon-bold.svg";
-import { ReactComponent as IconItalic } from "../assets/icons/text_editor/icon-italic.svg";
-import { ReactComponent as IconUnderline } from "../assets/icons/text_editor/icon-underline.svg";
-import { ReactComponent as IconStrike } from "../assets/icons/text_editor/icon-strike.svg";
-import { ReactComponent as IconHeading } from "../assets/icons/text_editor/icon-heading.svg";
-import { ReactComponent as IconOL } from "../assets/icons/text_editor/icon-ol.svg";
-import { ReactComponent as IconUL } from "../assets/icons/text_editor/icon-ul.svg";
-import { ReactComponent as IconLink } from "../assets/icons/text_editor/icon-link.svg";
-import { ReactComponent as IconBlockQuote } from "../assets/icons/text_editor/icon-blockquote.svg";
-import { ReactComponent as IconCode } from "../assets/icons/text_editor/icon-code.svg";
-import { ReactComponent as IconBlockCode } from "../assets/icons/text_editor/icon-code-block.svg";
+import { ReactComponent as IconBold } from "../../assets/icons/text_editor/icon-bold.svg";
+import { ReactComponent as IconItalic } from "../../assets/icons/text_editor/icon-italic.svg";
+import { ReactComponent as IconUnderline } from "../../assets/icons/text_editor/icon-underline.svg";
+import { ReactComponent as IconStrike } from "../../assets/icons/text_editor/icon-strike.svg";
+import { ReactComponent as IconHeading } from "../../assets/icons/text_editor/icon-heading.svg";
+import { ReactComponent as IconSubheading } from "../../assets/icons/text_editor/icon-subheading.svg";
+import { ReactComponent as IconOL } from "../../assets/icons/text_editor/icon-ol.svg";
+import { ReactComponent as IconUL } from "../../assets/icons/text_editor/icon-ul.svg";
+import { ReactComponent as IconLink } from "../../assets/icons/text_editor/icon-link.svg";
+import { ReactComponent as IconBlockQuote } from "../../assets/icons/text_editor/icon-blockquote.svg";
+import { ReactComponent as IconCode } from "../../assets/icons/text_editor/icon-code.svg";
+import { ReactComponent as IconBlockCode } from "../../assets/icons/text_editor/icon-code-block.svg";
 
 const findLinkEntities = (contentBlock, callback, contentState) => {
   contentBlock.findEntityRanges((character) => {
@@ -99,7 +101,11 @@ const decorator = new CompositeDecorator([
 
 const styleMap = {
   HEADING: {
-    fontSize: "1.75rem",
+    fontSize: "1.25rem",
+  },
+
+  SUBHEADING: {
+    fontSize: "1.125rem",
   },
 };
 
@@ -167,6 +173,10 @@ const TextEditor = forwardRef(
       setEditorState(RichUtils.toggleInlineStyle(editorState, "HEADING"));
     };
 
+    const onSubheadingClick = () => {
+      setEditorState(RichUtils.toggleInlineStyle(editorState, "SUBHEADING"));
+    };
+
     const onUnorderedListClick = () => {
       setEditorState(
         RichUtils.toggleBlockType(editorState, "unordered-list-item")
@@ -227,26 +237,11 @@ const TextEditor = forwardRef(
     };
 
     return (
-      <Wrapper isActive={editorState.getSelection().hasFocus} ref={wrapperRef}>
-        {type === "comment" && (
-          <Container>
-            <Editor
-              editorState={editorState}
-              onChange={(editorState) => {
-                setEditorState(editorState);
-                sendContent(
-                  JSON.stringify(convertToRaw(editorState.getCurrentContent()))
-                );
-              }}
-              customStyleMap={styleMap}
-              handleKeyCommand={handleKeyCommand}
-              onTab={handleTab}
-              blockStyleFn={customBlockFn}
-              placeholder={placeholder}
-            />
-          </Container>
-        )}
-
+      <Wrapper
+        isActive={editorState.getSelection().hasFocus}
+        isPost={type === "post"}
+        ref={wrapperRef}
+      >
         <Buttons>
           <Button
             type="button"
@@ -255,9 +250,9 @@ const TextEditor = forwardRef(
               e.preventDefault();
               onBoldClick();
             }}
+            active={editorState.getCurrentInlineStyle().has("BOLD")}
           >
             <IconBold data-tip="Bold" />
-            <ReactTooltip effect="solid" delayShow={300} />
           </Button>
 
           <Button
@@ -266,6 +261,7 @@ const TextEditor = forwardRef(
               e.preventDefault();
               onItalicClick();
             }}
+            active={editorState.getCurrentInlineStyle().has("ITALIC")}
           >
             <IconItalic data-tip="Italic" />
           </Button>
@@ -275,6 +271,7 @@ const TextEditor = forwardRef(
               e.preventDefault();
               onUnderlineClick();
             }}
+            active={editorState.getCurrentInlineStyle().has("UNDERLINE")}
           >
             <IconUnderline data-tip="Underline" />
           </Button>
@@ -315,6 +312,7 @@ const TextEditor = forwardRef(
                 setSelection(coords);
                 setIsLinkEditorOpen(!isLinkEditorOpen);
               }}
+              active={isLinkEditorOpen}
             >
               <IconLink data-tip="Link" />
             </Button>
@@ -326,6 +324,7 @@ const TextEditor = forwardRef(
               e.preventDefault();
               onCodeClick();
             }}
+            active={editorState.getCurrentInlineStyle().has("CODE")}
           >
             <IconCode data-tip="Code" />
           </Button>
@@ -336,6 +335,7 @@ const TextEditor = forwardRef(
               e.preventDefault();
               onHeadingClick();
             }}
+            active={editorState.getCurrentInlineStyle().has("HEADING")}
           >
             <IconHeading data-tip="Heading" />
           </Button>
@@ -344,8 +344,20 @@ const TextEditor = forwardRef(
             type="button"
             onMouseDown={(e) => {
               e.preventDefault();
+              onSubheadingClick();
+            }}
+            active={editorState.getCurrentInlineStyle().has("SUBHEADING")}
+          >
+            <IconSubheading data-tip="Subheading" />
+          </Button>
+
+          <Button
+            type="button"
+            onMouseDown={(e) => {
+              e.preventDefault();
               onStrikeThroughClick();
             }}
+            active={editorState.getCurrentInlineStyle().has("STRIKETHROUGH")}
           >
             <IconStrike data-tip="Strikethrough" />
           </Button>
@@ -389,26 +401,26 @@ const TextEditor = forwardRef(
           >
             <IconBlockCode data-tip="Code Block" />
           </Button>
+
+          <ReactTooltip effect="solid" delayShow={300} />
         </Buttons>
 
-        {type === "post" && (
-          <Container>
-            <Editor
-              editorState={editorState}
-              onChange={(editorState) => {
-                setEditorState(editorState);
-                sendContent(
-                  JSON.stringify(convertToRaw(editorState.getCurrentContent()))
-                );
-              }}
-              customStyleMap={styleMap}
-              handleKeyCommand={handleKeyCommand}
-              onTab={handleTab}
-              blockStyleFn={customBlockFn}
-              placeholder={placeholder}
-            />
-          </Container>
-        )}
+        <Container>
+          <Editor
+            editorState={editorState}
+            onChange={(editorState) => {
+              setEditorState(editorState);
+              sendContent(
+                JSON.stringify(convertToRaw(editorState.getCurrentContent()))
+              );
+            }}
+            customStyleMap={styleMap}
+            handleKeyCommand={handleKeyCommand}
+            onTab={handleTab}
+            blockStyleFn={customBlockFn}
+            placeholder={placeholder}
+          />
+        </Container>
 
         {isLinkEditorOpen && (
           <LinkBox selection={selection}>
@@ -446,62 +458,62 @@ TextEditor.defaultProps = {
 export const renderers = {
   inline: {
     // The key passed here is just an index based on rendering order inside a block
-    BOLD: (children, { key }) => <strong key={key}>{children}</strong>,
-    ITALIC: (children, { key }) => <em key={key}>{children}</em>,
-    UNDERLINE: (children, { key }) => <u key={key}>{children}</u>,
-    CODE: (children, { key }) => (
-      <span key={key} className="code">
+    BOLD: (children) => <strong key={uniqid()}>{children}</strong>,
+    ITALIC: (children) => <em key={uniqid()}>{children}</em>,
+    UNDERLINE: (children) => <u key={uniqid()}>{children}</u>,
+    CODE: (children) => (
+      <span key={uniqid()} className="code">
         {children}
       </span>
     ),
-    HEADING: (children, { key }) => (
-      <div className="heading" key={key}>
+    HEADING: (children) => (
+      <div className="heading" key={uniqid()}>
         {children}
       </div>
     ),
-    STRIKETHROUGH: (children, { key }) => (
-      <span key={key} className="strikethrough">
+    STRIKETHROUGH: (children) => (
+      <span key={uniqid()} className="strikethrough">
         {children}
       </span>
     ),
   },
   blocks: {
-    unstyled: (children, { key }) =>
+    unstyled: (children) =>
       children.map((child) => (
-        <div key={key} className="block">
+        <p key={uniqid()} className="block">
           {child}
-        </div>
+        </p>
       )),
-    codeBlock: (children, { key }) =>
+    codeBlock: (children) =>
       children.map((child) => (
-        <pre key={key} className="codeBlock">
+        <pre key={uniqid()} className="codeBlock">
           {child}
         </pre>
       )),
-    quoteBlock: (children, { key }) =>
+    quoteBlock: (children) =>
       children.map((child) => (
-        <div key={key} className="quoteBlock">
+        <div key={uniqid()} className="quoteBlock">
           {child}
         </div>
       )),
-    "unordered-list-item": (children, { keys }) => (
-      <ul key={keys[keys.length - 1]}>
+    "unordered-list-item": (children) => (
+      <ul key={uniqid()}>
         {children.map((child) => (
-          <li key={keys[keys.length - 1]}>{child}</li>
+          <li key={uniqid()}>{child}</li>
         ))}
       </ul>
     ),
-    "ordered-list-item": (children, { keys }) => (
-      <ol key={keys.join("|")}>
-        {children.map((child, index) => (
-          <li key={keys[index]}>{child}</li>
+    "ordered-list-item": (children) => (
+      <ol key={uniqid()}>
+        {children.map((child) => (
+          <li key={uniqid()}>{child}</li>
         ))}
       </ol>
     ),
   },
   entities: {
-    LINK: (children, data, { key }) => (
-      <StyledLink key={key} to={data.url}>
+    LINK: (children, data) => (
+      <StyledLink key={uniqid()} href={data.url}>
         {children}
       </StyledLink>
     ),
@@ -530,22 +542,23 @@ const colors = {
 };
 
 const Wrapper = styled.div`
+  display: flex;
+  flex-direction: ${(props) => (props.isPost ? "column" : "column-reverse")};
   border: 1px solid
-    ${(props) => (props.isActive ? colors.secondary : colors.border)};
+    ${(props) => props.isActive ? props.theme.borderHover : props.theme.border};
   border-radius: 5px;
 `;
 
 const Container = styled.div`
   min-height: 8rem;
   padding: 1rem;
-  background: ${colors.background};
+  background: ${(props) => props.theme.backgroundSecondary};
   cursor: text;
 `;
 
 const Buttons = styled.div`
-  background: ${colors.buttons};
+  background: ${(props) => props.theme.backgroundPrimary};
   display: flex;
-  color: ${colors.primary};
 `;
 
 const Button = styled.button`
@@ -554,10 +567,11 @@ const Button = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
+  border-radius: 3px;
+  background: ${props => props.active && colors.hover};
 
   &:hover {
     background: ${colors.hover};
-    border-radius: 3px;
   }
 `;
 
@@ -593,7 +607,7 @@ const StyledLink = styled.a`
 `;
 
 const LinkToUser = styled(Link)`
-  color: ${colors.border};
+  color: ${colors.accent};
   cursor: pointer;
 
   &:hover {

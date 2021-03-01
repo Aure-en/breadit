@@ -35,7 +35,8 @@ function usePost() {
     ref.set(data);
 
     // If some users are mentioned, notify them.
-    notifyMention(author.displayName, content, ref.id, data, "post");
+    if (type === "post")
+      notifyMention(author.displayName, content, ref.id, data, "post");
     return ref.id;
   };
 

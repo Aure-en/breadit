@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { format } from "date-fns";
-import useUser from "../../hooks/useUser";
+import useUser from "../../../hooks/useUser";
 
 function Profile({ userId }) {
   const [user, setUser] = useState();

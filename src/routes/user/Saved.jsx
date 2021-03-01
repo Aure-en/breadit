@@ -4,8 +4,8 @@ import { useAuth } from "../../contexts/AuthContext";
 import { useSave } from "../../contexts/SaveContext";
 import usePost from "../../hooks/usePost";
 import useComment from "../../hooks/useComment";
-import Post from "../../components/user/Post";
-import Comment from "../../components/user/Comment";
+import Post from "../../components/user/content/Post";
+import Comment from "../../components/user/content/Comment";
 
 function Saved() {
   const { currentUser } = useAuth();

@@ -39,7 +39,10 @@ function LatestPosts() {
                   <Text>
                     <Title title={post.title}>{post.title}</Title>
                     <Informations>
-                      {post.votes.sum} point{post.votes.sum !== 1 && post.votes.sum !== -1 && "s"} • {post.comments} comments • {formatDistanceStrict(
+                      {post.votes.sum} point
+                      {post.votes.sum !== 1 && post.votes.sum !== -1 && "s"} •{" "}
+                      {post.comments} comments •{" "}
+                      {formatDistanceStrict(
                         new Date(post.date.seconds * 1000),
                         new Date()
                       )}
@@ -56,16 +59,9 @@ function LatestPosts() {
 
 export default LatestPosts;
 
-const colors = {
-  background: "white",
-  secondary: "grey",
-  preview: "grey",
-  border: "grey",
-};
-
 const Container = styled.div`
   padding: 1rem;
-  background: ${colors.background};
+  background: ${(props) => props.theme.backgroundSecondary};
   border-radius: 5px;
 `;
 
@@ -77,11 +73,14 @@ const Heading = styled.h2`
 `;
 
 const PostsList = styled.ul`
+  margin: 0;
+  padding: 0;
+
   & > * {
     display: block;
     margin-bottom: 1rem;
     padding-bottom: 1rem;
-    border-bottom: 1px solid ${colors.border};
+    border-bottom: 1px solid ${(props) => props.theme.border};
   }
 
   & > *:last-child {
@@ -100,7 +99,7 @@ const Preview = styled.div`
   height: 3rem;
   min-width: 4rem;
   min-height: 3rem;
-  border: 1px solid ${colors.preview};
+  border: 1px solid ${(props) => props.theme.secondary};
   border-radius: 5px;
   margin-right: 1rem;
   display: flex;
@@ -129,6 +128,6 @@ const Title = styled.div`
 `;
 
 const Informations = styled.div`
-  color: ${colors.secondary};
+  color: ${(props) => props.theme.secondary};
   font-size: 0.75rem;
 `;

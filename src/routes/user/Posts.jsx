@@ -4,7 +4,7 @@ import styled from "styled-components";
 import useUser from "../../hooks/useUser";
 import useScroll from "../../hooks/useScroll";
 import useComment from "../../hooks/useComment";
-import Post from "../../components/user/Post";
+import Post from "../../components/user/content/Post";
 import Sort from "../../components/sort/Sort";
 
 function Posts({ username }) {

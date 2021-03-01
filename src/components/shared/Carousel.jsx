@@ -24,7 +24,13 @@ function Carousel({ images, title }) {
       <SlideNumber>
         {currentSlide + 1}/{slides.length}
       </SlideNumber>
-      <ButtonLeft type="button" onClick={previous}>
+      <ButtonLeft
+        type="button"
+        onClick={(e) => {
+          e.preventDefault();
+          previous();
+        }}
+      >
         <IconLeft />
       </ButtonLeft>
       <Slides
@@ -41,7 +47,13 @@ function Carousel({ images, title }) {
           );
         })}
       </Slides>
-      <ButtonRight type="button" onClick={next}>
+      <ButtonRight
+        type="button"
+        onClick={(e) => {
+          e.preventDefault();
+          next();
+        }}
+      >
         <IconRight />
       </ButtonRight>
     </Container>
@@ -61,7 +73,7 @@ export default Carousel;
 
 const colors = {
   "button-shadow": "rgba(0, 0, 0, .2)",
-  "background": "rgba(255, 255, 255)",
+  background: "rgba(255, 255, 255)",
   "slides-number": "rgba(0, 0, 0, .6)",
 };
 
@@ -122,10 +134,10 @@ const SlideNumber = styled.span`
   position: absolute;
   top: 2rem;
   right: 2rem;
-  font-size: .75rem;
+  font-size: 0.75rem;
   color: ${colors.background};
   background: ${colors["slides-number"]};
-  padding: .25rem .45rem;
+  padding: 0.25rem 0.45rem;
   border-radius: 50px;
   z-index: 1;
 `;

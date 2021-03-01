@@ -4,8 +4,8 @@ import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import usePost from "../../hooks/usePost";
 import useComment from "../../hooks/useComment";
-import PostContent from "../../components/posts/Post";
-import CommentTree from "../../components/posts/Comment";
+import PostContent from "../../components/content/Post";
+import CommentTree from "../../components/content/Comment";
 
 function Comment({ match }) {
   const { subreadit, postId, commentId } = match.params;

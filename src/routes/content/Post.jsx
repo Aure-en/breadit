@@ -4,9 +4,9 @@ import PropTypes from "prop-types";
 import { useAuth } from "../../contexts/AuthContext";
 import usePost from "../../hooks/usePost";
 import useComment from "../../hooks/useComment";
-import PostContent from "../../components/posts/Post";
-import TextEditor from "../../components/TextEditor";
-import Comment from "../../components/posts/Comment";
+import PostContent from "../../components/content/Post";
+import Comment from "../../components/content/Comment";
+import TextEditor from "../../components/shared/TextEditor";
 import SortDropdown from "../../components/sort/SortDropdown";
 
 function Post({ match }) {
@@ -78,12 +78,14 @@ function Post({ match }) {
           textEditorRef.current.reset();
         }}
       >
-        <TextEditor
-          type="comment"
-          sendContent={setComment}
-          ref={textEditorRef}
-          placeholder="What are your thoughts?"
-        />
+        <Editor>
+          <TextEditor
+            type="comment"
+            sendContent={setComment}
+            ref={textEditorRef}
+            placeholder="What are your thoughts?"
+          />
+        </Editor>
         <button type="submit">Comment</button>
       </form>
 
@@ -110,3 +112,7 @@ Post.propTypes = {
 };
 
 export default Post;
+
+const Editor = styled.div`
+  position: relative;
+`;

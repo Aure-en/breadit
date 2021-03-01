@@ -82,7 +82,7 @@ const colors = {
 
 const Container = styled.div`
   padding: 1rem;
-  background: ${colors.background};
+  background: ${(props) => props.theme.backgroundSecondary};
   line-height: 1.25rem;
 `;
 
@@ -125,12 +125,12 @@ const Name = styled(Link)`
 
 const Small = styled.div`
   font-size: 0.75rem;
-  color: ${colors.secondary};
+  color: ${(props) => props.theme.secondary};
 `;
 
 const Button = styled.button`
-  border: 1px solid ${colors.accent};
-  color: ${colors.accent};
+  border: 1px solid ${(props) => props.theme.accent};
+  color: ${(props) => props.theme.accent};
   border-radius: 5rem;
   padding: 0.45rem 1.25rem;
   font-weight: 500;
@@ -139,12 +139,12 @@ const Button = styled.button`
 `;
 
 const ButtonFilled = styled(Button)`
-  color: ${colors.background};
-  background-color: ${colors.accent};
-  border: 1px solid ${colors.accent};
+  color: ${(props) => props.theme.backgroundSecondary};
+  background-color: ${(props) => props.theme.accent};
+  border: 1px solid ${(props) => props.theme.accent};
 
   &::disabled {
-    background-color: ${colors.disabled};
-    border: 1px solid ${colors.disabled};
+    background-color: ${(props) => props.theme.disabled};
+    border: 1px solid ${(props) => props.theme.disabled};
   }
 `;

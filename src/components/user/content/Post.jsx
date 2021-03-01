@@ -4,19 +4,19 @@ import styled from "styled-components";
 import formatDistanceStrict from "date-fns/formatDistanceStrict";
 import Modal from "react-modal";
 import { Link } from "react-router-dom";
-import { useAuth } from "../../contexts/AuthContext";
-import useVote from "../../hooks/useVote";
-import Entry from "../entry/Entry";
+import { useAuth } from "../../../contexts/AuthContext";
+import useVote from "../../../hooks/useVote";
+import Entry from "../../entry/Entry";
 
 // Icons
-import { ReactComponent as IconUp } from "../../assets/icons/general/icon-upvote.svg";
-import { ReactComponent as IconDown } from "../../assets/icons/general/icon-downvote.svg";
-import { ReactComponent as IconPost } from "../../assets/icons/general/icon-post.svg";
-import { ReactComponent as IconLink } from "../../assets/icons/general/icon-link.svg";
-import { ReactComponent as IconComment } from "../../assets/icons/general/icon-comment.svg";
-import { ReactComponent as IconSave } from "../../assets/icons/general/icon-save.svg";
-import { ReactComponent as IconHide } from "../../assets/icons/general/icon-hide.svg";
-import { ReactComponent as IconLinkSmall } from "../../assets/icons/general/icon-link-small.svg";
+import { ReactComponent as IconUp } from "../../../assets/icons/general/icon-upvote.svg";
+import { ReactComponent as IconDown } from "../../../assets/icons/general/icon-downvote.svg";
+import { ReactComponent as IconPost } from "../../../assets/icons/general/icon-post.svg";
+import { ReactComponent as IconLink } from "../../../assets/icons/general/icon-link.svg";
+import { ReactComponent as IconComment } from "../../../assets/icons/general/icon-comment.svg";
+import { ReactComponent as IconSave } from "../../../assets/icons/general/icon-save.svg";
+import { ReactComponent as IconHide } from "../../../assets/icons/general/icon-hide.svg";
+import { ReactComponent as IconLinkSmall } from "../../../assets/icons/general/icon-link-small.svg";
 
 function Post({ author, id, title, subreadit, type, content, comments, date }) {
   const { currentUser } = useAuth();

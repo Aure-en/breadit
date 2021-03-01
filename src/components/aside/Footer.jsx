@@ -4,82 +4,46 @@ import styled from "styled-components";
 function Footer() {
   return (
     <Container>
-      <ul>
-        <li>
-          <Link href="/">Help</Link>
-        </li>
-        <li>
-          <Link href="/">Reddit App</Link>
-        </li>
-        <li>
-          <Link href="/">Reddit Coins</Link>
-        </li>
-        <li>
-          <Link href="/">Reddit Premium</Link>
-        </li>
-        <li>
-          <Link href="/">Reddit Gifts</Link>
-        </li>
-        <li>
-          <Link href="/">Communities</Link>
-        </li>
-        <li>
-          <Link href="/">Rereddit</Link>
-        </li>
-        <li>
-          <Link href="/">Topics</Link>
-        </li>
-      </ul>
-      <ul>
-        <li>
-          <Link href="/">About</Link>
-        </li>
-        <li>
-          <Link href="/">Careers</Link>
-        </li>
-        <li>
-          <Link href="/">Press</Link>
-        </li>
-        <li>
-          <Link href="/">Advertise</Link>
-        </li>
-        <li>
-          <Link href="/">Blog</Link>
-        </li>
-        <li>
-          <Link href="/">Terms</Link>
-        </li>
-        <li>
-          <Link href="/">Content Policy</Link>
-        </li>
-        <li>
-          <Link href="/">Privacy Policy</Link>
-        </li>
-        <li>
-          <Link href="/">Mod Policy</Link>
-        </li>
-      </ul>
+      <div>
+        <Link href="/">Help</Link>
+        <Link href="/">Reddit App</Link>
+        <Link href="/">Reddit Coins</Link>
+        <Link href="/">Reddit Premium</Link>
+        <Link href="/">Reddit Gifts</Link>
+        <Link href="/">Communities</Link>
+        <Link href="/">Rereddit</Link>
+        <Link href="/">Topics</Link>
+      </div>
+
+      <div>
+        <Link href="/">About</Link>
+        <Link href="/">Careers</Link>
+        <Link href="/">Press</Link>
+        <Link href="/">Advertise</Link>
+        <Link href="/">Blog</Link>
+        <Link href="/">Terms</Link>
+        <Link href="/">Content Policy</Link>
+        <Link href="/">Privacy Policy</Link>
+        <Link href="/">Mod Policy</Link>
+      </div>
     </Container>
   );
 }
 
 export default Footer;
 
-const colors = {
-  background: "white",
-};
-
 const Container = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   line-height: 1.25rem;
   padding: 1rem;
-  background: ${colors.background};
+  background: ${(props) => props.theme.backgroundSecondary};
   border-radius: 5px;
   font-size: 0.825rem;
 `;
 
 const Link = styled.a`
+  display: block;
   &:hover {
     text-decoration: underline;
   }

@@ -19,14 +19,9 @@ function Create() {
 
 export default Create;
 
-const colors = {
-  accent: "red",
-  background: "white",
-};
-
 const Container = styled.div`
   padding: 1rem;
-  background: ${colors.background};
+  background: ${(props) => props.theme.backgroundSecondary};
   line-height: 1.25rem;
   border-radius: 5px;
 
@@ -45,8 +40,8 @@ const Heading = styled.h3`
 
 const Button = styled(Link)`
   display: block;
-  border: 1px solid ${colors.accent};
-  color: ${colors.accent};
+  border: 1px solid ${(props) => props.theme.accent};
+  color: ${(props) => props.theme.accent};
   border-radius: 5rem;
   padding: 0.45rem 1.25rem;
   font-weight: 500;
@@ -55,7 +50,7 @@ const Button = styled(Link)`
 `;
 
 const ButtonFilled = styled(Button)`
-  color: ${colors.background};
-  background-color: ${colors.accent};
-  border: 1px solid ${colors.accent};
+  color: ${(props) => props.theme.backgroundSecondary};
+  background-color: ${(props) => props.theme.accent};
+  border: 1px solid ${(props) => props.theme.accent};
 `;

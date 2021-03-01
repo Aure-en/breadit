@@ -128,25 +128,20 @@ function NavDropdown() {
 
 export default NavDropdown;
 
-const colors = {
-  background: "white",
-  hover: "lightgrey",
-};
-
 const Dropdown = styled.div`
   position: relative;
 `;
 
 const DropdownHeader = styled.button`
   padding: 0.5rem 1.75rem;
-  border: 1px solid ${colors.hover};
+  border: 1px solid ${(props) => props.theme.border};
   cursor: pointer;
   width: 15rem;
 `;
 
 const DropdownList = styled.div`
   position: absolute;
-  background: ${colors.background};
+  background: ${(props) => props.theme.backgroundSecondary};
   padding-bottom: 1rem;
   max-height: 30rem;
   overflow: auto;
@@ -168,7 +163,7 @@ const Choice = styled(Link)`
   padding: 0.35rem 1.75rem;
 
   &:hover {
-    background: ${colors.hover};
+    background: ${(props) => props.theme.border};
   }
 `;
 

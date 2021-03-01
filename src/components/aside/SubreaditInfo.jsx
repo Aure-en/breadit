@@ -42,13 +42,9 @@ SubreaditInfo.propTypes = {
 
 export default SubreaditInfo;
 
-const colors = {
-  background: "white",
-};
-
 const Container = styled.div`
   padding: 1rem;
-  background: ${colors.background};
+  background: ${(props) => props.theme.backgroundSecondary};
   border-radius: 5px;
 `;
 

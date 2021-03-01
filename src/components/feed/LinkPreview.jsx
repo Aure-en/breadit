@@ -7,11 +7,6 @@ import NestedPostPreview from "./NestedPostPreview";
 import { ReactComponent as IconExternalLink } from "../../assets/icons/general/icon-external-link.svg";
 import { ReactComponent as IconLink } from "../../assets/icons/general/icon-link-med.svg";
 
-const colors = {
-  icon: "rgb(255, 255, 255)",
-  link: "rgb(51, 148, 163)",
-};
-
 function LinkPreview({ link, title }) {
   const youtubeRegex = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
   const breaditRegex = /^.*(breadit-296d8.web.app)\/b\/.+\/([a-zA-Z0-9]+)/;
@@ -98,7 +93,7 @@ LinkPreview.propTypes = {
 export default LinkPreview;
 
 const Link = styled.a`
-  color: ${colors.link};
+  color: ${(props) => props.theme.accent};
   font-size: 0.75rem;
   display: flex;
   align-items: center;
@@ -129,9 +124,9 @@ const Row = styled.div`
 
 const Preview = styled.div`
   position: relative;
-  border: 1px solid ${colors.link};
+  border: 1px solid ${(props) => props.theme.accent};
   border-radius: 5px;
-  color: ${colors.link};
+  color: ${(props) => props.theme.accent};
   width: 9rem;
   height: 6rem;
   margin-right: 0.5rem;
@@ -141,8 +136,8 @@ const Preview = styled.div`
 `;
 
 const ExternalLinkIcon = styled.div`
-  background: ${colors.link};
-  color: ${colors.icon};
+  background: ${(props) => props.theme.accent};
+  color: ${(props) => props.theme.accent};
   position: absolute;
   bottom: 0;
   right: 0;

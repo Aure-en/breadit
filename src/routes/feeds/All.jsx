@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import usePost from "../../hooks/usePost";
 import useScroll from "../../hooks/useScroll";
-import PostPreview from "../../components/posts/PostPreview";
+import PostPreview from "../../components/feed/PostPreview";
 import TopSubreadits from "../../components/aside/TopSubreadits";
 import Create from "../../components/aside/Create";
 import LatestPosts from "../../components/aside/LatestPosts";
@@ -29,7 +29,7 @@ function All() {
   }, [sort, limit]);
 
   return (
-    <Wrapper>
+    <>
       <Container>
         <Sort setSort={setSort} sort={sort} />
         <PostsList ref={postsRef}>
@@ -44,23 +44,11 @@ function All() {
         <LatestPosts />
         <Footer />
       </Aside>
-    </Wrapper>
+    </>
   );
 }
 
 export default All;
-const colors = {
-  background: "rgb(241, 236, 230)",
-};
-
-const Wrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  background: ${colors.background};
-  padding: 3rem;
-  height: 100%;
-  flex: 1;
-`;
 
 const Container = styled.div`
   max-width: 40rem;

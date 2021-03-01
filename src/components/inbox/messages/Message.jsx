@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import formatDistanceStrict from "date-fns/formatDistanceStrict";
 import { useAuth } from "../../../contexts/AuthContext";
 import useMessage from "../../../hooks/useMessage";
-import TextEditor, { renderers } from "../../TextEditor";
+import TextEditor, { renderers } from "../../shared/TextEditor";
 
 function Message({ id, sender, content, date, isSent }) {
   const [isReplying, setIsReplying] = useState(false);

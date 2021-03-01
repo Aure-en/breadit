@@ -37,11 +37,11 @@ function CreateSubreadit() {
     }
 
     try {
-      createSubreadit(name, description, currentUser.uid);
+      createSubreadit(name, description, currentUser);
       setMessage(
         "Your Subreadit has been created. You will be redirected shortly."
       );
-      setTimeout(() => history.push(`/b/${name}`), 1000);
+      setTimeout(() => history.push(`/b/${name.toLowerCase()}`), 1000);
     } catch (err) {
       setMessage("Sorry, something went wrong. Please try again later.");
     }

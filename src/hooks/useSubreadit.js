@@ -2,20 +2,66 @@ import firebase from "firebase";
 import { firestore } from "../firebase";
 
 function useSubreadit() {
+  // Add a member to the subreadit members count
+  // Add the subreadit to the user's subscriptions.
+  const joinSubreadit = (userId, subreadit) => {
+    firestore
+      .collection("subreadits")
+      .doc(subreadit.id)
+      .update({
+        members: firebase.firestore.FieldValue.increment(1),
+      });
+    firestore
+      .collection("users")
+      .doc(userId)
+      .collection("subreadits")
+      .doc(subreadit.id)
+      .set({
+        id: subreadit.id,
+        name: subreadit.name,
+      });
+  };
+
+  // Remove a member to the subreadit members count
+  // Remove the subreadit from the user's subscriptions.
+  const leaveSubreadit = (userId, subreadit) => {
+    firestore
+      .collection("subreadits")
+      .doc(subreadit.id)
+      .update({
+        members: firebase.firestore.FieldValue.increment(-1),
+      });
+    firestore
+      .collection("users")
+      .doc(userId)
+      .collection("subreadits")
+      .doc(subreadit.id)
+      .delete();
+  };
   const createSubreadit = async (name, description, user) => {
-    const ref = await firestore.collection("subreadits").add({
+    const ref = await firestore.collection("subreadits").doc();
+    await ref.set({
       name,
       name_lowercase: name.toLowerCase(),
       description,
       icon: "",
       permissions: {
-        owner: [user],
+        delete: [user.uid],
+        settings: [user.uid],
       },
-      members: 1,
+      owner: {
+        id: user.uid,
+        name: user.displayName,
+      },
+      members: 0,
       date: new Date(),
       rules: [],
+      id: ref.id,
     });
-    ref.update({ id: ref.id });
+    joinSubreadit(user.uid, {
+      id: ref.id,
+      name,
+    });
   };
 
   const getSubreaditById = (subreaditId) => {
@@ -25,7 +71,7 @@ function useSubreadit() {
   const getSubreaditByName = async (name) => {
     const query = await firestore
       .collection("subreadits")
-      .where("name", "==", name)
+      .where("name_lowercase", "==", name.toLowerCase())
       .get();
     return query.docs[0].data();
   };
@@ -109,43 +155,6 @@ function useSubreadit() {
       })
     );
     return subreadits;
-  };
-
-  // Add a member to the subreadit members count
-  // Add the subreadit to the user's subscriptions.
-  const joinSubreadit = (userId, subreadit) => {
-    firestore
-      .collection("subreadits")
-      .doc(subreadit.id)
-      .update({
-        members: firebase.firestore.FieldValue.increment(1),
-      });
-    firestore
-      .collection("users")
-      .doc(userId)
-      .collection("subreadits")
-      .doc(subreadit.id)
-      .set({
-        id: subreadit.id,
-        name: subreadit.name,
-      });
-  };
-
-  // Remove a member to the subreadit members count
-  // Remove the subreadit from the user's subscriptions.
-  const leaveSubreadit = (userId, subreadit) => {
-    firestore
-      .collection("subreadits")
-      .doc(subreadit.id)
-      .update({
-        members: firebase.firestore.FieldValue.increment(-1),
-      });
-    firestore
-      .collection("users")
-      .doc(userId)
-      .collection("subreadits")
-      .doc(subreadit.id)
-      .delete();
   };
 
   return {

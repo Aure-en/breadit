@@ -8,7 +8,7 @@ import useSubreadit from "../../hooks/useSubreadit";
 import useDragAndDrop from "../../hooks/useDragAndDrop";
 import useStorage from "../../hooks/useStorage";
 import useDropdown from "../../hooks/useDropdown";
-import TextEditor from "../../components/TextEditor";
+import TextEditor from "../../components/shared/TextEditor";
 
 // Icons
 import { ReactComponent as IconCaretDown } from "../../assets/icons/general/icon-caret-down.svg";
@@ -110,7 +110,7 @@ function CreatePost() {
   };
 
   return (
-    <Wrapper>
+    <>
       <Container>
         <div>
           <Heading>Create a post</Heading>
@@ -272,7 +272,7 @@ function CreatePost() {
                 disabled={
                   (type === "post" && (!title || !current)) ||
                   (type === "link" && (!title || !link || !current)) ||
-                  (type === "media" && (!title || !images || !current))
+                  (type === "image" && (!title || !images || !current))
                 }
               >
                 Post
@@ -281,7 +281,7 @@ function CreatePost() {
           </Form>
         </Main>
       </Container>
-    </Wrapper>
+    </>
   );
 }
 
@@ -294,14 +294,6 @@ const colors = {
   border: "rgb(242, 234, 230)",
   disabled: "rgb(222, 188, 171)",
 };
-
-const Wrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  background: ${colors.background};
-  padding: 3rem;
-  flex: 1;
-`;
 
 const Container = styled.div`
   width: 100%;

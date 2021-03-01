@@ -5,8 +5,8 @@ import useUser from "../../hooks/useUser";
 import usePost from "../../hooks/usePost";
 import useScroll from "../../hooks/useScroll";
 import useComment from "../../hooks/useComment";
-import Post from "../../components/user/Post";
-import Comment from "../../components/user/Comment";
+import Post from "../../components/user/content/Post";
+import Comment from "../../components/user/content/Comment";
 
 function Overview({ username }) {
   const [comments, setComments] = useState([]);

@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
-import Modal from "react-modal";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import useDropdown from "../../hooks/useDropdown";
@@ -94,37 +93,27 @@ function UserDropdown() {
         )}
       </Dropdown>
 
-      <EntryModal
-        isOpen={isEntryModalOpen}
-        onRequestClose={() => setIsEntryModalOpen(false)}
-      >
-        <Entry close={() => setIsEntryModalOpen(false)} />
-      </EntryModal>
+      {isEntryModalOpen && <Entry close={() => setIsEntryModalOpen(false)} />}
     </>
   );
 }
 
 export default UserDropdown;
 
-const colors = {
-  background: "white",
-  hover: "lightgrey",
-};
-
 const Dropdown = styled.div`
   position: relative;
 `;
 
 const DropdownHeader = styled.button`
-  border: 1px solid ${colors.hover};
+  border: 1px solid ${(props) => props.theme.border};
   cursor: pointer;
   width: 15rem;
 `;
 
 const DropdownList = styled.div`
   position: absolute;
-  background: ${colors.background};
-  border: 1px solid ${colors.hover};
+  background: ${(props) => props.theme.backgroundSecondary};
+  border: 1px solid ${(props) => props.theme.border};
   padding-bottom: 1rem;
   max-height: 30rem;
   overflow: auto;
@@ -148,7 +137,7 @@ const Choice = styled(Link)`
   width: 100%;
 
   &:hover {
-    background: ${colors.hover};
+    background: ${(props) => props.theme.border};
   }
 `;
 
@@ -172,14 +161,4 @@ const Icon = styled.img`
   width: 2rem;
   height: 2rem;
   border-radius: 3px;
-`;
-
-const EntryModal = styled(Modal)`
-  width: 30rem;
-  height: 30rem;
-  border: 1px solid red;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
 `;

@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useAuth } from "../../contexts/AuthContext";
 import useMessage from "../../hooks/useMessage";
 import useUser from "../../hooks/useUser";
-import TextEditor from "../../components/TextEditor";
+import TextEditor from "../../components/shared/TextEditor";
 
 function CreateMessage() {
   const [recipient, setRecipient] = useState("");

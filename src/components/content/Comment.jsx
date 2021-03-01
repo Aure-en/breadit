@@ -2,12 +2,11 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import Modal from "react-modal";
 import redraft from "redraft";
 import useComment from "../../hooks/useComment";
 import useVote from "../../hooks/useVote";
 import Entry from "../entry/Entry";
-import TextEditor, { renderers } from "../TextEditor";
+import TextEditor, { renderers } from "../shared/TextEditor";
 import { useAuth } from "../../contexts/AuthContext";
 import { useSave } from "../../contexts/SaveContext";
 
@@ -192,12 +191,8 @@ function Comment({ commentId, postId }) {
               );
             })}
           </Container>
-          <EntryModal
-            isOpen={isEntryOpen}
-            onRequestClose={() => setIsEntryOpen(false)}
-          >
-            <Entry close={() => setIsEntryOpen(false)} />
-          </EntryModal>
+
+          {isEntryOpen && <Entry close={() => setIsEntryOpen(false)} />}
         </>
       )}
     </>
@@ -222,13 +217,3 @@ const Vote = styled.button`
 `;
 
 const Buttons = styled.div``;
-
-const EntryModal = styled(Modal)`
-  width: 30rem;
-  height: 30rem;
-  border: 1px solid red;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-`;

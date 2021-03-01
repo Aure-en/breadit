@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import Modal from "react-modal";
 import ReactTooltip from "react-tooltip";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
@@ -57,19 +56,13 @@ function Header() {
 
       <UserDropdown />
 
-      <EntryModal
-        isOpen={isLogInModalOpen}
-        onRequestClose={() => setIsLogInModalOpen(false)}
-      >
+      {isLogInModalOpen && (
         <Entry close={() => setIsLogInModalOpen(false)} entryTab="signIn" />
-      </EntryModal>
+      )}
 
-      <EntryModal
-        isOpen={isSignUpModalOpen}
-        onRequestClose={() => setIsSignUpModalOpen(false)}
-      >
+      {isSignUpModalOpen && (
         <Entry close={() => setIsSignUpModalOpen(false)} entryTab="signUp" />
-      </EntryModal>
+      )}
     </Container>
   );
 }
@@ -79,16 +72,7 @@ export default Header;
 const Container = styled.header`
   display: flex;
   z-index: 5;
-`;
-
-const EntryModal = styled(Modal)`
-  width: 30rem;
-  height: 30rem;
-  border: 1px solid red;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
+  background: ${props => props.theme.backgroundQuaternary};
 `;
 
 const Buttons = styled.div``;

@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 import formatDistanceStrict from "date-fns/formatDistanceStrict";
 import { Link } from "react-router-dom";
-import { renderers } from "../../TextEditor";
+import { renderers } from "../../shared/TextEditor";
 import useNotification from "../../../hooks/useNotification";
 
 function PostNotification({ id, content }) {

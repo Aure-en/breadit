@@ -19,7 +19,6 @@ function LinkInbox() {
       const notifications = await getNotificationsNumber(currentUser.uid);
       const messages = await getUnreadNumber(currentUser.uid);
       setNumber(notifications + messages);
-      console.log(notifications, messages);
     })();
   }, []);
 
@@ -39,10 +38,6 @@ function LinkInbox() {
 
 export default LinkInbox;
 
-const colors = {
-  accent: "red",
-};
-
 const LinkIcon = styled(Link)`
   position: relative;
 `;
@@ -54,7 +49,7 @@ const Number = styled.div`
   width: 1rem;
   height: 1rem;
   border-radius: 50%;
-  background: ${colors.accent};
+  background: ${(props) => props.theme.accent};
   color: white;
   font-size: 0.75rem;
   display: flex;

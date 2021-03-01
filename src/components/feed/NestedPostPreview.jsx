@@ -1,5 +1,5 @@
 /* eslint-disable react/display-name */
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import formatDistanceStrict from "date-fns/formatDistanceStrict";
@@ -10,9 +10,9 @@ import useSubreadit from "../../hooks/useSubreadit";
 import useComment from "../../hooks/useComment";
 import usePost from "../../hooks/usePost";
 import useVote from "../../hooks/useVote";
-import Carousel from "./Carousel";
+import Carousel from "../shared/Carousel";
 import LinkPreview from "./LinkPreview";
-import { renderers } from "../TextEditor";
+import { renderers } from "../shared/TextEditor";
 import "../../styles/textEditor.css";
 
 function NestedPostPreview({ postId }) {
@@ -24,7 +24,6 @@ function NestedPostPreview({ postId }) {
   const [post, setPost] = useState();
   const [subreadit, setSubreadit] = useState();
   const [commentsNumber, setCommentsNumber] = useState(0);
-  const copyRef = useRef();
 
   useEffect(() => {
     (async () => {
@@ -117,32 +116,25 @@ NestedPostPreview.propTypes = {
 };
 export default NestedPostPreview;
 
-const colors = {
-  primary: "black",
-  secondary: "grey",
-  upvote: "rgb(179, 72, 54, .3)",
-  neutral: "rgb(209, 163, 155, .3)",
-};
-
 const Container = styled.article`
-  border: 1px solid ${colors.neutral};
+  border: 1px solid ${(props) => props.theme.neutral};
   border-radius: 0.25rem;
   margin: 1rem 0.5rem;
 
   &:hover {
-    border: 1px solid ${colors.upvote};
+    border: 1px solid ${(props) => props.theme.border};
   }
 `;
 
 const BoldPrimary = styled.div`
   font-weight: 600;
-  color: ${colors.primary};
+  color: ${(props) => props.theme.primary};
 `;
 
 const Informations = styled.div`
   display: flex;
   font-size: 0.75rem;
-  color: ${colors.secondary};
+  color: ${(props) => props.theme.secondary};
   padding: 0.5rem;
 
   & > * {

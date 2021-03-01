@@ -1,14 +1,13 @@
-/* eslint-disable react/display-name */
 import React from "react";
 import redraft from "redraft";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import formatDistanceStrict from "date-fns/formatDistanceStrict";
 import { Link } from "react-router-dom";
-import { renderers } from "../TextEditor";
+import { renderers } from "../../shared/TextEditor";
 
 // Icon
-import { ReactComponent as IconComment } from "../../assets/icons/general/icon-comment.svg";
+import { ReactComponent as IconComment } from "../../../assets/icons/general/icon-comment.svg";
 
 function Comment({ author, content, date, post, id }) {
   return (

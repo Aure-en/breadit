@@ -3,7 +3,7 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 import useScroll from "../../hooks/useScroll";
 import useSubreadit from "../../hooks/useSubreadit";
-import PostPreview from "../../components/posts/PostPreview";
+import PostPreview from "../../components/feed/PostPreview";
 import SubreaditInfo from "../../components/aside/SubreaditInfo";
 import SubreaditRules from "../../components/aside/SubreaditRules";
 import Sort from "../../components/sort/Sort";
@@ -42,7 +42,7 @@ function Subreadit({ match }) {
   }, [subreadit, sort, limit]);
 
   return (
-    <Wrapper>
+    <>
       <Container>
         <Sort setSort={setSort} sort={sort} />
         <PostsList ref={postsRef}>
@@ -59,7 +59,7 @@ function Subreadit({ match }) {
           </>
         )}
       </Aside>
-    </Wrapper>
+    </>
   );
 }
 
@@ -72,19 +72,6 @@ Subreadit.propTypes = {
 };
 
 export default Subreadit;
-
-const colors = {
-  background: "rgb(241, 236, 230)",
-};
-
-const Wrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  background: ${colors.background};
-  padding: 3rem;
-  height: 100%;
-  flex: 1;
-`;
 
 const Container = styled.main`
   max-width: 40rem;

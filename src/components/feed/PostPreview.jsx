@@ -4,7 +4,6 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 import formatDistanceStrict from "date-fns/formatDistanceStrict";
 import redraft from "redraft";
-import Modal from "react-modal";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import { useSave } from "../../contexts/SaveContext";
@@ -14,9 +13,9 @@ import useVote from "../../hooks/useVote";
 import usePost from "../../hooks/usePost";
 import useSubreadit from "../../hooks/useSubreadit";
 import Entry from "../entry/Entry";
-import Carousel from "./Carousel";
+import Carousel from "../shared/Carousel";
 import LinkPreview from "./LinkPreview";
-import { renderers } from "../TextEditor";
+import { renderers } from "../shared/TextEditor";
 import "../../styles/textEditor.css";
 
 // Icons
@@ -213,12 +212,7 @@ function PostPreview({ postId }) {
             </Main>
           </Container>
 
-          <EntryModal
-            isOpen={isEntryOpen}
-            onRequestClose={() => setIsEntryOpen(false)}
-          >
-            <Entry close={() => setIsEntryOpen(false)} />
-          </EntryModal>
+          {isEntryOpen && <Entry close={() => setIsEntryOpen(false)} />}
         </>
       )}
     </>
@@ -230,37 +224,26 @@ PostPreview.propTypes = {
 };
 export default PostPreview;
 
-const colors = {
-  primary: "black",
-  secondary: "grey",
-  background: "rgb(255, 255, 255)",
-  voteBackground: "rgb(247, 244, 240)",
-  arrowBackground: "rgb(237, 212, 194)",
-  upvote: "rgb(179, 72, 54)",
-  downvote: "rgb(70, 153, 147)",
-  neutral: "rgb(209, 163, 155)",
-};
-
 const Container = styled.article`
-  border: 1px solid ${colors.neutral};
+  border: 1px solid ${(props) => props.theme.neutral};
   display: flex;
   border-radius: 0.25rem;
-  background: ${colors.background};
+  background: ${(props) => props.theme.backgroundSecondary};
 
   &:hover {
-    border: 1px solid ${colors.upvote};
+    border: 1px solid ${(props) => props.theme.borderHover};
   }
 `;
 
 const BoldPrimary = styled.div`
   font-weight: 600;
-  color: ${colors.primary};
+  color: ${(props) => props.theme.primary};
 `;
 
 const Informations = styled.div`
   display: flex;
   font-size: 0.75rem;
-  color: ${colors.secondary};
+  color: ${(props) => props.theme.secondary};
   padding: 0.5rem;
 
   & > * {
@@ -276,7 +259,7 @@ const Vote = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: ${colors.voteBackground};
+  background: ${(props) => props.theme.backgroundTertiary};
   font-size: 0.75rem;
   font-weight: 600;
   padding: 0.25rem 0.5rem 0 0.5rem;
@@ -289,10 +272,10 @@ const Vote = styled.div`
 const VoteButton = styled.button`
   color: ${(props) =>
     props.isUpvoted
-      ? colors.upvote
+      ? props.theme.upvote
       : props.isDownvoted
-      ? colors.downvote
-      : colors.neutral};
+      ? props.theme.downvote
+      : props.theme.neutral};
   cursor: pointer;
   padding: 0;
   border-radius: 0.15rem;
@@ -300,7 +283,7 @@ const VoteButton = styled.button`
   height: 1.5rem;
 
   &:hover {
-    background: ${colors.arrowBackground};
+    background: ${(props) => props.theme.arrowHover};
   }
 `;
 
@@ -311,7 +294,7 @@ const Main = styled(Link)`
 const Title = styled.h3`
   font-size: 1.125rem;
   font-weight: 500;
-  padding: 0.5rem;
+  padding-left: 1rem;
 `;
 
 const ImageContainer = styled.div`
@@ -330,7 +313,7 @@ const Text = styled.div`
   position: relative;
   max-height: 15rem;
   overflow: hidden;
-  padding: 0 0.5rem;
+  padding: 0 1rem;
 
   &:before {
     content: "";
@@ -346,10 +329,10 @@ const Text = styled.div`
 const Buttons = styled.div`
   font-size: 0.75rem;
   font-weight: 500;
-  color: ${colors.secondary};
+  color: ${(props) => props.theme.secondary};
   display: flex;
   align-items: stretch;
-  padding: 0.5rem;
+  padding: 0.5rem 1rem;
 
   & > * {
     display: flex;
@@ -359,13 +342,14 @@ const Buttons = styled.div`
   }
 
   & > *:hover {
-    background: ${colors.voteBackground};
+    background: ${(props) => props.theme.backgroundTertiary};
   }
 `;
 
 const Button = styled.button`
   font-size: 0.75rem;
   font-weight: 500;
+  color: ${(props) => props.theme.secondary};
 
   & > *:first-child {
     margin-right: 0.15rem;
@@ -375,6 +359,7 @@ const Button = styled.button`
 const JoinButton = styled.button``;
 
 const ButtonLink = styled(Link)`
+  color: ${(props) => props.theme.secondary};
   & > *:first-child {
     margin-right: 0.15rem;
   }
@@ -387,14 +372,4 @@ const ButtonLink = styled(Link)`
 const InputCopy = styled.input`
   position: absolute;
   top: -9999px;
-`;
-
-const EntryModal = styled(Modal)`
-  width: 30rem;
-  height: 30rem;
-  border: 1px solid red;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
 `;
