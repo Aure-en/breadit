@@ -2,43 +2,26 @@
 import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import formatDistanceStrict from "date-fns/formatDistanceStrict";
 import redraft from "redraft";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import { useSave } from "../../contexts/SaveContext";
-import { useSubscription } from "../../contexts/SubscriptionContext";
 import useComment from "../../hooks/useComment";
-import useVote from "../../hooks/useVote";
 import usePost from "../../hooks/usePost";
-import useSubreadit from "../../hooks/useSubreadit";
 import Entry from "../entry/Entry";
 import Carousel from "../shared/Carousel";
 import LinkPreview from "./LinkPreview";
 import { renderers } from "../shared/TextEditor";
 import "../../styles/textEditor.css";
-
-// Icons
-import { ReactComponent as IconUp } from "../../assets/icons/general/icon-upvote.svg";
-import { ReactComponent as IconDown } from "../../assets/icons/general/icon-downvote.svg";
-import { ReactComponent as IconComment } from "../../assets/icons/general/icon-comment.svg";
-import { ReactComponent as IconSave } from "../../assets/icons/general/icon-save.svg";
-import { ReactComponent as IconSaved } from "../../assets/icons/general/icon-save-filled.svg";
-import { ReactComponent as IconHide } from "../../assets/icons/general/icon-hide.svg";
-import { ReactComponent as IconLink } from "../../assets/icons/general/icon-link-small.svg";
+import Vote from "../shared/Vote";
+import Information from "../content/post/Information";
+import Buttons from "../content/post/Buttons";
 
 function PostPreview({ postId }) {
   const { currentUser } = useAuth();
   const { saved, handleSave } = useSave();
   const { getPost } = usePost();
   const { getCommentsNumber } = useComment();
-  const { joinSubreadit } = useSubreadit();
-  const { vote, votes, handleUpvote, handleDownvote } = useVote(
-    "posts",
-    postId,
-    currentUser && currentUser.uid
-  );
-  const { subscriptions } = useSubscription();
   const [post, setPost] = useState();
   const [isEntryOpen, setIsEntryOpen] = useState(false);
   const [isHidden, setIsHidden] = useState(false);
@@ -90,68 +73,15 @@ function PostPreview({ postId }) {
       {!isHidden && post && (
         <>
           <Container>
-            <Vote>
-              <VoteButton
-                type="button"
-                isUpvoted={vote === 1}
-                onClick={() => {
-                  // eslint-disable-next-line no-unused-expressions
-                  currentUser
-                    ? handleUpvote("posts", postId, currentUser.uid, vote)
-                    : setIsEntryOpen(true);
-                }}
-              >
-                <IconUp />
-              </VoteButton>
-              <span>{votes}</span>
-              <VoteButton
-                type="button"
-                isDownvoted={vote === -1}
-                onClick={() => {
-                  // eslint-disable-next-line no-unused-expressions
-                  currentUser
-                    ? handleDownvote("posts", postId, currentUser.uid, vote)
-                    : setIsEntryOpen(true);
-                }}
-              >
-                <IconDown />
-              </VoteButton>
-            </Vote>
-            <Main to={`/b/${post.subreadit.name}`}>
+            <Vote type="posts" docId={postId} user={currentUser} />
+            <Main to={`/b/${post.subreadit.name}/${postId}`}>
+              <Information
+                subreaditId={post.subreadit.id}
+                author={post.author.name}
+                date={post.date}
+                user={currentUser}
+              />
               <Link to={`/b/${post.subreadit.name}`}>
-                <Informations>
-                  <Link to={`/b/${post.subreadit.name}`}>
-                    <BoldPrimary>
-                      b/
-                      {post.subreadit.name}
-                    </BoldPrimary>
-                  </Link>
-                  <span> • Posted by </span>
-                  <Link to={`/u/${post.author.name}`}>
-                    u/
-                    {post.author.name}
-                    &nbsp;
-                  </Link>
-                  <Link to={`/b/${post.subreadit.name}/${postId}`}>
-                    {formatDistanceStrict(
-                      new Date(post.date.seconds * 1000),
-                      new Date()
-                    )}
-                    &nbsp; ago
-                  </Link>
-                  {subscriptions.filter(
-                    (subreadit) => subreadit.id === post.subreadit.id
-                  ).length === 0 && (
-                    <JoinButton
-                      onClick={(e) => {
-                        e.preventDefault();
-                        joinSubreadit(currentUser.uid, post.subreadit);
-                      }}
-                    >
-                      Join
-                    </JoinButton>
-                  )}
-                </Informations>
                 {post.type !== "link" && (
                   <Link to={`/b/${post.subreadit.name}/${postId}`}>
                     <Title>{post.title}</Title>
@@ -166,50 +96,15 @@ function PostPreview({ postId }) {
                   {post.type === "link" && renderLink(post.content, post.title)}
                 </>
               </Link>
-              <Buttons>
-                <ButtonLink to={`/b/${post.subreadit.name}/${postId}`}>
-                  <IconComment />
-                  {commentsNumber} Comment
-                  {commentsNumber !== 1 && "s"}
-                </ButtonLink>
-                <Button
-                  type="button"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleSave(currentUser.uid, postId, "post");
-                  }}
-                >
-                  {saved.includes(postId) ? <IconSaved /> : <IconSave />}
-                  Save
-                </Button>
-                <Button
-                  type="button"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setIsHidden(true);
-                  }}
-                >
-                  <IconHide />
-                  Hide
-                </Button>
-                <Button
-                  type="button"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    copyLink();
-                  }}
-                >
-                  <IconLink />
-                  Share
-                  <InputCopy
-                    type="text"
-                    value={`https://breadit-296d8.web.app/b/${post.subreadit.name}/${postId}`}
-                    ref={copyRef}
-                    readOnly
-                  />
-                </Button>
-              </Buttons>
             </Main>
+            <ButtonsContainer>
+              <Buttons
+                postId={postId}
+                subreadit={post.subreadit.name}
+                hide={setIsHidden}
+                user={currentUser}
+              />
+            </ButtonsContainer>
           </Container>
 
           {isEntryOpen && <Entry close={() => setIsEntryOpen(false)} />}
@@ -225,8 +120,10 @@ PostPreview.propTypes = {
 export default PostPreview;
 
 const Container = styled.article`
+  display: grid;
+  grid-template: min-content auto / min-content 1fr;
+
   border: 1px solid ${(props) => props.theme.neutral};
-  display: flex;
   border-radius: 0.25rem;
   background: ${(props) => props.theme.backgroundSecondary};
 
@@ -235,60 +132,14 @@ const Container = styled.article`
   }
 `;
 
-const BoldPrimary = styled.div`
-  font-weight: 600;
-  color: ${(props) => props.theme.primary};
-`;
-
-const Informations = styled.div`
-  display: flex;
-  font-size: 0.75rem;
-  color: ${(props) => props.theme.secondary};
-  padding: 0.5rem;
-
-  & > * {
-    margin-right: 0.25rem;
-  }
-
-  & > a:hover {
-    text-decoration: underline;
-  }
-`;
-
-const Vote = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background: ${(props) => props.theme.backgroundTertiary};
-  font-size: 0.75rem;
-  font-weight: 600;
-  padding: 0.25rem 0.5rem 0 0.5rem;
-
-  & > * {
-    margin-bottom: 0.25rem;
-  }
-`;
-
-const VoteButton = styled.button`
-  color: ${(props) =>
-    props.isUpvoted
-      ? props.theme.upvote
-      : props.isDownvoted
-      ? props.theme.downvote
-      : props.theme.neutral};
-  cursor: pointer;
-  padding: 0;
-  border-radius: 0.15rem;
-  width: 1.5rem;
-  height: 1.5rem;
-
-  &:hover {
-    background: ${(props) => props.theme.arrowHover};
-  }
-`;
-
 const Main = styled(Link)`
+  grid-row: 1;
+  grid-column: 1 / -1;
   flex: 1;
+
+  @media all and (min-width: 768px) {
+    grid-column: 2;
+  }
 `;
 
 const Title = styled.h3`
@@ -322,54 +173,13 @@ const Text = styled.div`
     position: absolute;
     left: 0;
     top: 0;
-    background: linear-gradient(transparent 10rem, white);
+    background: linear-gradient(transparent 5rem, white);
   }
 `;
 
-const Buttons = styled.div`
-  font-size: 0.75rem;
-  font-weight: 500;
-  color: ${(props) => props.theme.secondary};
-  display: flex;
-  align-items: stretch;
-  padding: 0.5rem 1rem;
-
-  & > * {
-    display: flex;
-    align-items: center;
-    padding: 0.15rem 0.5rem;
-    border-radius: 3px;
+const ButtonsContainer = styled.div`
+  @media all and (min-width: 768px) {
+    grid-row: 2;
+    grid-column: 1 / -1;
   }
-
-  & > *:hover {
-    background: ${(props) => props.theme.backgroundTertiary};
-  }
-`;
-
-const Button = styled.button`
-  font-size: 0.75rem;
-  font-weight: 500;
-  color: ${(props) => props.theme.secondary};
-
-  & > *:first-child {
-    margin-right: 0.15rem;
-  }
-`;
-
-const JoinButton = styled.button``;
-
-const ButtonLink = styled(Link)`
-  color: ${(props) => props.theme.secondary};
-  & > *:first-child {
-    margin-right: 0.15rem;
-  }
-
-  & > a {
-    height: 100%;
-  }
-`;
-
-const InputCopy = styled.input`
-  position: absolute;
-  top: -9999px;
 `;

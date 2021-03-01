@@ -20,6 +20,7 @@ const GlobalStyles = createGlobalStyle`
     background: none;
     border: none;
     cursor: pointer;
+    padding: 0;
 
     &:focus {
       outline: none;
@@ -29,6 +30,11 @@ const GlobalStyles = createGlobalStyle`
   li {
     margin: .5rem 0;
   }
+
+  h3 {
+    margin: .25rem 0;
+  }
+
 `;
 
 export default GlobalStyles;

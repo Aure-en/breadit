@@ -4,8 +4,8 @@ import PropTypes from "prop-types";
 import { useAuth } from "../../contexts/AuthContext";
 import usePost from "../../hooks/usePost";
 import useComment from "../../hooks/useComment";
-import PostContent from "../../components/content/Post";
-import Comment from "../../components/content/Comment";
+import PostContent from "../../components/content/post/Post";
+import Comment from "../../components/content/comment/Comment";
 import TextEditor from "../../components/shared/TextEditor";
 import SortDropdown from "../../components/sort/SortDropdown";
 

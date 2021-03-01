@@ -5,24 +5,24 @@ import PropTypes from "prop-types";
 import formatDistanceStrict from "date-fns/formatDistanceStrict";
 import { Link } from "react-router-dom";
 import redraft from "redraft";
-import { useAuth } from "../../contexts/AuthContext";
-import { useSave } from "../../contexts/SaveContext";
-import useComment from "../../hooks/useComment";
-import useVote from "../../hooks/useVote";
-import usePost from "../../hooks/usePost";
-import Entry from "../entry/Entry";
-import Carousel from "../shared/Carousel";
-import LinkPreview from "../feed/LinkPreview";
-import TextEditor, { renderers } from "../shared/TextEditor";
-import "../../styles/textEditor.css";
+import { useAuth } from "../../../contexts/AuthContext";
+import { useSave } from "../../../contexts/SaveContext";
+import useComment from "../../../hooks/useComment";
+import useVote from "../../../hooks/useVote";
+import usePost from "../../../hooks/usePost";
+import Entry from "../../entry/Entry";
+import Carousel from "../../shared/Carousel";
+import LinkPreview from "../../feed/LinkPreview";
+import TextEditor, { renderers } from "../../shared/TextEditor";
+import "../../../styles/textEditor.css";
 
 // Icons
-import { ReactComponent as IconUp } from "../../assets/icons/general/icon-upvote.svg";
-import { ReactComponent as IconDown } from "../../assets/icons/general/icon-downvote.svg";
-import { ReactComponent as IconComment } from "../../assets/icons/general/icon-comment.svg";
-import { ReactComponent as IconSave } from "../../assets/icons/general/icon-save.svg";
-import { ReactComponent as IconSaved } from "../../assets/icons/general/icon-save-filled.svg";
-import { ReactComponent as IconLink } from "../../assets/icons/general/icon-link-small.svg";
+import { ReactComponent as IconUp } from "../../../assets/icons/general/icon-upvote.svg";
+import { ReactComponent as IconDown } from "../../../assets/icons/general/icon-downvote.svg";
+import { ReactComponent as IconComment } from "../../../assets/icons/general/icon-comment.svg";
+import { ReactComponent as IconSave } from "../../../assets/icons/general/icon-save.svg";
+import { ReactComponent as IconSaved } from "../../../assets/icons/general/icon-save-filled.svg";
+import { ReactComponent as IconLink } from "../../../assets/icons/general/icon-link-small.svg";
 
 function Post({ postId, subreadit }) {
   const { currentUser } = useAuth();

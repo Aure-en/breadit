@@ -3,18 +3,18 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import redraft from "redraft";
-import useComment from "../../hooks/useComment";
-import useVote from "../../hooks/useVote";
-import Entry from "../entry/Entry";
-import TextEditor, { renderers } from "../shared/TextEditor";
-import { useAuth } from "../../contexts/AuthContext";
-import { useSave } from "../../contexts/SaveContext";
+import useComment from "../../../hooks/useComment";
+import useVote from "../../../hooks/useVote";
+import Entry from "../../entry/Entry";
+import TextEditor, { renderers } from "../../shared/TextEditor";
+import { useAuth } from "../../../contexts/AuthContext";
+import { useSave } from "../../../contexts/SaveContext";
 
 // Icons
-import { ReactComponent as IconUp } from "../../assets/icons/general/icon-upvote.svg";
-import { ReactComponent as IconDown } from "../../assets/icons/general/icon-downvote.svg";
-import { ReactComponent as IconSave } from "../../assets/icons/general/icon-save.svg";
-import { ReactComponent as IconSaved } from "../../assets/icons/general/icon-save-filled.svg";
+import { ReactComponent as IconUp } from "../../../assets/icons/general/icon-upvote.svg";
+import { ReactComponent as IconDown } from "../../../assets/icons/general/icon-downvote.svg";
+import { ReactComponent as IconSave } from "../../../assets/icons/general/icon-save.svg";
+import { ReactComponent as IconSaved } from "../../../assets/icons/general/icon-save-filled.svg";
 
 function Comment({ commentId, postId }) {
   const [comment, setComment] = useState();

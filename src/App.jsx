@@ -31,7 +31,7 @@ const Wrapper = styled.div`
 const Container = styled.div`
   display: flex;
   justify-content: center;
-  padding: 3rem;
+  padding: 1rem 0;
   height: 100%;
   flex: 1;
 `;

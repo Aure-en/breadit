@@ -1,0 +1,1 @@
+export const BREADIT_URL = "https://breadit-296d8.web.app";

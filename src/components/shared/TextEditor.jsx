@@ -457,7 +457,6 @@ TextEditor.defaultProps = {
 
 export const renderers = {
   inline: {
-    // The key passed here is just an index based on rendering order inside a block
     BOLD: (children) => <strong key={uniqid()}>{children}</strong>,
     ITALIC: (children) => <em key={uniqid()}>{children}</em>,
     UNDERLINE: (children) => <u key={uniqid()}>{children}</u>,

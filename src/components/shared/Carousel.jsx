@@ -123,21 +123,34 @@ const Button = styled.button`
 `;
 
 const ButtonLeft = styled(Button)`
-  left: 2rem;
+  left: 1rem;
+
+  @media all and (min-width: 768px) {
+    left: 2rem;
+  }
 `;
 
 const ButtonRight = styled(Button)`
-  right: 2rem;
+  right: 1rem;
+
+  @media all and (min-width: 768px) {
+    right: 2rem;
+  }
 `;
 
 const SlideNumber = styled.span`
   position: absolute;
-  top: 2rem;
-  right: 2rem;
+  top: 1rem;
+  right: 1rem;
   font-size: 0.75rem;
   color: ${colors.background};
   background: ${colors["slides-number"]};
   padding: 0.25rem 0.45rem;
   border-radius: 50px;
   z-index: 1;
+
+  @media all and (min-width: 768px) {
+    top: 1rem;
+    right: 1rem;
+  }
 `;
