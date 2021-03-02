@@ -37,6 +37,12 @@ const GlobalStyles = createGlobalStyle`
     font-weight: 500;
   }
 
+  input[type="text"],
+  input[type="email"],
+  input[type="password"] {
+    box-sizing: border-box;
+  }
+
 `;
 
 export default GlobalStyles;

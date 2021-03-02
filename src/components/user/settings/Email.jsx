@@ -3,6 +3,7 @@ import styled from "styled-components";
 import Modal from "react-modal";
 import { useAuth } from "../../../contexts/AuthContext";
 import useUserSettings from "../../../hooks/useUserSettings";
+import { colors } from "../../../styles/themes/light";
 
 // Icons
 import { ReactComponent as IconClose } from "../../../assets/icons/general/icon-x.svg";
@@ -33,21 +34,30 @@ function Email() {
 
   const handleUpdateEmail = async () => {
     clear();
-    try {
-      await checkPassword(currentUser, currentUser.email, password);
-    } catch (err) {
-      switch (err) {
-        case "auth/wrong-password":
-          setPasswordError("The password is incorrect.");
-          break;
-        default:
-          setPasswordError("The credential is invalid.");
-      }
+
+    let areFieldsFilled = true;
+
+    if (!password) {
+      setPasswordError("This field is required");
+      areFieldsFilled = false;
+    }
+
+    if (!email) {
+      setEmailError("This field is required");
+      areFieldsFilled = false;
+    }
+
+    if (!areFieldsFilled) return;
+
+    const check = await checkPassword(currentUser, currentUser.email, password);
+    if (check) {
+      setPasswordError("The password is incorrect.");
       return;
     }
 
     try {
       await updateEmail(currentUser, email);
+      setMessage("Email successfully updated.");
       setTimeout(() => closeModal(), 1000);
     } catch (err) {
       switch (err.code) {
@@ -58,8 +68,8 @@ function Email() {
           setEmailError("This email is already registered.");
           break;
         default:
+          setMessage("Sorry, we were unable to update your information.");
       }
-      setMessage("Sorry, we were unable to update your information.");
     }
   };
 
@@ -79,7 +89,7 @@ function Email() {
         onRequestClose={closeModal}
         style={{
           overlay: {
-            backgroundColor: colors.overlay,
+            backgroundColor: colors.overlaySecondary,
           },
         }}
       >
@@ -109,6 +119,7 @@ function Email() {
                 id="email_password"
                 name="email_password"
                 placeholder="Current Password"
+                hasError={passwordError}
               />
             </label>
             <MessageError>{passwordError}</MessageError>
@@ -123,13 +134,14 @@ function Email() {
                 id="email"
                 name="email"
                 placeholder="New Email Address"
+                hasError={emailError}
               />
             </label>
             <MessageError>{emailError}</MessageError>
           </div>
 
           <ButtonsRight>
-            <ButtonFilled type="submit" disabled={!email || !password}>
+            <ButtonFilled type="submit">
               Save email
             </ButtonFilled>
           </ButtonsRight>
@@ -142,18 +154,9 @@ function Email() {
 
 export default Email;
 
-const colors = {
-  primary: "black",
-  secondary: "grey",
-  accent: "red",
-  disabled: "blue",
-  background: "white",
-  overlay: "rgba(0, 0, 0, .8)",
-};
-
 const SettingsModal = styled(Modal)`
-  background: ${colors.background};
-  width: 100%;
+  background: ${(props) => props.theme.backgroundSecondary};
+  width: 75vw;
   max-width: 25rem;
   position: absolute;
   top: 50%;
@@ -164,6 +167,10 @@ const SettingsModal = styled(Modal)`
 
   &:focus {
     outline: none;
+  }
+
+  @media all and (min-width: 500px) {
+    width: 100vw;
   }
 `;
 
@@ -181,23 +188,20 @@ const ButtonsRight = styled.div`
 `;
 
 const Button = styled.button`
-  border: 1px solid ${colors.accent};
-  color: ${colors.accent};
+  display: block;
+  border: 1px solid ${(props) => props.theme.accent};
+  color: ${(props) => props.theme.accent};
   border-radius: 5rem;
   padding: 0.45rem 1.25rem;
   font-weight: 500;
   align-self: center;
+  text-align: center;
 `;
 
 const ButtonFilled = styled(Button)`
-  color: ${colors.background};
-  background-color: ${colors.accent};
-  border: 1px solid ${colors.accent};
-
-  &::disabled {
-    background-color: ${colors.disabled};
-    border: 1px solid ${colors.disabled};
-  }
+  color: ${(props) => props.theme.backgroundSecondary};
+  background-color: ${(props) => props.theme.accent};
+  border: 1px solid ${(props) => props.theme.accent};
 `;
 
 const Subheading = styled.h3`
@@ -213,15 +217,17 @@ const Subheading = styled.h3`
 `;
 
 const Input = styled.input`
-  margin: 0.75rem 0;
-  width: 100%;
+  margin: 0.75rem 0 0.25rem 0;
   padding: 0.75rem;
   border-radius: 3px;
-  border: 1px solid ${colors.border};
+  width: 100%;
+  border: 1px solid
+    ${(props) =>
+      props.hasError ? props.theme.error : props.theme.secondary};
 
   &:focus {
     outline: none;
-    border: 1px solid ${colors.accent};
+    border: 1px solid ${(props) => props.theme.accent};
   }
 
   &::placeholder {
@@ -246,11 +252,12 @@ const ModalText = styled.p`
 
 const Message = styled.div`
   font-size: 0.75rem;
-  color: ${colors.secondary};
+  color: ${(props) => props.theme.secondary};
   margin-bottom: 0.5rem;
 `;
 
 const MessageError = styled(Message)`
-  color: ${colors.error};
+  color: ${(props) => props.theme.error};
   top: -0.5rem;
 `;
+

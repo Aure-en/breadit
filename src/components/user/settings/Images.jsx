@@ -5,9 +5,14 @@ import { useAuth } from "../../../contexts/AuthContext";
 import useUserSettings from "../../../hooks/useUserSettings";
 import useStorage from "../../../hooks/useStorage";
 
+// Icon
+import { ReactComponent as IconClose } from "../../../assets/icons/general/icon-x.svg";
+
 function Images({ prevAvatar, prevBanner }) {
   const [avatar, setAvatar] = useState(prevAvatar);
   const [banner, setBanner] = useState(prevBanner);
+  const [avatarHover, setAvatarHover] = useState(false);
+  const [bannerHover, setBannerHover] = useState(false);
   const { uploadImage } = useStorage();
   const { updateAvatar, updateBanner } = useUserSettings();
   const { currentUser } = useAuth();
@@ -45,9 +50,23 @@ function Images({ prevAvatar, prevBanner }) {
           if (e.target.files.length > 0) handleUpdateAvatar(e.target.files[0]);
         }}
       />
-      <label htmlFor="avatar">
+      <label
+        htmlFor="avatar"
+        onMouseEnter={() => setAvatarHover(true)}
+        onMouseLeave={() => setAvatarHover(false)}
+      >
         <Avatar src={avatar} alt="Current avatar">
-          {!avatar && <Message>Upload <strong>Avatar</strong></Message>}
+          {avatar && avatarHover && (
+            <Icon
+              onClick={(e) => {
+                e.preventDefault();
+                deleteAvatar();
+              }}
+            >
+              <IconClose />
+            </Icon>
+          )}
+          {!avatar && <Message>Upload <br/><strong>Avatar</strong></Message>}
         </Avatar>
       </label>
 
@@ -60,9 +79,23 @@ function Images({ prevAvatar, prevBanner }) {
           if (e.target.files.length > 0) handleUpdateBanner(e.target.files[0]);
         }}
       />
-      <label htmlFor="banner">
+      <label
+        htmlFor="banner"
+        onMouseEnter={() => setBannerHover(true)}
+        onMouseLeave={() => setBannerHover(false)}
+      >
         <Banner src={banner} alt="Current banner">
-          {!banner && <Message>Drag and Drop or Upload <strong>Banner</strong> Image</Message>}
+          {banner && bannerHover && (
+            <Icon
+              onClick={(e) => {
+                e.preventDefault();
+                deleteBanner();
+              }}
+            >
+              <IconClose />
+            </Icon>
+          )}
+          {!banner && <Message>Upload <strong>Banner</strong> Image</Message>}
         </Banner>
       </label>
     </Container>
@@ -80,15 +113,11 @@ Images.defaultProps = {
 };
 
 export default Images;
-const colors = {
-  background: "grey",
-  border: "red",
-  accent: "red",
-};
-
 const Container = styled.div`
   display: flex;
   margin-top: 1rem;
+  font-size: 0.75rem;
+  color: ${props => props.theme.secondary};
 
   & > label {
     margin-right: 2rem;
@@ -104,16 +133,25 @@ const ImageInput = styled.input`
 `;
 
 const Image = styled.div`
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 5px;
   cursor: pointer;
   background: ${(props) =>
-    props.src ? `url("${props.src}")` : colors.background};
-  border: ${(props) => !props.src && `1px dashed ${colors.border}`};
+    props.src ? `url("${props.src}")` : props.theme.accentSoft};
+  border: ${(props) => !props.src && `1px dashed ${props.theme.secondary}`};
   background-position: center;
   background-size: cover;
+  text-align: center;
+`;
+
+const Icon = styled.span`
+  position: absolute;
+  right: .25rem;
+  top: .25rem;
+  color: ${(props) => props.theme.accent}};
 `;
 
 const Avatar = styled(Image)`

@@ -71,7 +71,7 @@ function useSubreadit() {
   const getSubreaditByName = async (name) => {
     const query = await firestore
       .collection("subreadits")
-      .where("name_lowercase", "==", name.toLowerCase())
+      .where("name", "==", name.toLowerCase())
       .get();
     return query.docs[0].data();
   };

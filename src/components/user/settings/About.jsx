@@ -52,23 +52,19 @@ About.defaultProps = {
 
 export default About;
 
-const colors = {
-  primary: "black",
-  secondary: "grey",
-  accent: "red",
-  disabled: "blue",
-  background: "white",
-  overlay: "rgba(0, 0, 0, .8)",
-};
-
 const Textarea = styled.textarea`
   width: 100%;
   min-height: 8rem;
+
+  &:focus {
+    outline: none;
+    border: 1px solid ${(props) => props.theme.accent};
+  }
 `;
 
 const Message = styled.div`
   font-size: 0.75rem;
-  color: ${colors.secondary};
+  color: ${(props) => props.theme.success};
   margin-bottom: 0.5rem;
 `;
 
@@ -85,22 +81,17 @@ const ButtonsRight = styled.div`
   }
 `;
 
-const Button = styled.button`
-  border: 1px solid ${colors.accent};
-  color: ${colors.accent};
+const ButtonFilled = styled.button`
   border-radius: 5rem;
   padding: 0.45rem 1.25rem;
   font-weight: 500;
   align-self: center;
-`;
+  color: ${(props) => props.theme.backgroundSecondary};
+  background-color: ${(props) => props.theme.accent};
+  border: 1px solid ${(props) => props.theme.accent};
 
-const ButtonFilled = styled(Button)`
-  color: ${colors.background};
-  background-color: ${colors.accent};
-  border: 1px solid ${colors.accent};
-
-  &::disabled {
-    background-color: ${colors.disabled};
-    border: 1px solid ${colors.disabled};
+  &:hover {
+    background-color: ${(props) => props.theme.accentHover};
+    border: 1px solid ${(props) => props.theme.accentHover};
   }
 `;

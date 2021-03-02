@@ -103,8 +103,13 @@ const colors = {
 const Wrapper = styled.div`
   display: flex;
   justify-content: center;
-  padding: 3rem;
   flex: 1;
+  padding: 1rem;
+  background: ${(props) => props.theme.backgroundSecondary};
+
+  @media all and (min-width: 576px) {
+    padding: 3rem;
+  }
 `;
 
 const Container = styled.div`
@@ -148,4 +153,5 @@ const Message = styled.div`
   font-size: 0.75rem;
   color: ${colors.secondary};
   margin-bottom: 0.5rem;
+  margin-right: 1rem;
 `;

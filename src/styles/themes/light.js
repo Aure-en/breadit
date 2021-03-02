@@ -8,6 +8,7 @@ export const colors = {
   backgroundQuaternary: "rgb(107, 69, 56)", // Header
 
   overlay: "rgb(107, 69, 56, .2)", // Modals overlay
+  overlaySecondary: "rgb(105, 84, 76, .5)",
   shadow: "rgb(107, 69, 56, .5)",
 
   accent: "rgba(103, 188, 194)", // Buttons, notifications...

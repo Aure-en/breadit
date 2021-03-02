@@ -118,7 +118,7 @@ const Container = styled.div`
     border-radius: 3px;
   }
 
-  & > button:hover {
+  & > *:hover {
     background: ${(props) => props.theme.backgroundTertiary};
   }
 

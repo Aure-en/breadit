@@ -3,6 +3,7 @@ import styled from "styled-components";
 import Modal from "react-modal";
 import { useAuth } from "../../../contexts/AuthContext";
 import useUserSettings from "../../../hooks/useUserSettings";
+import { colors } from "../../../styles/themes/light";
 
 // Icons
 import { ReactComponent as IconClose } from "../../../assets/icons/general/icon-x.svg";
@@ -43,16 +44,30 @@ function Password() {
   };
 
   const handleUpdatePassword = async () => {
+    clear();
+    let areFieldsFilled = true;
+
+    if (!password) {
+      setPasswordError("This field is required");
+      areFieldsFilled = false;
+    }
+
+    if (!newPassword) {
+      setNewPasswordError("This field is required");
+      areFieldsFilled = false;
+    }
+
+    if (!newPasswordConfirmation) {
+      setNewPasswordConfirmationError("This field is required");
+      areFieldsFilled = false;
+    }
+
+    if (!areFieldsFilled) return;
+
     try {
       await checkPassword(currentUser, currentUser.email, password);
     } catch (err) {
-      switch (err) {
-        case "auth/wrong-password":
-          setPasswordError("The password is incorrect.");
-          break;
-        default:
-          setPasswordError("The credential is invalid.");
-      }
+      setPasswordError("The password is incorrect.");
       return;
     }
 
@@ -67,12 +82,12 @@ function Password() {
       closeModal();
     } catch (err) {
       switch (err.code) {
-        case "weak-password":
+        case "auth/weak-password":
           setNewPasswordError("Must be 6 or more in length.");
           break;
         default:
+          setMessage("Sorry, we were unable to update your information.");
       }
-      setMessage("Sorry, we were unable to update your information.");
     }
   };
 
@@ -92,7 +107,7 @@ function Password() {
         onRequestClose={closeModal}
         style={{
           overlay: {
-            backgroundColor: colors.overlay,
+            backgroundColor: colors.overlaySecondary,
           },
         }}
       >
@@ -121,6 +136,7 @@ function Password() {
                 id="email_password"
                 name="email_password"
                 placeholder="Current Password"
+                hasError={passwordError}
               />
             </label>
             <MessageError>{passwordError}</MessageError>
@@ -135,6 +151,7 @@ function Password() {
                 id="new_password"
                 name="new_password"
                 placeholder="New Password"
+                hasError={newPasswordError}
               />
             </label>
             <MessageError>{newPasswordError}</MessageError>
@@ -149,18 +166,14 @@ function Password() {
                 id="new_password_confirmation"
                 name="new_password_confirmation"
                 placeholder="Confirm New Password"
+                hasError={newPasswordConfirmationError}
               />
             </label>
             <MessageError>{newPasswordConfirmationError}</MessageError>
           </div>
 
           <ButtonsRight>
-            <ButtonFilled
-              type="submit"
-              disabled={!newPassword || !password || !newPasswordConfirmation}
-            >
-              Save
-            </ButtonFilled>
+            <ButtonFilled type="submit">Save</ButtonFilled>
           </ButtonsRight>
           <Message>{message}</Message>
         </form>
@@ -171,19 +184,10 @@ function Password() {
 
 export default Password;
 
-const colors = {
-  primary: "black",
-  secondary: "grey",
-  accent: "red",
-  disabled: "blue",
-  background: "white",
-  overlay: "rgba(0, 0, 0, .8)",
-};
-
 const SettingsModal = styled(Modal)`
-  background: ${colors.background};
-  width: 100%;
+  background: ${(props) => props.theme.backgroundSecondary};
   max-width: 25rem;
+  width: 75vw;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -193,6 +197,10 @@ const SettingsModal = styled(Modal)`
 
   &:focus {
     outline: none;
+  }
+
+  @media all and (min-width: 500px) {
+    width: 100vw;
   }
 `;
 
@@ -210,23 +218,20 @@ const ButtonsRight = styled.div`
 `;
 
 const Button = styled.button`
-  border: 1px solid ${colors.accent};
-  color: ${colors.accent};
+  display: block;
+  border: 1px solid ${(props) => props.theme.accent};
+  color: ${(props) => props.theme.accent};
   border-radius: 5rem;
   padding: 0.45rem 1.25rem;
   font-weight: 500;
   align-self: center;
+  text-align: center;
 `;
 
 const ButtonFilled = styled(Button)`
-  color: ${colors.background};
-  background-color: ${colors.accent};
-  border: 1px solid ${colors.accent};
-
-  &::disabled {
-    background-color: ${colors.disabled};
-    border: 1px solid ${colors.disabled};
-  }
+  color: ${(props) => props.theme.backgroundSecondary};
+  background-color: ${(props) => props.theme.accent};
+  border: 1px solid ${(props) => props.theme.accent};
 `;
 
 const Subheading = styled.h3`
@@ -242,15 +247,16 @@ const Subheading = styled.h3`
 `;
 
 const Input = styled.input`
-  margin: 0.75rem 0;
-  width: 100%;
+  margin: 0.75rem 0 0.25rem 0;
   padding: 0.75rem;
   border-radius: 3px;
-  border: 1px solid ${colors.border};
+  width: 100%;
+  border: 1px solid
+    ${(props) => (props.hasError ? props.theme.error : props.theme.secondary)};
 
   &:focus {
     outline: none;
-    border: 1px solid ${colors.accent};
+    border: 1px solid ${(props) => props.theme.accent};
   }
 
   &::placeholder {
@@ -275,11 +281,11 @@ const ModalText = styled.p`
 
 const Message = styled.div`
   font-size: 0.75rem;
-  color: ${colors.secondary};
+  color: ${(props) => props.theme.secondary};
   margin-bottom: 0.5rem;
 `;
 
 const MessageError = styled(Message)`
-  color: ${colors.error};
+  color: ${(props) => props.theme.error};
   top: -0.5rem;
 `;
