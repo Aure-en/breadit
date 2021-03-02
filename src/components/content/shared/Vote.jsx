@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import useVote from "../../hooks/useVote";
-import Entry from "../entry/Entry";
+import useVote from "../../../hooks/useVote";
+import Entry from "../../entry/Entry";
 
 // Icons
-import { ReactComponent as IconUp } from "../../assets/icons/general/icon-upvote.svg";
-import { ReactComponent as IconDown } from "../../assets/icons/general/icon-downvote.svg";
+import { ReactComponent as IconUp } from "../../../assets/icons/general/icon-upvote.svg";
+import { ReactComponent as IconDown } from "../../../assets/icons/general/icon-downvote.svg";
 
 function Vote({ type, docId, user }) {
   const [isEntryOpen, setIsEntryOpen] = useState(false);
@@ -17,7 +17,7 @@ function Vote({ type, docId, user }) {
   );
 
   return (
-    <Container>
+    <Container appearance={type}>
       <Button
         type="button"
         isUpvoted={vote === 1}
@@ -27,6 +27,7 @@ function Vote({ type, docId, user }) {
             ? handleUpvote(type, docId, user.uid, vote)
             : setIsEntryOpen(true);
         }}
+        appearance={type}
       >
         <IconUp />
       </Button>
@@ -40,6 +41,7 @@ function Vote({ type, docId, user }) {
             ? handleDownvote(type, docId, user.uid, vote)
             : setIsEntryOpen(true);
         }}
+        appearance={type}
       >
         <IconDown />
       </Button>
@@ -69,20 +71,22 @@ const Container = styled.div`
   color: ${(props) => props.theme.secondary};
 
   & > * {
-    padding: 0 .1rem;
+    padding: 0 0.1rem;
   }
 
   & > button:hover {
     background: ${(props) => props.theme.backgroundTertiary};
   }
 
+  ${(props) =>
+    props.appearance === "posts" &&
+    `
   @media all and (min-width: 768px) {
     flex-direction: column;
     align-items: center;
-    background: ${(props) => props.theme.backgroundTertiary};
     font-weight: 600;
     padding: 0.5rem 0.5rem 0 0.5rem;
-  }
+  }`}
 `;
 
 const Button = styled.button`
@@ -94,21 +98,24 @@ const Button = styled.button`
       : props.theme.secondary};
   border-radius: 3px;
 
-  @media all and (min-width: 768px) {
-    color: ${(props) =>
-      props.isUpvoted
-        ? props.theme.upvote
-        : props.isDownvoted
-        ? props.theme.downvote
-        : props.theme.neutral};
-    cursor: pointer;
-    padding: 0;
-    border-radius: 0.15rem;
-    width: 1.5rem;
-    height: 1.5rem;
-
-    &:hover {
-      background: ${(props) => props.theme.arrowHover};
-    }
+  ${(props) =>
+    props.appearance === "posts" && `
+    @media all and (min-width: 768px) {
+      color: ${(props) =>
+        props.isUpvoted
+          ? props.theme.upvote
+          : props.isDownvoted
+          ? props.theme.downvote
+          : props.theme.neutral};
+      cursor: pointer;
+      padding: 0;
+      border-radius: 0.15rem;
+      width: 1.5rem;
+      height: 1.5rem;
+  
+      &:hover {
+        background: ${props.theme.arrowHover};
+      }
+    `}
   }
 `;

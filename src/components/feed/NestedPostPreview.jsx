@@ -10,7 +10,7 @@ import useSubreadit from "../../hooks/useSubreadit";
 import useComment from "../../hooks/useComment";
 import usePost from "../../hooks/usePost";
 import useVote from "../../hooks/useVote";
-import Carousel from "../shared/Carousel";
+import Carousel from "../content/shared/Carousel";
 import LinkPreview from "./LinkPreview";
 import { renderers } from "../shared/TextEditor";
 import "../../styles/textEditor.css";

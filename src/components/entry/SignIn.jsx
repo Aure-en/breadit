@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 import useSignIn from "../../hooks/useSignIn";
 
 function SignIn({ changeTab }) {
@@ -18,6 +19,10 @@ function SignIn({ changeTab }) {
 
   return (
     <>
+      <div>
+        <h3>Sign in</h3>
+        <div>Welcome back! We are happy to see you again.</div>
+      </div>
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -34,7 +39,7 @@ function SignIn({ changeTab }) {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
-          <Message>{emailError}</Message>
+          <MessageError>{emailError}</MessageError>
         </Field>
 
         <Field>
@@ -43,29 +48,46 @@ function SignIn({ changeTab }) {
             type="password"
             id="password"
             name="password"
+            placeholder="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          <Message>{passwordError}</Message>
+          <MessageError>{passwordError}</MessageError>
         </Field>
 
-        <Button type="submit">Log In</Button>
-        <Message>{message}</Message>
+        <Button type="submit" disabled={loading}>
+          Log In
+        </Button>
+        <MessageSuccess>{message}</MessageSuccess>
       </form>
 
-      <SmallFont>
-        Forgot your
-        <ChangeTab type="button" onClick={() => changeTab("forgotPassword")}>
-          password
-        </ChangeTab>
+      <Message>
+        Forgot your{" "}
+        {changeTab ? (
+          <ChangeTab type="button" onClick={() => changeTab("forgotPassword")}>
+            password
+          </ChangeTab>
+        ) : (
+          <ChangeTab as={Link} to="/entry/password">
+            password
+          </ChangeTab>
+        )}
         ?
-      </SmallFont>
+      </Message>
 
       <Message>
-        New to breadit ?
-        <ChangeTab type="button" onClick={() => changeTab("signUp")}>
-          Sign up
-        </ChangeTab>
+        New to breadit ?{" "}
+        <>
+          {changeTab ? (
+            <ChangeTab type="button" onClick={() => changeTab("signUp")}>
+              Sign up
+            </ChangeTab>
+          ) : (
+            <ChangeTab as={Link} to="/entry/signup">
+              Sign up
+            </ChangeTab>
+          )}
+        </>
       </Message>
     </>
   );
@@ -76,24 +98,80 @@ SignIn.propTypes = {
 };
 
 SignIn.defaultProps = {
-  changeTab: () => {},
+  changeTab: null,
 };
 
 export default SignIn;
 
-const Field = styled.div``;
+const Field = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  & > * {
+    flex: 1;
+  }
+`;
 
 const Label = styled.label`
   position: absolute;
   top: -9999px;
 `;
 
-const Input = styled.input``;
+const Input = styled.input`
+  margin: 0.75rem 0 0 0;
+  padding: 0.75rem;
+  border-radius: 3px;
+  border: 1px solid
+    ${(props) =>
+      props.hasError ? props.theme.error : props.theme.borderSecondary};
 
-const Message = styled.div``;
+  &:focus {
+    outline: none;
+    border: 1px solid ${(props) => props.theme.accent};
+  }
 
-const SmallFont = styled(Message)``;
+  &::placeholder {
+    text-transform: uppercase;
+    font-weight: 500;
+    font-size: 0.75rem;
+  }
+`;
 
-const Button = styled.button``;
+const Message = styled.div`
+  font-size: 0.75rem;
+  color: ${(props) => props.theme.secondary};
+  margin-bottom: 0.5rem;
+`;
 
-const ChangeTab = styled.button``;
+const MessageError = styled(Message)`
+  color: ${(props) => props.theme.error};
+  top: -0.5rem;
+`;
+
+const MessageSuccess = styled(Message)`
+  color: ${(props) => props.theme.success};
+  line-height: 1rem;
+`;
+
+const Button = styled.button`
+  display: block;
+  color: ${(props) => props.theme.backgroundSecondary};
+  background-color: ${(props) => props.theme.accent};
+  border: 1px solid ${(props) => props.theme.accent};
+  border-radius: 5rem;
+  padding: 0.45rem 1.25rem;
+  font-weight: 500;
+  align-self: center;
+  text-align: center;
+  margin: 0.75rem 0;
+
+  &:disabled {
+    background-color: ${(props) => props.theme.accentDisabled};
+    border: 1px solid ${(props) => props.theme.accentDisabled};
+    cursor: disabled;
+  }
+`;
+
+const ChangeTab = styled.button`
+  color: ${(props) => props.theme.accent};
+`;

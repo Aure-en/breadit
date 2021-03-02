@@ -29,11 +29,11 @@ function Information({ subreaditId, author, date, user }) {
         <Container>
           <Icon
             src={subreadit.icon}
-            alt={`${subreadit.name_lowercase}'s Icon`}
+            alt={`${subreadit.name}'s Icon`}
           />
-          <SubreaditLink to={`/b/${subreadit.name_lowercase}`}>
+          <SubreaditLink to={`/b/${subreadit.name}`}>
             b/
-            {subreadit.name_lowercase}
+            {subreadit.name}
           </SubreaditLink>
           <Details>
             {" "}

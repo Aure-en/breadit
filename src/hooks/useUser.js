@@ -16,9 +16,8 @@ function useUser() {
     });
   };
 
-  const getUser = async (userId) => {
-    const user = await firestore.collection("users").doc(userId).get();
-    return user.data();
+  const getUser = (userId) => {
+    return firestore.collection("users").doc(userId).get();
   };
 
   const getUserByName = async (username) => {

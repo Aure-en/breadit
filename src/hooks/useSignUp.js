@@ -12,6 +12,7 @@ function useSignUp() {
   const [loading, setLoading] = useState(false);
   const { signUp, updateUsername, updatePicture } = useAuth();
   const { createUser, isUsernameAvailable } = useUser();
+  const [message, setMessage] = useState("");
 
   const checkUsername = async (username) => {
     if (!username) {
@@ -77,6 +78,9 @@ function useSignUp() {
       }
     }
     setLoading(false);
+    setMessage(
+      "You have succesfully created an account. You will be redirected shortly."
+    );
   };
 
   return {
@@ -94,6 +98,7 @@ function useSignUp() {
     checkEmail,
     checkPassword,
     handleSignUp,
+    message,
   };
 }
 

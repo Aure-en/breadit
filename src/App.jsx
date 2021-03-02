@@ -23,15 +23,17 @@ import User from "./routes/user/User";
 import Inbox from "./routes/inbox/Inbox";
 
 const Wrapper = styled.div`
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
+
+  @media all and (min-width: 768px) {
+    min-height: 100vh;
+  }
 `;
 
 const Container = styled.div`
   display: flex;
   justify-content: center;
-  padding: 1rem 0;
   height: 100%;
   flex: 1;
 `;

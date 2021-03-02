@@ -5,6 +5,8 @@ import useDropdown from "../../hooks/useDropdown";
 
 // Icons
 import { ReactComponent as IconDown } from "../../assets/icons/general/icon-caret-down.svg";
+import { ReactComponent as IconTop } from "../../assets/icons/sort/icon-top.svg";
+import { ReactComponent as IconNew } from "../../assets/icons/sort/icon-new.svg";
 
 function SortDropdown({ setSort, sort }) {
   const dropdownRef = useRef();
@@ -18,7 +20,9 @@ function SortDropdown({ setSort, sort }) {
         isDropdownOpen={isDropdownOpen}
         onClick={() => setIsDropdownOpen(!isDropdownOpen)}
       >
-        <div>Sort by: {sort}</div>
+        Sort by:
+        {"\u00A0"}
+        <CurrentChoice>{sort}</CurrentChoice>
         <IconDown />
       </DropdownHeader>
       {isDropdownOpen && (
@@ -30,6 +34,7 @@ function SortDropdown({ setSort, sort }) {
               setSort("new");
             }}
           >
+            <IconNew />
             New
           </Option>
           <Option
@@ -39,6 +44,7 @@ function SortDropdown({ setSort, sort }) {
               setSort("top");
             }}
           >
+            <IconTop />
             Top
           </Option>
         </DropdownList>
@@ -58,10 +64,50 @@ SortDropdown.defaultProps = {
   sort: "new",
 };
 
-const Dropdown = styled.div``;
+const Dropdown = styled.div`
+  position: relative;
+  display: inline-block;
+  margin-left: 1rem;
+  z-index: 5;
+  color: ${(props) => props.theme.secondary};
+`;
 
-const DropdownHeader = styled.div``;
+const DropdownHeader = styled.div`
+  display: flex;
+  align-items: center;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+`;
 
-const DropdownList = styled.div``;
+const CurrentChoice = styled.div`
+  color: ${(props) => props.theme.accent};
+`;
 
-const Option = styled.button``;
+const DropdownList = styled.div`
+  position: absolute;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  background: ${(props) => props.theme.backgroundSecondary};
+  border: 1px solid ${(props) => props.theme.secondary};
+  max-height: 30rem;
+  z-index: 5;
+  font-size: .75rem;
+`;
+
+const Option = styled.button`
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-gap: 0.75rem;
+  align-items: center;
+  padding: 0.35rem 1rem;
+  justify-items: start;
+  font-weight: 500;
+  color: ${(props) => props.theme.secondary};
+
+  &:hover {
+    background: ${(props) => props.theme.accentSoft};
+  }
+`;

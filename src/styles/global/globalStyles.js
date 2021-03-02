@@ -21,6 +21,7 @@ const GlobalStyles = createGlobalStyle`
     border: none;
     cursor: pointer;
     padding: 0;
+    font-family: 'IBM Plex Sans', 'Noto Sans JP', 'IBM Plex Mono', sans-serif;
 
     &:focus {
       outline: none;
@@ -33,6 +34,7 @@ const GlobalStyles = createGlobalStyle`
 
   h3 {
     margin: .25rem 0;
+    font-weight: 500;
   }
 
 `;

@@ -13,7 +13,7 @@ function Profile({ userId }) {
       if (!userId) return;
       const data = await getUser(userId);
       const karma = await getKarma(userId);
-      setUser({ ...data, karma });
+      setUser({ ...data.data(), karma });
     })();
   }, []);
 

@@ -20,6 +20,7 @@ import {
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import uniqid from "uniqid";
+import { BREADIT_URL } from "../../utils/const";
 import "draft-js/dist/Draft.css";
 import "../../styles/textEditor.css";
 
@@ -521,7 +522,7 @@ export const renderers = {
     {
       strategy: mentionStrategy,
       component: ({ children, decoratedText }) => (
-        <StyledLink href={`https://breadit-296d8.web.app/${decoratedText}`}>
+        <StyledLink href={`${BREADIT_URL}/${decoratedText}`.toLowerCase()}>
           {children}
         </StyledLink>
       ),
@@ -546,6 +547,7 @@ const Wrapper = styled.div`
   border: 1px solid
     ${(props) => props.isActive ? props.theme.borderHover : props.theme.border};
   border-radius: 5px;
+  max-width: 40rem;
 `;
 
 const Container = styled.div`
@@ -553,11 +555,22 @@ const Container = styled.div`
   padding: 1rem;
   background: ${(props) => props.theme.backgroundSecondary};
   cursor: text;
+  display: flex;
+  flex-direction: column;
+  & > * {
+    flex: 1;
+  }
 `;
 
 const Buttons = styled.div`
   background: ${(props) => props.theme.backgroundPrimary};
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  justify-items: center;
+
+  @media all and (min-width: 450px) {
+    display: flex;
+  }
 `;
 
 const Button = styled.button`
@@ -597,7 +610,7 @@ const LinkBox = styled.div`
 `;
 
 const StyledLink = styled.a`
-  color: ${colors.border};
+  color: ${(props) => props.theme.accent};
   cursor: pointer;
 
   &:hover {
@@ -606,7 +619,7 @@ const StyledLink = styled.a`
 `;
 
 const LinkToUser = styled(Link)`
-  color: ${colors.accent};
+  color: ${(props) => props.theme.accent};
   cursor: pointer;
 
   &:hover {

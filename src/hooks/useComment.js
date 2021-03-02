@@ -12,7 +12,7 @@ function useComment() {
     return firestore.collection("comments").doc(commentId).get();
   };
 
-  const createComment = async (postId, author, content, parentId = null) => {
+  const createComment = async (post, author, content, parentId = null) => {
     const ref = await firestore.collection("comments").doc();
     const data = {
       author: {
@@ -27,7 +27,13 @@ function useComment() {
       },
       parent: parentId,
       children: [],
-      post: postId,
+      post: {
+        id: post.id,
+        author: {
+          id: post.author.id,
+          name: post.author.name,
+        },
+      },
       isDeleted: false,
       id: ref.id,
     };
@@ -36,12 +42,11 @@ function useComment() {
     // If the comment is not a reply to another comment:
     // Notify the post author.
     if (!parentId) {
-      const post = await getPost(postId);
-      if (post.data().author.id !== author.uid) {
+      if (post.author.id !== author.uid) {
         createNotification(
           {
-            id: post.data().author.id,
-            name: post.data().author.name,
+            id: post.author.id,
+            name: post.author.name,
           },
           "comment",
           { type: "comment", id: ref.id },
@@ -107,7 +112,7 @@ function useComment() {
     const commentsList = [];
     const comments = await firestore
       .collection("comments")
-      .where("post", "==", postId)
+      .where("post.id", "==", postId)
       .where("parent", "==", null)
       .get();
     comments.forEach((comment) => commentsList.push(comment.data().id));
@@ -118,7 +123,7 @@ function useComment() {
     const commentsList = [];
     const comments = await firestore
       .collection("comments")
-      .where("post", "==", postId)
+      .where("post.id", "==", postId)
       .where("parent", "==", null)
       .orderBy("votes.sum", "desc")
       .limit(limit)
@@ -144,8 +149,7 @@ function useComment() {
   const getCommentsNumber = async (postId) => {
     const comments = await firestore
       .collection("comments")
-      .where("post", "==", postId)
-      .where("parent", "==", null)
+      .where("post.id", "==", postId)
       .get();
     return comments.docs.length;
   };
@@ -153,7 +157,7 @@ function useComment() {
   const commentListener = (postId, callback) => {
     return firestore
       .collection("comments")
-      .where("post", "==", postId)
+      .where("post.id", "==", postId)
       .onSnapshot(callback);
   };
 

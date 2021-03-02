@@ -17,7 +17,7 @@ function UserSettings() {
   useEffect(() => {
     (async () => {
       const user = await getUser(currentUser.uid);
-      setUser(user);
+      setUser(user.data());
     })();
   });
 

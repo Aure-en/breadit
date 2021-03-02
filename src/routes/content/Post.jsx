@@ -51,6 +51,7 @@ function Post({ match }) {
   // - When a new comment is added to the post by the user, update comments
   // so that the new comment appears without having to refresh the page.
   useEffect(() => {
+    if (!currentUser) return;
     const unsubscribe = commentListener(postId, (snapshot) => {
       snapshot.docChanges().forEach(async (change) => {
         if (change.doc.data().author.id === currentUser.uid) {
@@ -65,39 +66,47 @@ function Post({ match }) {
       });
     });
     return unsubscribe;
-  }, []);
+  }, [currentUser]);
 
   return (
     <div>
-      {post && <PostContent postId={postId} subreadit={subreadit} />}
+      {post && (
+        <>
+          <PostContent postId={postId} subreadit={subreadit} />
 
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          createComment(postId, currentUser, comment);
-          textEditorRef.current.reset();
-        }}
-      >
-        <Editor>
-          <TextEditor
-            type="comment"
-            sendContent={setComment}
-            ref={textEditorRef}
-            placeholder="What are your thoughts?"
-          />
-        </Editor>
-        <button type="submit">Comment</button>
-      </form>
+          <Form
+            onSubmit={(e) => {
+              e.preventDefault();
+              createComment(post, currentUser, comment);
+              textEditorRef.current.reset();
+            }}
+          >
+            <Editor>
+              <TextEditor
+                type="comment"
+                sendContent={setComment}
+                ref={textEditorRef}
+                placeholder="What are your thoughts?"
+              />
+            </Editor>
+            <Button type="submit">Comment</Button>
+          </Form>
 
-      <div>
-        <SortDropdown setSort={setSort} sort={sort} />
-        {comments &&
-          comments.map((commentId) => {
-            return (
-              <Comment key={commentId} commentId={commentId} postId={postId} />
-            );
-          })}
-      </div>
+          <div>
+            <SortDropdown setSort={setSort} sort={sort} />
+            {comments &&
+              comments.map((commentId) => {
+                return (
+                  <StyledComment
+                    key={commentId}
+                    commentId={commentId}
+                    post={post}
+                  />
+                );
+              })}
+          </div>
+        </>
+      )}
     </div>
   );
 }
@@ -115,4 +124,35 @@ export default Post;
 
 const Editor = styled.div`
   position: relative;
+`;
+
+const StyledComment = styled(Comment)`
+  padding: 1rem 0;
+
+  // Remove the vertical bar for the first comment.
+  & > * {
+    padding-left: 0 !important;
+  }
+
+  &:before {
+    content: none !important;
+  }
+`;
+
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+`;
+
+const Button = styled.button`
+  display: block;
+  color: ${(props) => props.theme.backgroundSecondary};
+  background-color: ${(props) => props.theme.accent};
+  border: 1px solid ${(props) => props.theme.accent};
+  border-radius: 5rem;
+  padding: 0.45rem 1.25rem;
+  font-weight: 500;
+  align-self: flex-end;
+  text-align: center;
+  margin-top: 1rem;
 `;

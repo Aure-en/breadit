@@ -4,19 +4,16 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 import redraft from "redraft";
 import useComment from "../../../hooks/useComment";
-import useVote from "../../../hooks/useVote";
 import Entry from "../../entry/Entry";
 import TextEditor, { renderers } from "../../shared/TextEditor";
 import { useAuth } from "../../../contexts/AuthContext";
 import { useSave } from "../../../contexts/SaveContext";
+import Vote from "../shared/Vote";
+import Information from "./Information";
+import Buttons from "./Buttons";
+import ModifyButtons from "../shared/ModifyButtons";
 
-// Icons
-import { ReactComponent as IconUp } from "../../../assets/icons/general/icon-upvote.svg";
-import { ReactComponent as IconDown } from "../../../assets/icons/general/icon-downvote.svg";
-import { ReactComponent as IconSave } from "../../../assets/icons/general/icon-save.svg";
-import { ReactComponent as IconSaved } from "../../../assets/icons/general/icon-save-filled.svg";
-
-function Comment({ commentId, postId }) {
+function Comment({ className, commentId, post }) {
   const [comment, setComment] = useState();
   const [reply, setReply] = useState("");
   const [isReplying, setIsReplying] = useState(false);
@@ -52,12 +49,6 @@ function Comment({ commentId, postId }) {
     return unsubscribe;
   }, []);
 
-  const { vote, votes, handleUpvote, handleDownvote } = useVote(
-    "comments",
-    commentId,
-    currentUser && currentUser.uid
-  );
-
   const handleEdit = () => {
     editComment(commentId, edit);
     setIsEditing(false);
@@ -67,30 +58,31 @@ function Comment({ commentId, postId }) {
     <>
       {comment && (
         <>
-          <Container>
+          <Container className={className}>
             <>
               {comment.isDeleted ? (
                 <div>[deleted]</div>
               ) : (
-                <div>{comment.author.name}</div>
+                <Information author={comment.author} date={comment.date} />
               )}
             </>
 
             {isEditing ? (
-              <>
+              <Form onSubmit={handleEdit}>
                 <TextEditor
                   type="comment"
                   sendContent={setEdit}
                   prevContent={comment.content}
                   placeholder="What are your thoughts?"
                 />
-                <button type="button" onClick={() => setIsEditing(false)}>
-                  Cancel
-                </button>
-                <button type="button" onClick={handleEdit}>
-                  Edit
-                </button>
-              </>
+
+                <ButtonsForm>
+                  <ButtonFilled type="submit">Edit</ButtonFilled>
+                  <Button type="button" onClick={() => setIsEditing(false)}>
+                    Cancel
+                  </Button>
+                </ButtonsForm>
+              </Form>
             ) : (
               <>
                 <>
@@ -100,95 +92,50 @@ function Comment({ commentId, postId }) {
                     <div>{redraft(JSON.parse(comment.content), renderers)}</div>
                   )}
                 </>
-                <Buttons>
-                  <Vote
-                    type="button"
-                    active={vote === 1}
-                    onClick={() => {
-                      // eslint-disable-next-line no-unused-expressions
-                      currentUser
-                        ? handleUpvote(
-                            "comments",
-                            commentId,
-                            currentUser.uid,
-                            vote
-                          )
-                        : setIsEntryOpen(true);
-                    }}
-                  >
-                    <IconUp />
-                  </Vote>
-                  <span>{votes}</span>
-                  <Vote
-                    type="button"
-                    active={vote === -1}
-                    onClick={() => {
-                      // eslint-disable-next-line no-unused-expressions
-                      currentUser
-                        ? handleDownvote(
-                            "comments",
-                            commentId,
-                            currentUser.uid,
-                            vote
-                          )
-                        : setIsEntryOpen(true);
-                    }}
-                  >
-                    <IconDown />
-                  </Vote>
-                  <button
-                    type="button"
-                    onClick={() => setIsReplying(!isReplying)}
-                  >
-                    Reply
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() =>
-                      handleSave(currentUser.uid, commentId, "comment")}
-                  >
-                    {saved.includes(commentId) ? <IconSaved /> : <IconSave />}
-                    Save
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setIsEditing(true);
-                      setEdit(comment.content);
-                    }}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => deleteComment(commentId)}
-                  >
-                    Delete
-                  </button>
-                </Buttons>
+                <ButtonsGroup>
+                  <Vote type="comments" docId={commentId} user={currentUser} />
+                  <Buttons
+                    user={currentUser}
+                    commentId={commentId}
+                    onReplyClick={() => setIsReplying(!isReplying)}
+                  />
+                  {currentUser && currentUser.uid === comment.author.id && (
+                    <ModifyButtons
+                      canEdit
+                      onEditClick={() => {
+                        setIsEditing(true);
+                        setEdit(comment.content);
+                      }}
+                      onDeleteClick={() => deleteComment(commentId)}
+                    />
+                  )}
+                </ButtonsGroup>
 
                 {isReplying && (
-                  <form
+                  <Form
                     onSubmit={(e) => {
                       e.preventDefault();
-                      createComment(postId, currentUser, reply, commentId);
+                      createComment(post, currentUser, reply, commentId);
                       setIsReplying(false);
                     }}
                   >
                     <TextEditor type="comment" sendContent={setReply} />
-                    <button type="submit">Comment</button>
-                    <button type="button" onClick={() => setIsReplying(false)}>
-                      Cancel
-                    </button>
-                  </form>
+                    <ButtonsForm>
+                      <ButtonFilled type="submit">Comment</ButtonFilled>
+                      <Button
+                        type="button"
+                        onClick={() => setIsReplying(false)}
+                      >
+                        Cancel
+                      </Button>
+                    </ButtonsForm>
+                  </Form>
                 )}
               </>
             )}
 
             {comment.children.map((childId) => {
-              return (
-                <Comment key={childId} commentId={childId} postId={postId} />
-              );
+              return <Comment key={childId} commentId={childId} post={post} />;
             })}
           </Container>
 
@@ -201,19 +148,88 @@ function Comment({ commentId, postId }) {
 
 Comment.propTypes = {
   commentId: PropTypes.string.isRequired,
-  postId: PropTypes.string.isRequired,
+  post: PropTypes.shape({
+    id: PropTypes.string,
+    author: PropTypes.shape({
+      id: PropTypes.string,
+      name: PropTypes.string,
+    }),
+  }).isRequired,
+  className: PropTypes.string,
+};
+
+Comment.defaultProps = {
+  className: "",
 };
 
 export default Comment;
 
 const Container = styled.div`
+  position: relative;
+  background: ${(props) => props.theme.backgroundSecondary};
+  margin: 1rem 0;
+
   & > * {
     margin-left: 1rem;
+    padding: 0 0.5rem;
+  }
+
+  &:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0.5rem;
+    bottom: 0;
+    width: 2px;
+    border-radius: 1rem;
+    background: ${(props) => props.theme.accent};
+    opacity: 0.25;
   }
 `;
 
-const Vote = styled.button`
-  color: ${(props) => (props.active ? "red" : "black")};
+const ButtonsGroup = styled.div`
+  display: flex;
+  flex-direction: row-reverse;
+  padding-right: 0.5rem;
+
+  @media all and (min-width: 768px) {
+    flex-direction: row;
+  }
 `;
 
-const Buttons = styled.div``;
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  margin: 1rem 0 1rem 1rem;
+`;
+
+const ButtonsForm = styled.div`
+  display: flex;
+  align-self: flex-end;
+  margin-top: 1rem;
+
+  & > button {
+    margin-right: 1rem;
+  }
+
+  & > button:last-child {
+    margin-right: 0;
+  }
+`;
+
+const Button = styled.button`
+  display: block;
+  border: 1px solid ${(props) => props.theme.accent};
+  color: ${(props) => props.theme.accent};
+  border-radius: 5rem;
+  padding: 0.45rem 1.25rem;
+  font-weight: 500;
+  align-self: center;
+  text-align: center;
+`;
+
+const ButtonFilled = styled(Button)`
+  color: ${(props) => props.theme.backgroundSecondary};
+  background-color: ${(props) => props.theme.accent};
+  border: 1px solid ${(props) => props.theme.accent};
+`;

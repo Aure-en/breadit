@@ -1,11 +1,11 @@
 import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import useCarousel from "../../hooks/useCarousel";
+import useCarousel from "../../../hooks/useCarousel";
 
 // Icons
-import { ReactComponent as IconLeft } from "../../assets/icons/general/icon-left.svg";
-import { ReactComponent as IconRight } from "../../assets/icons/general/icon-right.svg";
+import { ReactComponent as IconLeft } from "../../../assets/icons/general/icon-left.svg";
+import { ReactComponent as IconRight } from "../../../assets/icons/general/icon-right.svg";
 
 function Carousel({ images, title }) {
   const {

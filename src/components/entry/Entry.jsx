@@ -6,17 +6,22 @@ import SignUp from "./SignUp";
 import ForgotPassword from "./ForgotPassword";
 import { ReactComponent as IconClose } from "../../assets/icons/general/icon-x.svg";
 
+// Image
+import { ENTRY_IMG } from "../../utils/const";
+
 function Entry({ close, entryTab }) {
   const [currentTab, setCurrentTab] = useState(entryTab);
 
   return (
-    <Overlay>
-      <Container>
-        {currentTab === "signIn" && <SignIn changeTab={setCurrentTab} />}
-        {currentTab === "signUp" && <SignUp changeTab={setCurrentTab} />}
-        {currentTab === "forgotPassword" && (
-          <ForgotPassword changeTab={setCurrentTab} />
-        )}
+    <Overlay onClick={close}>
+      <Container onClick={(e) => e.stopPropagation()}>
+        <Content>
+          {currentTab === "signIn" && <SignIn changeTab={setCurrentTab} />}
+          {currentTab === "signUp" && <SignUp changeTab={setCurrentTab} />}
+          {currentTab === "forgotPassword" && (
+            <ForgotPassword changeTab={setCurrentTab} />
+          )}
+        </Content>
         <Close type="button" onClick={close}>
           <IconClose />
         </Close>
@@ -39,22 +44,53 @@ export default Entry;
 
 const Overlay = styled.div`
   position: absolute;
-  width: 100vw;
-  height: 100vh;
-  max-width: 100%;
-  max-height: 100%;
-  z-index: 12;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: ${(props) => props.theme.overlay};
+  z-index: 99;
 `;
 
 const Container = styled.div`
-  width: 30rem;
-  height: 30rem;
-  border: 1px solid red;
   position: absolute;
+  background: ${(props) => props.theme.backgroundSecondary};
   left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 11;
+  transform: translateX(-50%);
+  z-index: 100;
+
+  @media all and (min-width: 576px) {
+    width: 30rem;
+    height: 30rem;
+    box-shadow: 0 0 15px ${(props) => props.theme.shadow};
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: linear-gradient(
+        to right,
+        transparent 30%,
+        ${(props) => props.theme.backgroundSecondary} 30%
+      ),
+      url(${ENTRY_IMG});
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    border-radius: .5rem;
+  }
+`;
+
+const Content = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  & > * {
+    flex: 1;
+  }
+
+  @media all and (min-width: 576px) {
+    margin-left: 12rem;
+    max-width: 15rem;
+  }
 `;
 
 const Close = styled.button`

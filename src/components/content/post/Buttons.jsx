@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { useSave } from "../../../contexts/SaveContext";
 import useComment from "../../../hooks/useComment";
 import useWindowSize from "../../../hooks/useWindowSize";
-import { BREADIT_URL } from "../../../utils/utils";
+import { BREADIT_URL } from "../../../utils/const";
 
 // Icons
 import { ReactComponent as IconComment } from "../../../assets/icons/general/icon-comment.svg";
@@ -38,7 +38,6 @@ function Buttons({ postId, subreadit, hide, user }) {
 
   return (
     <Container>
-
       <Button as={Link} to={`/b/${subreadit}/${postId}`}>
         <IconComment />
         {commentsNumber}
@@ -73,7 +72,7 @@ function Buttons({ postId, subreadit, hide, user }) {
           readOnly
         />
       </Button>
-      
+
       <Button
         type="button"
         onClick={(e) => {
@@ -84,7 +83,6 @@ function Buttons({ postId, subreadit, hide, user }) {
         <IconHide />
         Hide
       </Button>
-
     </Container>
   );
 }
@@ -111,7 +109,7 @@ const Container = styled.div`
   color: ${(props) => props.theme.secondary};
   display: flex;
   align-items: stretch;
-  padding: 0.5rem 0;
+  padding: 0.5rem 0.5rem 0.5rem 0;
 
   & > * {
     display: flex;
@@ -125,7 +123,7 @@ const Container = styled.div`
   }
 
   @media all and (min-width: 768px) {
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 0 0.5rem 1rem;
   }
 `;
 

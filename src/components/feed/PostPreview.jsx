@@ -1,39 +1,31 @@
 /* eslint-disable react/display-name */
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import redraft from "redraft";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
-import { useSave } from "../../contexts/SaveContext";
-import useComment from "../../hooks/useComment";
 import usePost from "../../hooks/usePost";
 import Entry from "../entry/Entry";
-import Carousel from "../shared/Carousel";
+import Carousel from "../content/shared/Carousel";
 import LinkPreview from "./LinkPreview";
 import { renderers } from "../shared/TextEditor";
 import "../../styles/textEditor.css";
-import Vote from "../shared/Vote";
+import Vote from "../content/shared/Vote";
 import Information from "../content/post/Information";
 import Buttons from "../content/post/Buttons";
 
 function PostPreview({ postId }) {
   const { currentUser } = useAuth();
-  const { saved, handleSave } = useSave();
   const { getPost } = usePost();
-  const { getCommentsNumber } = useComment();
   const [post, setPost] = useState();
   const [isEntryOpen, setIsEntryOpen] = useState(false);
   const [isHidden, setIsHidden] = useState(false);
-  const [commentsNumber, setCommentsNumber] = useState(0);
-  const copyRef = useRef();
 
   useEffect(() => {
     (async () => {
       const post = await getPost(postId);
       setPost(post.data());
-      const comments = await getCommentsNumber(postId);
-      setCommentsNumber(comments);
     })();
   }, []);
 
@@ -60,20 +52,14 @@ function PostPreview({ postId }) {
     return <LinkPreview link={link} title={title} />;
   };
 
-  // Copy the post link
-  const copyLink = () => {
-    if (!copyRef) return;
-    copyRef.current.select();
-    copyRef.current.setSelectionRange(0, 99999);
-    document.execCommand("copy");
-  };
-
   return (
     <>
       {!isHidden && post && (
         <>
           <Container>
-            <Vote type="posts" docId={postId} user={currentUser} />
+            <VoteContainer>
+              <Vote type="posts" docId={postId} user={currentUser} />
+            </VoteContainer>
             <Main to={`/b/${post.subreadit.name}/${postId}`}>
               <Information
                 subreaditId={post.subreadit.id}
@@ -122,13 +108,15 @@ export default PostPreview;
 const Container = styled.article`
   display: grid;
   grid-template: min-content auto / min-content 1fr;
-
   border: 1px solid ${(props) => props.theme.neutral};
-  border-radius: 0.25rem;
   background: ${(props) => props.theme.backgroundSecondary};
 
   &:hover {
     border: 1px solid ${(props) => props.theme.borderHover};
+  }
+
+  @media all and (min-width: 768px) {
+    border-radius: 0.25rem;
   }
 `;
 
@@ -177,9 +165,21 @@ const Text = styled.div`
   }
 `;
 
+const VoteContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  @media all and (min-width: 768px) {
+    background: ${(props) => props.theme.backgroundTertiary};
+    display: block;
+    grid-row: 1 / -1;
+  }
+`;
+
 const ButtonsContainer = styled.div`
   @media all and (min-width: 768px) {
     grid-row: 2;
-    grid-column: 1 / -1;
+    grid-column: 2 / -1;
   }
 `;

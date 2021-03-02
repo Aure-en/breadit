@@ -41,8 +41,8 @@ function useSubreadit() {
   const createSubreadit = async (name, description, user) => {
     const ref = await firestore.collection("subreadits").doc();
     await ref.set({
-      name,
-      name_lowercase: name.toLowerCase(),
+      name: name.toLowerCase(),
+      name_sensitive: name,
       description,
       icon: "",
       permissions: {
