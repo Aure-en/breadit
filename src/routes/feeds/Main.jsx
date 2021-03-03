@@ -4,7 +4,7 @@ import { useSubscription } from "../../contexts/SubscriptionContext";
 import usePost from "../../hooks/usePost";
 import useScroll from "../../hooks/useScroll";
 import PostPreview from "../../components/feed/PostPreview";
-import TopSubreadits from "../../components/aside/TopSubreadits";
+import TopSubreadits from "../../components/aside/Top";
 import Create from "../../components/aside/Create";
 import LatestPosts from "../../components/aside/LatestPosts";
 import Footer from "../../components/aside/Footer";

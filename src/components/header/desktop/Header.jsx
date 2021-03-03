@@ -2,16 +2,16 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import ReactTooltip from "react-tooltip";
 import { Link } from "react-router-dom";
-import { useAuth } from "../../contexts/AuthContext";
-import Entry from "../entry/Entry";
+import { useAuth } from "../../../contexts/AuthContext";
+import Entry from "../../entry/Entry";
 import NavDropdown from "./NavDropdown";
 import UserDropdown from "./UserDropdown";
 import LinkInbox from "./LinkInbox";
 
 // Icons
-import { ReactComponent as IconHome } from "../../assets/icons/header/icon-home.svg";
-import { ReactComponent as IconFeed } from "../../assets/icons/header/icon-feed.svg";
-import { ReactComponent as IconPost } from "../../assets/icons/header/icon-post.svg";
+import { ReactComponent as IconHome } from "../../../assets/icons/header/icon-home.svg";
+import { ReactComponent as IconFeed } from "../../../assets/icons/header/icon-feed.svg";
+import { ReactComponent as IconPost } from "../../../assets/icons/header/icon-post.svg";
 
 function Header() {
   const { currentUser } = useAuth();

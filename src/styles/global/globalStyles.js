@@ -32,7 +32,7 @@ const GlobalStyles = createGlobalStyle`
     margin: .5rem 0;
   }
 
-  h3 {
+  h2, h3 {
     margin: .25rem 0;
     font-weight: 500;
   }

@@ -1,13 +1,13 @@
 import React from "react";
 import Modal from "react-modal";
 import styled, { ThemeProvider } from "styled-components";
-import "normalize.css";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import GlobalStyles from "./styles/global/globalStyles";
 import light from "./styles/themes/light";
 import { AuthProvider } from "./contexts/AuthContext";
 import { SubscriptionProvider } from "./contexts/SubscriptionContext";
 import { SaveProvider } from "./contexts/SaveContext";
+import useWindowSize from "./hooks/useWindowSize";
 import CreateSubreadit from "./routes/create/CreateSubreadit";
 import CreatePost from "./routes/create/CreatePost";
 import CreateMessage from "./routes/create/CreateMessage";
@@ -16,11 +16,13 @@ import Subreadit from "./routes/feeds/Subreadit";
 import Main from "./routes/feeds/Main";
 import Post from "./routes/content/Post";
 import Comment from "./routes/content/Comment";
-import Header from "./components/header/Header";
+import Header from "./components/header/desktop/Header";
+import HeaderMobile from "./components/header/mobile/Header";
 import UserSettings from "./routes/settings/UserSettings";
 import SubreaditSettings from "./routes/settings/SubreaditSettings";
 import User from "./routes/user/User";
 import Inbox from "./routes/inbox/Inbox";
+import "normalize.css";
 
 const Wrapper = styled.div`
   display: flex;
@@ -40,6 +42,8 @@ const Container = styled.div`
 
 Modal.setAppElement("#root");
 function App() {
+  const { windowSize } = useWindowSize();
+
   return (
     <Router>
       <ThemeProvider theme={light}>
@@ -48,7 +52,7 @@ function App() {
           <AuthProvider>
             <SubscriptionProvider>
               <SaveProvider>
-                <Header />
+                {windowSize.width < 768 ? <HeaderMobile /> : <Header />}
 
                 <Container>
                   <Switch>

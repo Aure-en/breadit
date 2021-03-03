@@ -35,16 +35,20 @@ function useUserSettings() {
     return user.delete();
   };
 
-  const updateAbout = (user, about) => {
-    return firestore.collection("users").doc(user).update({ about });
+  const updateAbout = (userId, about) => {
+    return firestore.collection("users").doc(userId).update({ about });
   };
 
   const updateAvatar = (user, image) => {
-    return firestore.collection("users").doc(user).update({ avatar: image });
+    user.updateProfile({ photoURL: image });
+    return firestore
+      .collection("users")
+      .doc(user.uid)
+      .update({ avatar: image });
   };
 
-  const updateBanner = (user, image) => {
-    return firestore.collection("users").doc(user).update({ banner: image });
+  const updateBanner = (userId, image) => {
+    return firestore.collection("users").doc(userId).update({ banner: image });
   };
 
   return {

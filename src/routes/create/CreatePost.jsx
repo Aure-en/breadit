@@ -11,7 +11,7 @@ import useDropdown from "../../hooks/useDropdown";
 import TextEditor from "../../components/shared/TextEditor";
 
 // Icons
-import { ReactComponent as IconCaretDown } from "../../assets/icons/general/icon-caret-down.svg";
+import { ReactComponent as IconDown } from "../../assets/icons/general/icon-down.svg";
 import { ReactComponent as IconPost } from "../../assets/icons/general/icon-post.svg";
 import { ReactComponent as IconImage } from "../../assets/icons/general/icon-image.svg";
 import { ReactComponent as IconLink } from "../../assets/icons/general/icon-link.svg";
@@ -122,7 +122,7 @@ function CreatePost() {
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
           >
             {current ? current.name : "Choose a community"}
-            <IconCaretDown />
+            <IconDown />
           </DropdownHeader>
           {isDropdownOpen && (
             <DropdownList>
@@ -297,7 +297,8 @@ const colors = {
 
 const Container = styled.div`
   width: 100%;
-  max-width: 50rem;
+  max-width: 40rem;
+  margin: 3rem 0;
 `;
 
 const Main = styled.div`

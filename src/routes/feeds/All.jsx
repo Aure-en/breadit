@@ -2,8 +2,9 @@ import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import usePost from "../../hooks/usePost";
 import useScroll from "../../hooks/useScroll";
+import useWindowSize from "../../hooks/useWindowSize";
 import PostPreview from "../../components/feed/PostPreview";
-import TopSubreadits from "../../components/aside/TopSubreadits";
+import TopSubreadits from "../../components/aside/Top";
 import Create from "../../components/aside/Create";
 import LatestPosts from "../../components/aside/LatestPosts";
 import Footer from "../../components/aside/Footer";
@@ -13,6 +14,7 @@ function All() {
   const [posts, setPosts] = useState([]);
   const [sort, setSort] = useState("top");
   const { getPostsByVotes, getPostsByDate } = usePost();
+  const { windowSize } = useWindowSize();
   const postsRef = useRef();
   const { limit } = useScroll(postsRef, 10, 5);
 
@@ -38,12 +40,14 @@ function All() {
           })}
         </PostsList>
       </Container>
-      <Aside>
-        <TopSubreadits />
-        <Create />
-        <LatestPosts />
-        <Footer />
-      </Aside>
+      {windowSize.width > 768 && (
+        <Aside>
+          <TopSubreadits />
+          <Create />
+          <LatestPosts />
+          <Footer />
+        </Aside>
+      )}
     </>
   );
 }

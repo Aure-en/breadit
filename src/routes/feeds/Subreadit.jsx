@@ -26,7 +26,7 @@ function Subreadit({ match }) {
       const subreadit = await getSubreaditByName(subreaditName);
       setSubreadit(subreadit);
     })();
-  }, []);
+  }, [match]);
 
   useEffect(() => {
     (async () => {

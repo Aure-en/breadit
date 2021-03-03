@@ -26,7 +26,7 @@ function Overview({ username }) {
       let userComments = await getUserComments(user.id, limit);
       userComments = await Promise.all(
         userComments.map(async (comment) => {
-          const post = await getPost(comment.post);
+          const post = await getPost(comment.post.id);
           return {
             ...comment,
             post: {

@@ -1,17 +1,17 @@
 import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { useAuth } from "../../contexts/AuthContext";
-import useDropdown from "../../hooks/useDropdown";
-import useUser from "../../hooks/useUser";
-import Entry from "../entry/Entry";
+import { useAuth } from "../../../contexts/AuthContext";
+import useDropdown from "../../../hooks/useDropdown";
+import useUser from "../../../hooks/useUser";
+import Entry from "../../entry/Entry";
 
 // Icons
-import { ReactComponent as IconUser } from "../../assets/icons/header/icon-user.svg";
-import { ReactComponent as IconSettings } from "../../assets/icons/header/icon-settings.svg";
-import { ReactComponent as IconLight } from "../../assets/icons/header/icon-light.svg";
-import { ReactComponent as IconLogOut } from "../../assets/icons/header/icon-logout.svg";
-import { ReactComponent as IconLogIn } from "../../assets/icons/header/icon-login.svg";
+import { ReactComponent as IconUser } from "../../../assets/icons/header/icon-user.svg";
+import { ReactComponent as IconSettings } from "../../../assets/icons/header/icon-settings.svg";
+import { ReactComponent as IconLight } from "../../../assets/icons/header/icon-light.svg";
+import { ReactComponent as IconLogOut } from "../../../assets/icons/header/icon-logout.svg";
+import { ReactComponent as IconLogIn } from "../../../assets/icons/header/icon-login.svg";
 
 function UserDropdown() {
   const { currentUser, signOut } = useAuth();

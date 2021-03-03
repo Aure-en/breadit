@@ -4,7 +4,7 @@ import styled from "styled-components";
 import useDropdown from "../../hooks/useDropdown";
 
 // Icons
-import { ReactComponent as IconDown } from "../../assets/icons/general/icon-caret-down.svg";
+import { ReactComponent as IconDown } from "../../assets/icons/general/icon-down.svg";
 import { ReactComponent as IconTop } from "../../assets/icons/sort/icon-top.svg";
 import { ReactComponent as IconNew } from "../../assets/icons/sort/icon-new.svg";
 

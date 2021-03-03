@@ -10,6 +10,7 @@ import Profile from "../../components/user/aside/Profile";
 import Nav from "../../components/user/Nav";
 
 function User({ match }) {
+  console.log(match);
   return (
     <Wrapper>
       <Container>

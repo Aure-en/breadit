@@ -568,7 +568,7 @@ const Buttons = styled.div`
   grid-template-columns: repeat(6, 1fr);
   justify-items: center;
 
-  @media all and (min-width: 450px) {
+  @media all and (min-width: 475px) {
     display: flex;
   }
 `;

@@ -19,7 +19,7 @@ function Images({ prevAvatar, prevBanner }) {
 
   const handleUpdateAvatar = async (image) => {
     const imageUrl = await uploadImage(image);
-    updateAvatar(currentUser.uid, imageUrl);
+    updateAvatar(currentUser, imageUrl);
     setAvatar(imageUrl);
   };
 
@@ -30,7 +30,7 @@ function Images({ prevAvatar, prevBanner }) {
   };
 
   const deleteAvatar = () => {
-    updateAvatar(currentUser.uid, "");
+    updateAvatar(currentUser, "");
     setAvatar("");
   };
 
@@ -113,18 +113,33 @@ Images.defaultProps = {
 };
 
 export default Images;
+
 const Container = styled.div`
   display: flex;
+  flex-direction: column;
   margin-top: 1rem;
   font-size: 0.75rem;
-  color: ${props => props.theme.secondary};
+  color: ${(props) => props.theme.secondary};
+
+  @media all and (min-width: 400px) {
+    flex-direction: row;
+  }
 
   & > label {
-    margin-right: 2rem;
+    margin-bottom: 2rem;
+
+    @media all and (min-width: 400px) {
+      margin-right: 2rem;
+      margin-bottom: 0;
+    }
   }
 
   & > label:last-child {
-    margin-right: 0;
+    margin-bottom: 0;
+
+    @media all and (min-width: 400px) {
+      margin-right: 0;
+    }
   }
 `;
 

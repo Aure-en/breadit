@@ -43,9 +43,7 @@ function TopSubreadits() {
                       {subreadit.members !== 1 && "s"}
                     </Small>
                   </div>
-                  {subscriptions.filter(
-                    (subscription) => subscription.id === subreadit.id
-                  ).length === 0 ? (
+                  {!subscriptions.includes(subreadit.id) ? (
                     <ButtonFilled
                       type="button"
                       onClick={() => joinSubreadit(currentUser.uid, subreadit)}
@@ -73,12 +71,6 @@ function TopSubreadits() {
 }
 
 export default TopSubreadits;
-
-const colors = {
-  background: "white",
-  secondary: "grey",
-  accent: "red",
-};
 
 const Container = styled.div`
   padding: 1rem;

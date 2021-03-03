@@ -260,4 +260,3 @@ const MessageError = styled(Message)`
   color: ${(props) => props.theme.error};
   top: -0.5rem;
 `;
-

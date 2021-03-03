@@ -12,7 +12,7 @@ function useScroll(ref, initial, step) {
   };
 
   useEffect(() => {
-    if (!ref) return;
+    if (!ref || !ref.current) return;
 
     const scroll = () => {
       const refBottom = ref.current.getBoundingClientRect().bottom;

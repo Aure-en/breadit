@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { useAuth } from "../../contexts/AuthContext";
-import useMessage from "../../hooks/useMessage";
-import useNotification from "../../hooks/useNotification";
+import { useAuth } from "../../../contexts/AuthContext";
+import useMessage from "../../../hooks/useMessage";
+import useNotification from "../../../hooks/useNotification";
 
 // Icons
-import { ReactComponent as IconInbox } from "../../assets/icons/header/icon-inbox.svg";
+import { ReactComponent as IconInbox } from "../../../assets/icons/header/icon-inbox.svg";
 
 function LinkInbox() {
   const { currentUser } = useAuth();

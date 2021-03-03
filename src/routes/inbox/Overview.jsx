@@ -27,7 +27,7 @@ function Overview() {
     return Promise.all(
       notifications.map(async (notification) => {
         if (notification.document.type === "comment") {
-          const post = await getPost(notification.content.post);
+          const post = await getPost(notification.content.post.id);
           return { ...notification, post: post.data() };
         }
         const comments = await getCommentsNumber(notification.content.id);

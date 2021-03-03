@@ -1,16 +1,16 @@
 import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { useSubscription } from "../../contexts/SubscriptionContext";
-import useDropdown from "../../hooks/useDropdown";
-import useSubreadit from "../../hooks/useSubreadit";
+import { useSubscription } from "../../../contexts/SubscriptionContext";
+import useDropdown from "../../../hooks/useDropdown";
+import useSubreadit from "../../../hooks/useSubreadit";
 
 // Icons
-import { ReactComponent as IconCommunity } from "../../assets/icons/header/icon-community.svg";
-import { ReactComponent as IconFeed } from "../../assets/icons/header/icon-feed.svg";
-import { ReactComponent as IconHome } from "../../assets/icons/header/icon-home.svg";
-import { ReactComponent as IconSettings } from "../../assets/icons/header/icon-settings.svg";
-import { ReactComponent as IconPost } from "../../assets/icons/header/icon-post.svg";
+import { ReactComponent as IconCommunity } from "../../../assets/icons/header/icon-community.svg";
+import { ReactComponent as IconFeed } from "../../../assets/icons/header/icon-feed.svg";
+import { ReactComponent as IconHome } from "../../../assets/icons/header/icon-home.svg";
+import { ReactComponent as IconSettings } from "../../../assets/icons/header/icon-settings.svg";
+import { ReactComponent as IconPost } from "../../../assets/icons/header/icon-post.svg";
 
 function NavDropdown() {
   const [mySubreadits, setMySubreadits] = useState([]);
@@ -25,11 +25,17 @@ function NavDropdown() {
     handleChoice,
   } = useDropdown(dropdownRef);
 
+  // Gets top subreadits
   useEffect(() => {
     (async () => {
       const popular = await getPopularSubreadits(5);
       setTopSubreadits(popular);
+    })();
+  }, []);
 
+  // Gets the subreadits the user joined
+  useEffect(() => {
+    (async () => {
       let subreadits = [];
       await Promise.all(
         subscriptions.map(async (subscription) => {
@@ -44,7 +50,7 @@ function NavDropdown() {
       subreadits = subreadits.sort((a, b) => b.name - a.name);
       setMySubreadits(subreadits);
     })();
-  }, []);
+  }, [subscriptions]);
 
   return (
     <Dropdown ref={dropdownRef}>
@@ -80,7 +86,10 @@ function NavDropdown() {
                       src={subreadit.icon}
                       alt={`${subreadit.name}'s Icon`}
                     />
-                    <div>{subreadit.name}</div>
+                    <div>
+                      b/
+                      {subreadit.name}
+                    </div>
                   </Choice>
                 );
               })}
@@ -146,6 +155,21 @@ const DropdownList = styled.div`
   max-height: 30rem;
   overflow: auto;
   width: 15rem;
+
+  &::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    background-color: #f5f5f5;
+  }
+
+  &::-webkit-scrollbar {
+    width: 10px;
+    background-color: #f5f5f5;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #000000;
+    border: 2px solid #555555;
+  }
 `;
 
 const Category = styled.div`
