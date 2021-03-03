@@ -32,7 +32,7 @@ function Comments({ username }) {
 
       userComments = await Promise.all(
         userComments.map(async (comment) => {
-          const post = await getPost(comment.post);
+          const post = await getPost(comment.post.id);
           return {
             ...comment,
             post: {

@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { useSubscription } from "../../contexts/SubscriptionContext";
 import usePost from "../../hooks/usePost";
 import useScroll from "../../hooks/useScroll";
+import useWindowSize from "../../hooks/useWindowSize";
 import PostPreview from "../../components/feed/PostPreview";
 import TopSubreadits from "../../components/aside/Top";
 import Create from "../../components/aside/Create";
@@ -18,6 +19,7 @@ function Main() {
     getSubscriptionsPostsByVotes,
     getSubscriptionsPostsByDate,
   } = usePost();
+  const { windowSize } = useWindowSize();
   const postsRef = useRef();
   const { limit } = useScroll(postsRef, 10, 5);
 
@@ -45,12 +47,14 @@ function Main() {
           })}
         </PostsList>
       </Container>
-      <Aside>
-        <TopSubreadits />
-        <Create />
-        <LatestPosts />
-        <Footer />
-      </Aside>
+      {windowSize.width > 768 && (
+        <Aside>
+          <TopSubreadits />
+          <Create />
+          <LatestPosts />
+          <Footer />
+        </Aside>
+      )}
     </>
   );
 }

@@ -16,19 +16,21 @@ function Comment({ author, content, date, post, id }) {
         <Header>
           <IconComment />
           <AccentLink to={`/u/${author.id}`}>
-            {author.name}
-            &nbsp;
-          </AccentLink>
-          commented on&nbsp;
+{author.name}
+{' '}
+ </AccentLink>
+          commented on
+{" "}
           <PostLink to={`/b/${post.subreadit.name}/${post.id}`}>
             {post.title}
           </PostLink>
-          &nbsp;•&nbsp;
+          {" • "}
           <StrongLink to={`/b/${post.subreadit.name}`}>
             b/
             {post.subreadit.name}
           </StrongLink>
-          &nbsp;• Posted by&nbsp;
+          {"\u00A0"}
+• Posted by{" "}
           <UnderlineLink to={`/u/${post.author.id}`}>
             {post.author.name}
           </UnderlineLink>
@@ -38,9 +40,13 @@ function Comment({ author, content, date, post, id }) {
           <div>
             <Informations>
               <StrongLink to={`/u/${author.id}`}>{author.name}</StrongLink>
-              &nbsp;•&nbsp;
-              {formatDistanceStrict(new Date(date.seconds * 1000), new Date())}
-              &nbsp;ago
+              {" • "}
+              {formatDistanceStrict(
+                new Date(date.seconds * 1000),
+                new Date()
+              )}
+{" "}
+              ago
             </Informations>
             <Content>{redraft(JSON.parse(content), renderers)}</Content>
           </div>
@@ -76,36 +82,25 @@ Comment.propTypes = {
 
 export default Comment;
 
-const colors = {
-  background: "white",
-  primary: "black",
-  secondary: "grey",
-  border: "grey",
-  accent: "red",
-  neutral: "rgb(209, 163, 155)",
-};
-
 const Container = styled(Link)`
   display: block;
-  border: 1px solid ${colors.border};
-  background: ${colors.background};
+  border: 1px solid ${(props) => props.theme.border};
+  background: ${(props) => props.theme.backgroundSecondary};
   cursor: pointer;
 
   &:hover {
-    border: 1px solid ${colors.neutral};
+    border: 1px solid ${(props) => props.theme.borderHover};
   }
 `;
 
 const Informations = styled.div`
   font-size: 0.75rem;
-  color: ${colors.secondary};
+  color: ${(props) => props.theme.secondary};
 `;
 
 const Header = styled(Informations)`
-  display: flex;
-  align-items: center;
-  padding: 1rem;
-  border-bottom: 1px solid ${colors.border};
+  padding: 0.5rem;
+  border-bottom: 1px solid ${(props) => props.theme.border};
 
   & > svg:first-child {
     margin-right: 1rem;
@@ -120,7 +115,7 @@ const Main = styled.div`
     display: block;
     content: "";
     align-self: stretch;
-    border-left: 3px dashed ${colors.border};
+    border-left: 2px solid ${(props) => props.theme.accentSoft};
     margin-right: 1rem;
   }
 `;
@@ -134,14 +129,14 @@ const UnderlineLink = styled(Link)`
 `;
 
 const PostLink = styled(Link)`
-  color: ${colors.primary};
+  color: ${(props) => props.theme.primary};
 `;
 
 const AccentLink = styled(UnderlineLink)`
-  color: ${colors.accent};
+  color: ${(props) => props.theme.accent};
 `;
 
 const StrongLink = styled(UnderlineLink)`
   font-weight: 500;
-  color: ${colors.primary};
+  color: ${(props) => props.theme.primary};
 `;

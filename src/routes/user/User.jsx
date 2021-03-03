@@ -10,9 +10,8 @@ import Profile from "../../components/user/aside/Profile";
 import Nav from "../../components/user/Nav";
 
 function User({ match }) {
-  console.log(match);
   return (
-    <Wrapper>
+    <>
       <Container>
         <Nav username={match.params.username} />
         <Switch>
@@ -35,7 +34,7 @@ function User({ match }) {
         </Switch>
       </Container>
       <Profile username={match.params.username} />
-    </Wrapper>
+    </>
   );
 }
 
@@ -49,20 +48,6 @@ User.propTypes = {
 };
 
 export default User;
-
-const colors = {
-  background: "rgb(241, 236, 230)",
-};
-
-const Wrapper = styled.div`
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  background: ${colors.background};
-  padding: 3rem;
-  height: 100%;
-  flex: 1;
-`;
 
 const Container = styled.div`
   flex: 1;

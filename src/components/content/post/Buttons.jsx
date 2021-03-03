@@ -109,7 +109,6 @@ const Container = styled.div`
   color: ${(props) => props.theme.secondary};
   display: flex;
   align-items: stretch;
-  padding: 0.5rem 0.5rem 0.5rem 0;
 
   & > * {
     display: flex;
@@ -122,8 +121,12 @@ const Container = styled.div`
     background: ${(props) => props.theme.backgroundTertiary};
   }
 
-  @media all and (min-width: 768px) {
-    padding: 0.5rem 0 0.5rem 1rem;
+  & > *:first-child {
+    padding-left: 0;
+  }
+
+  & > *:last-child {
+    padding-right: 0;
   }
 `;
 

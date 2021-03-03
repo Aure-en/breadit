@@ -37,7 +37,6 @@ const Container = styled.div`
   background: ${(props) => props.theme.backgroundSecondary};
   border: 1px solid ${(props) => props.theme.neutral};
   margin: 1rem 0;
-  padding: 0.5rem 0;
 
   &:hover {
     border: 1px solid ${(props) => props.theme.borderHover};
@@ -49,13 +48,14 @@ const Container = styled.div`
 `;
 
 const Option = styled.button`
+  flex: 1;
   display: flex;
   align-items: center;
+  justify-content: center;
   font-weight: ${(props) => props.isSelected && "500"};
   color: ${(props) =>
     props.isSelected ? props.theme.accent : props.theme.secondary};
-  background: ${(props) => props.isSelected && props.theme.backgroundTertiary};
-  padding: .25rem .85rem;
+  padding: .5rem .85rem;
   border-radius: 1rem;
 
   & > svg {

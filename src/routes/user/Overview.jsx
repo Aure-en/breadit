@@ -48,13 +48,7 @@ function Overview({ username }) {
       setComments(userComments);
 
       // Get posts
-      let posts = await getUserPosts(user.id, limit);
-      posts = await Promise.all(
-        posts.map(async (post) => {
-          const comments = await getCommentsNumber(post.id);
-          return { ...post, comments };
-        })
-      );
+      const posts = await getUserPosts(user.id, limit);
       setPosts(posts);
     })();
   }, [limit]);
@@ -88,7 +82,6 @@ function Overview({ username }) {
             title={article.title}
             content={article.content}
             date={article.date}
-            comments={article.comments}
           />
         ) : (
           <Comment

@@ -87,7 +87,6 @@ const Container = styled.div`
   grid-template: repeat(2, auto) / auto 1fr auto;
   font-size: 0.75rem;
   color: ${(props) => props.theme.secondary};
-  padding: 0.5rem;
 
   & > * {
     margin-right: 0.25rem;
