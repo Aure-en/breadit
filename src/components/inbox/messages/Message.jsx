@@ -178,8 +178,7 @@ const Button = styled.button`
 `;
 
 const UserLink = styled(Link)`
-  font-weight: 500;
-  color: ${(props) => props.theme.primary};
+  color: ${(props) => props.theme.accent};
 
   &:hover {
     text-decoration: underline;

@@ -8,7 +8,7 @@ import Message from "../../../components/inbox/messages/Message";
 function Received() {
   const [messages, setMessages] = useState([]);
   const { currentUser } = useAuth();
-  const { getMessages, deleteMessageListener } = useMessage();
+  const { getMessages, deleteMessageListener, readMessages } = useMessage();
   const listRef = useRef();
   const { limit } = useScroll(listRef, 20, 10);
 
@@ -24,6 +24,11 @@ function Received() {
     };
     const unsubscribe = deleteMessageListener(currentUser.uid, callback);
     return unsubscribe;
+  }, []);
+
+  // Mark the new messages as "read"
+  useEffect(() => {
+    readMessages(currentUser.uid);
   }, []);
 
   useEffect(() => {

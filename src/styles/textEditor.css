@@ -40,9 +40,3 @@
   font-family: "Noto Sans", sans-serif;
   font-size: .875rem;
 }
-
-/* Makes text editor focus on click anywhere by making this node the same
-height as the editor */
-.public-DraftStyleDefault-block.public-DraftStyleDefault-ltr {
-  height: 8rem;
-}

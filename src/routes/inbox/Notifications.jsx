@@ -11,7 +11,11 @@ import CommentNotification from "../../components/inbox/notifications/CommentNot
 function Notifications() {
   const [notifications, setNotifications] = useState([]);
   const { currentUser } = useAuth();
-  const { getNotifications, deleteNotificationListener } = useNotification();
+  const {
+    getNotifications,
+    deleteNotificationListener,
+    readNotifications,
+  } = useNotification();
   const { getCommentsNumber } = useComment();
   const { getPost } = usePost();
   const listRef = useRef();
@@ -32,6 +36,7 @@ function Notifications() {
     );
   };
 
+  // Load more notifications on scroll
   useEffect(() => {
     (async () => {
       let notifications = await getNotifications(currentUser.uid, limit);
@@ -40,6 +45,7 @@ function Notifications() {
     })();
   }, [limit]);
 
+  // Refresh notifications when we delete one of them
   useEffect(() => {
     const callback = (snapshot) => {
       snapshot.docChanges().forEach(async (change) => {
@@ -52,6 +58,11 @@ function Notifications() {
     };
     const unsubscribe = deleteNotificationListener(currentUser.uid, callback);
     return unsubscribe;
+  }, []);
+
+  // Mark the new notifications as "read"
+  useEffect(() => {
+    readNotifications(currentUser.uid);
   }, []);
 
   return (

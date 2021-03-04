@@ -24,7 +24,7 @@ function PostNotification({ id, content }) {
         />
 
         <Main to={`/b/${content.subreadit.name}/${content.id}`}>
-          <Content>{redraft(JSON.parse(content.content), renderers)}</Content>
+          {redraft(JSON.parse(content.content), renderers)}
         </Main>
 
         <Buttons
@@ -58,29 +58,19 @@ PostNotification.propTypes = {
   }).isRequired,
 };
 
-const colors = {
-  background: "white",
-  primary: "black",
-  secondary: "grey",
-  border: "grey",
-  accent: "red",
-  neutral: "rgb(209, 163, 155)",
-};
-
 const Container = styled(Link)`
   display: block;
-  border: 1px solid ${colors.border};
-  background: ${colors.background};
+  border: 1px solid ${(props) => props.theme.border};
+  background: ${(props) => props.theme.backgroundSecondary};
   cursor: pointer;
+  padding: 0.5rem;
 
   &:hover {
-    border: 1px solid ${colors.neutral};
+    border: 1px solid ${(props) => props.theme.borderHover};
   }
 `;
 
 const Main = styled(Link)`
   display: flex;
-  padding: 1rem;
+  padding-left: 1rem;
 `;
-
-const Content = styled.div``;

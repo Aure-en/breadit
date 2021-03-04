@@ -69,6 +69,6 @@ const StrongLink = styled(PostLink)`
   font-weight: 500;
 `;
 
-const AccentLink = styled(Link)`
+const AccentLink = styled(UnderlineLink)`
   color: ${(props) => props.theme.accent};
 `;

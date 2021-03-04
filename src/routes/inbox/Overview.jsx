@@ -16,8 +16,12 @@ function Overview() {
   const [all, setAll] = useState([]);
   const [overview, setOverview] = useState([]);
   const { currentUser } = useAuth();
-  const { getAllMessages, deleteMessageListener } = useMessage();
-  const { getAllNotifications, deleteNotificationListener } = useNotification();
+  const { getAllMessages, deleteMessageListener, readMessages } = useMessage();
+  const {
+    getAllNotifications,
+    deleteNotificationListener,
+    readNotifications,
+  } = useNotification();
   const { getCommentsNumber } = useComment();
   const { getPost } = usePost();
   const listRef = useRef();
@@ -94,6 +98,12 @@ function Overview() {
     return unsubscribe;
   }, []);
 
+  // Mark the new messages and notifications as "read"
+  useEffect(() => {
+    readNotifications(currentUser.uid);
+    readMessages(currentUser.uid);
+  }, []);
+
   return (
     <List ref={listRef}>
       {overview.map((doc) => {
@@ -103,6 +113,7 @@ function Overview() {
               key={doc.id}
               id={doc.id}
               sender={doc.sender}
+              recipient={doc.recipient}
               content={doc.content}
               date={doc.date}
               isSent={false}

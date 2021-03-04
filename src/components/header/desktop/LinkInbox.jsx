@@ -11,8 +11,8 @@ import { ReactComponent as IconInbox } from "../../../assets/icons/header/icon-i
 function LinkInbox() {
   const { currentUser } = useAuth();
   const [number, setNumber] = useState(0);
-  const { getNotificationsNumber, readNotifications } = useNotification();
-  const { getUnreadNumber, readMessages } = useMessage();
+  const { getNotificationsNumber } = useNotification();
+  const { getUnreadNumber } = useMessage();
 
   useEffect(() => {
     (async () => {
@@ -22,15 +22,9 @@ function LinkInbox() {
     })();
   }, []);
 
-  const handleRead = () => {
-    readNotifications(currentUser.uid);
-    readMessages(currentUser.uid);
-    setNumber(0);
-  };
-
   return (
-    <LinkIcon to="/inbox" data-tip="Inbox" onClick={handleRead}>
-      {number !== 0 && <Number>{number}</Number>}
+    <LinkIcon to="/inbox" data-tip="Inbox">
+      {number !== 0 && <Notification>{number}</Notification>}
       <IconInbox />
     </LinkIcon>
   );
@@ -42,10 +36,10 @@ const LinkIcon = styled(Link)`
   position: relative;
 `;
 
-const Number = styled.div`
+const Notification = styled.span`
   position: absolute;
   top: -1rem;
-  right: -.5rem;
+  right: -0.5rem;
   width: 1rem;
   height: 1rem;
   border-radius: 50%;
