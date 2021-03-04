@@ -4,7 +4,9 @@ import styled from "styled-components";
 import useUser from "../../hooks/useUser";
 import usePost from "../../hooks/usePost";
 import useScroll from "../../hooks/useScroll";
+import useWindowSize from "../../hooks/useWindowSize";
 import Comment from "../../components/user/content/Comment";
+import SortDropdown from "../../components/sort/SortDropdown";
 import Sort from "../../components/sort/Sort";
 
 function Comments({ username }) {
@@ -18,6 +20,7 @@ function Comments({ username }) {
   const { getPost } = usePost();
   const commentsRef = useRef();
   const { limit } = useScroll(commentsRef, 20, 10);
+  const { windowSize } = useWindowSize();
 
   // Get comments
   useEffect(() => {
@@ -56,8 +59,12 @@ function Comments({ username }) {
   }, [limit, sort]);
 
   return (
-    <>
-      <Sort setSort={setSort} sort={sort} />
+    <Container>
+            {windowSize.width > 992 ? (
+        <Sort setSort={setSort} sort={sort} />
+      ) : (
+        <SortDropdown setSort={setSort} sort={sort} />
+      )}
       <CommentsList ref={commentsRef}>
         {comments.map((comment) => {
           return (
@@ -72,7 +79,7 @@ function Comments({ username }) {
           );
         })}
       </CommentsList>
-    </>
+    </Container>
   );
 }
 
@@ -82,7 +89,16 @@ Comments.propTypes = {
 
 export default Comments;
 
-const CommentsList = styled.div`
+const Container = styled.div`
+  @media all and (min-width: 992px) {
+    grid-row: 2;
+    grid-column: 2;
+    max-width: 40rem;
+  }
+  width: 100vw;
+`;
+
+const CommentsList = styled.main`
   & > * {
     margin-bottom: 0.5rem;
   }

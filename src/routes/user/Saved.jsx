@@ -75,6 +75,11 @@ function Saved() {
 export default Saved;
 
 const List = styled.div`
+  @media all and (min-width: 992px) {
+    grid-row: 2;
+    grid-column: 2;
+  }
+
   & > * {
     margin-bottom: 0.5rem;
   }

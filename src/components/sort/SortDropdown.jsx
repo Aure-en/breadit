@@ -70,6 +70,7 @@ const Dropdown = styled.div`
   margin-left: 1rem;
   z-index: 5;
   color: ${(props) => props.theme.secondary};
+  padding: .5rem 0;
 `;
 
 const DropdownHeader = styled.div`

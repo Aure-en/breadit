@@ -110,12 +110,17 @@ const Container = styled.article`
   grid-template: repeat(3, auto) / repeat(2, auto) 1fr;
   align-items: center;
   padding: 0.5rem;
-  border: 1px solid ${colors.border};
   background: ${colors.background};
   cursor: pointer;
+  box-shadow: 0 2px 3px -4px ${(props) => props.theme.shadow};
+  border: 1px solid ${(props) => props.theme.border};
 
   &:hover {
-    border: 1px solid ${colors.neutral};
+    border: 1px solid ${(props) => props.theme.borderHover};
+  }
+
+  @media all and (min-width: 992px) {
+    border-radius: 5px;
   }
 `;
 

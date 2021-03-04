@@ -4,16 +4,15 @@ import styled from "styled-components";
 import { format } from "date-fns";
 import useUser from "../../../hooks/useUser";
 
-function Profile({ userId }) {
+function Profile({ username }) {
   const [user, setUser] = useState();
-  const { getUser, getKarma } = useUser();
+  const { getUserByName, getKarma } = useUser();
 
   useEffect(() => {
     (async () => {
-      if (!userId) return;
-      const data = await getUser(userId);
-      const karma = await getKarma(userId);
-      setUser({ ...data.data(), karma });
+      const user = await getUserByName(username);
+      const karma = await getKarma(user.id);
+      setUser({ ...user, karma });
     })();
   }, []);
 
@@ -44,24 +43,29 @@ function Profile({ userId }) {
 }
 
 Profile.propTypes = {
-  userId: PropTypes.string.isRequired,
+  username: PropTypes.string.isRequired,
 };
 
 export default Profile;
 
-const colors = {
-  background: "white",
-  secondary: "grey",
-};
-
 const Container = styled.aside`
   position: relative;
-  width: 20rem;
-  margin-left: 3rem;
   padding: 8rem 1rem 1rem 1rem;
-  background: ${colors.background};
+  background: ${(props) => props.theme.backgroundSecondary};
+  box-shadow: 0 2px 3px -4px ${(props) => props.theme.shadow};
+  border: 1px solid ${(props) => props.theme.border};
   line-height: 1.25rem;
   border-radius: 5px;
+
+  &:hover {
+    border: 1px solid ${(props) => props.theme.borderHover};
+  }
+
+  @media all and (min-width: 992px) {
+    grid-row: 2;
+    grid-column: 3;
+    min-width: 15rem;
+  }
 `;
 
 const Banner = styled.img`
@@ -70,6 +74,7 @@ const Banner = styled.img`
   height: 5rem;
   left: 0;
   top: 0;
+  width: 100%;
   object-fit: cover;
   border-radius: 5px 5px 0 0;
 `;
@@ -97,6 +102,6 @@ const Informations = styled.div`
 
 const Information = styled.div`
   font-size: 0.825rem;
-  color: ${colors.secondary};
+  color: ${(props) => props.theme.secondary};
   font-weight: initial;
 `;

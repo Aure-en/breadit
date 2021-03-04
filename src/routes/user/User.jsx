@@ -11,30 +11,28 @@ import Nav from "../../components/user/Nav";
 
 function User({ match }) {
   return (
-    <>
-      <Container>
-        <Nav username={match.params.username} />
-        <Switch>
-          <Route
-            exact
-            path={`${match.path}`}
-            render={() => <Overview username={match.params.username} />}
-          />
-          <Route
-            exact
-            path={`${match.path}/posts`}
-            render={() => <Posts username={match.params.username} />}
-          />
-          <Route
-            exact
-            path={`${match.path}/comments`}
-            render={() => <Comments username={match.params.username} />}
-          />
-          <Route exact path={`${match.path}/saved`} component={Saved} />
-        </Switch>
-      </Container>
+    <Container>
       <Profile username={match.params.username} />
-    </>
+      <Nav username={match.params.username} />
+      <Switch>
+        <Route
+          exact
+          path={`${match.path}`}
+          render={() => <Overview username={match.params.username} />}
+        />
+        <Route
+          exact
+          path={`${match.path}/posts`}
+          render={() => <Posts username={match.params.username} />}
+        />
+        <Route
+          exact
+          path={`${match.path}/comments`}
+          render={() => <Comments username={match.params.username} />}
+        />
+        <Route exact path={`${match.path}/saved`} component={Saved} />
+      </Switch>
+    </Container>
   );
 }
 
@@ -51,5 +49,14 @@ export default User;
 
 const Container = styled.div`
   flex: 1;
-  max-width: 40rem;
+  width: 100vw;
+  max-width: 100%;
+
+  @media all and (min-width: 992px) {
+    display: grid;
+    grid-template: auto 1fr / 1fr repeat(2, auto) 1fr;
+    grid-column-gap: 3rem;
+    grid-row-gap: 1rem;
+    align-items: start;
+  }
 `;

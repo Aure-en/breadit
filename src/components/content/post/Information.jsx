@@ -10,7 +10,7 @@ import useWindowSize from "../../../hooks/useWindowSize";
 // Icons
 import { ReactComponent as IconPlus } from "../../../assets/icons/general/icon-plus.svg";
 
-function Information({ subreaditId, author, date, user }) {
+function Information({ subreaditId, author, date, user, className }) {
   const [subreadit, setSubreadit] = useState();
   const { windowSize } = useWindowSize();
   const { subscriptions } = useSubscription();
@@ -26,7 +26,7 @@ function Information({ subreaditId, author, date, user }) {
   return (
     <>
       {subreadit && (
-        <Container>
+        <Container className={className}>
           <Icon
             src={subreadit.icon}
             alt={`${subreadit.name}'s Icon`}
@@ -75,10 +75,12 @@ Information.propTypes = {
   user: PropTypes.shape({
     uid: PropTypes.string,
   }),
+  className: PropTypes.string,
 };
 
 Information.defaultProps = {
   user: null,
+  className: "",
 };
 
 const Container = styled.div`

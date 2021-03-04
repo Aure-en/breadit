@@ -14,7 +14,7 @@ import { ReactComponent as IconSaved } from "../../../assets/icons/general/icon-
 import { ReactComponent as IconHide } from "../../../assets/icons/general/icon-hide.svg";
 import { ReactComponent as IconLink } from "../../../assets/icons/general/icon-link-small.svg";
 
-function Buttons({ postId, subreadit, hide, user }) {
+function Buttons({ postId, subreadit, hide, user, className }) {
   const [commentsNumber, setCommentsNumber] = useState(0);
   const { saved, handleSave } = useSave();
   const { getCommentsNumber } = useComment();
@@ -37,7 +37,7 @@ function Buttons({ postId, subreadit, hide, user }) {
   };
 
   return (
-    <Container>
+    <Container className={className}>
       <Button as={Link} to={`/b/${subreadit}/${postId}`}>
         <IconComment />
         {commentsNumber}
@@ -96,11 +96,13 @@ Buttons.propTypes = {
   user: PropTypes.shape({
     uid: PropTypes.string,
   }),
+  className: PropTypes.string,
 };
 
 Buttons.defaultProps = {
   hide: () => {},
   user: null,
+  className: "",
 };
 
 const Container = styled.div`

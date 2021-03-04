@@ -45,17 +45,26 @@ export default Nav;
 const Container = styled.nav`
   display: flex;
   justify-content: space-around;
+  padding-top: .5rem;
   background: ${(props) => props.theme.backgroundSecondary};
-  border: 1px solid ${(props) => props.theme.neutral};
-  margin: 1rem 0;
 
   & > * {
     flex: 1;
   }
+
+  @media all and (min-width: 992px) {
+    grid-row: 1;
+    grid-column: 1 / -1;
+    justify-content: center;
+
+    & > * {
+      flex: initial;
+      min-width: 7.5rem;
+    }
+  }
 `;
 
 const NavLink = styled(Link)`
-  flex: 1;
   padding: 0.5rem 0;
   display: flex;
   align-items: center;

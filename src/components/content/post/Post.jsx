@@ -66,7 +66,7 @@ function Post({ postId, subreadit }) {
             <Main>
               {subreadit && (
                 <>
-                  <Information
+                  <StyledInformation
                     subreaditId={post.subreadit.id}
                     author={post.author.name}
                     date={post.date}
@@ -187,6 +187,7 @@ const Editor = styled.div`
 
 const ButtonsContainer = styled.div`
   display: flex;
+  margin-left: 0.5rem;
   @media all and (min-width: 768px) {
     grid-row: 2;
     grid-column: 1 / -1;
@@ -208,4 +209,8 @@ const ButtonFilled = styled(Button)`
   color: ${(props) => props.theme.backgroundSecondary};
   background-color: ${(props) => props.theme.accent};
   border: 1px solid ${(props) => props.theme.accent};
+`;
+
+const StyledInformation = styled(Information)`
+  margin: 0.5rem 0 0 0.5rem;
 `;

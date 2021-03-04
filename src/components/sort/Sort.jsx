@@ -35,8 +35,8 @@ const Container = styled.div`
   display: flex;
   justify-content: space-around;
   background: ${(props) => props.theme.backgroundSecondary};
-  border: 1px solid ${(props) => props.theme.neutral};
-  margin: 1rem 0;
+  border: 1px solid ${(props) => props.theme.border};
+  margin-bottom: 1rem;
 
   &:hover {
     border: 1px solid ${(props) => props.theme.borderHover};

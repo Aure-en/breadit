@@ -15,12 +15,6 @@ function Comment({ author, content, date, post, id }) {
       <Container to={`/b/${post.subreadit.name}/${post.id}/${id}`}>
         <Header>
           <IconComment />
-          <AccentLink to={`/u/${author.id}`}>
-{author.name}
-{' '}
- </AccentLink>
-          commented on
-{" "}
           <PostLink to={`/b/${post.subreadit.name}/${post.id}`}>
             {post.title}
           </PostLink>
@@ -84,12 +78,17 @@ export default Comment;
 
 const Container = styled(Link)`
   display: block;
-  border: 1px solid ${(props) => props.theme.border};
   background: ${(props) => props.theme.backgroundSecondary};
   cursor: pointer;
+  box-shadow: 0 2px 3px -4px ${(props) => props.theme.shadow};
+  border: 1px solid ${(props) => props.theme.border};
 
   &:hover {
     border: 1px solid ${(props) => props.theme.borderHover};
+  }
+
+  @media all and (min-width: 992px) {
+    border-radius: 5px;
   }
 `;
 
@@ -100,7 +99,6 @@ const Informations = styled.div`
 
 const Header = styled(Informations)`
   padding: 0.5rem;
-  border-bottom: 1px solid ${(props) => props.theme.border};
 
   & > svg:first-child {
     margin-right: 1rem;
@@ -109,7 +107,7 @@ const Header = styled(Informations)`
 
 const Main = styled.div`
   display: flex;
-  padding: 1rem;
+  padding: 0 1rem 1rem 1rem;
 
   &:before {
     display: block;
@@ -130,10 +128,6 @@ const UnderlineLink = styled(Link)`
 
 const PostLink = styled(Link)`
   color: ${(props) => props.theme.primary};
-`;
-
-const AccentLink = styled(UnderlineLink)`
-  color: ${(props) => props.theme.accent};
 `;
 
 const StrongLink = styled(UnderlineLink)`

@@ -21,8 +21,8 @@ export const colors = {
   error: "rgba(168, 31, 5)",
   success: "rgba(65, 150, 156)",
 
-  border: "rgba(150, 98, 75)",
-  borderHover: "rgba(158, 91, 79)",
+  border: "rgba(128, 127, 126, .25)",
+  borderHover: "rgba(103, 188, 194, .5)",
   borderSecondary: "rgba(214, 148, 126)",
 
   upvote: "rgba(158, 91, 79)",

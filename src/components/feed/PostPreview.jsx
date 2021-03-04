@@ -61,7 +61,7 @@ function PostPreview({ postId }) {
               <Vote type="posts" docId={postId} user={currentUser} />
             </VoteContainer>
             <Main to={`/b/${post.subreadit.name}/${postId}`}>
-              <Information
+              <StyledInformation
                 subreaditId={post.subreadit.id}
                 author={post.author.name}
                 date={post.date}
@@ -83,14 +83,12 @@ function PostPreview({ postId }) {
                 </>
               </Link>
             </Main>
-            <ButtonsContainer>
-              <Buttons
+              <StyledButtons
                 postId={postId}
                 subreadit={post.subreadit.name}
                 hide={setIsHidden}
                 user={currentUser}
               />
-            </ButtonsContainer>
           </Container>
 
           {isEntryOpen && <Entry close={() => setIsEntryOpen(false)} />}
@@ -177,9 +175,15 @@ const VoteContainer = styled.div`
   }
 `;
 
-const ButtonsContainer = styled.div`
+const StyledButtons = styled(Buttons)`
   @media all and (min-width: 768px) {
     grid-row: 2;
     grid-column: 2 / -1;
   }
+  padding-left: 1rem;
+`;
+
+const StyledInformation = styled(Information)`
+  padding-left: 1rem;
+  margin-top: 0.5rem;
 `;

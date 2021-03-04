@@ -4,7 +4,6 @@ import styled from "styled-components";
 import useUser from "../../hooks/useUser";
 import usePost from "../../hooks/usePost";
 import useScroll from "../../hooks/useScroll";
-import useComment from "../../hooks/useComment";
 import Post from "../../components/user/content/Post";
 import Comment from "../../components/user/content/Comment";
 
@@ -13,7 +12,6 @@ function Overview({ username }) {
   const [posts, setPosts] = useState([]);
   const [overview, setOverview] = useState([]);
   const { getUserByName, getUserComments, getUserPosts } = useUser();
-  const { getCommentsNumber } = useComment();
   const { getPost } = usePost();
   const docsRef = useRef();
   const { limit } = useScroll(docsRef, 20, 10);
@@ -105,6 +103,17 @@ Overview.propTypes = {
 export default Overview;
 
 const List = styled.div`
+  margin-top: 0.5rem;
+
+  @media all and (min-width: 992px) {
+    grid-row: 2;
+    grid-column: 2;
+    margin-top: 0;
+    max-width: 40rem;
+  }
+
+  width: 100vw;
+
   & > * {
     margin-bottom: 0.5rem;
   }

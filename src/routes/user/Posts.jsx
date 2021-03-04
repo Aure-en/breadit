@@ -4,8 +4,10 @@ import styled from "styled-components";
 import useUser from "../../hooks/useUser";
 import useScroll from "../../hooks/useScroll";
 import useComment from "../../hooks/useComment";
+import useWindowSize from "../../hooks/useWindowSize";
 import Post from "../../components/user/content/Post";
 import Sort from "../../components/sort/Sort";
+import SortDropdown from "../../components/sort/SortDropdown";
 
 function Posts({ username }) {
   const [posts, setPosts] = useState([]);
@@ -14,6 +16,7 @@ function Posts({ username }) {
   const { getCommentsNumber } = useComment();
   const postsRef = useRef();
   const { limit } = useScroll(postsRef, 20, 10);
+  const { windowSize } = useWindowSize();
 
   useEffect(() => {
     (async () => {
@@ -36,8 +39,12 @@ function Posts({ username }) {
   }, [sort, limit]);
 
   return (
-    <>
-      <Sort setSort={setSort} sort={sort} />
+    <Container>
+      {windowSize.width > 992 ? (
+        <Sort setSort={setSort} sort={sort} />
+      ) : (
+        <SortDropdown setSort={setSort} sort={sort} />
+      )}
       <PostList ref={postsRef}>
         {posts.map((post) => {
           return (
@@ -55,7 +62,7 @@ function Posts({ username }) {
           );
         })}
       </PostList>
-    </>
+    </Container>
   );
 }
 
@@ -65,7 +72,16 @@ Posts.propTypes = {
 
 export default Posts;
 
-const PostList = styled.div`
+const Container = styled.div`
+  @media all and (min-width: 992px) {
+    grid-row: 2;
+    grid-column: 2;
+    max-width: 40rem;
+  }
+  width: 100vw;
+`;
+
+const PostList = styled.main`
   & > * {
     margin-bottom: 0.5rem;
   }
