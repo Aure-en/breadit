@@ -547,7 +547,6 @@ const Wrapper = styled.div`
   border: 1px solid
     ${(props) => props.isActive ? props.theme.borderHover : props.theme.border};
   border-radius: 5px;
-  max-width: 40rem;
 `;
 
 const Container = styled.div`

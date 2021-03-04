@@ -41,6 +41,7 @@ function Received() {
             key={message.id}
             id={message.id}
             sender={message.sender}
+            recipient={message.recipient}
             content={message.content}
             date={message.date}
             isSent={false}
@@ -54,7 +55,11 @@ function Received() {
 export default Received;
 
 const List = styled.div`
+  width: 100vw;
+  max-width: 100%;
+
   & > * {
+    display: block;
     margin-bottom: 0.5rem;
   }
 

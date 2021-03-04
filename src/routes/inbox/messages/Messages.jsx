@@ -7,19 +7,14 @@ import Sent from "./Sent";
 
 function Messages() {
   return (
-    <Container>
+    <>
       <Nav />
       <Switch>
         <Route exact path="/inbox/messages/sent" component={Sent} />
         <Route path="/inbox/messages" component={Received} />
       </Switch>
-    </Container>
+    </>
   );
 }
 
 export default Messages;
-
-const Container = styled.div`
-  flex: 1;
-  max-width: 40rem;
-`;

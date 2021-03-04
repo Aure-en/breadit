@@ -71,7 +71,7 @@ function Post({ match }) {
   return (
     <div>
       {post && (
-        <>
+        <Container>
           <PostContent postId={postId} subreadit={subreadit} />
 
           <Form
@@ -92,7 +92,7 @@ function Post({ match }) {
             <Button type="submit">Comment</Button>
           </Form>
 
-          <div>
+          <Comments>
             <SortDropdown setSort={setSort} sort={sort} />
             {comments &&
               comments.map((commentId) => {
@@ -104,8 +104,8 @@ function Post({ match }) {
                   />
                 );
               })}
-          </div>
-        </>
+          </Comments>
+        </Container>
       )}
     </div>
   );
@@ -122,8 +122,18 @@ Post.propTypes = {
 
 export default Post;
 
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100vw;
+  max-width: 40rem;
+`;
+
 const Editor = styled.div`
   position: relative;
+  width: 100%;
+  max-width: 40rem;
 `;
 
 const StyledComment = styled(Comment)`
@@ -142,6 +152,13 @@ const StyledComment = styled(Comment)`
 const Form = styled.form`
   display: flex;
   flex-direction: column;
+  width: 100%;
+  max-width: 40rem;
+`;
+
+const Comments = styled.div`
+  width: 100%;
+  max-width: 40rem;
 `;
 
 const Button = styled.button`

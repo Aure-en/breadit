@@ -52,19 +52,19 @@ const Container = styled.aside`
   position: relative;
   padding: 8rem 1rem 1rem 1rem;
   background: ${(props) => props.theme.backgroundSecondary};
-  box-shadow: 0 2px 3px -4px ${(props) => props.theme.shadow};
-  border: 1px solid ${(props) => props.theme.border};
   line-height: 1.25rem;
   border-radius: 5px;
-
-  &:hover {
-    border: 1px solid ${(props) => props.theme.borderHover};
-  }
 
   @media all and (min-width: 992px) {
     grid-row: 2;
     grid-column: 3;
     min-width: 15rem;
+    box-shadow: 0 2px 3px -4px ${(props) => props.theme.shadow};
+    border: 1px solid ${(props) => props.theme.border};
+
+    &:hover {
+      border: 1px solid ${(props) => props.theme.borderHover};
+    }
   }
 `;
 

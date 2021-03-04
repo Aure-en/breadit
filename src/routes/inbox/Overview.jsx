@@ -131,7 +131,12 @@ function Overview() {
 export default Overview;
 
 const List = styled.div`
+  margin-top: 0.5rem;
+  width: 100vw;
+  max-width: 100%;
+
   & > * {
+    display: block;
     margin-bottom: 0.5rem;
   }
 

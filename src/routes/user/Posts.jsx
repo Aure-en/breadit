@@ -73,16 +73,18 @@ Posts.propTypes = {
 export default Posts;
 
 const Container = styled.div`
+  max-width: 100%;
+  width: 100vw;
+  
   @media all and (min-width: 992px) {
     grid-row: 2;
     grid-column: 2;
-    max-width: 40rem;
   }
-  width: 100vw;
 `;
 
 const PostList = styled.main`
   & > * {
+    display: block;
     margin-bottom: 0.5rem;
   }
 

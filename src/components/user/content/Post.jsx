@@ -21,48 +21,53 @@ function Post({ author, id, title, subreadit, type, content, date }) {
   return (
     <>
       {!isHidden && (
-        <Container>
-          <VoteContainer>
-            <Vote type="posts" docId={id} user={currentUser} />
-          </VoteContainer>
+        <Link to={`/b/${subreadit.name}/${id}`}>
+          <Container>
+            <VoteContainer>
+              <Vote type="posts" docId={id} user={currentUser} />
+            </VoteContainer>
 
-          <Preview to={`/b/${subreadit.name}/${id}`}>
-            {type === "link" && <IconLink />}
-            {type === "post" && <IconPost />}
-            {type === "image" && <Image src={content[0]} alt={title} />}
-          </Preview>
+            <Preview to={`/b/${subreadit.name}/${id}`}>
+              {type === "link" && <IconLink />}
+              {type === "post" && <IconPost />}
+              {type === "image" && <Image src={content[0]} alt={title} />}
+            </Preview>
 
-          <Information>
-            <SubreaditLink to={`/b/${subreadit.name}`}>
-              b/
-              {subreadit.name}
-            </SubreaditLink>
-            {" • "}
-            Posted by{" "}
-            <StyledLink to={`/u/${author.name}`}>{author.name}</StyledLink>
-            {" • "}
-            <StyledLink to={`/b/${subreadit.name}/${id}`}>
-              {formatDistanceStrict(new Date(date.seconds * 1000), new Date())}{" "}
-              ago
-            </StyledLink>
-          </Information>
+            <Information>
+              <SubreaditLink to={`/b/${subreadit.name}`}>
+                b/
+                {subreadit.name}
+              </SubreaditLink>
+              {" • "}
+              Posted by{" "}
+              <StyledLink to={`/u/${author.name}`}>{author.name}</StyledLink>
+              {" • "}
+              <StyledLink to={`/b/${subreadit.name}/${id}`}>
+                {formatDistanceStrict(
+                  new Date(date.seconds * 1000),
+                  new Date()
+                )}{" "}
+                ago
+              </StyledLink>
+            </Information>
 
-          <Title>{title}</Title>
+            <Title>{title}</Title>
 
-          <Buttons
-            postId={id}
-            subreadit={subreadit.name}
-            user={currentUser}
-            hide={() => setIsHidden(true)}
-          />
+            <Buttons
+              postId={id}
+              subreadit={subreadit.name}
+              user={currentUser}
+              hide={() => setIsHidden(true)}
+            />
 
-          <EntryModal
-            isOpen={isEntryOpen}
-            onRequestClose={() => setIsEntryOpen(false)}
-          >
-            <Entry close={() => setIsEntryOpen(false)} />
-          </EntryModal>
-        </Container>
+            <EntryModal
+              isOpen={isEntryOpen}
+              onRequestClose={() => setIsEntryOpen(false)}
+            >
+              <Entry close={() => setIsEntryOpen(false)} />
+            </EntryModal>
+          </Container>
+        </Link>
       )}
     </>
   );
@@ -91,26 +96,12 @@ Post.propTypes = {
 
 export default Post;
 
-const colors = {
-  background: "white",
-  primary: "black",
-  secondary: "grey",
-  preview: "grey",
-  border: "grey",
-  accent: "red",
-  voteBackground: "rgb(247, 244, 240)",
-  arrowBackground: "rgb(237, 212, 194)",
-  upvote: "rgb(179, 72, 54)",
-  downvote: "rgb(70, 153, 147)",
-  neutral: "rgb(209, 163, 155)",
-};
-
 const Container = styled.article`
   display: grid;
   grid-template: repeat(3, auto) / repeat(2, auto) 1fr;
   align-items: center;
   padding: 0.5rem;
-  background: ${colors.background};
+  background: ${(props) => props.theme.backgroundSecondary};
   cursor: pointer;
   box-shadow: 0 2px 3px -4px ${(props) => props.theme.shadow};
   border: 1px solid ${(props) => props.theme.border};
@@ -136,7 +127,7 @@ const Preview = styled(Link)`
   height: 3.5rem;
   min-width: 4rem;
   min-height: 3rem;
-  border: 1px solid ${colors.preview};
+  border: 1px solid ${(props) => props.theme.secondary};
   border-radius: 5px;
   display: flex;
   align-items: center;

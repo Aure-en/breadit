@@ -8,7 +8,11 @@ import { useAuth } from "../../../contexts/AuthContext";
 import useMessage from "../../../hooks/useMessage";
 import TextEditor, { renderers } from "../../shared/TextEditor";
 
-function Message({ id, sender, content, date, isSent }) {
+// Icons
+import { ReactComponent as IconReply } from "../../../assets/icons/content/icon-reply.svg";
+import { ReactComponent as IconDelete } from "../../../assets/icons/content/icon-delete.svg";
+
+function Message({ id, sender, recipient, content, date, isSent }) {
   const [isReplying, setIsReplying] = useState(false);
   const [reply, setReply] = useState("");
   const [message, setMessage] = useState("");
@@ -40,11 +44,19 @@ function Message({ id, sender, content, date, isSent }) {
   return (
     <Container>
       <Informations>
-        <UserLink to={`/u/${sender.name}`}>{sender.name}</UserLink>
-        <span>
-          &nbsp;•&nbsp;
-          {formatDistanceStrict(new Date(date.seconds * 1000), new Date())}
-        </span>
+        {currentUser.uid === sender.id ? (
+          <>
+            {"Message sent to "}
+            <UserLink to={`/u/${recipient.name}`}>{recipient.name}</UserLink>
+          </>
+        ) : (
+          <>
+            <UserLink to={`/u/${sender.name}`}>{sender.name}</UserLink>
+            {" sent you a private message"}
+          </>
+        )}
+        {" • "}
+        {formatDistanceStrict(new Date(date.seconds * 1000), new Date())} ago
       </Informations>
 
       <Content>{redraft(JSON.parse(content), renderers)}</Content>
@@ -52,27 +64,40 @@ function Message({ id, sender, content, date, isSent }) {
       {!isSent && (
         <Buttons>
           <Button type="button" onClick={() => setIsReplying(!isReplying)}>
+            <IconReply />
             Reply
           </Button>
           <Button type="button" onClick={() => deleteMessage(id)}>
+            <IconDelete />
             Delete
           </Button>
         </Buttons>
       )}
 
       {isReplying && (
-        <form onSubmit={handleReply}>
-          <TextEditor type="comment" sendContent={setReply} />
-          <div>{message}</div>
-          <Buttons>
-            <Button type="submit" disabled={!reply}>
+        <Form onSubmit={handleReply}>
+          <TextEditor
+            type="comment"
+            sendContent={setReply}
+            placeholder="What are your thoughts?"
+          />
+
+          {message === "Your message has been sent." && (
+            <MessageSuccess>{message}</MessageSuccess>
+          )}
+          {message === "Sorry, we were unable to send your message." && (
+            <MessageError>{message}</MessageError>
+          )}
+
+          <ButtonsForm>
+            <ButtonFilled type="submit" disabled={!reply}>
               Send
-            </Button>
-            <Button type="button" onClick={() => setIsReplying(false)}>
+            </ButtonFilled>
+            <ButtonForm type="button" onClick={() => setIsReplying(false)}>
               Cancel
-            </Button>
-          </Buttons>
-        </form>
+            </ButtonForm>
+          </ButtonsForm>
+        </Form>
       )}
     </Container>
   );
@@ -83,6 +108,10 @@ export default Message;
 Message.propTypes = {
   id: PropTypes.string.isRequired,
   sender: PropTypes.shape({
+    id: PropTypes.string,
+    name: PropTypes.string,
+  }).isRequired,
+  recipient: PropTypes.shape({
     id: PropTypes.string,
     name: PropTypes.string,
   }).isRequired,
@@ -97,14 +126,110 @@ Message.defaultProps = {
   isSent: false,
 };
 
-const Container = styled.div``;
+const Container = styled.div`
+  background: ${(props) => props.theme.backgroundSecondary};
+  box-shadow: 0 2px 3px -4px ${(props) => props.theme.shadow};
+  border: 1px solid ${(props) => props.theme.border};
+  padding: 0.5rem;
+
+  &:hover {
+    border: 1px solid ${(props) => props.theme.borderHover};
+  }
+
+  @media all and (min-width: 992px) {
+    border-radius: 5px;
+  }
+`;
 
 const Content = styled.div``;
 
-const Informations = styled.div``;
+const Informations = styled.div`
+  font-size: 0.75rem;
+  color: ${(props) => props.theme.secondary};
+`;
 
-const Buttons = styled.div``;
+const Buttons = styled.div`
+  display: flex;
 
-const Button = styled.button``;
+  & > * {
+    display: flex;
+    align-items: center;
+    padding: 0.15rem 0.5rem;
+    border-radius: 3px;
+  }
 
-const UserLink = styled(Link)``;
+  & > *:hover {
+    background: ${(props) => props.theme.backgroundTertiary};
+  }
+`;
+
+const Button = styled.button`
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: ${(props) => props.theme.secondary};
+
+  & > *:first-child {
+    margin-right: 0.15rem;
+  }
+
+  & > a {
+    height: 100%;
+  }
+`;
+
+const UserLink = styled(Link)`
+  font-weight: 500;
+  color: ${(props) => props.theme.primary};
+
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  margin: 0.75rem 0;
+`;
+
+const ButtonsForm = styled.div`
+  display: flex;
+  align-self: flex-end;
+  margin-top: 1rem;
+
+  & > button:first-child {
+    margin-right: 0.5rem;
+  }
+`;
+
+const ButtonForm = styled.button`
+  display: block;
+  border: 1px solid ${(props) => props.theme.accent};
+  color: ${(props) => props.theme.accent};
+  border-radius: 5rem;
+  padding: 0.45rem 1.25rem;
+  font-weight: 500;
+  align-self: center;
+  text-align: center;
+`;
+
+const ButtonFilled = styled(ButtonForm)`
+  color: ${(props) => props.theme.backgroundSecondary};
+  background-color: ${(props) => props.theme.accent};
+  border: 1px solid ${(props) => props.theme.accent};
+
+  &:disabled {
+    background-color: ${(props) => props.theme.accentDisabled};
+    border: 1px solid ${(props) => props.theme.accentDisabled};
+    cursor: not-allowed;
+  }
+`;
+
+const MessageSuccess = styled.div`
+  font-size: 0.75rem;
+  color: ${(props) => props.theme.success};
+`;
+
+const MessageError = styled(MessageSuccess)`
+  color: ${(props) => props.theme.error};
+`;

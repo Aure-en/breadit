@@ -97,7 +97,7 @@ const Link = styled.a`
   font-size: 0.75rem;
   display: flex;
   align-items: center;
-  margin: 0 0 0.5rem 0.5rem;
+  margin: 0 0 0.5rem 1rem;
 
   &:hover {
     text-decoration: underline;
@@ -114,7 +114,7 @@ const Url = styled.span`
 const Title = styled.h3`
   font-size: 1.125rem;
   font-weight: 500;
-  padding: 0.5rem;
+  padding-left: 1rem;
 `;
 
 const Row = styled.div`

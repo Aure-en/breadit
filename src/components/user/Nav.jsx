@@ -9,58 +9,62 @@ function Nav({ username }) {
   const location = useLocation();
 
   return (
-    <Container>
-      <NavLink
-        to={`/u/${username}`}
-        isSelected={location.pathname === `/u/${username}`}
-      >
-        Overview
-      </NavLink>
-      <NavLink
-        to={`/u/${username}/posts`}
-        isSelected={location.pathname === `/u/${username}/posts`}
-      >
-        Posts
-      </NavLink>
-      <NavLink
-        to={`/u/${username}/comments`}
-        isSelected={location.pathname === `/u/${username}/comments`}
-      >
-        Comments
-      </NavLink>
-      {currentUser.uid === username && (
+    <Wrapper>
+      <Container>
         <NavLink
-          to={`/u/${username}/saved`}
-          isSelected={location.pathname === `/u/${username}/saved`}
+          to={`/u/${username}`}
+          isSelected={location.pathname === `/u/${username}`}
         >
-          Saved
+          Overview
         </NavLink>
-      )}
-    </Container>
+        <NavLink
+          to={`/u/${username}/posts`}
+          isSelected={location.pathname === `/u/${username}/posts`}
+        >
+          Posts
+        </NavLink>
+        <NavLink
+          to={`/u/${username}/comments`}
+          isSelected={location.pathname === `/u/${username}/comments`}
+        >
+          Comments
+        </NavLink>
+        {currentUser.uid === username && (
+          <NavLink
+            to={`/u/${username}/saved`}
+            isSelected={location.pathname === `/u/${username}/saved`}
+          >
+            Saved
+          </NavLink>
+        )}
+      </Container>
+    </Wrapper>
   );
 }
 
 export default Nav;
 
-const Container = styled.nav`
-  display: flex;
-  justify-content: space-around;
-  padding-top: .5rem;
+const Wrapper = styled.div`
+  width: 100%;
   background: ${(props) => props.theme.backgroundSecondary};
-
-  & > * {
-    flex: 1;
-  }
 
   @media all and (min-width: 992px) {
     grid-row: 1;
     grid-column: 1 / -1;
     justify-content: center;
+  }
+`;
 
-    & > * {
-      flex: initial;
-      min-width: 7.5rem;
-    }
+const Container = styled.nav`
+  display: flex;
+  justify-content: space-around;
+  padding-top: 0.5rem;
+  background: ${(props) => props.theme.backgroundSecondary};
+  margin: 0 auto;
+  max-width: 40rem;
+
+  & > * {
+    flex: 1;
   }
 `;
 

@@ -56,11 +56,11 @@ function Overview({ username }) {
     setOverview(() => {
       return [...comments]
         .map((comment) => {
-          return { ...comment, type: "comment" };
+          return { ...comment, doc: "comment" };
         })
         .concat(
           [...posts].map((post) => {
-            return { ...post, type: "post" };
+            return { ...post, doc: "post" };
           })
         )
         .sort((a, b) => b.date.seconds - a.date.seconds);
@@ -70,7 +70,7 @@ function Overview({ username }) {
   return (
     <List ref={docsRef}>
       {overview.map((article) => {
-        return article.type === "post" ? (
+        return article.doc === "post" ? (
           <Post
             key={article.id}
             author={article.author}
@@ -104,17 +104,11 @@ export default Overview;
 
 const List = styled.div`
   margin-top: 0.5rem;
-
-  @media all and (min-width: 992px) {
-    grid-row: 2;
-    grid-column: 2;
-    margin-top: 0;
-    max-width: 40rem;
-  }
-
   width: 100vw;
+  max-width: 100%;
 
   & > * {
+    display: block;
     margin-bottom: 0.5rem;
   }
 

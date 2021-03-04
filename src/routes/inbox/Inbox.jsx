@@ -11,11 +11,17 @@ function Inbox() {
     <>
       <Container>
         <Nav />
-        <Switch>
-          <Route exact path="/inbox" component={Overview} />
-          <Route exact path="/inbox/notifications" component={Notifications} />
-          <Route path="/inbox/messages" component={Messages} />
-        </Switch>
+        <Content>
+          <Switch>
+            <Route exact path="/inbox" component={Overview} />
+            <Route
+              exact
+              path="/inbox/notifications"
+              component={Notifications}
+            />
+            <Route path="/inbox/messages" component={Messages} />
+          </Switch>
+        </Content>
       </Container>
     </>
   );
@@ -25,5 +31,13 @@ export default Inbox;
 
 const Container = styled.div`
   flex: 1;
-  max-width: 40rem;
+  display: flex;
+  flex-direction: column;
+`;
+
+const Content = styled.div`
+  @media all and (min-width: 576px) {
+    max-width: 40rem;
+    align-self: center;
+  }
 `;

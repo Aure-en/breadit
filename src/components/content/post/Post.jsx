@@ -138,13 +138,14 @@ const Container = styled.article`
   border-radius: 0.25rem;
   grid-template: min-content auto / min-content 1fr;
   background: ${(props) => props.theme.backgroundSecondary};
-  margin-bottom: 3rem;
+  margin-bottom: 1rem;
+  width: 100%;
 
   @media all and (min-width: 768px) {
     max-width: 39rem;
     border: 1px solid ${(props) => props.theme.neutral};
     border-radius: 0.25rem;
-    margin: 3rem 0;
+    margin: 3rem 0 2rem 0;
     padding-right: 1rem;
   }
 `;

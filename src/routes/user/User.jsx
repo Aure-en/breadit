@@ -14,24 +14,26 @@ function User({ match }) {
     <Container>
       <Profile username={match.params.username} />
       <Nav username={match.params.username} />
-      <Switch>
-        <Route
-          exact
-          path={`${match.path}`}
-          render={() => <Overview username={match.params.username} />}
-        />
-        <Route
-          exact
-          path={`${match.path}/posts`}
-          render={() => <Posts username={match.params.username} />}
-        />
-        <Route
-          exact
-          path={`${match.path}/comments`}
-          render={() => <Comments username={match.params.username} />}
-        />
-        <Route exact path={`${match.path}/saved`} component={Saved} />
-      </Switch>
+      <Content>
+        <Switch>
+          <Route
+            exact
+            path={`${match.path}`}
+            render={() => <Overview username={match.params.username} />}
+          />
+          <Route
+            exact
+            path={`${match.path}/posts`}
+            render={() => <Posts username={match.params.username} />}
+          />
+          <Route
+            exact
+            path={`${match.path}/comments`}
+            render={() => <Comments username={match.params.username} />}
+          />
+          <Route exact path={`${match.path}/saved`} component={Saved} />
+        </Switch>
+      </Content>
     </Container>
   );
 }
@@ -58,5 +60,12 @@ const Container = styled.div`
     grid-column-gap: 3rem;
     grid-row-gap: 1rem;
     align-items: start;
+  }
+`;
+
+const Content = styled.div`
+  @media all and (min-width: 576px) {
+    max-width: 40rem;
+    grid-column: 2;
   }
 `;

@@ -5,42 +5,20 @@ import styled from "styled-components";
 import formatDistanceStrict from "date-fns/formatDistanceStrict";
 import { Link } from "react-router-dom";
 import { renderers } from "../../shared/TextEditor";
-import useNotification from "../../../hooks/useNotification";
+import Information from "./Information";
+import Buttons from "./Buttons";
 
 function CommentNotification({ id, type, date, content, post }) {
-  const { deleteNotification } = useNotification();
-
   return (
     <article>
       <Container to={`/b/${post.subreadit.name}/${post.id}`}>
-        <Header>
-          <AccentLink to={`/u/${content.author.name}`}>
-            {content.author.name}
-            &nbsp;
-          </AccentLink>
-          <span>
-            {type === "comment" && "commented on your post"}
-            {type === "reply" && "replied to your comment on"}
-            {type === "mention" && "mentioned you on"}
-            &nbsp;
-          </span>
-          <PostLink to={`/b/${post.subreadit.name}/${post.id}`}>
-            {post.title}
-          </PostLink>
-          <span>&nbsp;•&nbsp;</span>
-          <StrongLink to={`/b/${post.subreadit.name}`}>
-            b/
-            {post.subreadit.name}
-          </StrongLink>
-          &nbsp;• Posted by&nbsp;
-          <UnderlineLink to={`/u/${post.author.id}`}>
-            {post.author.name}
-          </UnderlineLink>
-          <span> • </span>
-          <UnderlineLink to={`/b/${post.subreadit.name}/${post.id}`}>
-            {formatDistanceStrict(new Date(date.seconds * 1000), new Date())}
-          </UnderlineLink>
-        </Header>
+        <Information
+          type={type}
+          author={content.author.name}
+          subreadit={post.subreadit.name}
+          post={post}
+          date={date}
+        />
 
         <Main>
           <div>
@@ -55,24 +33,17 @@ function CommentNotification({ id, type, date, content, post }) {
               )}
               &nbsp;ago
             </Informations>
-            <Content>{redraft(JSON.parse(content.content), renderers)}</Content>
+            <div>{redraft(JSON.parse(content.content), renderers)}</div>
           </div>
-
-          <Buttons>
-            <Button as={Link} to={`/b/${post.subreadit.name}/${post.id}`}>
-              View Post
-            </Button>
-            <Button
-              type="button"
-              onClick={(e) => {
-                e.preventDefault();
-                deleteNotification(id);
-              }}
-            >
-              Delete
-            </Button>
-          </Buttons>
         </Main>
+
+        <Buttons
+          type="comment"
+          subreadit={post.subreadit.name}
+          postId={post.id}
+          notificationId={id}
+          commentId={content.id}
+        />
       </Container>
     </article>
   );
@@ -129,40 +100,21 @@ CommentNotification.defaultProps = {
   post: null,
 };
 
-const colors = {
-  background: "white",
-  primary: "black",
-  secondary: "grey",
-  border: "grey",
-  accent: "red",
-  neutral: "rgb(209, 163, 155)",
-};
-
 const Container = styled(Link)`
   display: block;
-  border: 1px solid ${colors.border};
-  background: ${colors.background};
+  border: 1px solid ${(props) => props.theme.border};
+  background: ${(props) => props.theme.backgroundSecondary};
   cursor: pointer;
+  padding: 0.5rem;
 
   &:hover {
-    border: 1px solid ${colors.neutral};
+    border: 1px solid ${(props) => props.theme.borderHover};
   }
 `;
 
 const Informations = styled.div`
   font-size: 0.75rem;
-  color: ${colors.secondary};
-`;
-
-const Header = styled(Informations)`
-  display: flex;
-  align-items: center;
-  padding: 1rem;
-  border-bottom: 1px solid ${colors.border};
-
-  & > svg:first-child {
-    margin-right: 1rem;
-  }
+  color: ${(props) => props.theme.secondary};
 `;
 
 const Main = styled.div`
@@ -173,12 +125,10 @@ const Main = styled.div`
     display: block;
     content: "";
     align-self: stretch;
-    border-left: 3px dashed ${colors.border};
+    border-left: 2px solid ${(props) => props.theme.accentSoft};
     margin-right: 1rem;
   }
 `;
-
-const Content = styled.div``;
 
 const UnderlineLink = styled(Link)`
   &:hover {
@@ -186,19 +136,7 @@ const UnderlineLink = styled(Link)`
   }
 `;
 
-const PostLink = styled(Link)`
-  color: ${colors.primary};
-`;
-
-const AccentLink = styled(UnderlineLink)`
-  color: ${colors.accent};
-`;
-
 const StrongLink = styled(UnderlineLink)`
   font-weight: 500;
-  color: ${colors.primary};
+  color: ${(props) => props.theme.primary};
 `;
-
-const Buttons = styled.div``;
-
-const Button = styled.button``;
