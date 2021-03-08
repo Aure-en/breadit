@@ -5,7 +5,6 @@ import PropTypes from "prop-types";
 import redraft from "redraft";
 import { useAuth } from "../../../contexts/AuthContext";
 import usePost from "../../../hooks/usePost";
-import Entry from "../../entry/Entry";
 import Carousel from "../shared/Carousel";
 import LinkPreview from "../../feed/LinkPreview";
 import TextEditor, { renderers } from "../../shared/TextEditor";
@@ -19,7 +18,6 @@ function Post({ postId, subreadit }) {
   const { currentUser } = useAuth();
   const { getPost, editPost, deletePost } = usePost();
   const [post, setPost] = useState();
-  const [isEntryOpen, setIsEntryOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [edit, setEdit] = useState("");
 
@@ -112,15 +110,13 @@ function Post({ postId, subreadit }) {
               />
               {currentUser && currentUser.uid === post.author.id && (
                 <ModifyButtons
-                  type={post.type === "post"}
+                  canEdit={post.type === "post"}
                   onEditClick={() => setIsEditing(!isEditing)}
                   onDeleteClick={() => deletePost(postId)}
                 />
               )}
             </ButtonsContainer>
           </Container>
-
-          {isEntryOpen && <Entry close={() => setIsEntryOpen(false)} />}
         </>
       )}
     </>
@@ -137,15 +133,13 @@ const Container = styled.article`
   display: grid;
   border-radius: 0.25rem;
   grid-template: min-content auto / min-content 1fr;
-  background: ${(props) => props.theme.backgroundSecondary};
   margin-bottom: 1rem;
   width: 100%;
 
   @media all and (min-width: 768px) {
+    width: 100vw;
     max-width: 39rem;
-    border: 1px solid ${(props) => props.theme.neutral};
     border-radius: 0.25rem;
-    margin: 3rem 0 2rem 0;
     padding-right: 1rem;
   }
 `;
@@ -188,7 +182,8 @@ const Editor = styled.div`
 
 const ButtonsContainer = styled.div`
   display: flex;
-  margin-left: 0.5rem;
+  margin-left: 0.25rem;
+
   @media all and (min-width: 768px) {
     grid-row: 2;
     grid-column: 1 / -1;

@@ -61,7 +61,7 @@ function Carousel({ images, title }) {
 }
 
 Carousel.propTypes = {
-  images: PropTypes.arrayOf(PropTypes.images).isRequired,
+  images: PropTypes.arrayOf(PropTypes.string).isRequired,
   title: PropTypes.string,
 };
 
@@ -70,12 +70,6 @@ Carousel.defaultProps = {
 };
 
 export default Carousel;
-
-const colors = {
-  "button-shadow": "rgba(0, 0, 0, .2)",
-  background: "rgba(255, 255, 255)",
-  "slides-number": "rgba(0, 0, 0, .6)",
-};
 
 const Container = styled.div`
   position: relative;
@@ -114,8 +108,8 @@ const Button = styled.button`
   border-radius: 50%;
   width: 2.5rem;
   height: 2.5rem;
-  box-shadow: 0 0 10px ${colors["button-shadow"]};
-  background: ${colors.background};
+  box-shadow: 0 0 10px ${(props) => props.theme.shadowSecondary};
+  background: ${(props) => props.theme.backgroundSecondary};
   padding: 0;
   top: 50%;
   transform: translateY(-50%);
@@ -143,8 +137,8 @@ const SlideNumber = styled.span`
   top: 1rem;
   right: 1rem;
   font-size: 0.75rem;
-  color: ${colors.background};
-  background: ${colors["slides-number"]};
+  color: ${(props) => props.theme.backgroundSecondary};
+  background: ${(props) => props.theme.overlayTertiary};
   padding: 0.25rem 0.45rem;
   border-radius: 50px;
   z-index: 1;

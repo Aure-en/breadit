@@ -37,9 +37,16 @@ const GlobalStyles = createGlobalStyle`
     font-weight: 500;
   }
 
+  h4 {
+    font-weight: 300;
+    font-size: 1.125rem;
+    margin: 0.25rem 0;
+  }
+
   input[type="text"],
   input[type="email"],
-  input[type="password"] {
+  input[type="password"],
+  textarea {
     box-sizing: border-box;
   }
 

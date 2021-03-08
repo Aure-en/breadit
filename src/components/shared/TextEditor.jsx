@@ -522,7 +522,10 @@ export const renderers = {
     {
       strategy: mentionStrategy,
       component: ({ children, decoratedText }) => (
-        <StyledLink href={`${BREADIT_URL}/${decoratedText}`.toLowerCase()}>
+        <StyledLink
+          key={uniqid()}
+          href={`${BREADIT_URL}/${decoratedText}`.toLowerCase()}
+        >
           {children}
         </StyledLink>
       ),
@@ -545,7 +548,8 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: ${(props) => (props.isPost ? "column" : "column-reverse")};
   border: 1px solid
-    ${(props) => props.isActive ? props.theme.borderHover : props.theme.border};
+    ${(props) =>
+      props.isActive ? props.theme.borderHover : props.theme.borderSecondary};
   border-radius: 5px;
 `;
 
@@ -579,7 +583,7 @@ const Button = styled.button`
   align-items: center;
   justify-content: center;
   border-radius: 3px;
-  background: ${props => props.active && colors.hover};
+  background: ${(props) => props.active && colors.hover};
 
   &:hover {
     background: ${colors.hover};

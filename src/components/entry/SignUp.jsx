@@ -1,10 +1,9 @@
 import React from "react";
 import styled from "styled-components";
-import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
+import { useEntry } from "../../contexts/EntryContext";
 import useSignUp from "../../hooks/useSignUp";
 
-function SignUp({ changeTab }) {
+function SignUp() {
   const {
     email,
     setEmail,
@@ -22,6 +21,7 @@ function SignUp({ changeTab }) {
     handleSignUp,
     message,
   } = useSignUp();
+  const { setCurrentTab } = useEntry();
 
   return (
     <>
@@ -91,31 +91,15 @@ function SignUp({ changeTab }) {
 
       <Message>
         Already a breaditor ?{" "}
-        <>
-          {changeTab ? (
-            <ChangeTab type="button" onClick={() => changeTab("signIn")}>
-              Log In
-            </ChangeTab>
-          ) : (
-            <ChangeTab as={Link} to="/entry/signin">
-              Log In
-            </ChangeTab>
-          )}
-        </>
+        <ChangeTab type="button" onClick={() => setCurrentTab("signIn")}>
+          Log In
+        </ChangeTab>
       </Message>
 
       <MessageSuccess>{message}</MessageSuccess>
     </>
   );
 }
-
-SignUp.propTypes = {
-  changeTab: PropTypes.func,
-};
-
-SignUp.defaultProps = {
-  changeTab: null,
-};
 
 export default SignUp;
 
@@ -185,6 +169,12 @@ const Button = styled.button`
     background-color: ${(props) => props.theme.accentDisabled};
     border: 1px solid ${(props) => props.theme.accentDisabled};
     cursor: disabled;
+  }
+
+  &:hover {
+    color: ${(props) => props.theme.backgroundSecondary};
+    background-color: ${(props) => props.theme.accentHover};
+    border: 1px solid ${(props) => props.theme.accentHover};
   }
 `;
 

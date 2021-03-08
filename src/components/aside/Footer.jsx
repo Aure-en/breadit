@@ -35,10 +35,12 @@ export default Footer;
 const Container = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  line-height: 1.25rem;
   padding: 1rem;
+  border: 1px solid ${(props) => props.theme.neutral};
   background: ${(props) => props.theme.backgroundSecondary};
-  border-radius: 5px;
+  box-shadow: 0 0 10px -5px ${(props) => props.theme.shadow};
+  line-height: 1.25rem;
+  border-radius: 0.25rem;
   font-size: 0.825rem;
 `;
 

@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import ReactTooltip from "react-tooltip";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../../contexts/AuthContext";
-import Entry from "../../entry/Entry";
+import { useEntry } from "../../../contexts/EntryContext";
 import NavDropdown from "./NavDropdown";
 import UserDropdown from "./UserDropdown";
 import LinkInbox from "./LinkInbox";
@@ -15,8 +15,7 @@ import { ReactComponent as IconPost } from "../../../assets/icons/header/icon-po
 
 function Header() {
   const { currentUser } = useAuth();
-  const [isLogInModalOpen, setIsLogInModalOpen] = useState(false);
-  const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false);
+  const { openSignIn, openSignUp } = useEntry();
 
   return (
     <Container>
@@ -41,13 +40,10 @@ function Header() {
           </>
         ) : (
           <>
-            <Button type="button" onClick={() => setIsLogInModalOpen(true)}>
+            <Button type="button" onClick={openSignIn}>
               Log In
             </Button>
-            <ButtonFilled
-              type="button"
-              onClick={() => setIsSignUpModalOpen(true)}
-            >
+            <ButtonFilled type="button" onClick={openSignUp}>
               Sign Up
             </ButtonFilled>
           </>
@@ -55,14 +51,6 @@ function Header() {
       </Buttons>
 
       <UserDropdown />
-
-      {isLogInModalOpen && (
-        <Entry close={() => setIsLogInModalOpen(false)} entryTab="signIn" />
-      )}
-
-      {isSignUpModalOpen && (
-        <Entry close={() => setIsSignUpModalOpen(false)} entryTab="signUp" />
-      )}
     </Container>
   );
 }
@@ -72,7 +60,7 @@ export default Header;
 const Container = styled.header`
   display: flex;
   z-index: 5;
-  background: ${props => props.theme.backgroundQuaternary};
+  background: ${(props) => props.theme.backgroundQuaternary};
 `;
 
 const Buttons = styled.div``;

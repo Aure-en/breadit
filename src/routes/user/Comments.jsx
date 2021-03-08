@@ -60,7 +60,7 @@ function Comments({ username }) {
 
   return (
     <Container>
-            {windowSize.width > 992 ? (
+      {windowSize.width > 992 ? (
         <Sort setSort={setSort} sort={sort} />
       ) : (
         <SortDropdown setSort={setSort} sort={sort} />

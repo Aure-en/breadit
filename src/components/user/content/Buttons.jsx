@@ -2,7 +2,9 @@ import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
+import { useAuth } from "../../../contexts/AuthContext";
 import { useSave } from "../../../contexts/SaveContext";
+import { useEntry } from "../../../contexts/EntryContext";
 import useComment from "../../../hooks/useComment";
 import useWindowSize from "../../../hooks/useWindowSize";
 import useDropdown from "../../../hooks/useDropdown";
@@ -18,9 +20,11 @@ import { ReactComponent as IconDots } from "../../../assets/icons/content/icon-d
 
 function Buttons({ postId, subreadit, hide, user }) {
   const [commentsNumber, setCommentsNumber] = useState(0);
+  const { currentUser } = useAuth();
   const { saved, handleSave } = useSave();
   const { getCommentsNumber } = useComment();
   const { windowSize } = useWindowSize();
+  const { openSignUp } = useEntry();
   const copyRef = useRef();
   const dropdownRef = useRef();
   const { isDropdownOpen, setIsDropdownOpen } = useDropdown(dropdownRef);
@@ -55,7 +59,9 @@ function Buttons({ postId, subreadit, hide, user }) {
             type="button"
             onClick={(e) => {
               e.preventDefault();
-              handleSave(user.uid, postId, "post");
+              currentUser ?
+              handleSave(user.uid, postId, "post") :
+              openSignUp();
             }}
           >
             {saved.includes(postId) ? <IconSaved /> : <IconSave />}

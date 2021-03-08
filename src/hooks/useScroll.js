@@ -15,6 +15,7 @@ function useScroll(ref, initial, step) {
     if (!ref || !ref.current) return;
 
     const scroll = () => {
+      if (!ref || !ref.current) return;
       const refBottom = ref.current.getBoundingClientRect().bottom;
       const windowBottom = document.documentElement.clientHeight;
 

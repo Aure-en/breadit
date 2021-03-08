@@ -1,15 +1,15 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
+import { useEntry } from "../../../contexts/EntryContext";
 import useVote from "../../../hooks/useVote";
-import Entry from "../../entry/Entry";
 
 // Icons
 import { ReactComponent as IconUp } from "../../../assets/icons/general/icon-upvote.svg";
 import { ReactComponent as IconDown } from "../../../assets/icons/general/icon-downvote.svg";
 
 function Vote({ type, docId, user }) {
-  const [isEntryOpen, setIsEntryOpen] = useState(false);
+  const { openSignUp } = useEntry();
   const { vote, votes, handleUpvote, handleDownvote } = useVote(
     type,
     docId,
@@ -22,10 +22,7 @@ function Vote({ type, docId, user }) {
         type="button"
         isUpvoted={vote === 1}
         onClick={() => {
-          // eslint-disable-next-line no-unused-expressions
-          user
-            ? handleUpvote(type, docId, user.uid, vote)
-            : setIsEntryOpen(true);
+          user ? handleUpvote(type, docId, user.uid, vote) : openSignUp();
         }}
         appearance={type}
       >
@@ -36,16 +33,12 @@ function Vote({ type, docId, user }) {
         type="button"
         isDownvoted={vote === -1}
         onClick={() => {
-          // eslint-disable-next-line no-unused-expressions
-          user
-            ? handleDownvote(type, docId, user.uid, vote)
-            : setIsEntryOpen(true);
+          user ? handleDownvote(type, docId, user.uid, vote) : openSignUp();
         }}
         appearance={type}
       >
         <IconDown />
       </Button>
-      {isEntryOpen && <Entry close={() => setIsEntryOpen(false)} />}
     </Container>
   );
 }
@@ -99,7 +92,8 @@ const Button = styled.button`
   border-radius: 3px;
 
   ${(props) =>
-    props.appearance === "posts" && `
+    props.appearance === "posts" &&
+    `
     @media all and (min-width: 768px) {
       color: ${(props) =>
         props.isUpvoted

@@ -2,6 +2,7 @@ import React, { useRef } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../../contexts/AuthContext";
+import { useEntry } from "../../../contexts/EntryContext";
 import useDropdown from "../../../hooks/useDropdown";
 import Top from "./Top";
 import Subscriptions from "./Subscriptions";
@@ -13,11 +14,11 @@ import { ReactComponent as IconUser } from "../../../assets/icons/header/icon-us
 import { ReactComponent as IconFeed } from "../../../assets/icons/header/icon-feed.svg";
 import { ReactComponent as IconInbox } from "../../../assets/icons/header/icon-inbox.svg";
 import { ReactComponent as IconSaved } from "../../../assets/icons/header/icon-saved.svg";
-import { ReactComponent as IconSettings } from "../../../assets/icons/header/icon-settings.svg";
 import { BREADIT_ICON } from "../../../utils/const";
 
 function Header() {
   const { currentUser } = useAuth();
+  const { openSignUp } = useEntry();
   const dropdownRef = useRef();
   const { isDropdownOpen, setIsDropdownOpen, closeDropdown } = useDropdown(
     dropdownRef
@@ -75,7 +76,11 @@ function Header() {
               <IconFeed />
               Popular
             </Choice>
-            {!currentUser && <Button type="button">Sign up / Log in</Button>}
+            {!currentUser && (
+              <Button type="button" onClick={openSignUp}>
+                Sign up / Log in
+              </Button>
+            )}
           </DropdownList>
         )}
       </Dropdown>

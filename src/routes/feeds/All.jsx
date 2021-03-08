@@ -40,7 +40,7 @@ function All() {
           })}
         </PostsList>
       </Container>
-      {windowSize.width > 768 && (
+      {windowSize.width > 992 && (
         <Aside>
           <TopSubreadits />
           <Create />
@@ -57,6 +57,11 @@ export default All;
 const Container = styled.div`
   max-width: 40rem;
   flex: 1;
+  margin: 1rem 0;
+
+  @media all and (min-width: 992px) {
+    margin: 3rem 0;
+  }
 `;
 
 const PostsList = styled.div`
@@ -70,8 +75,8 @@ const PostsList = styled.div`
 `;
 
 const Aside = styled.aside`
+  margin: 3rem 0 3rem 3rem;
   max-width: 20rem;
-  margin-left: 3rem;
 
   & > * {
     margin-bottom: 1.5rem;

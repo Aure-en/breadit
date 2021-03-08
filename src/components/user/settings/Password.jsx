@@ -226,12 +226,23 @@ const Button = styled.button`
   font-weight: 500;
   align-self: center;
   text-align: center;
+
+  &:hover {
+    color: ${(props) => props.theme.accentHover};
+    border: 1px solid ${(props) => props.theme.accentHover};
+  }
 `;
 
 const ButtonFilled = styled(Button)`
   color: ${(props) => props.theme.backgroundSecondary};
   background-color: ${(props) => props.theme.accent};
   border: 1px solid ${(props) => props.theme.accent};
+
+  &:hover {
+    color: ${(props) => props.theme.backgroundSecondary};
+    background-color: ${(props) => props.theme.accentHover};
+    border: 1px solid ${(props) => props.theme.accentHover};
+  }
 `;
 
 const Subheading = styled.h3`

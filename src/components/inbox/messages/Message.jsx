@@ -131,6 +131,7 @@ const Container = styled.div`
   box-shadow: 0 2px 3px -4px ${(props) => props.theme.shadow};
   border: 1px solid ${(props) => props.theme.border};
   padding: 0.5rem;
+  box-shadow: 0 0 10px -5px ${(props) => props.theme.shadow};
 
   &:hover {
     border: 1px solid ${(props) => props.theme.borderHover};

@@ -26,10 +26,12 @@ function ModifyButtons({ canEdit, onEditClick, onDeleteClick }) {
           </DropdownHeader>
           {isDropdownOpen && (
             <DropdownList>
-              <Choice type="button" onClick={onEditClick}>
-                <IconEdit />
-                Edit
-              </Choice>
+              {canEdit && (
+                <Choice type="button" onClick={onEditClick}>
+                  <IconEdit />
+                  Edit
+                </Choice>
+              )}
               <Choice type="button" onClick={onDeleteClick}>
                 <IconDelete />
                 Delete
@@ -75,8 +77,6 @@ const Container = styled.div`
   position: relative;
   color: ${(props) => props.theme.secondary};
   display: flex;
-  align-items: stretch;
-  padding: 0.5rem 0;
   z-index: 5;
 
   & > * {

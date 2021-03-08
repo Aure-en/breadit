@@ -1,7 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
+import { useAuth } from "../../../contexts/AuthContext";
 import { useSave } from "../../../contexts/SaveContext";
+import { useEntry } from "../../../contexts/EntryContext";
 
 // Icons
 import { ReactComponent as IconSave } from "../../../assets/icons/general/icon-save.svg";
@@ -9,17 +11,28 @@ import { ReactComponent as IconSaved } from "../../../assets/icons/general/icon-
 import { ReactComponent as IconReply } from "../../../assets/icons/content/icon-reply.svg";
 
 function Buttons({ user, commentId, onReplyClick }) {
+  const { currentUser } = useAuth();
   const { saved, handleSave } = useSave();
+  const { openSignUp } = useEntry();
 
   return (
     <Container>
-      <Button type="button" onClick={onReplyClick}>
+      <Button
+        type="button"
+        onClick={() => {
+          currentUser ? onReplyClick() : openSignUp();
+        }}
+      >
         <IconReply />
         Reply
       </Button>
       <Button
         type="button"
-        onClick={() => handleSave(user.uid, commentId, "comment")}
+        onClick={() => {
+          currentUser ?
+          handleSave(user.uid, commentId, "comment")
+          : openSignUp();
+        }}
       >
         {saved.includes(commentId) ? <IconSaved /> : <IconSave />}
         Save

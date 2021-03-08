@@ -1,49 +1,41 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
-import PropTypes from "prop-types";
 import SignIn from "./SignIn";
 import SignUp from "./SignUp";
 import ForgotPassword from "./ForgotPassword";
+import { useEntry } from "../../contexts/EntryContext";
+
+// Assets
+import { ENTRY_IMG } from "../../utils/const";
 import { ReactComponent as IconClose } from "../../assets/icons/general/icon-x.svg";
 
-// Image
-import { ENTRY_IMG } from "../../utils/const";
-
-function Entry({ close, entryTab }) {
-  const [currentTab, setCurrentTab] = useState(entryTab);
+function Entry() {
+  const { isEntryModalOpen, closeEntry, currentTab } = useEntry();
 
   return (
-    <Overlay onClick={close}>
-      <Container onClick={(e) => e.stopPropagation()}>
-        <Content>
-          {currentTab === "signIn" && <SignIn changeTab={setCurrentTab} />}
-          {currentTab === "signUp" && <SignUp changeTab={setCurrentTab} />}
-          {currentTab === "forgotPassword" && (
-            <ForgotPassword changeTab={setCurrentTab} />
-          )}
-        </Content>
-        <Close type="button" onClick={close}>
-          <IconClose />
-        </Close>
-      </Container>
-    </Overlay>
+    <>
+      {isEntryModalOpen && (
+        <Overlay onClick={closeEntry}>
+          <Container onClick={(e) => e.stopPropagation()}>
+            <Content>
+              {currentTab === "signIn" && <SignIn />}
+              {currentTab === "signUp" && <SignUp />}
+              {currentTab === "forgotPassword" && <ForgotPassword />}
+            </Content>
+            <Close type="button" onClick={closeEntry}>
+              <IconClose />
+            </Close>
+          </Container>
+        </Overlay>
+      )}
+    </>
   );
 }
-
-Entry.propTypes = {
-  close: PropTypes.func,
-  entryTab: PropTypes.string,
-};
-
-Entry.defaultProps = {
-  close: () => {},
-  entryTab: "signUp",
-};
 
 export default Entry;
 
 const Overlay = styled.div`
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
@@ -55,9 +47,12 @@ const Overlay = styled.div`
 const Container = styled.div`
   position: absolute;
   background: ${(props) => props.theme.backgroundSecondary};
+  top: 50%;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translate(-50%, -50%);
   z-index: 100;
+  padding: 2rem;
+  border-radius: 0.5rem;
 
   @media all and (min-width: 576px) {
     width: 30rem;
@@ -75,7 +70,6 @@ const Container = styled.div`
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    border-radius: .5rem;
   }
 `;
 

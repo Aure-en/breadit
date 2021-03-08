@@ -9,10 +9,13 @@ import Comment from "../../components/content/comment/Comment";
 import TextEditor from "../../components/shared/TextEditor";
 import SortDropdown from "../../components/sort/SortDropdown";
 
+// Icons
+import { ReactComponent as IconComment } from "../../assets/icons/general/icon-comment.svg";
+
 function Post({ match }) {
   const { postId, subreadit } = match.params;
   const [post, setPost] = useState();
-  const [comments, setComments] = useState();
+  const [comments, setComments] = useState([]);
   const [comment, setComment] = useState("");
   const [limit, setLimit] = useState(20);
   const [sort, setSort] = useState("top");
@@ -69,7 +72,7 @@ function Post({ match }) {
   }, [currentUser]);
 
   return (
-    <div>
+    <>
       {post && (
         <Container>
           <PostContent postId={postId} subreadit={subreadit} />
@@ -92,22 +95,34 @@ function Post({ match }) {
             <Button type="submit">Comment</Button>
           </Form>
 
-          <Comments>
-            <SortDropdown setSort={setSort} sort={sort} />
-            {comments &&
-              comments.map((commentId) => {
-                return (
-                  <StyledComment
-                    key={commentId}
-                    commentId={commentId}
-                    post={post}
-                  />
-                );
-              })}
-          </Comments>
+          {comments.length === 0 ? (
+            <>
+              <NoComment>
+                <Icon>
+                  <IconComment />
+                </Icon>
+                <h4>No comments here yet.</h4>
+                Be the first to share what you think!
+              </NoComment>
+            </>
+          ) : (
+            <Comments>
+              <SortDropdown setSort={setSort} sort={sort} />
+              {comments &&
+                comments.map((commentId) => {
+                  return (
+                    <StyledComment
+                      key={commentId}
+                      commentId={commentId}
+                      post={post}
+                    />
+                  );
+                })}
+            </Comments>
+          )}
         </Container>
       )}
-    </div>
+    </>
   );
 }
 
@@ -126,14 +141,25 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 100vw;
+  align-self: flex-start;
+  flex: 1;
+  background: ${(props) => props.theme.backgroundSecondary};
   max-width: 40rem;
+  margin: 1rem;
+  border-radius: 5px;
+  border: 1px solid ${(props) => props.theme.border};
+
+  @media all and (min-width: 360px) {
+    padding: 1rem;
+  }
+
+  @media all and (min-width: 768px) {
+    align-items: center;
+  }
 `;
 
 const Editor = styled.div`
   position: relative;
-  width: 100%;
-  max-width: 40rem;
 `;
 
 const StyledComment = styled(Comment)`
@@ -153,12 +179,14 @@ const Form = styled.form`
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: 40rem;
+
+  @media all and (min-width: 360px) {
+    padding: 0 1rem;
+  }
 `;
 
 const Comments = styled.div`
   width: 100%;
-  max-width: 40rem;
 `;
 
 const Button = styled.button`
@@ -172,4 +200,14 @@ const Button = styled.button`
   align-self: flex-end;
   text-align: center;
   margin-top: 1rem;
+`;
+
+const NoComment = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const Icon = styled.span`
+  color: ${(props) => props.theme.accent};
 `;

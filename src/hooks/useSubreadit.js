@@ -55,7 +55,7 @@ function useSubreadit() {
       },
       members: 0,
       date: new Date(),
-      rules: [],
+      rules: [""],
       id: ref.id,
     });
     joinSubreadit(user.uid, {
@@ -143,7 +143,7 @@ function useSubreadit() {
     const subreadits = [];
     const subreaditsDocs = await firestore
       .collection("subreadits")
-      .orderBy("members")
+      .orderBy("members", "desc")
       .limit(limit)
       .get();
     subreaditsDocs.docs.forEach((subreadit) =>

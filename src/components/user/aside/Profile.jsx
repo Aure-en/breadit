@@ -2,11 +2,16 @@ import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { format } from "date-fns";
+import { Link } from "react-router-dom";
+import { useAuth } from "../../../contexts/AuthContext";
+import { useEntry } from "../../../contexts/EntryContext";
 import useUser from "../../../hooks/useUser";
 
 function Profile({ username }) {
+  const { currentUser } = useAuth();
   const [user, setUser] = useState();
   const { getUserByName, getKarma } = useUser();
+  const { openSignUp } = useEntry();
 
   useEffect(() => {
     (async () => {
@@ -36,6 +41,24 @@ function Profile({ username }) {
               </Information>
             </div>
           </Informations>
+
+          {currentUser && currentUser.displayName !== username && (
+            <Button
+              as={Link}
+              to={{
+                pathname: "/message/compose",
+                recipient: user.username,
+              }}
+            >
+              Send a message
+            </Button>
+          )}
+
+          {!currentUser && (
+            <Button type="button" onClick={openSignUp}>
+              Send a message
+            </Button>
+          )}
         </Container>
       )}
     </>
@@ -49,6 +72,8 @@ Profile.propTypes = {
 export default Profile;
 
 const Container = styled.aside`
+  display: flex;
+  flex-direction: column;
   position: relative;
   padding: 8rem 1rem 1rem 1rem;
   background: ${(props) => props.theme.backgroundSecondary};
@@ -104,4 +129,22 @@ const Information = styled.div`
   font-size: 0.825rem;
   color: ${(props) => props.theme.secondary};
   font-weight: initial;
+`;
+
+const Button = styled.button`
+  display: block;
+  color: ${(props) => props.theme.backgroundSecondary};
+  background-color: ${(props) => props.theme.accent};
+  border: 1px solid ${(props) => props.theme.accent};
+  border-radius: 5rem;
+  padding: 0.45rem 1.25rem;
+  font-weight: 500;
+  align-self: center;
+  text-align: center;
+  margin-top: 1rem;
+
+  &:hover {
+    background-color: ${(props) => props.theme.accentHover};
+    border: 1px solid ${(props) => props.theme.accentHover};
+  }
 `;

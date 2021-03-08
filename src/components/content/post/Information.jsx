@@ -39,11 +39,11 @@ function Information({ subreaditId, author, date, user, className }) {
             {" "}
             {windowSize.width > 768 && "• "}
             Posted by{" "}
-            <Link to={`/user/${author}`}>
+            <UnderlineLink to={`/u/${author.toLowerCase()}`}>
               {" "}
               u/
               {author}{" "}
-            </Link>
+            </UnderlineLink>
             {formatDistanceStrict(new Date(date.seconds * 1000), new Date())}{" "}
             ago
           </Details>
@@ -151,5 +151,11 @@ const Button = styled.button`
 
   @media all and (min-width: 768px) {
     padding: 0.25rem 0.5rem 0.25rem 0.25rem;
+  }
+`;
+
+const UnderlineLink = styled(Link)`
+  &:hover {
+    text-decoration: underline;
   }
 `;

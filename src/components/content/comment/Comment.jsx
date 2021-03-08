@@ -4,10 +4,8 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 import redraft from "redraft";
 import useComment from "../../../hooks/useComment";
-import Entry from "../../entry/Entry";
 import TextEditor, { renderers } from "../../shared/TextEditor";
 import { useAuth } from "../../../contexts/AuthContext";
-import { useSave } from "../../../contexts/SaveContext";
 import Vote from "../shared/Vote";
 import Information from "./Information";
 import Buttons from "./Buttons";
@@ -19,9 +17,7 @@ function Comment({ className, commentId, post }) {
   const [isReplying, setIsReplying] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [edit, setEdit] = useState("");
-  const [isEntryOpen, setIsEntryOpen] = useState(false);
   const { currentUser } = useAuth();
-  const { saved, handleSave } = useSave();
   const {
     getComment,
     createComment,
@@ -138,8 +134,6 @@ function Comment({ className, commentId, post }) {
               return <Comment key={childId} commentId={childId} post={post} />;
             })}
           </Container>
-
-          {isEntryOpen && <Entry close={() => setIsEntryOpen(false)} />}
         </>
       )}
     </>

@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, Link } from "react-router-dom";
 import Nav from "../../../components/inbox/messages/Nav";
 import Received from "./Received";
 import Sent from "./Sent";
@@ -8,7 +8,10 @@ import Sent from "./Sent";
 function Messages() {
   return (
     <>
-      <Nav />
+      <Header>
+        <Nav />
+        <StyledLink to="/message/compose">Send a message</StyledLink>
+      </Header>
       <Switch>
         <Route exact path="/inbox/messages/sent" component={Sent} />
         <Route path="/inbox/messages" component={Received} />
@@ -18,3 +21,20 @@ function Messages() {
 }
 
 export default Messages;
+
+const Header = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const StyledLink = styled(Link)`
+  font-weight: 500;
+  color: ${(props) => props.theme.secondary};
+  text-transform: uppercase;
+  font-size: 0.75rem;
+
+  &:hover {
+    color: ${(props) => props.theme.accent};
+  }
+`;

@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
+import { useAuth } from "../../../contexts/AuthContext";
+import { useEntry } from "../../../contexts/EntryContext";
 import { useSave } from "../../../contexts/SaveContext";
 import useComment from "../../../hooks/useComment";
 import useWindowSize from "../../../hooks/useWindowSize";
@@ -16,6 +18,8 @@ import { ReactComponent as IconLink } from "../../../assets/icons/general/icon-l
 
 function Buttons({ postId, subreadit, hide, user, className }) {
   const [commentsNumber, setCommentsNumber] = useState(0);
+  const { currentUser } = useAuth();
+  const { openSignUp } = useEntry();
   const { saved, handleSave } = useSave();
   const { getCommentsNumber } = useComment();
   const { windowSize } = useWindowSize();
@@ -49,7 +53,7 @@ function Buttons({ postId, subreadit, hide, user, className }) {
         type="button"
         onClick={(e) => {
           e.preventDefault();
-          handleSave(user.uid, postId, "post");
+          currentUser ? handleSave(user.uid, postId, "post") : openSignUp();
         }}
       >
         {saved.includes(postId) ? <IconSaved /> : <IconSave />}
@@ -121,14 +125,6 @@ const Container = styled.div`
 
   & > *:hover {
     background: ${(props) => props.theme.backgroundTertiary};
-  }
-
-  & > *:first-child {
-    padding-left: 0;
-  }
-
-  & > *:last-child {
-    padding-right: 0;
   }
 `;
 

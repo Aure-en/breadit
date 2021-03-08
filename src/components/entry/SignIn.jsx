@@ -1,10 +1,9 @@
 import React from "react";
 import styled from "styled-components";
-import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
+import { useEntry } from "../../contexts/EntryContext";
 import useSignIn from "../../hooks/useSignIn";
 
-function SignIn({ changeTab }) {
+function SignIn() {
   const {
     email,
     setEmail,
@@ -16,6 +15,7 @@ function SignIn({ changeTab }) {
     message,
     handleSignIn,
   } = useSignIn();
+  const { setCurrentTab } = useEntry();
 
   return (
     <>
@@ -63,43 +63,24 @@ function SignIn({ changeTab }) {
 
       <Message>
         Forgot your{" "}
-        {changeTab ? (
-          <ChangeTab type="button" onClick={() => changeTab("forgotPassword")}>
-            password
-          </ChangeTab>
-        ) : (
-          <ChangeTab as={Link} to="/entry/password">
-            password
-          </ChangeTab>
-        )}
+        <ChangeTab
+          type="button"
+          onClick={() => setCurrentTab("forgotPassword")}
+        >
+          password
+        </ChangeTab>
         ?
       </Message>
 
       <Message>
         New to breadit ?{" "}
-        <>
-          {changeTab ? (
-            <ChangeTab type="button" onClick={() => changeTab("signUp")}>
-              Sign up
-            </ChangeTab>
-          ) : (
-            <ChangeTab as={Link} to="/entry/signup">
-              Sign up
-            </ChangeTab>
-          )}
-        </>
+        <ChangeTab type="button" onClick={() => setCurrentTab("signUp")}>
+          Sign up
+        </ChangeTab>
       </Message>
     </>
   );
 }
-
-SignIn.propTypes = {
-  changeTab: PropTypes.func,
-};
-
-SignIn.defaultProps = {
-  changeTab: null,
-};
 
 export default SignIn;
 
@@ -169,6 +150,12 @@ const Button = styled.button`
     background-color: ${(props) => props.theme.accentDisabled};
     border: 1px solid ${(props) => props.theme.accentDisabled};
     cursor: disabled;
+  }
+
+  &:hover {
+    color: ${(props) => props.theme.backgroundSecondary};
+    background-color: ${(props) => props.theme.accentHover};
+    border: 1px solid ${(props) => props.theme.accentHover};
   }
 `;
 

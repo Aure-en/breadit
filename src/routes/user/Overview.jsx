@@ -115,4 +115,8 @@ const List = styled.div`
   & > *:last-child {
     margin-bottom: 0;
   }
+
+  @media all and (min-width: 992px) {
+    margin-top: 0;
+  }
 `;

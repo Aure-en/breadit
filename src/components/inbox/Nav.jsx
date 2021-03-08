@@ -97,5 +97,5 @@ const Notification = styled.span`
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-left: .75rem;
+  margin-left: 0.75rem;
 `;

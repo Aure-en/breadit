@@ -18,7 +18,7 @@ function TopSubreadits() {
 
   useEffect(() => {
     (async () => {
-      const subreadits = await getPopularSubreadits();
+      const subreadits = await getPopularSubreadits(5);
       setSubreadits(subreadits);
     })();
   }, []);
@@ -74,8 +74,11 @@ export default TopSubreadits;
 
 const Container = styled.div`
   padding: 1rem;
+  border: 1px solid ${(props) => props.theme.neutral};
   background: ${(props) => props.theme.backgroundSecondary};
+  box-shadow: 0 0 10px -5px ${(props) => props.theme.shadow};
   line-height: 1.25rem;
+  border-radius: 0.25rem;
 `;
 
 const Heading = styled.h3`
@@ -84,6 +87,8 @@ const Heading = styled.h3`
 `;
 
 const SubreaditsList = styled.ul`
+  padding: 0 0.5rem;
+
   & > li {
     margin-bottom: 1rem;
   }

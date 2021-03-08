@@ -106,6 +106,7 @@ const Container = styled(Link)`
   background: ${(props) => props.theme.backgroundSecondary};
   cursor: pointer;
   padding: 0.5rem;
+  box-shadow: 0 0 10px -5px ${(props) => props.theme.shadow};
 
   &:hover {
     border: 1px solid ${(props) => props.theme.borderHover};

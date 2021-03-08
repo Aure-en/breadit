@@ -95,7 +95,11 @@ function Images({ prevAvatar, prevBanner }) {
               <IconClose />
             </Icon>
           )}
-          {!banner && <Message>Upload <strong>Banner</strong> Image</Message>}
+          {!banner && (
+            <div>
+              Upload <strong>Banner</strong> Image
+            </div>
+          )}
         </Banner>
       </label>
     </Container>
@@ -177,7 +181,4 @@ const Avatar = styled(Image)`
 const Banner = styled(Image)`
   width: 15rem;
   height: 5rem;
-`;
-
-const Message = styled.div`
 `;

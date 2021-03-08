@@ -5,6 +5,9 @@ import useStorage from "../../hooks/useStorage";
 import useSubreadit from "../../hooks/useSubreadit";
 import useSubreaditSettings from "../../hooks/useSubreaditSettings";
 
+// Icons
+import { ReactComponent as IconClose } from "../../assets/icons/general/icon-x.svg";
+
 function SubreaditSettings({ match }) {
   const [subreadit, setSubreadit] = useState();
   const [icon, setIcon] = useState();
@@ -46,12 +49,16 @@ function SubreaditSettings({ match }) {
       <Container>
         {subreadit && (
           <form onSubmit={handleSubmit}>
-            <Heading>b/{subreaditName} Settings</Heading>
+            <Heading>
+b/{subreadit.name_sensitive}
+{' '}
+Settings
+</Heading>
             <Category>General Settings</Category>
 
             <Setting>
               <SettingType>Name</SettingType>
-              <div>{subreadit.name}</div>
+              <div>{subreadit.name_sensitive}</div>
             </Setting>
 
             <Setting>
@@ -61,7 +68,8 @@ function SubreaditSettings({ match }) {
                   id="description"
                   name="description"
                   value={description}
-                  onChange={(e) => setDescription(e.target.value)} />
+                  onChange={(e) => setDescription(e.target.value)}
+                />
               </label>
             </Setting>
 
@@ -69,13 +77,14 @@ function SubreaditSettings({ match }) {
               <SettingType>Rules</SettingType>
               {rules.map((rule, index) => {
                 return (
-                  <React.Fragment key={rule}>
-                    <div>{index + 1}</div>
+                  <Rule key={rule}>
                     <label htmlFor="rules">
-                      <Textarea
+                      <Input
+                        type="text"
                         id="rules"
                         name="rules"
                         value={rules[index]}
+                        placeholder={`Rule ${index + 1}`}
                         onChange={(e) =>
                           setRules((prev) => {
                             const rules = [...prev];
@@ -84,29 +93,29 @@ function SubreaditSettings({ match }) {
                           })}
                       />
                     </label>
-                    <Button
+                    <IconButton
                       type="button"
                       onClick={() => {
-                        setRules(prevRules => {
+                        setRules((prevRules) => {
                           const rules = [...prevRules];
                           rules.splice(index, 1);
                           return rules;
                         });
                       }}
                     >
-                      x
-                    </Button>
-                  </React.Fragment>
+                      <IconClose />
+                    </IconButton>
+                  </Rule>
                 );
               })}
-              <Button
+              <RuleButton
                 type="button"
                 onClick={() => {
                   setRules([...rules, ""]);
                 }}
               >
                 Add a rule
-              </Button>
+              </RuleButton>
             </Setting>
 
             <Category>Appearance</Category>
@@ -114,45 +123,47 @@ function SubreaditSettings({ match }) {
             <Setting>
               <SettingType>Icon and banner image</SettingType>
               <Message>Images must be .png or .jpg format</Message>
-              <ImageInput
-                type="file"
-                id="Icon"
-                name="Icon"
-                accept="image/png, image/jpeg, image/jpg"
-                onChange={async (e) => {
-                  if (e.target.files.length > 0) {
-                    const iconUrl = await uploadSubreaditImage(
-                      subreadit.id,
-                      e.target.files[0]
-                    );
-                    setIcon(iconUrl);
-                  }
-                }}
-              />
-              <label htmlFor="Icon">
-                <Icon src={icon} alt="Current Icon" />
-              </label>
+              <Images>
+                <ImageInput
+                  type="file"
+                  id="Icon"
+                  name="Icon"
+                  accept="image/png, image/jpeg, image/jpg"
+                  onChange={async (e) => {
+                    if (e.target.files.length > 0) {
+                      const iconUrl = await uploadSubreaditImage(
+                        subreadit.id,
+                        e.target.files[0]
+                      );
+                      setIcon(iconUrl);
+                    }
+                  }}
+                />
+                <label htmlFor="Icon">
+                  <Icon src={icon} alt="Current Icon" />
+                </label>
 
-              <ImageInput
-                type="file"
-                id="banner"
-                name="banner"
-                accept="image/png, image/jpeg, image/jpg"
-                onChange={async (e) => {
-                  if (e.target.files.length > 0) {
-                    const bannerUrl = await uploadSubreaditImage(
-                      subreadit.id,
-                      e.target.files[0]
-                    );
-                    setBanner(bannerUrl);
-                  }
-                }}
-              />
-              <label htmlFor="banner">
-                <Banner src={banner} alt="Current banner" />
-              </label>
+                <ImageInput
+                  type="file"
+                  id="banner"
+                  name="banner"
+                  accept="image/png, image/jpeg, image/jpg"
+                  onChange={async (e) => {
+                    if (e.target.files.length > 0) {
+                      const bannerUrl = await uploadSubreaditImage(
+                        subreadit.id,
+                        e.target.files[0]
+                      );
+                      setBanner(bannerUrl);
+                    }
+                  }}
+                />
+                <label htmlFor="banner">
+                  <Banner src={banner} alt="Current banner" />
+                </label>
+              </Images>
             </Setting>
-            <Button type="submit">Save Changes</Button>
+            <ButtonFilled type="submit">Save Changes</ButtonFilled>
           </form>
         )}
       </Container>
@@ -170,20 +181,12 @@ SubreaditSettings.propTypes = {
 
 export default SubreaditSettings;
 
-const colors = {
-  primary: "black",
-  secondary: "grey",
-  accent: "red",
-  disabled: "blue",
-  background: "white",
-  overlay: "rgba(0, 0, 0, .8)",
-};
-
 const Wrapper = styled.div`
   display: flex;
   justify-content: center;
   padding: 3rem;
   flex: 1;
+  background: ${(props) => props.theme.backgroundSecondary};
 `;
 
 const Container = styled.div`
@@ -203,8 +206,8 @@ const Category = styled.h2`
   font-size: 0.75rem;
   text-transform: uppercase;
   line-height: 1.5rem;
-  color: ${colors.secondary};
-  border-bottom: 1px solid ${colors.secondary};
+  color: ${(props) => props.theme.secondary};
+  border-bottom: 1px solid ${(props) => props.theme.secondary};
 `;
 
 const Setting = styled.div`
@@ -219,21 +222,87 @@ const SettingType = styled.h3`
 
 const Message = styled.div`
   font-size: 0.75rem;
-  color: ${colors.secondary};
+  color: ${(props) => props.theme.secondary};
   margin-bottom: 0.5rem;
 `;
 
 const Textarea = styled.textarea`
   width: 100%;
+  min-height: 8rem;
+  border: 1px solid ${(props) => props.theme.secondary};
+  padding: .5rem;
+  box-sizing: border-box;
+
+  &:focus {
+    outline: none;
+    border: 1px solid ${(props) => props.theme.accent}
+  }
+`;
+
+const IconButton = styled.button`
+  color: ${(props) => props.theme.secondary};
+
+  &:hover {
+    color: ${(props) => props.theme.backgroundQuaternary};
+  }
+`;
+
+const RuleButton = styled.button`
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  color: ${(props) => props.theme.accent};
+
+  &:hover {
+    color: ${(props) => props.theme.accentHover};
+  }
 `;
 
 const Button = styled.button`
-  border: 1px solid ${colors.accent};
-  color: ${colors.accent};
+  display: block;
+  border: 1px solid ${(props) => props.theme.accent};
+  color: ${(props) => props.theme.accent};
   border-radius: 5rem;
   padding: 0.45rem 1.25rem;
   font-weight: 500;
   align-self: center;
+  text-align: center;
+`;
+
+const ButtonFilled = styled(Button)`
+  color: ${(props) => props.theme.backgroundSecondary};
+  background-color: ${(props) => props.theme.accent};
+  border: 1px solid ${(props) => props.theme.accent};
+  margin-left: auto;
+`;
+
+const Images = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-top: 1rem;
+  font-size: 0.75rem;
+  color: ${(props) => props.theme.secondary};
+
+  @media all and (min-width: 400px) {
+    flex-direction: row;
+  }
+
+  & > label {
+    margin-bottom: 2rem;
+
+    @media all and (min-width: 400px) {
+      margin-right: 2rem;
+      margin-bottom: 0;
+    }
+  }
+
+  & > label:last-child {
+    margin-bottom: 0;
+
+    @media all and (min-width: 400px) {
+      margin-right: 0;
+    }
+  }
 `;
 
 const ImageInput = styled.input`
@@ -252,4 +321,29 @@ const Banner = styled.img`
   height: 5rem;
   border-radius: 5px;
   cursor: pointer;
+`;
+
+const Rule = styled.div`
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  grid-gap: 1rem;
+`;
+
+const Input = styled.input`
+  padding: 0.75rem;
+  border-radius: 3px;
+  border: 1px solid ${(props) => props.theme.secondary};
+  width: 100%;
+
+  &:focus {
+    outline: none;
+    border: 1px solid ${(props) => props.theme.accent};
+  }
+
+  &::placeholder {
+    text-transform: uppercase;
+    font-weight: 500;
+    font-size: 0.75rem;
+  }
 `;

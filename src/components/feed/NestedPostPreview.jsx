@@ -29,7 +29,7 @@ function NestedPostPreview({ postId }) {
     (async () => {
       const post = await getPost(postId);
       setPost(post.data());
-      const subreadit = await getSubreaditById(post.data().subreadit);
+      const subreadit = await getSubreaditById(post.data().subreadit.id);
       setSubreadit(subreadit.data());
       const comments = await getCommentsNumber(postId);
       setCommentsNumber(comments);
@@ -76,13 +76,13 @@ function NestedPostPreview({ postId }) {
                 u/
                 {post.author.name}
               </Link>
-{" "}
+              {" "}
               <Link to={`/b/${subreadit.name}/${postId}`}>
                 {formatDistanceStrict(
                   new Date(post.date.seconds * 1000),
                   new Date()
                 )}
-{" "}
+                {" "}
                 ago
               </Link>
             </Informations>
@@ -98,10 +98,10 @@ function NestedPostPreview({ postId }) {
               {post.type === "link" && renderLink(post.content, post.title)}
             </>
             <Informations>
-              <Link to={`/b/${subreadit.name}/${postId}`}>{votes} points</Link>
+              <Link to={`/b/${subreadit.name}/${postId}`}>{votes} point{votes > 1 && "s"}</Link>
               <span> • </span>
               <Link to={`/b/${subreadit.name}/${postId}`}>
-                {commentsNumber} comments
+                {commentsNumber} comment{commentsNumber > 1 && "s"}
               </Link>
             </Informations>
           </Container>
@@ -135,7 +135,7 @@ const Informations = styled.div`
   display: flex;
   font-size: 0.75rem;
   color: ${(props) => props.theme.secondary};
-  padding: 0.5rem;
+  padding: 0.5rem 0 0 0.5rem;
 
   & > * {
     margin-right: 0.25rem;
@@ -149,7 +149,7 @@ const Informations = styled.div`
 const Title = styled.h3`
   font-size: 0.875rem;
   font-weight: 500;
-  padding: 0 0.5rem 0.5rem 0.5rem;
+  padding-left: 0.5rem;
 `;
 
 const ImageContainer = styled.div`

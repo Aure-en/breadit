@@ -2,9 +2,9 @@ import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../../contexts/AuthContext";
+import { useEntry } from "../../../contexts/EntryContext";
 import useDropdown from "../../../hooks/useDropdown";
 import useUser from "../../../hooks/useUser";
-import Entry from "../../entry/Entry";
 
 // Icons
 import { ReactComponent as IconUser } from "../../../assets/icons/header/icon-user.svg";
@@ -15,10 +15,10 @@ import { ReactComponent as IconLogIn } from "../../../assets/icons/header/icon-l
 
 function UserDropdown() {
   const { currentUser, signOut } = useAuth();
+  const { openSignUp } = useEntry();
   const dropdownRef = useRef();
   const { isDropdownOpen, setIsDropdownOpen } = useDropdown(dropdownRef);
   const { getUser, getKarma } = useUser();
-  const [isEntryModalOpen, setIsEntryModalOpen] = useState(false);
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -101,7 +101,7 @@ function UserDropdown() {
                 type="button"
                 onClick={() => {
                   setIsDropdownOpen(false);
-                  setIsEntryModalOpen(true);
+                  openSignUp();
                 }}
               >
                 <IconLogIn />
@@ -111,8 +111,6 @@ function UserDropdown() {
           </DropdownList>
         )}
       </Dropdown>
-
-      {isEntryModalOpen && <Entry close={() => setIsEntryModalOpen(false)} />}
     </>
   );
 }

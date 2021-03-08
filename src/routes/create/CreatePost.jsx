@@ -342,7 +342,7 @@ const Dropdown = styled.div`
   position: relative;
   max-width: 20rem;
   border: 1px solid ${colors.border};
-  z-index: 10;
+  z-index: 1;
 `;
 
 const DropdownHeader = styled.button`
@@ -361,12 +361,9 @@ const DropdownList = styled.ul`
   left: 0;
   right: 0;
   background: ${colors.secondary};
-  border: 1px solid transparent;
-  outline: 1px solid ${colors.border};
   max-height: 25rem;
   overflow-y: auto;
   padding: 0.75rem 0;
-  margin: 0;
 
   & > li {
     margin: 0 0.5rem 1rem 0.5rem;

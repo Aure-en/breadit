@@ -29,7 +29,7 @@ function Nav({ username }) {
         >
           Comments
         </NavLink>
-        {currentUser.uid === username && (
+        {currentUser && currentUser.displayName === username && (
           <NavLink
             to={`/u/${username}/saved`}
             isSelected={location.pathname === `/u/${username}/saved`}

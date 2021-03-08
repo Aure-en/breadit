@@ -1,10 +1,9 @@
 import React from "react";
 import styled from "styled-components";
-import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
+import { useEntry } from "../../contexts/EntryContext";
 import useForgotPassword from "../../hooks/useForgotPassword";
 
-function ForgotPassword({ changeTab }) {
+function ForgotPassword() {
   const {
     email,
     setEmail,
@@ -12,6 +11,7 @@ function ForgotPassword({ changeTab }) {
     message,
     handleForgotPassword,
   } = useForgotPassword();
+  const { setCurrentTab } = useEntry();
 
   return (
     <>
@@ -41,40 +41,17 @@ function ForgotPassword({ changeTab }) {
       </form>
 
       <Message>
-        {changeTab ? (
-          <>
-            <ChangeTab type="button" onClick={() => changeTab("signIn")}>
-              Log In
-            </ChangeTab>
-            <span> • </span>
-            <ChangeTab type="button" onClick={() => changeTab("signUp")}>
-              Sign Up
-            </ChangeTab>
-          </>
-        ) : (
-          <>
-            <ChangeTab as={Link} to="/entry/signin">
-              Log In
-            </ChangeTab>
-            <span> • </span>
-            <ChangeTab as={Link} to="/entry/signup">
-              Sign Up
-            </ChangeTab>
-          </>
-        )}
+        <ChangeTab type="button" onClick={() => setCurrentTab("signIn")}>
+          Log In
+        </ChangeTab>
+        <span> • </span>
+        <ChangeTab type="button" onClick={() => setCurrentTab("signUp")}>
+          Sign Up
+        </ChangeTab>
       </Message>
     </>
   );
 }
-
-ForgotPassword.propTypes = {
-  changeTab: PropTypes.func,
-};
-
-ForgotPassword.defaultProps = {
-  changeTab: null,
-};
-
 export default ForgotPassword;
 
 const Field = styled.div`
@@ -143,6 +120,12 @@ const Button = styled.button`
     background-color: ${(props) => props.theme.accentDisabled};
     border: 1px solid ${(props) => props.theme.accentDisabled};
     cursor: disabled;
+  }
+
+  &:hover {
+    color: ${(props) => props.theme.backgroundSecondary};
+    background-color: ${(props) => props.theme.accentHover};
+    border: 1px solid ${(props) => props.theme.accentHover};
   }
 `;
 

@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import Modal from "react-modal";
 import { Link } from "react-router-dom";
 import formatDistanceStrict from "date-fns/formatDistanceStrict";
 import { useAuth } from "../../../contexts/AuthContext";
-import Entry from "../../entry/Entry";
 import Vote from "../../content/shared/Vote";
 import Buttons from "./Buttons";
 
@@ -15,7 +13,6 @@ import { ReactComponent as IconLink } from "../../../assets/icons/general/icon-l
 
 function Post({ author, id, title, subreadit, type, content, date }) {
   const { currentUser } = useAuth();
-  const [isEntryOpen, setIsEntryOpen] = useState(false);
   const [isHidden, setIsHidden] = useState(false);
 
   return (
@@ -59,13 +56,6 @@ function Post({ author, id, title, subreadit, type, content, date }) {
               user={currentUser}
               hide={() => setIsHidden(true)}
             />
-
-            <EntryModal
-              isOpen={isEntryOpen}
-              onRequestClose={() => setIsEntryOpen(false)}
-            >
-              <Entry close={() => setIsEntryOpen(false)} />
-            </EntryModal>
           </Container>
         </Link>
       )}
@@ -162,16 +152,6 @@ const Title = styled.div`
   @media all and (min-width: 576px) {
     grid-column: 3;
   }
-`;
-
-const EntryModal = styled(Modal)`
-  width: 30rem;
-  height: 30rem;
-  border: 1px solid red;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
 `;
 
 const Information = styled.div`

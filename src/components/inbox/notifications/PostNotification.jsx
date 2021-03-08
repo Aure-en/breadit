@@ -43,9 +43,15 @@ export default PostNotification;
 PostNotification.propTypes = {
   id: PropTypes.string.isRequired,
   content: PropTypes.shape({
-    author: PropTypes.string.isRequired,
+    author: PropTypes.shape({
+      id: PropTypes.string,
+      name: PropTypes.string,
+    }),
     id: PropTypes.string.isRequired,
-    subreadit: PropTypes.string.isRequired,
+    subreadit: PropTypes.shape({
+      id: PropTypes.string,
+      name: PropTypes.string,
+    }),
     title: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired,
     content: PropTypes.oneOfType([
@@ -64,6 +70,7 @@ const Container = styled(Link)`
   background: ${(props) => props.theme.backgroundSecondary};
   cursor: pointer;
   padding: 0.5rem;
+  box-shadow: 0 0 10px -5px ${(props) => props.theme.shadow};
 
   &:hover {
     border: 1px solid ${(props) => props.theme.borderHover};

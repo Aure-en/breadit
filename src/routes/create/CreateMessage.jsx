@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 import styled from "styled-components";
 import { useAuth } from "../../contexts/AuthContext";
 import useMessage from "../../hooks/useMessage";
 import useUser from "../../hooks/useUser";
 import TextEditor from "../../components/shared/TextEditor";
 
-function CreateMessage() {
+function CreateMessage({ location }) {
   const [recipient, setRecipient] = useState("");
   const [recipientError, setRecipientError] = useState("");
   const [content, setContent] = useState("");
@@ -13,6 +14,12 @@ function CreateMessage() {
   const { currentUser } = useAuth();
   const { getUserByName } = useUser();
   const { sendMessage } = useMessage();
+
+  // Automatically fills the recipient's username if
+  // the user intended to send a message to them.
+  useEffect(() => {
+    if (location.recipient) setRecipient(location.recipient);
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -91,6 +98,12 @@ function CreateMessage() {
 }
 
 export default CreateMessage;
+
+CreateMessage.propTypes = {
+  location: PropTypes.shape({
+    recipient: PropTypes.string,
+  }).isRequired,
+};
 
 const Container = styled.div`
   width: 100%;

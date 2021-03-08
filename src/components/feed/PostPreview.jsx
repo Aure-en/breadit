@@ -6,20 +6,18 @@ import redraft from "redraft";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import usePost from "../../hooks/usePost";
-import Entry from "../entry/Entry";
 import Carousel from "../content/shared/Carousel";
 import LinkPreview from "./LinkPreview";
 import { renderers } from "../shared/TextEditor";
-import "../../styles/textEditor.css";
 import Vote from "../content/shared/Vote";
 import Information from "../content/post/Information";
 import Buttons from "../content/post/Buttons";
+import "../../styles/textEditor.css";
 
 function PostPreview({ postId }) {
   const { currentUser } = useAuth();
   const { getPost } = usePost();
   const [post, setPost] = useState();
-  const [isEntryOpen, setIsEntryOpen] = useState(false);
   const [isHidden, setIsHidden] = useState(false);
 
   useEffect(() => {
@@ -90,8 +88,6 @@ function PostPreview({ postId }) {
                 user={currentUser}
               />
           </Container>
-
-          {isEntryOpen && <Entry close={() => setIsEntryOpen(false)} />}
         </>
       )}
     </>
@@ -108,6 +104,7 @@ const Container = styled.article`
   grid-template: min-content auto / min-content 1fr;
   border: 1px solid ${(props) => props.theme.neutral};
   background: ${(props) => props.theme.backgroundSecondary};
+  box-shadow: 0 0 10px -5px ${(props) => props.theme.shadow};
 
   &:hover {
     border: 1px solid ${(props) => props.theme.borderHover};
@@ -180,7 +177,7 @@ const StyledButtons = styled(Buttons)`
     grid-row: 2;
     grid-column: 2 / -1;
   }
-  padding-left: 1rem;
+  padding-left: 0.25rem;
 `;
 
 const StyledInformation = styled(Information)`

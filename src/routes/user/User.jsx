@@ -50,6 +50,8 @@ User.propTypes = {
 export default User;
 
 const Container = styled.div`
+  display: flex;
+  flex-direction: column;
   flex: 1;
   width: 100vw;
   max-width: 100%;
@@ -57,15 +59,25 @@ const Container = styled.div`
   @media all and (min-width: 992px) {
     display: grid;
     grid-template: auto 1fr / 1fr repeat(2, auto) 1fr;
-    grid-column-gap: 3rem;
+    grid-column-gap: 2vw;
     grid-row-gap: 1rem;
     align-items: start;
+  }
+
+  @media all and (min-width: 1005px) {
+    grid-column-gap: 3vw;
   }
 `;
 
 const Content = styled.div`
+  align-self: center;
+
   @media all and (min-width: 576px) {
     max-width: 40rem;
     grid-column: 2;
+  }
+
+  @media all and (min-width: 992px) {
+    align-self: initial;
   }
 `;
