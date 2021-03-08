@@ -26,6 +26,7 @@ const Header = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin: 0 1rem;
 `;
 
 const StyledLink = styled(Link)`

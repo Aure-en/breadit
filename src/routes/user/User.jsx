@@ -31,7 +31,11 @@ function User({ match }) {
             path={`${match.path}/comments`}
             render={() => <Comments username={match.params.username} />}
           />
-          <Route exact path={`${match.path}/saved`} component={Saved} />
+          <Route
+            exact
+            path={`${match.path}/saved`}
+            render={() => <Saved username={match.params.username} />}
+          />
         </Switch>
       </Content>
     </Container>
@@ -53,7 +57,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1;
-  width: 100vw;
+  width: calc(100vw - 16px);
   max-width: 100%;
 
   @media all and (min-width: 992px) {
@@ -70,11 +74,10 @@ const Container = styled.div`
 `;
 
 const Content = styled.div`
-  align-self: center;
-
-  @media all and (min-width: 576px) {
+  @media all and (min-width: 40rem) {
     max-width: 40rem;
     grid-column: 2;
+    align-self: center;
   }
 
   @media all and (min-width: 992px) {

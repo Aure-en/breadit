@@ -14,6 +14,7 @@ import { ReactComponent as IconUser } from "../../../assets/icons/header/icon-us
 import { ReactComponent as IconFeed } from "../../../assets/icons/header/icon-feed.svg";
 import { ReactComponent as IconInbox } from "../../../assets/icons/header/icon-inbox.svg";
 import { ReactComponent as IconSaved } from "../../../assets/icons/header/icon-saved.svg";
+import { ReactComponent as IconPost } from "../../../assets/icons/header/icon-post.svg";
 import { BREADIT_ICON } from "../../../utils/const";
 
 function Header() {
@@ -28,6 +29,9 @@ function Header() {
     <Container>
       <Logo src={BREADIT_ICON} alt="Breadit Icon" />
       <Brand>Breadit</Brand>
+      <Link to="/submit">
+        <IconPost />
+      </Link>
       <Dropdown ref={dropdownRef}>
         <DropdownHeader
           isDropdownOpen={isDropdownOpen}
@@ -92,7 +96,7 @@ export default Header;
 
 const Container = styled.header`
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: auto 1fr repeat(2, auto);
   align-items: center;
   background: ${(props) => props.theme.backgroundQuaternary};
   z-index: 15;

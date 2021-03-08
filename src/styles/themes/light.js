@@ -1,11 +1,14 @@
 export const colors = {
   primary: "rgba(0, 0, 0)", // Main text (headings, etc)
   secondary: "rgba(128, 127, 126)", // Small text (informations, buttons)
+  tertiary: "rgba(84, 84, 84)",
 
-  backgroundPrimary: "rgba(255, 234, 205, .7)", // App background
+  backgroundPrimary: "rgba(255, 240, 219)", // App background
   backgroundSecondary: "rgba(255, 255, 255)", // Posts, comments background
   backgroundTertiary: "rgb(255, 248, 242)", // Vote, hover background
   backgroundQuaternary: "rgb(93, 70, 63)", // Header
+
+  backgroundPrimaryHover: "rgba(251, 224, 200)",
 
   overlay: "rgb(107, 69, 56, .2)", // Modals overlay
   overlaySecondary: "rgb(105, 84, 76, .5)",
@@ -17,7 +20,11 @@ export const colors = {
   accent: "rgba(103, 188, 194)", // Buttons, notifications...
   accentHover: "rgba(111, 207, 214)",
   accentDisabled: "rgba(173, 221, 224)",
-  accentSoft: "rgba(103, 188, 194, .25)",
+  accentSoft: "rgba(103, 188, 194, .15)",
+
+  accentSecondary: "rgb(179, 72, 54)",
+  accentSecondaryHover: "rgb(162, 53, 35)",
+  accentSecondaryDisabled: "rgb(222, 188, 171)",
 
   disabled: "rgba(209, 189, 171)", // Disabled buttons
 
@@ -26,7 +33,7 @@ export const colors = {
 
   border: "rgba(128, 127, 126, .25)",
   borderHover: "rgba(209, 163, 155)",
-  borderSecondary: "rgba(214, 148, 126)",
+  borderSecondary: "rgb(242,234,230)",
 
   upvote: "rgba(191, 104, 104)", // Upvote arrow
   neutral: "rgb(209, 163, 155, .5)", // No vote arrow

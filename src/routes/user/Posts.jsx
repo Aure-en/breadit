@@ -10,7 +10,7 @@ import Sort from "../../components/sort/Sort";
 import SortDropdown from "../../components/sort/SortDropdown";
 
 function Posts({ username }) {
-  const [posts, setPosts] = useState([]);
+  const [posts, setPosts] = useState();
   const [sort, setSort] = useState("top");
   const { getUserByName, getUserPostsByVotes, getUserPostsByDate } = useUser();
   const { getCommentsNumber } = useComment();
@@ -36,33 +36,46 @@ function Posts({ username }) {
       );
       setPosts(posts);
     })();
-  }, [sort, limit]);
+  }, [sort, limit, username]);
 
   return (
-    <Container>
-      {windowSize.width > 992 ? (
-        <Sort setSort={setSort} sort={sort} />
-      ) : (
-        <SortDropdown setSort={setSort} sort={sort} />
+    <>
+      {posts && (
+        <Container>
+          {posts.length > 0 ? (
+            <>
+              {windowSize.width > 992 ? (
+                <Sort setSort={setSort} sort={sort} />
+              ) : (
+                <SortDropdown setSort={setSort} sort={sort} />
+              )}
+              <PostList ref={postsRef}>
+                {posts.map((post) => {
+                  return (
+                    <Post
+                      key={post.id}
+                      author={post.author}
+                      id={post.id}
+                      subreadit={post.subreadit}
+                      type={post.type}
+                      title={post.title}
+                      content={post.content}
+                      date={post.date}
+                      comments={post.comments}
+                    />
+                  );
+                })}
+              </PostList>
+            </>
+          ) : (
+            <Empty>
+              <h4>Nothing to see here.</h4>
+              {username} hasn't posted anything yet.
+            </Empty>
+          )}
+        </Container>
       )}
-      <PostList ref={postsRef}>
-        {posts.map((post) => {
-          return (
-            <Post
-              key={post.id}
-              author={post.author}
-              id={post.id}
-              subreadit={post.subreadit}
-              type={post.type}
-              title={post.title}
-              content={post.content}
-              date={post.date}
-              comments={post.comments}
-            />
-          );
-        })}
-      </PostList>
-    </Container>
+    </>
   );
 }
 
@@ -75,10 +88,34 @@ export default Posts;
 const Container = styled.div`
   max-width: 100%;
   width: 100vw;
-  
+
   @media all and (min-width: 992px) {
     grid-row: 2;
     grid-column: 2;
+  }
+`;
+
+const Empty = styled.div`
+  margin-top: 0.5rem;
+  width: 100vw;
+  max-width: 100%;
+  background: ${(props) => props.theme.backgroundSecondary};
+  border-bottom: 1px solid ${(props) => props.theme.border};
+  border-top: 1px solid ${(props) => props.theme.border};
+  border-left: 1px solid transparent;
+  border-right: 1px solid transparent;
+  padding: 1rem;
+  border-radius: 0.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  @media all and (min-width: 768px) {
+    border: 1px solid ${(props) => props.theme.neutral};
+    align-items: center;
+    margin: 1rem;
+    max-width: 40rem;
   }
 `;
 

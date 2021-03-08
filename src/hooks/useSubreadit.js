@@ -119,7 +119,7 @@ function useSubreadit() {
   const isNameAvailable = async (name) => {
     const query = await firestore
       .collection("subreadits")
-      .where("name", "==", name)
+      .where("name", "==", name.toLowerCase())
       .get();
     return query.docs.length === 0;
   };
@@ -130,7 +130,7 @@ function useSubreadit() {
     subreaditsDocs.forEach((subreadit) =>
       subreadits.push({
         name: subreadit.data().name,
-        members: subreadit.data().members.length,
+        members: subreadit.data().members,
         id: subreadit.data().id,
         icon: subreadit.data().icon,
       })

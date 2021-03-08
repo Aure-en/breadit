@@ -55,9 +55,7 @@ function PostPreview({ postId }) {
       {!isHidden && post && (
         <>
           <Container>
-            <VoteContainer>
-              <Vote type="posts" docId={postId} user={currentUser} />
-            </VoteContainer>
+            <StyledVote type="posts" docId={postId} user={currentUser} />
             <Main to={`/b/${post.subreadit.name}/${postId}`}>
               <StyledInformation
                 subreaditId={post.subreadit.id}
@@ -102,16 +100,25 @@ export default PostPreview;
 const Container = styled.article`
   display: grid;
   grid-template: min-content auto / min-content 1fr;
-  border: 1px solid ${(props) => props.theme.neutral};
+  border-bottom: 1px solid ${(props) => props.theme.neutral};
+  border-top: 1px solid ${(props) => props.theme.neutral};
+  border-left: 1px solid transparent;
+  border-right: 1px solid transparent;
   background: ${(props) => props.theme.backgroundSecondary};
   box-shadow: 0 0 10px -5px ${(props) => props.theme.shadow};
 
   &:hover {
-    border: 1px solid ${(props) => props.theme.borderHover};
+    border-bottom: 1px solid ${(props) => props.theme.borderHover};
+    border-top: 1px solid ${(props) => props.theme.borderHover};
   }
 
   @media all and (min-width: 768px) {
     border-radius: 0.25rem;
+    border: 1px solid ${(props) => props.theme.neutral};
+
+    &:hover {
+      border: 1px solid ${(props) => props.theme.borderHover};
+    }
   }
 `;
 
@@ -160,15 +167,14 @@ const Text = styled.div`
   }
 `;
 
-const VoteContainer = styled.div`
+const StyledVote = styled(Vote)`
   display: flex;
   align-items: center;
-  justify-content: center;
 
   @media all and (min-width: 768px) {
     background: ${(props) => props.theme.backgroundTertiary};
-    display: block;
     grid-row: 1 / -1;
+    padding: 0.5rem 0.5rem 0 0.5rem;
   }
 `;
 

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
+import { useEntry } from "../../contexts/EntryContext";
 import { useSubscription } from "../../contexts/SubscriptionContext";
 import useSubreadit from "../../hooks/useSubreadit";
 
@@ -15,6 +16,7 @@ function TopSubreadits() {
   } = useSubreadit();
   const { subscriptions } = useSubscription();
   const { currentUser } = useAuth();
+  const { openSignUp } = useEntry();
 
   useEffect(() => {
     (async () => {
@@ -46,7 +48,11 @@ function TopSubreadits() {
                   {!subscriptions.includes(subreadit.id) ? (
                     <ButtonFilled
                       type="button"
-                      onClick={() => joinSubreadit(currentUser.uid, subreadit)}
+                      onClick={() =>
+                        currentUser
+                          ? joinSubreadit(currentUser.uid, subreadit)
+                          : openSignUp()
+                      }
                     >
                       Join
                     </ButtonFilled>

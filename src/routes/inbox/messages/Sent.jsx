@@ -20,21 +20,34 @@ function Sent() {
   }, [limit]);
 
   return (
-    <List ref={listRef}>
-      {messages.map((message) => {
-        return (
-          <Message
-            key={message.id}
-            id={message.id}
-            sender={message.sender}
-            recipient={message.recipient}
-            content={message.content}
-            date={message.date}
-            isSent
-          />
-        );
-      })}
-    </List>
+    <>
+      {messages && (
+        <>
+          {messages.length > 0 ? (
+            <List ref={listRef}>
+              {messages.map((message) => {
+                return (
+                  <Message
+                    key={message.id}
+                    id={message.id}
+                    sender={message.sender}
+                    recipient={message.recipient}
+                    content={message.content}
+                    date={message.date}
+                    isSent
+                  />
+                );
+              })}
+            </List>
+          ) : (
+            <Empty>
+              <h4>Nothing to see here.</h4>
+              Send a message to see it displayed here
+            </Empty>
+          )}
+        </>
+      )}
+    </>
   );
 }
 
@@ -51,5 +64,29 @@ const List = styled.div`
 
   & > *:last-child {
     margin-bottom: 0;
+  }
+`;
+
+const Empty = styled.div`
+  margin-top: 0.5rem;
+  width: 100vw;
+  max-width: 100%;
+  background: ${(props) => props.theme.backgroundSecondary};
+  border-bottom: 1px solid ${(props) => props.theme.border};
+  border-top: 1px solid ${(props) => props.theme.border};
+  border-left: 1px solid transparent;
+  border-right: 1px solid transparent;
+  padding: 1rem;
+  border-radius: 0.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  @media all and (min-width: 768px) {
+    border: 1px solid ${(props) => props.theme.neutral};
+    align-items: center;
+    margin: 1rem;
+    max-width: 40rem;
   }
 `;

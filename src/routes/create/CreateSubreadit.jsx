@@ -14,7 +14,7 @@ function CreateSubreadit() {
   const { createSubreadit, isNameAvailable } = useSubreadit();
   const history = useHistory();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setNameError("");
     setDescriptionError("");
@@ -26,7 +26,13 @@ function CreateSubreadit() {
       return;
     }
 
-    if (!isNameAvailable(name)) {
+    if (!name.match(/^[a-zA-Z0-9_]+$/)) {
+      setNameError("Make sure your Community Name follows all the formatting rules.");
+      return;
+    }
+
+    const availability = await isNameAvailable(name);
+    if (!availability) {
       setNameError("This Community Name is already taken.");
       return;
     }
@@ -48,13 +54,14 @@ function CreateSubreadit() {
   };
 
   return (
-    <div>
+    <Container>
       <h3>Create a Subreadit</h3>
       <Form onSubmit={handleSubmit}>
         <Field>
           <Label htmlFor="name">Name</Label>
           <Message>
-            Community names including capitalization cannot be changed.
+            Community names including capitalization cannot be changed. <br />
+            Names cannot have spaces and can only includes letters, numbers and "_".
           </Message>
 
           <Input
@@ -85,24 +92,79 @@ function CreateSubreadit() {
         <Button type="submit">Create Community</Button>
         <Message>{message}</Message>
       </Form>
-    </div>
+    </Container>
   );
 }
 
 export default CreateSubreadit;
 
-const Form = styled.form``;
+const Container = styled.div`
+  width: 100%;
+  max-width: 40rem;
+  margin: 3rem 0;
+`;
 
-const Field = styled.div``;
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  background: ${(props) => props.theme.backgroundSecondary};
+  margin-top: 1rem;
+  padding: 1rem;
+  border-radius: 5px;
+  box-shadow: 0 0 10px -5px ${(props) => props.theme.neutral};
+`;
 
-const Label = styled.label``;
+const Field = styled.div`
+  margin-bottom: 1rem;
+`;
 
-const Input = styled.input``;
+const Label = styled.label`
+  font-weight: 500;
+  color: ${(props) => props.theme.accentSecondary};
+`;
 
-const Textarea = styled.textarea``;
+const Input = styled.input`
+  width: 100%;
+  border: 1px solid ${(props) => props.theme.borderSecondary};
+  padding: 0.5rem;
+  border-radius: 5px;
 
-const Message = styled.div``;
+  &:focus {
+    outline: none;
+    border: 1px solid ${(props) => props.theme.borderHover};
+  }
+`;
 
-const Error = styled(Message)``;
+const Textarea = styled.textarea`
+  width: 100%;
+  border: 1px solid ${(props) => props.theme.borderSecondary};
+  padding: 0.5rem;
+  border-radius: 5px;
 
-const Button = styled.button``;
+  &:focus {
+    outline: none;
+    border: 1px solid ${(props) => props.theme.borderHover};
+  }
+`;
+
+const Message = styled.div`
+  position: relative;
+  font-size: 0.75rem;
+  color: ${(props) => props.theme.secondary};
+  line-height: 0.85rem;
+  margin-bottom: 0.5rem;
+`;
+
+const Error = styled(Message)`
+  color: ${(props) => props.theme.error};
+`;
+
+const Button = styled.button`
+  align-self: flex-end;
+  border-radius: 5rem;
+  padding: 0.45rem 1.25rem;
+  font-weight: 500;
+  color: ${(props) => props.theme.backgroundSecondary};
+  background: ${(props) => props.theme.accentSecondary};
+  border: 1px solid transparent;
+`;

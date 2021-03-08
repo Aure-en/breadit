@@ -8,7 +8,7 @@ import useVote from "../../../hooks/useVote";
 import { ReactComponent as IconUp } from "../../../assets/icons/general/icon-upvote.svg";
 import { ReactComponent as IconDown } from "../../../assets/icons/general/icon-downvote.svg";
 
-function Vote({ type, docId, user }) {
+function Vote({ type, docId, user, className }) {
   const { openSignUp } = useEntry();
   const { vote, votes, handleUpvote, handleDownvote } = useVote(
     type,
@@ -17,7 +17,7 @@ function Vote({ type, docId, user }) {
   );
 
   return (
-    <Container appearance={type}>
+    <Container appearance={type} className={className}>
       <Button
         type="button"
         isUpvoted={vote === 1}
@@ -51,10 +51,12 @@ Vote.propTypes = {
   user: PropTypes.shape({
     uid: PropTypes.string,
   }),
+  className: PropTypes.string,
 };
 
 Vote.defaultProps = {
   user: null,
+  className: "",
 };
 
 const Container = styled.div`
@@ -78,7 +80,7 @@ const Container = styled.div`
     flex-direction: column;
     align-items: center;
     font-weight: 600;
-    padding: 0.5rem 0.5rem 0 0.5rem;
+    margin-right: 0.5rem;
   }`}
 `;
 

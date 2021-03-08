@@ -15,7 +15,7 @@ function SignIn() {
     message,
     handleSignIn,
   } = useSignIn();
-  const { setCurrentTab } = useEntry();
+  const { setCurrentTab, closeEntry } = useEntry();
 
   return (
     <>
@@ -27,6 +27,7 @@ function SignIn() {
         onSubmit={(e) => {
           e.preventDefault();
           handleSignIn();
+          setTimeout(() => closeEntry(), 1500);
         }}
       >
         <Field>

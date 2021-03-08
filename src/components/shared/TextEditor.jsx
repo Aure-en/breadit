@@ -535,15 +535,6 @@ export const renderers = {
 
 export default TextEditor;
 
-const colors = {
-  primary: "black",
-  secondary: "rgb(179, 72, 54)",
-  background: "rgb(255, 255, 255)",
-  buttons: "rgb(241, 236, 230)",
-  hover: "rgb(235, 215, 199)",
-  border: "rgb(242, 234, 230)",
-};
-
 const Wrapper = styled.div`
   display: flex;
   flex-direction: ${(props) => (props.isPost ? "column" : "column-reverse")};
@@ -583,16 +574,16 @@ const Button = styled.button`
   align-items: center;
   justify-content: center;
   border-radius: 3px;
-  background: ${(props) => props.active && colors.hover};
+  color: ${(props) => !props.active && props.theme.tertiary};
 
   &:hover {
-    background: ${colors.hover};
+    background: ${(props) => props.theme.backgroundPrimaryHover};
   }
 `;
 
 const LinkBox = styled.div`
   position: absolute;
-  background: ${colors.buttons};
+  background: ${(props) => props.theme.backgroundPrimary};
   padding: 1rem;
   border-radius: 5px;
   top: ${(props) => props.selection && `calc(${props.selection.top}px + 1rem)`};
@@ -603,7 +594,7 @@ const LinkBox = styled.div`
   &:before {
     content: "";
     border: 7px solid transparent;
-    border-bottom: 10px solid ${colors.buttons};
+    border-bottom: 10px solid ${(props) => props.theme.backgroundPrimary};
     z-index: 3;
     position: absolute;
     top: calc(-0.75rem - 5px);
@@ -631,13 +622,13 @@ const LinkToUser = styled(Link)`
 `;
 
 const Input = styled.input`
-  border: 1px solid ${colors.border};
+  border: 1px solid ${(props) => props.theme.borderSecondary};
   padding: 0.5rem;
   border-radius: 5px;
   margin-bottom: 0.5rem;
 
   &:focus {
     outline: none;
-    border: 1px solid ${colors.primary};
+    border: 1px solid ${(props) => props.theme.borderHover};
   }
 `;

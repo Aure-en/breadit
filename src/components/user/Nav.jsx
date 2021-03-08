@@ -47,6 +47,7 @@ export default Nav;
 const Wrapper = styled.div`
   width: 100%;
   background: ${(props) => props.theme.backgroundSecondary};
+  border-bottom: 1px solid ${(props) => props.theme.accentSoft};
 
   @media all and (min-width: 992px) {
     grid-row: 1;

@@ -9,7 +9,7 @@ import PostNotification from "../../components/inbox/notifications/PostNotificat
 import CommentNotification from "../../components/inbox/notifications/CommentNotification";
 
 function Notifications() {
-  const [notifications, setNotifications] = useState([]);
+  const [notifications, setNotifications] = useState();
   const { currentUser } = useAuth();
   const {
     getNotifications,
@@ -66,28 +66,39 @@ function Notifications() {
   }, []);
 
   return (
-    <div>
-      <List ref={listRef}>
-        {notifications.map((notification) => {
-          return notification.document.type === "post" ? (
-            <PostNotification
-              key={notification.id}
-              id={notification.id}
-              content={notification.content}
-            />
+    <>
+      {notifications && (
+        <>
+          {notifications.length > 0 ? (
+            <List ref={listRef}>
+              {notifications.map((notification) => {
+                return notification.document.type === "post" ? (
+                  <PostNotification
+                    key={notification.id}
+                    id={notification.id}
+                    content={notification.content}
+                  />
+                ) : (
+                  <CommentNotification
+                    key={notification.id}
+                    id={notification.id}
+                    type={notification.type}
+                    date={notification.date}
+                    content={notification.content}
+                    post={notification.post}
+                  />
+                );
+              })}
+            </List>
           ) : (
-            <CommentNotification
-              key={notification.id}
-              id={notification.id}
-              type={notification.type}
-              date={notification.date}
-              content={notification.content}
-              post={notification.post}
-            />
-          );
-        })}
-      </List>
-    </div>
+            <Empty>
+              <h4>Nothing to see here.</h4>
+              You will be notified if someone interacts with you.
+            </Empty>
+          )}
+        </>
+      )}
+    </>
   );
 }
 
@@ -105,5 +116,29 @@ const List = styled.div`
 
   & > *:last-child {
     margin-bottom: 0;
+  }
+`;
+
+const Empty = styled.div`
+  margin-top: 0.5rem;
+  width: 100vw;
+  max-width: 100%;
+  background: ${(props) => props.theme.backgroundSecondary};
+  border-bottom: 1px solid ${(props) => props.theme.border};
+  border-top: 1px solid ${(props) => props.theme.border};
+  border-left: 1px solid transparent;
+  border-right: 1px solid transparent;
+  padding: 1rem;
+  border-radius: 0.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  @media all and (min-width: 768px) {
+    border: 1px solid ${(props) => props.theme.neutral};
+    align-items: center;
+    margin: 1rem;
+    max-width: 40rem;
   }
 `;

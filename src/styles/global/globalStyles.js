@@ -1,8 +1,12 @@
 import { createGlobalStyle } from "styled-components";
 
 const GlobalStyles = createGlobalStyle`
-  body {
+
+  * {
     box-sizing: border-box;
+  }
+
+  body {
     font-family: 'IBM Plex Sans', 'Noto Sans JP', 'IBM Plex Mono', sans-serif;
     font-size: .875rem;
     background: ${({ theme }) => theme.backgroundPrimary};
@@ -42,14 +46,6 @@ const GlobalStyles = createGlobalStyle`
     font-size: 1.125rem;
     margin: 0.25rem 0;
   }
-
-  input[type="text"],
-  input[type="email"],
-  input[type="password"],
-  textarea {
-    box-sizing: border-box;
-  }
-
 `;
 
 export default GlobalStyles;

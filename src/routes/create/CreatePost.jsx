@@ -135,7 +135,7 @@ function CreatePost() {
                         alt={subreadit.name}
                       />
                       <div>
-                        <Bold>b/{subreadit.name}</Bold>
+                        <div>b/{subreadit.name}</div>
                         <Small>
                           {subreadit.members} member
                           {subreadit.members !== 1 && "s"}
@@ -175,21 +175,23 @@ function CreatePost() {
           </Tabs>
           <Form onSubmit={handleSubmit}>
             <Field>
-              <label htmlFor="title">
-                <Input
-                  type="text"
-                  value={title}
-                  id="title"
-                  name="title"
-                  onChange={(e) => {
-                    e.target.value.length > 300
-                      ? setTitle(e.target.value.slice(0, 300))
-                      : setTitle(e.target.value);
-                  }}
-                  placeholder="Title"
-                />
-              </label>
-              <TitleLength>{title.length}/300</TitleLength>
+              <Title>
+                <label htmlFor="title">
+                  <Input
+                    type="text"
+                    value={title}
+                    id="title"
+                    name="title"
+                    onChange={(e) => {
+                      e.target.value.length > 300
+                        ? setTitle(e.target.value.slice(0, 300))
+                        : setTitle(e.target.value);
+                    }}
+                    placeholder="Title"
+                  />
+                </label>
+                <TitleLength>{title.length}/300</TitleLength>
+              </Title>
             </Field>
 
             {type === "post" && (
@@ -255,6 +257,7 @@ function CreatePost() {
                     placeholder="Url"
                   />
                 </label>
+                <MessageError>{linkError}</MessageError>
               </Field>
             )}
 
@@ -287,14 +290,6 @@ function CreatePost() {
 
 export default CreatePost;
 
-const colors = {
-  primary: "rgb(179, 72, 54)",
-  secondary: "rgb(255, 255, 255)",
-  background: "rgb(241, 236, 230)",
-  border: "rgb(242, 234, 230)",
-  disabled: "rgb(222, 188, 171)",
-};
-
 const Container = styled.div`
   width: 100%;
   max-width: 40rem;
@@ -302,9 +297,10 @@ const Container = styled.div`
 `;
 
 const Main = styled.div`
-  background: ${colors.secondary};
+  background: ${(props) => props.theme.backgroundSecondary};
   margin-top: 1rem;
   border-radius: 5px;
+  box-shadow: 0 0 10px -5px ${(props) => props.theme.neutral};
 `;
 
 const Header = styled.div`
@@ -313,21 +309,23 @@ const Header = styled.div`
 
 const Tabs = styled.div`
   display: flex;
-  border-bottom: 1px solid ${colors.border};
+  border-bottom: 1px solid ${(props) => props.theme.borderSecondary};
 `;
 
 const Tab = styled.button`
   flex: 1;
   padding: 1rem;
-  border-left: 1px solid ${colors.border};
+  border-left: 1px solid ${(props) => props.theme.borderSecondary};
   display: flex;
   align-items: center;
   justify-content: center;
   padding-right: -0.5rem;
   font-weight: ${(props) => props.isSelected && "500"};
-  color: ${(props) => props.isSelected && colors.primary};
+  color: ${(props) => props.isSelected && props.theme.accentSecondary};
   border-bottom: ${(props) =>
-    props.isSelected ? `2px solid ${colors.primary}` : "2px solid transparent"};
+    props.isSelected
+      ? `2px solid ${props.theme.accentSecondary}`
+      : "2px solid transparent"};
 
   & > *:first-child {
     margin-right: 0.5rem;
@@ -341,14 +339,15 @@ const Heading = styled.h2`
 const Dropdown = styled.div`
   position: relative;
   max-width: 20rem;
-  border: 1px solid ${colors.border};
-  z-index: 1;
+  border: 1px solid ${(props) => props.theme.borderSecondary};
+  z-index: 2;
+  box-shadow: 0 0 10px -5px ${(props) => props.theme.neutral};
 `;
 
 const DropdownHeader = styled.button`
   display: grid;
   grid-template-columns: 1fr auto;
-  background: ${colors.secondary};
+  background: ${(props) => props.theme.backgroundSecondary};
   padding: 0.75rem;
   border-radius: ${(props) => (props.isDropdownOpen ? "5px 5px 0 0" : "5px")};
   cursor: pointer;
@@ -360,10 +359,13 @@ const DropdownList = styled.ul`
   position: absolute;
   left: 0;
   right: 0;
-  background: ${colors.secondary};
+  background: ${(props) => props.theme.backgroundSecondary};
   max-height: 25rem;
   overflow-y: auto;
   padding: 0.75rem 0;
+  margin: 0;
+  border: 1px solid transparent;
+  outline: 1px solid ${(props) => props.theme.borderSecondary};
 
   & > li {
     margin: 0 0.5rem 1rem 0.5rem;
@@ -394,13 +396,9 @@ const SubreaditIcon = styled.img`
   margin-right: 0.5rem;
 `;
 
-const Bold = styled.div`
-  font-weight: 500;
-`;
-
 const Small = styled.div`
   font-size: 0.75rem;
-  color: ${colors.secondary};
+  color: ${(props) => props.theme.secondary};
 `;
 
 const Form = styled.form`
@@ -412,24 +410,44 @@ const Field = styled.div`
   margin-bottom: 1rem;
 `;
 
-const input = `
+const Input = styled.input`
+  border: none;
   width: 100%;
-  border: 1px solid ${colors.border};
+
+  &:focus {
+    outline: none;
+  }
+`;
+
+const Title = styled.div`
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-gap: 1rem;
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 5px;
+  border: 1px solid ${(props) => props.theme.borderSecondary};
+
+  &:focus-within {
+    border: 1px solid ${(props) => props.theme.borderHover};
+  }
+`;
+
+const TitleLength = styled.span`
+  font-size: 0.75rem;
+  font-weight: 500;
+`;
+
+const Textarea = styled.textarea`
+  width: 100%;
+  border: 1px solid ${(props) => props.theme.borderSecondary};
   padding: 0.5rem;
   border-radius: 5px;
 
   &:focus {
     outline: none;
-    border: 1px solid ${colors.primary};
+    border: 1px solid ${(props) => props.theme.borderHover};
   }
-`;
-
-const Input = styled.input`
-  ${input}
-`;
-
-const Textarea = styled.textarea`
-  ${input}
 `;
 
 const DropArea = styled.div`
@@ -437,8 +455,8 @@ const DropArea = styled.div`
   min-height: 200px;
   border: ${(props) =>
     props.areFilesDragged
-      ? `2px dashed ${colors.primary}`
-      : `1px dashed ${colors.border}`};
+      ? `2px dashed ${props.theme.borderHover}`
+      : `1px dashed ${props.theme.borderSecondary}`};
   ${(props) =>
     props.center &&
     `display: flex;
@@ -449,48 +467,38 @@ const DropArea = styled.div`
 
 const Preview = styled.div`
   max-width: 100%;
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  grid-gap: 1rem;
-  padding: 1rem;
-  justify-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0.5rem;
 `;
 
 const ImageContainer = styled.div`
   position: relative;
-  background: ${colors.backgroundImage};
-  border: 1px solid ${colors.disabled};
-  width: 8.4rem;
-  height: 8.4rem;
+  border: 1px solid ${(props) => props.theme.borderSecondary};
+  flex-basis: calc(25% - 1.125rem);
   display: flex;
-  align-items: center;
-  justify-content: center;
+  margin: 0.5rem;
+
+  &:before {
+    content: "";
+    display: block;
+    padding-top: 100%;
+  }
 `;
 
 const Image = styled.img`
-  max-width: 100%;
-  max-height: 100%;
-`;
-
-const TitleLength = styled.span`
   position: absolute;
-  font-size: 0.75rem;
-  font-weight: 500;
-  padding: 0.5rem;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
 `;
 
 const button = `
   border-radius: 5rem;
   padding: 0.45rem 1.25rem;
   font-weight: 500;
-`;
-
-const buttonEmpty = `
-  color: ${colors.primary};
-  border: 1px solid ${colors.primary};
 `;
 
 const Buttons = styled.div`
@@ -514,12 +522,14 @@ const DeleteButton = styled.button`
   padding: 0;
   width: 1.5rem;
   height: 1.5rem;
+  color: ${(props) => props.theme.borderSecondary};
 `;
 
 const Upload = styled.label`
-  display: inline-block;
   ${button}
-  ${buttonEmpty}
+  display: inline-block;
+  color: ${(props) => props.theme.accentSecondary};
+  border: 1px solid ${(props) => props.theme.accentSecondary};
   cursor: pointer;
   margin-left: 0.5rem;
 `;
@@ -533,9 +543,15 @@ const ButtonBool = styled(Button)`
   display: flex;
   align-items: center;
   border: 1px solid
-    ${(props) => (props.isChecked ? colors.primary : colors.disabled)};
-  color: ${(props) => (props.isChecked ? colors.secondary : colors.disabled)};
-  background: ${(props) => props.isChecked && colors.primary};
+    ${(props) =>
+      props.isChecked
+        ? props.theme.accentSecondary
+        : props.theme.accentSecondaryDisabled};
+  color: ${(props) =>
+    props.isChecked
+      ? props.theme.backgroundSecondary
+      : props.theme.accentSecondaryDisabled};
+  background: ${(props) => props.isChecked && props.theme.accentSecondary};
 
   & > *:first-child {
     margin-left: -0.5rem;
@@ -544,7 +560,17 @@ const ButtonBool = styled(Button)`
 `;
 
 const SubmitBtn = styled(Button)`
-  color: ${colors.secondary};
-  background: ${(props) => (props.disabled ? colors.disabled : colors.primary)};
+  color: ${(props) => props.theme.backgroundSecondary};
+  background: ${(props) => props.theme.accentSecondary};
   border: 1px solid transparent;
+
+  &:disabled {
+    background: ${(props) => props.accentSecondaryDisabled};
+  }
+`;
+
+const MessageError = styled.div`
+  font-size: 0.75rem;
+  color: ${(props) => props.theme.error};
+  top: -0.5rem;
 `;

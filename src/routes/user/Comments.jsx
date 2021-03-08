@@ -59,27 +59,40 @@ function Comments({ username }) {
   }, [limit, sort]);
 
   return (
-    <Container>
-      {windowSize.width > 992 ? (
-        <Sort setSort={setSort} sort={sort} />
-      ) : (
-        <SortDropdown setSort={setSort} sort={sort} />
+    <>
+      {comments && (
+        <Container>
+          {comments.length > 0 ? (
+            <>
+              {windowSize.width > 992 ? (
+                <Sort setSort={setSort} sort={sort} />
+              ) : (
+                <SortDropdown setSort={setSort} sort={sort} />
+              )}
+              <CommentsList ref={commentsRef}>
+                {comments.map((comment) => {
+                  return (
+                    <Comment
+                      key={comment.id}
+                      id={comment.id}
+                      author={comment.author}
+                      content={comment.content}
+                      date={comment.date}
+                      post={comment.post}
+                    />
+                  );
+                })}
+              </CommentsList>
+            </>
+          ) : (
+            <Empty>
+              <h4>Nothing to see here.</h4>
+              {username} hasn't commented anything yet.
+            </Empty>
+          )}
+        </Container>
       )}
-      <CommentsList ref={commentsRef}>
-        {comments.map((comment) => {
-          return (
-            <Comment
-              key={comment.id}
-              id={comment.id}
-              author={comment.author}
-              content={comment.content}
-              date={comment.date}
-              post={comment.post}
-            />
-          );
-        })}
-      </CommentsList>
-    </Container>
+    </>
   );
 }
 
@@ -108,5 +121,29 @@ const CommentsList = styled.main`
 
   & > *:last-child {
     margin-bottom: 0;
+  }
+`;
+
+const Empty = styled.div`
+  margin-top: 0.5rem;
+  width: 100vw;
+  max-width: 100%;
+  background: ${(props) => props.theme.backgroundSecondary};
+  border-bottom: 1px solid ${(props) => props.theme.border};
+  border-top: 1px solid ${(props) => props.theme.border};
+  border-left: 1px solid transparent;
+  border-right: 1px solid transparent;
+  padding: 1rem;
+  border-radius: 0.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  @media all and (min-width: 768px) {
+    border: 1px solid ${(props) => props.theme.neutral};
+    align-items: center;
+    margin: 1rem;
+    max-width: 40rem;
   }
 `;

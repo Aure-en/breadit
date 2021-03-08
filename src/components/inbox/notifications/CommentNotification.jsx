@@ -102,14 +102,26 @@ CommentNotification.defaultProps = {
 
 const Container = styled(Link)`
   display: block;
-  border: 1px solid ${(props) => props.theme.border};
+  border-bottom: 1px solid ${(props) => props.theme.border};
+  border-top: 1px solid ${(props) => props.theme.border};
+  border-left: 1px solid transparent;
+  border-right: 1px solid transparent;
   background: ${(props) => props.theme.backgroundSecondary};
   cursor: pointer;
   padding: 0.5rem;
   box-shadow: 0 0 10px -5px ${(props) => props.theme.shadow};
 
   &:hover {
-    border: 1px solid ${(props) => props.theme.borderHover};
+    border-bottom: 1px solid ${(props) => props.theme.borderHover};
+    border-top: 1px solid ${(props) => props.theme.borderHover};
+  }
+
+  @media all and (min-width: 40rem) {
+    border: 1px solid ${(props) => props.theme.border};
+
+    &:hover {
+      border: 1px solid ${(props) => props.theme.borderHover};
+    }
   }
 `;
 

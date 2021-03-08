@@ -21,7 +21,7 @@ function SignUp() {
     handleSignUp,
     message,
   } = useSignUp();
-  const { setCurrentTab } = useEntry();
+  const { setCurrentTab, closeEntry } = useEntry();
 
   return (
     <>
@@ -37,6 +37,7 @@ function SignUp() {
         onSubmit={(e) => {
           e.preventDefault();
           handleSignUp(username, email, password);
+          setTimeout(() => closeEntry(), 1500);
         }}
       >
         <Field>

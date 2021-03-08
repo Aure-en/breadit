@@ -19,7 +19,7 @@ function Profile({ username }) {
       const karma = await getKarma(user.id);
       setUser({ ...user, karma });
     })();
-  }, []);
+  }, [username]);
 
   return (
     <>
@@ -86,10 +86,6 @@ const Container = styled.aside`
     min-width: 15rem;
     box-shadow: 0 2px 3px -4px ${(props) => props.theme.shadow};
     border: 1px solid ${(props) => props.theme.border};
-
-    &:hover {
-      border: 1px solid ${(props) => props.theme.borderHover};
-    }
   }
 `;
 
@@ -111,6 +107,7 @@ const Avatar = styled.img`
   left: 50%;
   top: 2.5rem;
   transform: translateX(-50%);
+  border: 2px solid ${(props) => props.theme.backgroundSecondary};
 `;
 
 const Heading = styled.h2`

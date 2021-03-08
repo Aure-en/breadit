@@ -49,8 +49,13 @@ function Buttons({ postId, subreadit, hide, user }) {
       <Button as={Link} to={`/b/${subreadit}/${postId}`}>
         <IconComment />
         {commentsNumber}
-        {" "}Comment
-        {commentsNumber !== 1 && "s"}
+        {windowSize.width > 576 && (
+          <>
+            {" "}
+            Comment
+            {commentsNumber !== 1 && "s"}
+          </>
+        )}
       </Button>
 
       {windowSize.width > 576 ? (
@@ -59,9 +64,7 @@ function Buttons({ postId, subreadit, hide, user }) {
             type="button"
             onClick={(e) => {
               e.preventDefault();
-              currentUser ?
-              handleSave(user.uid, postId, "post") :
-              openSignUp();
+              currentUser ? handleSave(user.uid, postId, "post") : openSignUp();
             }}
           >
             {saved.includes(postId) ? <IconSaved /> : <IconSave />}
@@ -100,7 +103,10 @@ function Buttons({ postId, subreadit, hide, user }) {
         <Dropdown ref={dropdownRef}>
           <DropdownHeader
             isDropdownOpen={isDropdownOpen}
-            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+            onClick={(e) => {
+              e.preventDefault();
+              setIsDropdownOpen(!isDropdownOpen);
+            }}
           >
             <IconDots />
           </DropdownHeader>
@@ -186,17 +192,12 @@ const Container = styled.div`
   & > *:hover {
     background: ${(props) => props.theme.backgroundTertiary};
   }
-
-  & > *:first-child {
-    padding-left: 0;
-  }
-
-  & > *:last-child {
-    padding-right: 0;
-  }
 `;
 
 const Button = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 0.75rem;
   font-weight: 500;
   color: ${(props) => props.theme.secondary};
@@ -220,6 +221,9 @@ const Dropdown = styled.div`
 `;
 
 const DropdownHeader = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: ${(props) => props.theme.secondary};
 `;
 

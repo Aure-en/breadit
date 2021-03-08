@@ -143,18 +143,22 @@ const Container = styled.div`
   align-items: center;
   align-self: flex-start;
   flex: 1;
-  background: ${(props) => props.theme.backgroundSecondary};
-  max-width: 40rem;
-  margin: 1rem;
   border-radius: 5px;
-  border: 1px solid ${(props) => props.theme.border};
+  background: ${(props) => props.theme.backgroundSecondary};
+  border-bottom: 1px solid ${(props) => props.theme.border};
+  border-top: 1px solid ${(props) => props.theme.border};
+  border-left: 1px solid transparent;
+  border-right: 1px solid transparent;
 
-  @media all and (min-width: 360px) {
+  @media all and (min-width: 520px) {
     padding: 1rem;
   }
 
   @media all and (min-width: 768px) {
+    border: 1px solid ${(props) => props.theme.neutral};
     align-items: center;
+    margin: 1rem;
+    max-width: 40rem;
   }
 `;
 

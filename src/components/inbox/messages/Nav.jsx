@@ -46,7 +46,6 @@ export default Nav;
 const Dropdown = styled.div`
   position: relative;
   display: inline-block;
-  margin-left: 1rem;
   z-index: 5;
   color: ${(props) => props.theme.secondary};
   padding: 0.5rem 0;
