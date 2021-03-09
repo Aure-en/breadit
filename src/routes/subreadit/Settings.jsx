@@ -13,7 +13,13 @@ function SubreaditSettings({ match }) {
   const [icon, setIcon] = useState();
   const [banner, setBanner] = useState();
   const [description, setDescription] = useState("");
-  const [rules, setRules] = useState([""]);
+  const [rules, setRules] = useState([
+    {
+      title: "",
+      description: "",
+    },
+  ]);
+  const [message, setMessage] = useState("");
   const { getSubreaditByName } = useSubreadit();
   const {
     updateIcon,
@@ -37,11 +43,16 @@ function SubreaditSettings({ match }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (icon !== subreadit.icon) updateIcon(icon, subreadit.id);
-    if (banner !== subreadit.banner) updateBanner(banner, subreadit.id);
-    if (description !== subreadit.description)
-      updateDescription(description, subreadit.id);
-    if (rules !== subreadit.rules) updateRules(rules, subreadit.id);
+    try {
+      if (icon !== subreadit.icon) updateIcon(icon, subreadit.id);
+      if (banner !== subreadit.banner) updateBanner(banner, subreadit.id);
+      if (description !== subreadit.description)
+        updateDescription(description, subreadit.id);
+      if (rules !== subreadit.rules) updateRules(rules, subreadit.id);
+      setMessage("The subreadit settings have been updated.");
+    } catch (err) {
+      setMessage("Sorry, we were unable to save the settings.");
+    }
   };
 
   return (
@@ -50,10 +61,10 @@ function SubreaditSettings({ match }) {
         {subreadit && (
           <form onSubmit={handleSubmit}>
             <Heading>
-b/{subreadit.name_sensitive}
-{' '}
-Settings
-</Heading>
+              b/{subreadit.name_sensitive}
+              {' '}
+              Settings
+            </Heading>
             <Category>General Settings</Category>
 
             <Setting>
@@ -69,49 +80,75 @@ Settings
                   name="description"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
+                  required
                 />
               </label>
             </Setting>
 
             <Setting>
               <SettingType>Rules</SettingType>
-              {rules.map((rule, index) => {
-                return (
-                  <Rule key={rule}>
-                    <label htmlFor="rules">
-                      <Input
-                        type="text"
-                        id="rules"
-                        name="rules"
-                        value={rules[index]}
-                        placeholder={`Rule ${index + 1}`}
-                        onChange={(e) =>
-                          setRules((prev) => {
-                            const rules = [...prev];
-                            rules[index] = e.target.value;
-                            return rules;
-                          })}
-                      />
-                    </label>
-                    <IconButton
-                      type="button"
-                      onClick={() => {
-                        setRules((prevRules) => {
-                          const rules = [...prevRules];
-                          rules.splice(index, 1);
-                          return rules;
-                        });
-                      }}
-                    >
-                      <IconClose />
-                    </IconButton>
-                  </Rule>
-                );
-              })}
+              <Rules>
+                {rules.map((rule, index) => {
+                  return (
+                    <div key={index}>
+                      <Row>
+                        <RuleNumber>
+                          Rule
+                          {index + 1}
+                        </RuleNumber>
+                        <IconButton
+                          type="button"
+                          onClick={() => {
+                            setRules((prevRules) => {
+                              const rules = [...prevRules];
+                              rules.splice(index, 1);
+                              return rules;
+                            });
+                          }}
+                        >
+                          <IconClose />
+                        </IconButton>
+                      </Row>
+                      <label htmlFor={`title-${index}`}>
+                        <Input
+                          type="text"
+                          id={`title-${index}`}
+                          name={`title-${index}`}
+                          value={rules[index].title}
+                          placeholder="Title"
+                          onChange={(e) =>
+                            setRules((prev) => {
+                              const rules = [...prev];
+                              rules[index].title = e.target.value;
+                              return rules;
+                            })}
+                          required
+                        />
+                      </label>
+
+                      <label htmlFor={`description-${index}`}>
+                        <Textarea
+                          type="text"
+                          id={`description-${index}`}
+                          name={`description-${index}`}
+                          value={rules[index].description}
+                          placeholder="Description (optional)"
+                          onChange={(e) =>
+                            setRules((prev) => {
+                              const rules = [...prev];
+                              rules[index].description = e.target.value;
+                              return rules;
+                            })}
+                        />
+                      </label>
+                    </div>
+                  );
+                })}
+              </Rules>
               <RuleButton
                 type="button"
                 onClick={() => {
-                  setRules([...rules, ""]);
+                  setRules([...rules, { title: "", description: "" }]);
                 }}
               >
                 Add a rule
@@ -166,6 +203,12 @@ Settings
             <ButtonFilled type="submit">Save Changes</ButtonFilled>
           </form>
         )}
+        {message === "The subreadit settings have been updated." && (
+          <MessageSuccess>{message}</MessageSuccess>
+        )}
+        {message === "Sorry, we were unable to save the settings." && (
+          <MessageError>{message}</MessageError>
+        )}
       </Container>
     </Wrapper>
   );
@@ -211,6 +254,8 @@ const Category = styled.h2`
 `;
 
 const Setting = styled.div`
+  display: flex;
+  flex-direction: column;
   margin: 2rem 0;
 `;
 
@@ -230,12 +275,12 @@ const Textarea = styled.textarea`
   width: 100%;
   min-height: 8rem;
   border: 1px solid ${(props) => props.theme.secondary};
-  padding: .5rem;
+  padding: 0.5rem;
   box-sizing: border-box;
 
   &:focus {
     outline: none;
-    border: 1px solid ${(props) => props.theme.accent}
+    border: 1px solid ${(props) => props.theme.accent};
   }
 `;
 
@@ -252,6 +297,7 @@ const RuleButton = styled.button`
   font-weight: 500;
   text-transform: uppercase;
   color: ${(props) => props.theme.accent};
+  align-self: flex-end;
 
   &:hover {
     color: ${(props) => props.theme.accentHover};
@@ -321,29 +367,50 @@ const Banner = styled.img`
   height: 5rem;
   border-radius: 5px;
   cursor: pointer;
+  object-fit: cover;
 `;
 
-const Rule = styled.div`
-  display: grid;
-  grid-template-columns: 1fr auto;
-  align-items: center;
-  grid-gap: 1rem;
+const Row = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+const Rules = styled.div`
+  & > * {
+    margin-bottom: 1.5rem;
+  }
+
+  & > *:last-child {
+    margin-bottom: 0;
+  }
+`;
+
+const RuleNumber = styled.div`
+  text-transform: uppercase;
+  font-weight: 500;
+  font-size: 0.75rem;
+  color: ${(props) => props.theme.accent};
 `;
 
 const Input = styled.input`
   padding: 0.75rem;
-  border-radius: 3px;
   border: 1px solid ${(props) => props.theme.secondary};
   width: 100%;
+  margin-bottom: 1rem;
 
   &:focus {
     outline: none;
     border: 1px solid ${(props) => props.theme.accent};
   }
+`;
 
-  &::placeholder {
-    text-transform: uppercase;
-    font-weight: 500;
-    font-size: 0.75rem;
-  }
+const MessageSuccess = styled.div`
+  font-size: 0.75rem;
+  color: ${(props) => props.theme.success};
+  margin-bottom: 0.5rem;
+`;
+
+const MessageError = styled(MessageSuccess)`
+  color: ${(props) => props.theme.error};
+  top: -0.5rem;
 `;

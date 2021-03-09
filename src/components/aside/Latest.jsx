@@ -1,5 +1,5 @@
-import { formatDistanceStrict } from "date-fns";
 import React, { useState, useEffect } from "react";
+import { formatDistanceStrict } from "date-fns";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import usePost from "../../hooks/usePost";

@@ -2,21 +2,15 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
-import { useEntry } from "../../contexts/EntryContext";
 import { useSubscription } from "../../contexts/SubscriptionContext";
 import useSubreadit from "../../hooks/useSubreadit";
+import JoinButton from "../subreadit/JoinButton";
 
 function TopSubreadits() {
   const [subreadits, setSubreadits] = useState([]);
-  const [isHovered, setIsHovered] = useState();
-  const {
-    getPopularSubreadits,
-    joinSubreadit,
-    leaveSubreadit,
-  } = useSubreadit();
+  const { getPopularSubreadits } = useSubreadit();
   const { subscriptions } = useSubscription();
   const { currentUser } = useAuth();
-  const { openSignUp } = useEntry();
 
   useEffect(() => {
     (async () => {
@@ -45,27 +39,11 @@ function TopSubreadits() {
                       {subreadit.members !== 1 && "s"}
                     </Small>
                   </div>
-                  {!subscriptions.includes(subreadit.id) ? (
-                    <ButtonFilled
-                      type="button"
-                      onClick={() =>
-                        currentUser
-                          ? joinSubreadit(currentUser.uid, subreadit)
-                          : openSignUp()
-                      }
-                    >
-                      Join
-                    </ButtonFilled>
-                  ) : (
-                    <Button
-                      type="button"
-                      onMouseEnter={() => setIsHovered(subreadit.id)}
-                      onMouseLeave={() => setIsHovered("")}
-                      onClick={() => leaveSubreadit(currentUser.uid, subreadit)}
-                    >
-                      {isHovered === subreadit.id ? "Leave" : "Joined"}
-                    </Button>
-                  )}
+                  <JoinButton
+                    subscriptions={subscriptions}
+                    subreadit={subreadit}
+                    user={currentUser}
+                  />
                 </Subreadit>
               );
             })}
@@ -129,25 +107,4 @@ const Name = styled(Link)`
 const Small = styled.div`
   font-size: 0.75rem;
   color: ${(props) => props.theme.secondary};
-`;
-
-const Button = styled.button`
-  border: 1px solid ${(props) => props.theme.accent};
-  color: ${(props) => props.theme.accent};
-  border-radius: 5rem;
-  padding: 0.45rem 1.25rem;
-  font-weight: 500;
-  align-self: center;
-  width: 6rem;
-`;
-
-const ButtonFilled = styled(Button)`
-  color: ${(props) => props.theme.backgroundSecondary};
-  background-color: ${(props) => props.theme.accent};
-  border: 1px solid ${(props) => props.theme.accent};
-
-  &::disabled {
-    background-color: ${(props) => props.theme.disabled};
-    border: 1px solid ${(props) => props.theme.disabled};
-  }
 `;

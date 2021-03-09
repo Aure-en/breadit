@@ -7,7 +7,7 @@ import useWindowSize from "../../hooks/useWindowSize";
 import PostPreview from "../../components/feed/PostPreview";
 import TopSubreadits from "../../components/aside/Top";
 import Create from "../../components/aside/Create";
-import LatestPosts from "../../components/aside/LatestPosts";
+import Latest from "../../components/aside/Latest";
 import Footer from "../../components/aside/Footer";
 import Sort from "../../components/sort/Sort";
 
@@ -51,7 +51,7 @@ function Main() {
         <Aside>
           <TopSubreadits />
           <Create />
-          <LatestPosts />
+          <Latest />
           <Footer />
         </Aside>
       )}
