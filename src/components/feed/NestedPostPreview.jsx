@@ -122,7 +122,7 @@ const Container = styled.article`
   margin: 1rem 0.5rem;
 
   &:hover {
-    border: 1px solid ${(props) => props.theme.border};
+    border: 1px solid ${(props) => props.theme.borderHover};
   }
 `;
 

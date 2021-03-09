@@ -70,7 +70,7 @@ const Button = styled.button`
   border: 1px solid ${(props) => props.theme.accent};
   color: ${(props) => props.theme.accent};
   border-radius: 5rem;
-  padding: 0.45rem 1.25rem;
+  padding: 0.35rem 1.25rem;
   font-weight: 500;
   text-align: center;
 

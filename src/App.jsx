@@ -73,7 +73,11 @@ function App() {
                         component={CreateMessage}
                       />
                       <Route exact path="/b/all" component={All} />
-                      <Route exact path="/b/:subreadit" component={Subreadit} />
+                      <Route
+                        exact
+                        path={["/b/:subreadit", "/b/:subreadit/about"]}
+                        component={Subreadit}
+                      />
                       <Route
                         exact
                         path="/b/:subreadit/settings"

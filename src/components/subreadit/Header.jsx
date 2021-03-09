@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 import { useAuth } from "../../contexts/AuthContext";
 import { useSubscription } from "../../contexts/SubscriptionContext";
+import useWindowSize from "../../hooks/useWindowSize";
 import useSubreadit from "../../hooks/useSubreadit";
 import JoinButton from "./JoinButton";
 
@@ -11,6 +12,7 @@ function Header({ subreaditName }) {
   const { subscriptions } = useSubscription();
   const [subreadit, setSubreadit] = useState();
   const { getSubreaditByName } = useSubreadit();
+  const { windowSize } = useWindowSize();
 
   useEffect(() => {
     if (!subreaditName) return;
@@ -28,7 +30,10 @@ function Header({ subreaditName }) {
             <Icon src={subreadit.icon} alt={`${subreadit.name}'s icon`} />
             <Informations>
               <div>
-                <Heading>{subreadit.name_sensitive}</Heading>
+                <Heading>
+                  {windowSize.width > 768 && "Welcome to b/"}
+                  {subreadit.name_sensitive}
+                </Heading>
                 <Subheading>
                   b/
                   {subreadit.name}
@@ -60,6 +65,8 @@ const Container = styled.div`
       ${(props) => props.theme.backgroundSecondary} 50%
     ),
     url(${(props) => props.banner});
+  background-repeat: no-repeat;
+  background-size: cover;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -69,8 +76,10 @@ const Content = styled.div`
   padding: 4rem 0 1rem 0;
   width: 90%;
 
-  @media all and (min-width: 768px) {
+  @media all and (min-width: 992px) {
     display: flex;
+    width: 63rem;
+    align-items: flex-end;
   }
 `;
 
@@ -79,17 +88,24 @@ const Icon = styled.img`
   height: 5.5rem;
   border: 3px solid ${(props) => props.theme.backgroundSecondary};
   border-radius: 50%;
+  margin-right: 1rem;
 `;
 
 const Informations = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex: 1;
 `;
 
 const Heading = styled.h2`
   line-height: 1rem;
   margin-bottom: 0.25rem;
+
+  @media all and (min-width: 992px) {
+    font-size: 1.75rem;
+    line-height: 2rem;
+  }
 `;
 
 const Subheading = styled.div`

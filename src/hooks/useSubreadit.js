@@ -55,7 +55,7 @@ function useSubreadit() {
       },
       members: 0,
       date: new Date(),
-      rules: [""],
+      rules: [],
       id: ref.id,
     });
     joinSubreadit(user.uid, {

@@ -9,7 +9,7 @@ import { ReactComponent as IconPost } from "../../assets/icons/general/icon-post
 import { ReactComponent as IconLink } from "../../assets/icons/general/icon-link.svg";
 
 // Loads and displays the 5 latest breadit posts.
-function LatestPosts() {
+function Latest() {
   const [posts, setPosts] = useState();
   const { getRecentPosts } = usePost();
 
@@ -57,7 +57,7 @@ function LatestPosts() {
   );
 }
 
-export default LatestPosts;
+export default Latest;
 
 const Container = styled.div`
   padding: 1rem;

@@ -46,8 +46,15 @@ function PostPreview({ postId }) {
     );
   };
 
-  const renderLink = (link, title) => {
-    return <LinkPreview link={link} title={title} />;
+  const renderLink = (link, title, subreaditName, postId) => {
+    return (
+      <LinkPreview
+        link={link}
+        title={title}
+        subreaditName={subreaditName}
+        postId={postId}
+      />
+    );
   };
 
   return (
@@ -75,16 +82,22 @@ function PostPreview({ postId }) {
                     renderText(post.content, post.subreadit.name, postId)}
                   {post.type === "image" &&
                     renderImages(post.content, post.title)}
-                  {post.type === "link" && renderLink(post.content, post.title)}
+                  {post.type === "link" &&
+                    renderLink(
+                      post.content,
+                      post.title,
+                      post.subreadit.name,
+                      postId
+                    )}
                 </>
               </Link>
             </Main>
-              <StyledButtons
-                postId={postId}
-                subreadit={post.subreadit.name}
-                hide={setIsHidden}
-                user={currentUser}
-              />
+            <StyledButtons
+              postId={postId}
+              subreadit={post.subreadit.name}
+              hide={setIsHidden}
+              user={currentUser}
+            />
           </Container>
         </>
       )}
@@ -112,7 +125,7 @@ const Container = styled.article`
     border-top: 1px solid ${(props) => props.theme.borderHover};
   }
 
-  @media all and (min-width: 768px) {
+  @media all and (min-width: 40rem) {
     border-radius: 0.25rem;
     border: 1px solid ${(props) => props.theme.neutral};
 

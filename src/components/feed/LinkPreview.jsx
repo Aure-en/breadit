@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import NestedPostPreview from "./NestedPostPreview";
 
@@ -7,7 +8,7 @@ import NestedPostPreview from "./NestedPostPreview";
 import { ReactComponent as IconExternalLink } from "../../assets/icons/general/icon-external-link.svg";
 import { ReactComponent as IconLink } from "../../assets/icons/general/icon-link-med.svg";
 
-function LinkPreview({ link, title }) {
+function LinkPreview({ link, title, subreaditName, postId }) {
   const youtubeRegex = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
   const breaditRegex = /^.*(breadit-296d8.web.app)\/b\/.+\/([a-zA-Z0-9]+)/;
 
@@ -17,15 +18,17 @@ function LinkPreview({ link, title }) {
     return match && match[2].length === 11 ? match[2] : null;
   };
 
-  const renderYoutubeLink = (link, title) => {
+  const renderYoutubeLink = (link, title, subreaditName, postId) => {
     const videoId = getYoutubeId(link);
     return (
       <>
-        <Title>{title}</Title>
-        <Link href={link}>
+        <Link to={`/b/${subreaditName}/${postId}`}>
+          <Title>{title}</Title>
+        </Link>
+        <ExternalLink href={link}>
           <Url>{link}</Url>
           <IconExternalLink />
-        </Link>
+        </ExternalLink>
         <VideoWrapper>
           <iframe
             title={link}
@@ -41,12 +44,14 @@ function LinkPreview({ link, title }) {
   };
 
   // Breadit links
-  const renderBreaditLink = (url, title) => {
+  const renderBreaditLink = (url, title, subreaditName, postId) => {
     const match = url.match(breaditRegex);
     if (match) {
       return (
         <>
-          <Title>{title}</Title>
+          <Link to={`/b/${subreaditName}/${postId}`}>
+            <Title>{title}</Title>
+          </Link>
           <NestedPostPreview postId={match[2]} />
         </>
       );
@@ -57,20 +62,22 @@ function LinkPreview({ link, title }) {
   return (
     <div>
       {/* Youtube links are detected through a regex and the video is embed. */}
-      {link.match(youtubeRegex) && renderYoutubeLink(link, title)}
+      {link.match(youtubeRegex) && renderYoutubeLink(link, title, subreaditName, postId)}
 
       {/* Breadit posts are detected through a regex and a post preview is displayed */}
-      {link.match(breaditRegex) && renderBreaditLink(link, title)}
+      {link.match(breaditRegex) && renderBreaditLink(link, title, subreaditName, postId)}
 
       {/* Any other type of link is only displayed along the title */}
       {!link.match(youtubeRegex) && !link.match(breaditRegex) && (
         <Row>
           <div>
-            <Title>{title}</Title>
-            <Link href={link}>
+            <Link to={`/b/${subreaditName}/${postId}`}>
+              <Title>{title}</Title>
+            </Link>
+            <ExternalLink href={link}>
               <Url>{link}</Url>
               <IconExternalLink />
-            </Link>
+            </ExternalLink>
           </div>
           <a href={link}>
             <Preview>
@@ -88,11 +95,19 @@ function LinkPreview({ link, title }) {
 
 LinkPreview.propTypes = {
   link: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  subreaditName: PropTypes.string,
+  postId: PropTypes.string,
+};
+
+LinkPreview.defaultProps = {
+  subreaditName: "",
+  postId: "",
 };
 
 export default LinkPreview;
 
-const Link = styled.a`
+const ExternalLink = styled.a`
   color: ${(props) => props.theme.accent};
   font-size: 0.75rem;
   display: flex;

@@ -72,8 +72,6 @@ const Container = styled.aside`
   position: relative;
   display: flex;
   flex-direction: column;
-  width: 20rem;
-  padding-bottom: 1rem;
   background: ${(props) => props.theme.backgroundSecondary};
   line-height: 1.25rem;
   border-radius: 0.25rem;
