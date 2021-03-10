@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import useScroll from "../../hooks/useScroll";
 import useSubreadit from "../../hooks/useSubreadit";
 import useWindowSize from "../../hooks/useWindowSize";
-import PostPreview from "../../components/feed/PostPreview";
+import PostPreview from "../../components/feed/preview/PostPreview";
 import Sort from "../../components/sort/Sort";
 import SortDropdown from "../../components/sort/SortDropdown";
 import About from "../../components/subreadit/aside/About";

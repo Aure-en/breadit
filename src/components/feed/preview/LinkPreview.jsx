@@ -5,8 +5,8 @@ import styled from "styled-components";
 import NestedPostPreview from "./NestedPostPreview";
 
 // Icons
-import { ReactComponent as IconExternalLink } from "../../assets/icons/general/icon-external-link.svg";
-import { ReactComponent as IconLink } from "../../assets/icons/general/icon-link-med.svg";
+import { ReactComponent as IconExternalLink } from "../../../assets/icons/general/icon-external-link.svg";
+import { ReactComponent as IconLink } from "../../../assets/icons/general/icon-link-med.svg";
 
 function LinkPreview({ link, title, subreaditName, postId }) {
   const youtubeRegex = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;

@@ -4,15 +4,15 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 import redraft from "redraft";
 import { Link } from "react-router-dom";
-import { useAuth } from "../../contexts/AuthContext";
-import usePost from "../../hooks/usePost";
-import Carousel from "../content/shared/Carousel";
+import { useAuth } from "../../../contexts/AuthContext";
+import usePost from "../../../hooks/usePost";
+import Carousel from "../../content/shared/Carousel";
 import LinkPreview from "./LinkPreview";
-import { renderers } from "../shared/TextEditor";
-import Vote from "../content/shared/Vote";
-import Information from "../content/post/Information";
-import Buttons from "../content/post/Buttons";
-import "../../styles/textEditor.css";
+import { renderers } from "../../shared/TextEditor";
+import Vote from "../../content/shared/Vote";
+import Information from "../../content/post/Information";
+import Buttons from "../../content/post/Buttons";
+import "../../../styles/textEditor.css";
 
 function PostPreview({ postId }) {
   const { currentUser } = useAuth();

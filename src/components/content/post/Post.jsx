@@ -7,7 +7,7 @@ import { useHistory } from "react-router-dom";
 import { useAuth } from "../../../contexts/AuthContext";
 import usePost from "../../../hooks/usePost";
 import Carousel from "../shared/Carousel";
-import LinkPreview from "../../feed/LinkPreview";
+import LinkPreview from "../../feed/preview/LinkPreview";
 import TextEditor, { renderers } from "../../shared/TextEditor";
 import Vote from "../shared/Vote";
 import Information from "./Information";

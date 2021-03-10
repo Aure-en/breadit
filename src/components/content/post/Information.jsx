@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import formatDistanceStrict from "date-fns/formatDistanceStrict";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useSubscription } from "../../../contexts/SubscriptionContext";
 import useSubreadit from "../../../hooks/useSubreadit";
 import useWindowSize from "../../../hooks/useWindowSize";
@@ -15,6 +15,7 @@ function Information({ subreaditId, author, date, user, className }) {
   const { windowSize } = useWindowSize();
   const { subscriptions } = useSubscription();
   const { getSubreaditById, joinSubreadit } = useSubreadit();
+  const location = useLocation();
 
   useEffect(() => {
     (async () => {
@@ -27,10 +28,7 @@ function Information({ subreaditId, author, date, user, className }) {
     <>
       {subreadit && (
         <Container className={className}>
-          <Icon
-            src={subreadit.icon}
-            alt={`${subreadit.name}'s Icon`}
-          />
+          <Icon src={subreadit.icon} alt={`${subreadit.name}'s Icon`} />
           <SubreaditLink to={`/b/${subreadit.name}`}>
             b/
             {subreadit.name}
@@ -47,16 +45,20 @@ function Information({ subreaditId, author, date, user, className }) {
             {formatDistanceStrict(new Date(date.seconds * 1000), new Date())}{" "}
             ago
           </Details>
-          {!subscriptions.includes(subreadit.id) && (
-            <Button
-              onClick={(e) => {
-                e.preventDefault();
-                joinSubreadit(user.uid, subreadit);
-              }}
-            >
-              <IconPlus />
-              {windowSize.width > 768 && "Join"}
-            </Button>
+          {(location.pathname === "/b/all" || location.pathname === "/") && (
+            <>
+              {!subscriptions.includes(subreadit.id) && (
+                <Button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    joinSubreadit(user.uid, subreadit);
+                  }}
+                >
+                  <IconPlus />
+                  {windowSize.width > 768 && "Join"}
+                </Button>
+              )}
+            </>
           )}
         </Container>
       )}

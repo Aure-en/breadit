@@ -82,7 +82,7 @@ const Content = styled.div`
   }
 
   @media all and (min-width: 576px) {
-    margin-left: 12rem;
+    margin-left: 10rem;
     max-width: 15rem;
   }
 `;

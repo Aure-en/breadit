@@ -12,6 +12,7 @@ export function useSubscription() {
 export function SubscriptionProvider({ children }) {
   const { currentUser } = useAuth();
   const [subscriptions, setSubscriptions] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const getSubscriptions = async (userId) => {
     const subscriptionsArr = [];
@@ -27,6 +28,7 @@ export function SubscriptionProvider({ children }) {
   useEffect(() => {
     if (!currentUser) {
       setSubscriptions([]);
+      setLoading(false);
       return;
     }
     const unsubscribe = firestore
@@ -36,6 +38,7 @@ export function SubscriptionProvider({ children }) {
       .onSnapshot(async () => {
         const subscriptions = await getSubscriptions(currentUser.uid);
         setSubscriptions(subscriptions);
+        setLoading(false);
       });
     return unsubscribe;
   }, [currentUser]);
@@ -50,7 +53,7 @@ export function SubscriptionProvider({ children }) {
 
   return (
     <SubscriptionContext.Provider value={value}>
-      {children}
+      {!loading && children}
     </SubscriptionContext.Provider>
   );
 }

@@ -5,15 +5,15 @@ import PropTypes from "prop-types";
 import formatDistanceStrict from "date-fns/formatDistanceStrict";
 import { Link } from "react-router-dom";
 import redraft from "redraft";
-import { useAuth } from "../../contexts/AuthContext";
-import useSubreadit from "../../hooks/useSubreadit";
-import useComment from "../../hooks/useComment";
-import usePost from "../../hooks/usePost";
-import useVote from "../../hooks/useVote";
-import Carousel from "../content/shared/Carousel";
+import { useAuth } from "../../../contexts/AuthContext";
+import useSubreadit from "../../../hooks/useSubreadit";
+import useComment from "../../../hooks/useComment";
+import usePost from "../../../hooks/usePost";
+import useVote from "../../../hooks/useVote";
+import Carousel from "../../content/shared/Carousel";
 import LinkPreview from "./LinkPreview";
-import { renderers } from "../shared/TextEditor";
-import "../../styles/textEditor.css";
+import { renderers } from "../../shared/TextEditor";
+import "../../../styles/textEditor.css";
 
 function NestedPostPreview({ postId }) {
   const { currentUser } = useAuth();
