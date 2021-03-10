@@ -17,9 +17,9 @@ function Information({ subreaditName }) {
   }, [subreaditName]);
 
   return (
-    <Container>
+    <>
       {subreadit && (
-        <>
+        <Container>
           <About
             description={subreadit.description}
             members={subreadit.members}
@@ -28,9 +28,9 @@ function Information({ subreaditName }) {
           {subreadit.rules.length > 0 && (
             <Rules rules={subreadit.rules} subreaditName={subreaditName} />
           )}
-        </>
+        </Container>
       )}
-    </Container>
+    </>
   );
 }
 
@@ -42,6 +42,8 @@ Information.propTypes = {
 
 const Container = styled.div`
   margin-top: 1rem;
+  width: 100%;
+  max-width: 20rem;
 
   & > * {
     margin-bottom: 1rem;

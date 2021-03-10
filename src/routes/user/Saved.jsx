@@ -13,6 +13,7 @@ function Saved({ username }) {
   const { getPost } = usePost();
   const { getComment, getCommentsNumber } = useComment();
   const [docs, setDocs] = useState();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!currentUser.uid) return;
@@ -27,7 +28,7 @@ function Saved({ username }) {
             return { ...post.data(), comments, doc: "post" };
           }
           const comment = await getComment(doc.id);
-          const post = await getPost(comment.data().post);
+          const post = await getPost(comment.data().post.id);
           return {
             ...comment.data(),
             post: {
@@ -41,6 +42,7 @@ function Saved({ username }) {
         })
       );
       setDocs(saved);
+      setLoading(false);
     })();
   }, [saved, username]);
 
@@ -92,10 +94,15 @@ function Saved({ username }) {
   return (
     <>
       {currentUser.displayName !== username && renderWrongUser()}
-
-      {currentUser.displayName === username &&
-        docs &&
-        renderCorrectUser()}
+      <>
+        {!loading && (
+          <>
+            {currentUser.displayName === username &&
+              docs &&
+              renderCorrectUser()}
+          </>
+        )}
+      </>
     </>
   );
 }

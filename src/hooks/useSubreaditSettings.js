@@ -1,9 +1,6 @@
 import { firestore } from "../firebase";
-import useStorage from "./useStorage";
 
 function useSubreaditSettings() {
-  const { uploadSubreaditImage } = useStorage();
-
   const updateIcon = async (image, subreaditId) => {
     firestore.collection("subreadits").doc(subreaditId).update({
       icon: image,

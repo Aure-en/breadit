@@ -1,44 +1,70 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { Switch, Route } from "react-router-dom";
+import useUser from "../../hooks/useUser";
 import Overview from "./Overview";
 import Posts from "./Posts";
 import Comments from "./Comments";
 import Saved from "./Saved";
 import Profile from "../../components/user/aside/Profile";
 import Nav from "../../components/user/Nav";
+import Nonexistent from "../../components/user/Nonexistent";
 
 function User({ match }) {
+  const [user, setUser] = useState();
+  const [loading, setLoading] = useState(true);
+  const { getUserByName } = useUser();
+
+  useEffect(() => {
+    (async () => {
+      const user = await getUserByName(match.params.username);
+      setUser(user);
+      setLoading(false);
+    })();
+  }, [match]);
+
   return (
-    <Container>
-      <Profile username={match.params.username} />
-      <Nav username={match.params.username} />
-      <Content>
-        <Switch>
-          <Route
-            exact
-            path={`${match.path}`}
-            render={() => <Overview username={match.params.username} />}
-          />
-          <Route
-            exact
-            path={`${match.path}/posts`}
-            render={() => <Posts username={match.params.username} />}
-          />
-          <Route
-            exact
-            path={`${match.path}/comments`}
-            render={() => <Comments username={match.params.username} />}
-          />
-          <Route
-            exact
-            path={`${match.path}/saved`}
-            render={() => <Saved username={match.params.username} />}
-          />
-        </Switch>
-      </Content>
-    </Container>
+    <>
+      {!loading && (
+        <>
+          {user ? (
+            <Container>
+              <Profile username={match.params.username} />
+              <Nav username={match.params.username} />
+              <Content>
+                <Switch>
+                  <Route
+                    exact
+                    path={`${match.path}`}
+                    render={() => <Overview username={match.params.username} />}
+                  />
+                  <Route
+                    exact
+                    path={`${match.path}/posts`}
+                    render={() => <Posts username={match.params.username} />}
+                  />
+                  <Route
+                    exact
+                    path={`${match.path}/comments`}
+                    render={() => <Comments username={match.params.username} />}
+                  />
+                  <Route
+                    exact
+                    path={`${match.path}/saved`}
+                    render={() => <Saved username={match.params.username} />}
+                  />
+                </Switch>
+              </Content>
+            </Container>
+          ) : (
+            <Content>
+              <Nonexistent />
+            </Content>
+          )}
+        </>
+      )}
+    </>
   );
 }
 

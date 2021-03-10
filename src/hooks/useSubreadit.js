@@ -73,7 +73,7 @@ function useSubreadit() {
       .collection("subreadits")
       .where("name", "==", name.toLowerCase())
       .get();
-    return query.docs[0].data();
+    return query.docs.length > 0 ? query.docs[0].data() : undefined;
   };
 
   const deleteSubreadit = (subreaditId) => {

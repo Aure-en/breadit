@@ -11,6 +11,7 @@ import Sort from "../../components/sort/Sort";
 
 function Comments({ username }) {
   const [comments, setComments] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [sort, setSort] = useState("top");
   const {
     getUserByName,
@@ -55,42 +56,47 @@ function Comments({ username }) {
         return { ...comment, votes };
       });
       setComments(userComments);
+      setLoading(false);
     })();
   }, [limit, sort]);
 
   return (
     <>
-      {comments && (
-        <Container>
-          {comments.length > 0 ? (
-            <>
-              {windowSize.width > 992 ? (
-                <Sort setSort={setSort} sort={sort} />
+      {!loading && (
+        <>
+          {comments && (
+            <Container>
+              {comments.length > 0 ? (
+                <>
+                  {windowSize.width > 992 ? (
+                    <Sort setSort={setSort} sort={sort} />
+                  ) : (
+                    <SortDropdown setSort={setSort} sort={sort} />
+                  )}
+                  <CommentsList ref={commentsRef}>
+                    {comments.map((comment) => {
+                      return (
+                        <Comment
+                          key={comment.id}
+                          id={comment.id}
+                          author={comment.author}
+                          content={comment.content}
+                          date={comment.date}
+                          post={comment.post}
+                        />
+                      );
+                    })}
+                  </CommentsList>
+                </>
               ) : (
-                <SortDropdown setSort={setSort} sort={sort} />
+                <Empty>
+                  <h4>Nothing to see here.</h4>
+                  {username} hasn't commented anything yet.
+                </Empty>
               )}
-              <CommentsList ref={commentsRef}>
-                {comments.map((comment) => {
-                  return (
-                    <Comment
-                      key={comment.id}
-                      id={comment.id}
-                      author={comment.author}
-                      content={comment.content}
-                      date={comment.date}
-                      post={comment.post}
-                    />
-                  );
-                })}
-              </CommentsList>
-            </>
-          ) : (
-            <Empty>
-              <h4>Nothing to see here.</h4>
-              {username} hasn't commented anything yet.
-            </Empty>
+            </Container>
           )}
-        </Container>
+        </>
       )}
     </>
   );

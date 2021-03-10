@@ -11,6 +11,7 @@ import SortDropdown from "../../components/sort/SortDropdown";
 
 function Posts({ username }) {
   const [posts, setPosts] = useState();
+  const [loading, setLoading] = useState(true);
   const [sort, setSort] = useState("top");
   const { getUserByName, getUserPostsByVotes, getUserPostsByDate } = useUser();
   const { getCommentsNumber } = useComment();
@@ -35,45 +36,50 @@ function Posts({ username }) {
         })
       );
       setPosts(posts);
+      setLoading(false);
     })();
   }, [sort, limit, username]);
 
   return (
     <>
-      {posts && (
-        <Container>
-          {posts.length > 0 ? (
-            <>
-              {windowSize.width > 992 ? (
-                <Sort setSort={setSort} sort={sort} />
+      {!loading && (
+        <>
+          {posts && (
+            <Container>
+              {posts.length > 0 ? (
+                <>
+                  {windowSize.width > 992 ? (
+                    <Sort setSort={setSort} sort={sort} />
+                  ) : (
+                    <SortDropdown setSort={setSort} sort={sort} />
+                  )}
+                  <PostList ref={postsRef}>
+                    {posts.map((post) => {
+                      return (
+                        <Post
+                          key={post.id}
+                          author={post.author}
+                          id={post.id}
+                          subreadit={post.subreadit}
+                          type={post.type}
+                          title={post.title}
+                          content={post.content}
+                          date={post.date}
+                          comments={post.comments}
+                        />
+                      );
+                    })}
+                  </PostList>
+                </>
               ) : (
-                <SortDropdown setSort={setSort} sort={sort} />
+                <Empty>
+                  <h4>Nothing to see here.</h4>
+                  {username} hasn't posted anything yet.
+                </Empty>
               )}
-              <PostList ref={postsRef}>
-                {posts.map((post) => {
-                  return (
-                    <Post
-                      key={post.id}
-                      author={post.author}
-                      id={post.id}
-                      subreadit={post.subreadit}
-                      type={post.type}
-                      title={post.title}
-                      content={post.content}
-                      date={post.date}
-                      comments={post.comments}
-                    />
-                  );
-                })}
-              </PostList>
-            </>
-          ) : (
-            <Empty>
-              <h4>Nothing to see here.</h4>
-              {username} hasn't posted anything yet.
-            </Empty>
+            </Container>
           )}
-        </Container>
+        </>
       )}
     </>
   );

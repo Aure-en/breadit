@@ -1,7 +1,8 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 import React, { useState, useEffect, useRef } from "react";
-import { useHistory } from "react-router-dom";
+import PropTypes from "prop-types";
 import styled from "styled-components";
+import { useHistory } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import usePost from "../../hooks/usePost";
 import useSubreadit from "../../hooks/useSubreadit";
@@ -19,7 +20,7 @@ import { ReactComponent as IconPlus } from "../../assets/icons/general/icon-plus
 import { ReactComponent as IconCheck } from "../../assets/icons/general/icon-check.svg";
 import { ReactComponent as IconClose } from "../../assets/icons/general/icon-x.svg";
 
-function CreatePost() {
+function CreatePost({ location }) {
   const [type, setType] = useState("post");
   const [title, setTitle] = useState("");
   const [post, setPost] = useState("");
@@ -59,6 +60,12 @@ function CreatePost() {
       const subreaditsList = await getSubreadits();
       setSubreadits(subreaditsList);
     })();
+  }, []);
+
+  // Pre-fill
+  useEffect(() => {
+    if (location.type) setType(location.type);
+    if (location.subreadit) handleChoice(location.subreadit);
   }, []);
 
   const handleSubmit = async (e) => {
@@ -289,6 +296,13 @@ function CreatePost() {
 }
 
 export default CreatePost;
+
+CreatePost.propTypes = {
+  location: PropTypes.shape({
+    type: PropTypes.string,
+    subreadit: PropTypes.string,
+  }).isRequired,
+};
 
 const Container = styled.div`
   width: 100%;

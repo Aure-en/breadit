@@ -6,6 +6,7 @@ import usePost from "../../hooks/usePost";
 import useComment from "../../hooks/useComment";
 import PostContent from "../../components/content/post/Post";
 import Comment from "../../components/content/comment/Comment";
+import Nonexistent from "../../components/content/post/Nonexistent";
 import TextEditor from "../../components/shared/TextEditor";
 import SortDropdown from "../../components/sort/SortDropdown";
 
@@ -14,6 +15,7 @@ import { ReactComponent as IconComment } from "../../assets/icons/general/icon-c
 
 function Post({ match }) {
   const { postId, subreadit } = match.params;
+  const [loading, setLoading] = useState(true);
   const [post, setPost] = useState();
   const [comments, setComments] = useState([]);
   const [comment, setComment] = useState("");
@@ -34,8 +36,9 @@ function Post({ match }) {
     (async () => {
       const post = await getPost(postId);
       setPost(post.data());
+      setLoading(false);
     })();
-  }, []);
+  }, [match]);
 
   // Load the comments
   useEffect(() => {
@@ -73,54 +76,60 @@ function Post({ match }) {
 
   return (
     <>
-      {post && (
-        <Container>
-          <PostContent postId={postId} subreadit={subreadit} />
+      {!loading && (
+        <>
+          {post ? (
+            <Container>
+              <PostContent postId={postId} subreadit={subreadit} />
 
-          <Form
-            onSubmit={(e) => {
-              e.preventDefault();
-              createComment(post, currentUser, comment);
-              textEditorRef.current.reset();
-            }}
-          >
-            <Editor>
-              <TextEditor
-                type="comment"
-                sendContent={setComment}
-                ref={textEditorRef}
-                placeholder="What are your thoughts?"
-              />
-            </Editor>
-            <Button type="submit">Comment</Button>
-          </Form>
+              <Form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  createComment(post, currentUser, comment);
+                  textEditorRef.current.reset();
+                }}
+              >
+                <Editor>
+                  <TextEditor
+                    type="comment"
+                    sendContent={setComment}
+                    ref={textEditorRef}
+                    placeholder="What are your thoughts?"
+                  />
+                </Editor>
+                <Button type="submit">Comment</Button>
+              </Form>
 
-          {comments.length === 0 ? (
-            <>
-              <NoComment>
-                <Icon>
-                  <IconComment />
-                </Icon>
-                <h4>No comments here yet.</h4>
-                Be the first to share what you think!
-              </NoComment>
-            </>
+              {comments.length === 0 ? (
+                <>
+                  <NoComment>
+                    <Icon>
+                      <IconComment />
+                    </Icon>
+                    <h4>No comments here yet.</h4>
+                    Be the first to share what you think!
+                  </NoComment>
+                </>
+              ) : (
+                <Comments>
+                  <SortDropdown setSort={setSort} sort={sort} />
+                  {comments &&
+                    comments.map((commentId) => {
+                      return (
+                        <StyledComment
+                          key={commentId}
+                          commentId={commentId}
+                          post={post}
+                        />
+                      );
+                    })}
+                </Comments>
+              )}
+            </Container>
           ) : (
-            <Comments>
-              <SortDropdown setSort={setSort} sort={sort} />
-              {comments &&
-                comments.map((commentId) => {
-                  return (
-                    <StyledComment
-                      key={commentId}
-                      commentId={commentId}
-                      post={post}
-                    />
-                  );
-                })}
-            </Comments>
+            <Nonexistent />
           )}
-        </Container>
+        </>
       )}
     </>
   );

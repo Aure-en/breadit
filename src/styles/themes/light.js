@@ -14,13 +14,14 @@ export const colors = {
   overlaySecondary: "rgb(105, 84, 76, .5)",
   overlayTertiary: "rgba(0, 0, 0, .5)", // Carousel
 
-  shadow: "rgba(103, 188, 194, .5)",
+  shadow: "rgba(103, 188, 194, .25)",
   shadowSecondary: "rgba(0, 0, 0, .4)", // Carousel
 
   accent: "rgba(103, 188, 194)", // Buttons, notifications...
   accentHover: "rgba(111, 207, 214)",
   accentDisabled: "rgba(173, 221, 224)",
-  accentSoft: "rgba(103, 188, 194, .15)",
+  accentSoft: "rgba(232, 245, 246)",
+  accentBackground: "rgba(245, 247, 246)",
 
   accentSecondary: "rgb(179, 72, 54)",
   accentSecondaryHover: "rgb(162, 53, 35)",
@@ -31,7 +32,7 @@ export const colors = {
   error: "rgba(168, 31, 5)",
   success: "rgba(65, 150, 156)",
 
-  border: "rgba(128, 127, 126, .25)",
+  border: "rgba(223, 223, 222)",
   borderHover: "rgba(209, 163, 155)",
   borderSecondary: "rgb(242,234,230)",
 

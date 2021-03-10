@@ -11,6 +11,7 @@ function Overview({ username }) {
   const [comments, setComments] = useState([]);
   const [posts, setPosts] = useState([]);
   const [overview, setOverview] = useState();
+  const [loading, setLoading] = useState(true);
   const { getUserByName, getUserComments, getUserPosts } = useUser();
   const { getPost } = usePost();
   const docsRef = useRef();
@@ -48,6 +49,7 @@ function Overview({ username }) {
       // Get posts
       const posts = await getUserPosts(user.id, limit);
       setPosts(posts);
+      setLoading(false);
     })();
   }, [limit, username]);
 
@@ -69,7 +71,7 @@ function Overview({ username }) {
 
   return (
     <>
-      {overview && (
+      {!loading && (
         <>
           {overview.length > 0 ? (
             <List ref={docsRef}>

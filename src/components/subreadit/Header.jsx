@@ -70,6 +70,10 @@ const Container = styled.div`
   width: 100%;
   display: flex;
   justify-content: center;
+
+  @media all and (min-width: 992px) {
+    border-bottom: 1px solid ${(props) => props.theme.border};
+  }
 `;
 
 const Content = styled.div`
