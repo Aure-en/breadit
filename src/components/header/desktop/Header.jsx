@@ -59,7 +59,7 @@ export default Header;
 
 const Container = styled.header`
   display: flex;
-  z-index: 5;
+  z-index: 10;
   background: ${(props) => props.theme.backgroundQuaternary};
 `;
 

@@ -1,11 +1,9 @@
 import firebase from "firebase";
 import { firestore } from "../firebase";
-import usePost from "./usePost";
 import useNotification from "./useNotification";
 
 function useComment() {
   const { createNotification, notifyMention } = useNotification();
-  const { getPost } = usePost();
 
   // Get a comment from an id
   const getComment = (commentId) => {

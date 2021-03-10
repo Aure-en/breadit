@@ -11,7 +11,7 @@ import TextEditor, { renderers } from "../../shared/TextEditor";
 import Vote from "../shared/Vote";
 import Information from "./Information";
 import Buttons from "./Buttons";
-import ModifyButtons from "../shared/ModifyButtons";
+import ExtraButtons from "../shared/Buttons";
 import "../../../styles/textEditor.css";
 
 function Post({ postId, subreadit }) {
@@ -109,10 +109,12 @@ function Post({ postId, subreadit }) {
                 user={currentUser}
               />
               {currentUser && currentUser.uid === post.author.id && (
-                <ModifyButtons
+                <ExtraButtons
                   canEdit={post.type === "post"}
                   onEditClick={() => setIsEditing(!isEditing)}
                   onDeleteClick={() => deletePost(postId)}
+                  copy={`${subreadit}/${postId}`}
+                  canDelete
                 />
               )}
             </ButtonsContainer>

@@ -145,4 +145,6 @@ const Button = styled.button`
 const Copy = styled.input`
   position: absolute;
   top: -9999px;
+  left: -9999px;
+  height: 0;
 `;

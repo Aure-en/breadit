@@ -9,7 +9,7 @@ import { useAuth } from "../../../contexts/AuthContext";
 import Vote from "../shared/Vote";
 import Information from "./Information";
 import Buttons from "./Buttons";
-import ModifyButtons from "../shared/ModifyButtons";
+import ExtraButtons from "../shared/Buttons";
 
 function Comment({ className, commentId, post }) {
   const [comment, setComment] = useState();
@@ -93,9 +93,11 @@ function Comment({ className, commentId, post }) {
                   <Buttons
                     user={currentUser}
                     commentId={commentId}
+                    postId={post.id}
+                    subreadit={post.subreadit.name}
                     onReplyClick={() => setIsReplying(!isReplying)}
                   />
-                  {currentUser && currentUser.uid === comment.author.id && (
+                  {/* {currentUser && currentUser.uid === comment.author.id && (
                     <ModifyButtons
                       canEdit
                       onEditClick={() => {
@@ -104,7 +106,21 @@ function Comment({ className, commentId, post }) {
                       }}
                       onDeleteClick={() => deleteComment(commentId)}
                     />
-                  )}
+                  )} */}
+                  <ExtraButtons
+                    canEdit={
+                      currentUser && currentUser.uid === comment.author.id
+                    }
+                    canDelete={
+                      currentUser && currentUser.uid === comment.author.id
+                    }
+                    onEditClick={() => {
+                      setIsEditing(true);
+                      setEdit(comment.content);
+                    }}
+                    onDeleteClick={() => deleteComment(commentId)}
+                    copy={`${post.subreadit.name}/${post.id}/${commentId}`}
+                  />
                 </ButtonsGroup>
 
                 {isReplying && (
@@ -146,6 +162,9 @@ Comment.propTypes = {
     id: PropTypes.string,
     author: PropTypes.shape({
       id: PropTypes.string,
+      name: PropTypes.string,
+    }),
+    subreadit: PropTypes.shape({
       name: PropTypes.string,
     }),
   }).isRequired,
