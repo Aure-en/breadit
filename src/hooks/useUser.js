@@ -1,4 +1,5 @@
 import { firestore } from "../firebase";
+import { BREADITOR_AVATAR, BREADITOR_BANNER } from "../utils/const";
 
 function useUser() {
   // Create the user's firestore document
@@ -8,8 +9,8 @@ function useUser() {
       username,
       // To check if username is available (no case insensitive search >:)
       username_lowercase: username.toLowerCase(),
-      avatar: "",
-      banner: "",
+      avatar: BREADITOR_AVATAR,
+      banner: BREADITOR_BANNER,
       about: "",
       subreadits: [],
       date: new Date(),

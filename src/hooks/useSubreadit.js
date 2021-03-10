@@ -1,5 +1,6 @@
 import firebase from "firebase";
 import { firestore } from "../firebase";
+import { SUBREADIT_ICON, SUBREADIT_BANNER } from "../utils/const";
 
 function useSubreadit() {
   // Add a member to the subreadit members count
@@ -44,7 +45,8 @@ function useSubreadit() {
       name: name.toLowerCase(),
       name_sensitive: name,
       description,
-      icon: "",
+      icon: SUBREADIT_ICON,
+      banner: SUBREADIT_BANNER,
       permissions: {
         delete: [user.uid],
         settings: [user.uid],
