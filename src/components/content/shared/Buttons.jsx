@@ -1,8 +1,9 @@
-import React, { useRef } from "react";
+import React, { useState, useRef } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import useDropdown from "../../../hooks/useDropdown";
 import useWindowSize from "../../../hooks/useWindowSize";
+import Delete from "./Delete";
 import { BREADIT_URL } from "../../../utils/const";
 
 // Icons
@@ -11,7 +12,7 @@ import { ReactComponent as IconEdit } from "../../../assets/icons/content/icon-e
 import { ReactComponent as IconDelete } from "../../../assets/icons/content/icon-delete.svg";
 import { ReactComponent as IconLink } from "../../../assets/icons/general/icon-link-small.svg";
 
-function Buttons({ canEdit, canDelete, onEditClick, onDeleteClick, copy }) {
+function Buttons({ canEdit, canDelete, onEdit, onDelete, copy, type }) {
   const dropdownRef = useRef();
   const copyRef = useRef();
   const { windowSize } = useWindowSize();
@@ -48,22 +49,17 @@ function Buttons({ canEdit, canDelete, onEditClick, onDeleteClick, copy }) {
                 Share
               </Choice>
               {canEdit && (
-                <Choice type="button" onClick={onEditClick}>
+                <Choice type="button" onClick={onEdit}>
                   <IconEdit />
                   Edit
                 </Choice>
               )}
               {canDelete && (
-                <Choice
-                  type="button"
-                  onClick={() => {
-                    onDeleteClick();
-                    setIsDropdownOpen(false);
-                  }}
-                >
-                  <IconDelete />
-                  Delete
-                </Choice>
+                <DeleteChoice
+                  onClick={() => setIsDropdownOpen(false)}
+                  onDelete={onDelete}
+                  type={type}
+                />
               )}
             </DropdownList>
           )}
@@ -84,17 +80,12 @@ function Buttons({ canEdit, canDelete, onEditClick, onDeleteClick, copy }) {
           </Button>
 
           {canEdit && (
-            <Button type="button" onClick={onEditClick}>
+            <Button type="button" onClick={onEdit}>
               <IconEdit />
               Edit
             </Button>
           )}
-          {canDelete && (
-            <Button type="button" onClick={onDeleteClick}>
-              <IconDelete />
-              Delete
-            </Button>
-          )}
+          {canDelete && <DeleteButton onDelete={onDelete} type={type} />}
         </Container>
       )}
 
@@ -108,21 +99,78 @@ function Buttons({ canEdit, canDelete, onEditClick, onDeleteClick, copy }) {
   );
 }
 
+function DeleteButton({ onDelete, type }) {
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
+  return (
+    <>
+      <Button type="button" onClick={() => setIsDeleteModalOpen(true)}>
+        <IconDelete />
+        Delete
+      </Button>
+      {isDeleteModalOpen && (
+        <Delete
+          closeModal={() => setIsDeleteModalOpen(false)}
+          type={type}
+          onDelete={onDelete}
+        />
+      )}
+    </>
+  );
+}
+
+function DeleteChoice({ onDelete, type }) {
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
+  return (
+    <>
+      <Choice
+        type="button"
+        onClick={() => {
+          setIsDeleteModalOpen(true);
+        }}
+      >
+        <IconDelete />
+        Delete
+      </Choice>
+      {isDeleteModalOpen && (
+        <Delete
+          closeModal={() => setIsDeleteModalOpen(false)}
+          type={type}
+          onDelete={onDelete}
+        />
+      )}
+    </>
+  );
+}
+
 export default Buttons;
 
 Buttons.propTypes = {
   canEdit: PropTypes.bool,
   canDelete: PropTypes.bool,
-  onEditClick: PropTypes.func,
-  onDeleteClick: PropTypes.func,
+  onEdit: PropTypes.func,
+  onDelete: PropTypes.func,
   copy: PropTypes.string.isRequired,
+  type: PropTypes.string,
 };
 
 Buttons.defaultProps = {
   canEdit: false,
   canDelete: false,
-  onEditClick: () => {},
-  onDeleteClick: () => {},
+  onEdit: () => {},
+  onDelete: () => {},
+  type: "post",
+};
+
+DeleteChoice.propTypes = {
+  onDelete: PropTypes.func.isRequired,
+  type: PropTypes.string.isRequired,
+};
+
+DeleteButton.propTypes = {
+  onDelete: PropTypes.func.isRequired,
+  type: PropTypes.string.isRequired,
 };
 
 const Container = styled.div`
@@ -131,6 +179,7 @@ const Container = styled.div`
   font-weight: 500;
   color: ${(props) => props.theme.secondary};
   padding: 0.5rem 0;
+  position: relative;
 
   & > * {
     display: flex;

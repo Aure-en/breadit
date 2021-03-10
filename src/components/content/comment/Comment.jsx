@@ -114,12 +114,13 @@ function Comment({ className, commentId, post }) {
                     canDelete={
                       currentUser && currentUser.uid === comment.author.id
                     }
-                    onEditClick={() => {
+                    onEdit={() => {
                       setIsEditing(true);
                       setEdit(comment.content);
                     }}
-                    onDeleteClick={() => deleteComment(commentId)}
+                    onDelete={() => deleteComment(commentId)}
                     copy={`${post.subreadit.name}/${post.id}/${commentId}`}
+                    type="comment"
                   />
                 </ButtonsGroup>
 

@@ -579,7 +579,8 @@ const SubmitBtn = styled(Button)`
   border: 1px solid transparent;
 
   &:disabled {
-    background: ${(props) => props.accentSecondaryDisabled};
+    background: ${(props) => props.theme.accentSecondaryDisabled};
+    cursor: not-allowed;
   }
 `;
 

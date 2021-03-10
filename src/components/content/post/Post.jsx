@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import redraft from "redraft";
+import { useHistory } from "react-router-dom";
 import { useAuth } from "../../../contexts/AuthContext";
 import usePost from "../../../hooks/usePost";
 import Carousel from "../shared/Carousel";
@@ -16,6 +17,7 @@ import "../../../styles/textEditor.css";
 
 function Post({ postId, subreadit }) {
   const { currentUser } = useAuth();
+  const history = useHistory();
   const { getPost, editPost, deletePost } = usePost();
   const [post, setPost] = useState();
   const [isEditing, setIsEditing] = useState(false);
@@ -111,10 +113,14 @@ function Post({ postId, subreadit }) {
               {currentUser && currentUser.uid === post.author.id && (
                 <ExtraButtons
                   canEdit={post.type === "post"}
-                  onEditClick={() => setIsEditing(!isEditing)}
-                  onDeleteClick={() => deletePost(postId)}
+                  onEdit={() => setIsEditing(!isEditing)}
+                  onDelete={() => {
+                    deletePost(postId);
+                    history.push(`/b/${subreadit}`);
+                  }}
                   copy={`${subreadit}/${postId}`}
                   canDelete
+                  type="post"
                 />
               )}
             </ButtonsContainer>

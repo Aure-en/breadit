@@ -25,7 +25,7 @@ export const colors = {
 
   accentSecondary: "rgb(179, 72, 54)",
   accentSecondaryHover: "rgb(162, 53, 35)",
-  accentSecondaryDisabled: "rgb(222, 188, 171)",
+  accentSecondaryDisabled: "rgb(232, 185, 177)",
 
   disabled: "rgba(209, 189, 171)", // Disabled buttons
 
