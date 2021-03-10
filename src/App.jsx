@@ -9,6 +9,7 @@ import { EntryProvider } from "./contexts/EntryContext";
 import { SubscriptionProvider } from "./contexts/SubscriptionContext";
 import { SaveProvider } from "./contexts/SaveContext";
 import useWindowSize from "./hooks/useWindowSize";
+import PrivateRoute from "./routes/PrivateRoute";
 import CreateSubreadit from "./routes/create/CreateSubreadit";
 import CreatePost from "./routes/create/CreatePost";
 import CreateMessage from "./routes/create/CreateMessage";
@@ -60,14 +61,22 @@ function App() {
                   <Container>
                     <Switch>
                       <Route exact path="/" component={Main} />
-                      <Route exact path="/settings" component={UserSettings} />
-                      <Route exact path="/submit" component={CreatePost} />
-                      <Route
+                      <PrivateRoute
+                        exact
+                        path="/settings"
+                        component={UserSettings}
+                      />
+                      <PrivateRoute
+                        exact
+                        path="/submit"
+                        component={CreatePost}
+                      />
+                      <PrivateRoute
                         exact
                         path="/create/subreadit"
                         component={CreateSubreadit}
                       />
-                      <Route
+                      <PrivateRoute
                         exact
                         path="/message/compose"
                         component={CreateMessage}
@@ -78,7 +87,7 @@ function App() {
                         path={["/b/:subreadit", "/b/:subreadit/about"]}
                         component={Subreadit}
                       />
-                      <Route
+                      <PrivateRoute
                         exact
                         path="/b/:subreadit/settings"
                         component={SubreaditSettings}
@@ -94,7 +103,7 @@ function App() {
                         component={Comment}
                       />
                       <Route path="/u/:username" component={User} />
-                      <Route path="/inbox" component={Inbox} />
+                      <PrivateRoute path="/inbox" component={Inbox} />
                     </Switch>
                   </Container>
                   <Entry />
