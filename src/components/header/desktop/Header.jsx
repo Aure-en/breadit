@@ -8,10 +8,11 @@ import NavDropdown from "./NavDropdown";
 import UserDropdown from "./UserDropdown";
 import LinkInbox from "./LinkInbox";
 
-// Icons
+// Assets
 import { ReactComponent as IconHome } from "../../../assets/icons/header/icon-home.svg";
 import { ReactComponent as IconFeed } from "../../../assets/icons/header/icon-feed.svg";
 import { ReactComponent as IconPost } from "../../../assets/icons/header/icon-post.svg";
+import { BREADIT_ICON, BREADIT_BRAND } from "../../../utils/const";
 
 function Header() {
   const { currentUser } = useAuth();
@@ -19,38 +20,47 @@ function Header() {
 
   return (
     <Container>
-      <div>{/* TO-DO : Add Breadit Icon */}</div>
+      <Column>
+        <Link to="/">
+          <Breadit>
+            <Logo src={BREADIT_ICON} alt="Breadit Icon" />
+            <Brand src={BREADIT_BRAND} alt="Breadit Brand" />
+          </Breadit>
+        </Link>
 
-      {currentUser && <NavDropdown />}
+        {currentUser && <NavDropdown />}
+      </Column>
 
-      <Buttons>
-        {currentUser ? (
-          <>
-            <LinkIcon to="/" data-tip="My Feed">
-              <IconHome />
-            </LinkIcon>
-            <LinkIcon to="/b/all" data-tip="All">
-              <IconFeed />
-            </LinkIcon>
-            <LinkIcon to="/submit" data-tip="Create Post">
-              <IconPost />
-            </LinkIcon>
-            <LinkInbox />
-            <ReactTooltip effect="solid" delayShow={300} />
-          </>
-        ) : (
-          <>
-            <Button type="button" onClick={openSignIn}>
-              Log In
-            </Button>
-            <ButtonFilled type="button" onClick={openSignUp}>
-              Sign Up
-            </ButtonFilled>
-          </>
-        )}
-      </Buttons>
+      <Column>
+        <Buttons>
+          {currentUser ? (
+            <>
+              <LinkIcon to="/" data-tip="My Feed">
+                <IconHome />
+              </LinkIcon>
+              <LinkIcon to="/b/all" data-tip="All">
+                <IconFeed />
+              </LinkIcon>
+              <LinkIcon to="/submit" data-tip="Create Post">
+                <IconPost />
+              </LinkIcon>
+              <LinkInbox />
+              <ReactTooltip effect="solid" delayShow={300} />
+            </>
+          ) : (
+            <>
+              <Button type="button" onClick={openSignIn}>
+                Log In
+              </Button>
+              <ButtonFilled type="button" onClick={openSignUp}>
+                Sign Up
+              </ButtonFilled>
+            </>
+          )}
+        </Buttons>
 
-      <UserDropdown />
+        <UserDropdown />
+      </Column>
     </Container>
   );
 }
@@ -59,16 +69,79 @@ export default Header;
 
 const Container = styled.header`
   display: flex;
-  z-index: 10;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 15;
   background: ${(props) => props.theme.backgroundQuaternary};
+  padding: 0.25rem 1rem;
 `;
 
-const Buttons = styled.div``;
+const Column = styled.div`
+  display: flex;
+`;
+
+const Breadit = styled.div`
+  display: flex;
+  align-items: center;
+  margin-right: 1rem;
+
+  & > *:first-child {
+    margin-right: 1rem;
+  }
+`;
+
+const Logo = styled.img`
+  width: 2rem;
+  height: 2rem;
+`;
+
+const Brand = styled.img`
+  height: 1.25rem;
+`;
+
+const Buttons = styled.div`
+  display: flex;
+  align-items: center;
+  margin-right: 1rem;
+
+  & > button:first-child {
+    margin-right: 1rem;
+  }
+`;
 
 const Button = styled.button`
-  width: 8rem;
+  border: 1px solid ${(props) => props.theme.accentTertiary};
+  color: ${(props) => props.theme.accentTertiary};
+  border-radius: 5rem;
+  padding: 0.35rem 1.25rem;
+  font-weight: 500;
+  text-align: center;
+
+  &:hover {
+    color: ${(props) => props.theme.accentTertiaryHover};
+    border: 1px solid ${(props) => props.theme.accentTertiaryHover};
+  }
 `;
 
-const ButtonFilled = styled(Button)``;
+const ButtonFilled = styled(Button)`
+  color: ${(props) => props.theme.backgroundQuaternary};
+  background-color: ${(props) => props.theme.backgroundPrimary};
+  border: 1px solid ${(props) => props.theme.backgroundPrimary};
+  opacity: 0.95;
 
-const LinkIcon = styled(Link)``;
+  &:hover {
+    color: ${(props) => props.theme.backgroundQuaternary};
+    background-color: ${(props) => props.theme.accentTertiaryHover};
+    border: 1px solid ${(props) => props.theme.accentTertiaryHover};
+    opacity: 1;
+  }
+`;
+
+const LinkIcon = styled(Link)`
+  padding: 0.15rem 0.25rem;
+  color: ${(props) => props.theme.accentTertiary};
+
+  &:hover {
+    color: ${(props) => props.theme.accentTertiaryHover};
+  }
+`;

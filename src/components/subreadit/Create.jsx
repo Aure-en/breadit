@@ -99,6 +99,7 @@ const Icon = styled.img`
   height: 2.25rem;
   border-radius: 50%;
   border: 2px solid ${(props) => props.theme.accentBackground};
+  background: ${(props) => props.theme.backgroundQuaternary};
 `;
 
 const Input = styled.div`

@@ -28,7 +28,7 @@ const GlobalStyles = createGlobalStyle`
     font-family: 'IBM Plex Sans', 'Noto Sans JP', 'IBM Plex Mono', sans-serif;
 
     &:focus {
-      outline: none;
+      outline: 1px solid transparent;
     }
   }
 

@@ -7,11 +7,14 @@ import useSubreaditSettings from "../../hooks/useSubreaditSettings";
 
 // Icons
 import { ReactComponent as IconClose } from "../../assets/icons/general/icon-x.svg";
+import { SUBREADIT_ICON, SUBREADIT_BANNER } from "../../utils/const";
 
 function SubreaditSettings({ match }) {
   const [subreadit, setSubreadit] = useState();
   const [icon, setIcon] = useState();
   const [banner, setBanner] = useState();
+  const [iconHover, setIconHover] = useState(false);
+  const [bannerHover, setBannerHover] = useState(false);
   const [description, setDescription] = useState("");
   const [rules, setRules] = useState([
     {
@@ -64,7 +67,7 @@ function SubreaditSettings({ match }) {
               b/{subreadit.name_sensitive}
               {' '}
               Settings
-            </Heading>
+</Heading>
             <Category>General Settings</Category>
 
             <Setting>
@@ -121,7 +124,8 @@ function SubreaditSettings({ match }) {
                               const rules = [...prev];
                               rules[index].title = e.target.value;
                               return rules;
-                            })}
+                            })
+                          }
                           required
                         />
                       </label>
@@ -138,7 +142,8 @@ function SubreaditSettings({ match }) {
                               const rules = [...prev];
                               rules[index].description = e.target.value;
                               return rules;
-                            })}
+                            })
+                          }
                         />
                       </label>
                     </div>
@@ -163,8 +168,8 @@ function SubreaditSettings({ match }) {
               <Images>
                 <ImageInput
                   type="file"
-                  id="Icon"
-                  name="Icon"
+                  id="icon"
+                  name="icon"
                   accept="image/png, image/jpeg, image/jpg"
                   onChange={async (e) => {
                     if (e.target.files.length > 0) {
@@ -176,8 +181,32 @@ function SubreaditSettings({ match }) {
                     }
                   }}
                 />
-                <label htmlFor="Icon">
-                  <Icon src={icon} alt="Current Icon" />
+                <label
+                  htmlFor="icon"
+                  onMouseEnter={() => setIconHover(true)}
+                  onMouseLeave={() => setIconHover(false)}
+                >
+                  <Icon src={icon} alt="Current Icon">
+                    {icon !== SUBREADIT_ICON && iconHover && (
+                      <BtnDelete
+                        onClick={(e) => {
+                          e.preventDefault();
+                          updateIcon(SUBREADIT_ICON, subreadit.id);
+                          setIcon(SUBREADIT_ICON);
+                        }}
+                      >
+                        <IconClose />
+                      </BtnDelete>
+                    )}
+                    {icon === SUBREADIT_ICON && (
+                      <div>
+                        Upload 
+                        {' '}
+                        <br />
+                        <strong>Icon</strong>
+                      </div>
+                    )}
+                  </Icon>
                 </label>
 
                 <ImageInput
@@ -195,8 +224,31 @@ function SubreaditSettings({ match }) {
                     }
                   }}
                 />
-                <label htmlFor="banner">
-                  <Banner src={banner} alt="Current banner" />
+                <label
+                  htmlFor="banner"
+                  onMouseEnter={() => setBannerHover(true)}
+                  onMouseLeave={() => setBannerHover(false)}
+                >
+                  <Banner src={banner} alt="Current banner">
+                    {banner !== SUBREADIT_BANNER && bannerHover && (
+                      <BtnDelete
+                        onClick={(e) => {
+                          e.preventDefault();
+                          updateBanner(SUBREADIT_BANNER, subreadit.id);
+                          setBanner(SUBREADIT_BANNER);
+                        }}
+                      >
+                        <IconClose />
+                      </BtnDelete>
+                    )}
+                    {banner === SUBREADIT_BANNER && (
+                      <div>
+                        Upload <strong>Banner</strong>
+                        {' '}
+                        Image
+                      </div>
+                    )}
+                  </Banner>
                 </label>
               </Images>
             </Setting>
@@ -355,19 +407,45 @@ const ImageInput = styled.input`
   display: none;
 `;
 
-const Icon = styled.img`
+const Image = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  cursor: pointer;
+  background: ${(props) =>
+    !(props.src === SUBREADIT_BANNER || props.src === SUBREADIT_ICON)
+      ? `url("${props.src}") ${props.theme.backgroundQuaternary}`
+      : props.theme.accentSoft};
+  border: ${(props) =>
+    (props.src === SUBREADIT_BANNER || props.src === SUBREADIT_ICON) &&
+    `1px dashed ${props.theme.secondary}`};
+  background-position: center;
+  background-size: cover;
+  text-align: center;
+`;
+
+const Icon = styled(Image)`
   width: 5rem;
   height: 5rem;
   border-radius: 5px;
   cursor: pointer;
 `;
 
-const Banner = styled.img`
+const Banner = styled(Image)`
   width: 15rem;
   height: 5rem;
   border-radius: 5px;
   cursor: pointer;
   object-fit: cover;
+`;
+
+const BtnDelete = styled.button`
+  position: absolute;
+  right: .25rem;
+  top: .25rem;
+  color: ${(props) => props.theme.accent}};
 `;
 
 const Row = styled.div`

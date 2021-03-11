@@ -97,16 +97,6 @@ function Comment({ className, commentId, post }) {
                     subreadit={post.subreadit.name}
                     onReplyClick={() => setIsReplying(!isReplying)}
                   />
-                  {/* {currentUser && currentUser.uid === comment.author.id && (
-                    <ModifyButtons
-                      canEdit
-                      onEditClick={() => {
-                        setIsEditing(true);
-                        setEdit(comment.content);
-                      }}
-                      onDeleteClick={() => deleteComment(commentId)}
-                    />
-                  )} */}
                   <ExtraButtons
                     canEdit={
                       currentUser && currentUser.uid === comment.author.id

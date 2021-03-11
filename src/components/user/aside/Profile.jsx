@@ -98,6 +98,7 @@ const Banner = styled.img`
   width: 100%;
   object-fit: cover;
   border-radius: 5px 5px 0 0;
+  background: ${(props) => props.theme.backgroundQuaternary};
 `;
 
 const Avatar = styled.img`
@@ -108,6 +109,7 @@ const Avatar = styled.img`
   top: 2.5rem;
   transform: translateX(-50%);
   border: 2px solid ${(props) => props.theme.backgroundSecondary};
+  background: ${(props) => props.theme.backgroundQuaternary};
 `;
 
 const Heading = styled.h2`

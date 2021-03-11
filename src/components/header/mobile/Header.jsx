@@ -15,7 +15,7 @@ import { ReactComponent as IconFeed } from "../../../assets/icons/header/icon-fe
 import { ReactComponent as IconInbox } from "../../../assets/icons/header/icon-inbox.svg";
 import { ReactComponent as IconSaved } from "../../../assets/icons/header/icon-saved.svg";
 import { ReactComponent as IconPost } from "../../../assets/icons/header/icon-post.svg";
-import { BREADIT_ICON } from "../../../utils/const";
+import { BREADIT_ICON, BREADIT_BRAND } from "../../../utils/const";
 
 function Header() {
   const { currentUser } = useAuth();
@@ -27,11 +27,15 @@ function Header() {
 
   return (
     <Container>
-      <Logo src={BREADIT_ICON} alt="Breadit Icon" />
-      <Brand>Breadit</Brand>
-      <Link to="/submit">
-        <IconPost />
+      <Link to="/">
+        <Breadit>
+          <Logo src={BREADIT_ICON} alt="Breadit Icon" />
+          <Brand src={BREADIT_BRAND} alt="Breadit Brand" />
+        </Breadit>
       </Link>
+      <LinkIcon to="/submit">
+        <IconPost />
+      </LinkIcon>
       <Dropdown ref={dropdownRef}>
         <DropdownHeader
           isDropdownOpen={isDropdownOpen}
@@ -96,24 +100,49 @@ export default Header;
 
 const Container = styled.header`
   display: grid;
-  grid-template-columns: auto 1fr repeat(2, auto);
+  grid-template-columns: 1fr auto auto;
   align-items: center;
+  padding: 0 0.5rem;
   background: ${(props) => props.theme.backgroundQuaternary};
   z-index: 15;
+`;
+
+const Breadit = styled.div`
+  display: flex;
+  align-items: center;
+
+  & > *:first-child {
+    margin-right: 0.5rem;
+  }
 `;
 
 const Logo = styled.img`
   width: 2rem;
   height: 2rem;
-  border-radius: 50%;
 `;
 
-const Brand = styled.div``;
+const Brand = styled.img`
+  height: 1.25rem;
+`;
+
+const LinkIcon = styled(Link)`
+  padding: 0.15rem 0.25rem;
+  color: ${(props) => props.theme.accentTertiary};
+
+  &:hover {
+    color: ${(props) => props.theme.accentTertiaryHover};
+  }
+`;
 
 const Dropdown = styled.div``;
 
 const DropdownHeader = styled.button`
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 0 0.5rem 0.25rem;
+  color: ${(props) => props.theme.accentTertiary};
+
+  &:hover {
+    color: ${(props) => props.theme.accentTertiaryHover};
+  }
 `;
 
 const DropdownList = styled.div`

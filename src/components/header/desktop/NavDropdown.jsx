@@ -11,6 +11,7 @@ import { ReactComponent as IconFeed } from "../../../assets/icons/header/icon-fe
 import { ReactComponent as IconHome } from "../../../assets/icons/header/icon-home.svg";
 import { ReactComponent as IconSettings } from "../../../assets/icons/header/icon-settings.svg";
 import { ReactComponent as IconPost } from "../../../assets/icons/header/icon-post.svg";
+import { ReactComponent as IconDown } from "../../../assets/icons/general/icon-down.svg";
 
 function NavDropdown() {
   const [mySubreadits, setMySubreadits] = useState([]);
@@ -59,6 +60,7 @@ function NavDropdown() {
         onClick={() => setIsDropdownOpen(!isDropdownOpen)}
       >
         {current || "Navigation"}
+        <IconDown />
       </DropdownHeader>
       {isDropdownOpen && (
         <DropdownList>
@@ -142,41 +144,59 @@ const Dropdown = styled.div`
 `;
 
 const DropdownHeader = styled.button`
-  padding: 0.5rem 1.75rem;
-  border: 1px solid ${(props) => props.theme.border};
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: ${(props) => props.theme.accentTertiary};
+  border: 1px solid
+    ${(props) =>
+      props.isDropdownOpen ? props.theme.accentTertiary : "transparent"};
+  border-radius: 3px 3px 0 0;
+  padding: 0.5rem 0.75rem;
   cursor: pointer;
   width: 15rem;
+
+  &:hover {
+    border: 1px solid ${(props) => props.theme.accentTertiary};
+  }
+
+  & > svg:last-child {
+    margin-left: 1rem;
+  }
 `;
 
 const DropdownList = styled.div`
   position: absolute;
+  display: flex;
+  flex-direction: column;
   background: ${(props) => props.theme.backgroundSecondary};
+  border: 1px solid ${(props) => props.theme.border};
   padding-bottom: 1rem;
   max-height: 30rem;
   overflow: auto;
   width: 15rem;
+  border-radius: 0 0 3px 3px;
 
   &::-webkit-scrollbar-track {
-    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-    background-color: #f5f5f5;
+    background-color: ${(props) => props.theme.backgroundTertiary};
   }
 
   &::-webkit-scrollbar {
-    width: 10px;
-    background-color: #f5f5f5;
+    width: 8px;
+    background-color: ${(props) => props.theme.accentTertiary};
   }
 
   &::-webkit-scrollbar-thumb {
-    background-color: #000000;
-    border: 2px solid #555555;
+    background-color: ${(props) => props.theme.borderHover};
   }
 `;
 
 const Category = styled.div`
   text-transform: uppercase;
   font-weight: 500;
-  font-size: 0.75rem;
-  margin: 1rem;
+  font-size: 0.65rem;
+  margin: 0.5rem 1rem;
+  color: ${(props) => props.theme.secondary};
 `;
 
 const Choice = styled(Link)`
@@ -184,10 +204,15 @@ const Choice = styled(Link)`
   grid-template-columns: 2rem 1fr;
   grid-gap: 0.75rem;
   align-items: center;
-  padding: 0.35rem 1.75rem;
+  padding: 0.25rem 1rem;
+  justify-items: start;
+
+  & > svg:first-child {
+    color: ${(props) => props.theme.secondary};
+  }
 
   &:hover {
-    background: ${(props) => props.theme.border};
+    background: ${(props) => props.theme.accentTertiarySoft};
   }
 `;
 

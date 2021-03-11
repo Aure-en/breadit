@@ -1,14 +1,13 @@
 export const colors = {
   primary: "rgba(0, 0, 0)", // Main text (headings, etc)
   secondary: "rgba(128, 127, 126)", // Small text (informations, buttons)
-  tertiary: "rgba(84, 84, 84)",
+  tertiary: "rgb(84, 84, 84)",
 
-  backgroundPrimary: "rgba(255, 240, 219)", // App background
-  backgroundSecondary: "rgba(255, 255, 255)", // Posts, comments background
+  backgroundPrimary: "rgb(255, 240, 219)", // App background
+  backgroundPrimaryHover: "rgb(251, 224, 200)",
+  backgroundSecondary: "rgb(255, 255, 255)", // Posts, comments background
   backgroundTertiary: "rgb(255, 248, 242)", // Vote, hover background
   backgroundQuaternary: "rgb(93, 70, 63)", // Header
-
-  backgroundPrimaryHover: "rgba(251, 224, 200)",
 
   overlay: "rgb(107, 69, 56, .2)", // Modals overlay
   overlaySecondary: "rgb(105, 84, 76, .5)",
@@ -17,28 +16,32 @@ export const colors = {
   shadow: "rgba(103, 188, 194, .25)",
   shadowSecondary: "rgba(0, 0, 0, .4)", // Carousel
 
-  accent: "rgba(103, 188, 194)", // Buttons, notifications...
-  accentHover: "rgba(111, 207, 214)",
+  accent: "rgb(103, 188, 194)", // Buttons, notifications... (blue)
+  accentHover: "rgb(111, 207, 214)",
   accentDisabled: "rgba(173, 221, 224)",
-  accentSoft: "rgba(232, 245, 246)",
-  accentBackground: "rgba(245, 247, 246)",
+  accentSoft: "rgb(232, 245, 246)",
+  accentBackground: "rgb(245, 247, 246)",
 
-  accentSecondary: "rgb(179, 72, 54)",
+  accentSecondary: "rgb(179, 72, 54)", // Pink
   accentSecondaryHover: "rgb(162, 53, 35)",
   accentSecondaryDisabled: "rgb(232, 185, 177)",
 
-  disabled: "rgba(209, 189, 171)", // Disabled buttons
+  accentTertiary: "rgb(208, 188, 173)", // Header
+  accentTertiaryHover: "rgb(255, 248, 222)",
+  accentTertiarySoft: "rgb(255, 249, 245)",
 
-  error: "rgba(168, 31, 5)",
-  success: "rgba(65, 150, 156)",
+  disabled: "rgb(209, 189, 171)", // Disabled buttons
 
-  border: "rgba(223, 223, 222)",
-  borderHover: "rgba(209, 163, 155)",
+  error: "rgb(168, 31, 5)",
+  success: "rgb(65, 150, 156)",
+
+  border: "rgb(223, 223, 222)",
+  borderHover: "rgb(209, 163, 155)",
   borderSecondary: "rgb(242,234,230)",
 
-  upvote: "rgba(191, 104, 104)", // Upvote arrow
-  neutral: "rgb(209, 163, 155, .5)", // No vote arrow
-  downvote: "rgba(126, 192, 196)", // Downvote arrow
+  upvote: "rgb(191, 104, 104)", // Upvote arrow
+  neutral: "rgb(209, 163, 155)", // No vote arrow
+  downvote: "rgb(126, 192, 196)", // Downvote arrow
   arrowHover: "rgb(237, 212, 194)",
 };
 

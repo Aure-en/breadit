@@ -93,6 +93,7 @@ const Icon = styled.img`
   border: 3px solid ${(props) => props.theme.backgroundSecondary};
   border-radius: 50%;
   margin-right: 1rem;
+  background: ${(props) => props.theme.backgroundQuaternary};
 `;
 
 const Informations = styled.div`

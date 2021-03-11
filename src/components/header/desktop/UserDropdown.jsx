@@ -12,6 +12,7 @@ import { ReactComponent as IconSettings } from "../../../assets/icons/header/ico
 import { ReactComponent as IconLight } from "../../../assets/icons/header/icon-light.svg";
 import { ReactComponent as IconLogOut } from "../../../assets/icons/header/icon-logout.svg";
 import { ReactComponent as IconLogIn } from "../../../assets/icons/header/icon-login.svg";
+import { ReactComponent as IconDown } from "../../../assets/icons/general/icon-down.svg";
 
 function UserDropdown() {
   const { currentUser, signOut } = useAuth();
@@ -45,12 +46,17 @@ function UserDropdown() {
               <Icon src={user.avatar} alt={`${user.name}'s avatar`} />
               <Informations>
                 <Name>{user.username}</Name>
-                <div>{user.karma} karma</div>
+                <div>
+                  {user.karma}
+                  {' '}
+                  karma
+                </div>
               </Informations>
             </User>
           ) : (
             <IconUser />
           )}
+          <IconDown />
         </DropdownHeader>
         {isDropdownOpen && (
           <DropdownList>
@@ -91,7 +97,14 @@ function UserDropdown() {
             </Choice>
 
             {currentUser ? (
-              <Choice as="button" type="button" onClick={signOut}>
+              <Choice
+                as="button"
+                type="button"
+                onClick={() => {
+                  signOut();
+                  setIsDropdownOpen(false);
+                }}
+              >
                 <IconLogOut />
                 <div>Log Out</div>
               </Choice>
@@ -122,13 +135,29 @@ const Dropdown = styled.div`
 `;
 
 const DropdownHeader = styled.button`
-  border: 1px solid ${(props) => props.theme.border};
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: ${(props) => props.theme.accentTertiary};
+  border: 1px solid
+    ${(props) =>
+      props.isDropdownOpen ? props.theme.accentTertiary : "transparent"};
+  border-radius: 3px 0 3px 3px;
+  padding: 0.1rem 0.5rem;
   cursor: pointer;
-  width: 15rem;
+
+  &:hover {
+    border: 1px solid ${(props) => props.theme.accentTertiary};
+  }
+
+  & > svg:last-child {
+    margin-left: 1rem;
+  }
 `;
 
 const DropdownList = styled.div`
   position: absolute;
+  right: 0;
   display: flex;
   flex-direction: column;
   background: ${(props) => props.theme.backgroundSecondary};
@@ -136,14 +165,16 @@ const DropdownList = styled.div`
   padding-bottom: 1rem;
   max-height: 30rem;
   overflow: auto;
-  width: 15rem;
+  width: 12.5rem;
+  border-radius: 3px 0 3px 3px;
 `;
 
 const Category = styled.div`
   text-transform: uppercase;
   font-weight: 500;
-  font-size: 0.75rem;
-  margin: 1rem;
+  font-size: 0.65rem;
+  margin: 0.5rem 1rem;
+  color: ${(props) => props.theme.secondary};
 `;
 
 const Choice = styled(Link)`
@@ -151,11 +182,15 @@ const Choice = styled(Link)`
   grid-template-columns: 2rem 1fr;
   grid-gap: 0.75rem;
   align-items: center;
-  padding: 0.35rem 1.75rem;
+  padding: 0.25rem 1rem;
   justify-items: start;
 
+  & > svg:first-child {
+    color: ${(props) => props.theme.secondary};
+  }
+
   &:hover {
-    background: ${(props) => props.theme.border};
+    background: ${(props) => props.theme.accentTertiarySoft};
   }
 `;
 
@@ -164,6 +199,7 @@ const User = styled.div`
   grid-template-columns: 2rem 1fr;
   grid-gap: 1rem;
   justify-items: start;
+  align-items: center;
   text-align: start;
 `;
 
@@ -179,4 +215,5 @@ const Icon = styled.img`
   width: 2rem;
   height: 2rem;
   border-radius: 3px;
+  background: ${(props) => props.theme.backgroundQuaternary};
 `;

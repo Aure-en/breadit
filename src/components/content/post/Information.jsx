@@ -128,6 +128,7 @@ const Icon = styled.img`
   border-radius: 50%;
   grid-row: 1 / span 2;
   margin-right: 0.5rem;
+  background: ${(props) => props.theme.backgroundQuaternary};
 
   @media all and (min-width: 768px) {
     width: 1.5rem;

@@ -5,8 +5,9 @@ import { useAuth } from "../../../contexts/AuthContext";
 import useUserSettings from "../../../hooks/useUserSettings";
 import useStorage from "../../../hooks/useStorage";
 
-// Icon
+// Assets
 import { ReactComponent as IconClose } from "../../../assets/icons/general/icon-x.svg";
+import { BREADITOR_AVATAR, BREADITOR_BANNER } from "../../../utils/const";
 
 function Images({ prevAvatar, prevBanner }) {
   const [avatar, setAvatar] = useState(prevAvatar);
@@ -30,13 +31,13 @@ function Images({ prevAvatar, prevBanner }) {
   };
 
   const deleteAvatar = () => {
-    updateAvatar(currentUser, "");
-    setAvatar("");
+    updateAvatar(currentUser, BREADITOR_AVATAR);
+    setAvatar(BREADITOR_AVATAR);
   };
 
   const deleteBanner = () => {
-    updateBanner(currentUser.uid, "");
-    setBanner("");
+    updateBanner(currentUser.uid, BREADITOR_BANNER);
+    setBanner(BREADITOR_BANNER);
   };
 
   return (
@@ -66,7 +67,14 @@ function Images({ prevAvatar, prevBanner }) {
               <IconClose />
             </Icon>
           )}
-          {!avatar && <Message>Upload <br/><strong>Avatar</strong></Message>}
+          {!avatar && (
+            <div>
+              Upload 
+{' '}
+<br />
+              <strong>Avatar</strong>
+            </div>
+          )}
         </Avatar>
       </label>
 
@@ -97,8 +105,10 @@ function Images({ prevAvatar, prevBanner }) {
           )}
           {!banner && (
             <div>
-              Upload <strong>Banner</strong> Image
-            </div>
+              Upload <strong>Banner</strong>
+{' '}
+Image
+</div>
           )}
         </Banner>
       </label>
@@ -159,8 +169,12 @@ const Image = styled.div`
   border-radius: 5px;
   cursor: pointer;
   background: ${(props) =>
-    props.src ? `url("${props.src}")` : props.theme.accentSoft};
-  border: ${(props) => !props.src && `1px dashed ${props.theme.secondary}`};
+    !(props.src === BREADITOR_BANNER || props.src === BREADITOR_AVATAR)
+      ? `url("${props.src}") ${props.theme.backgroundQuaternary}`
+      : props.theme.accentSoft};
+  border: ${(props) =>
+    (props.src === BREADITOR_BANNER || props.src === BREADITOR_AVATAR) &&
+    `1px dashed ${props.theme.secondary}`};
   background-position: center;
   background-size: cover;
   text-align: center;
