@@ -21,7 +21,8 @@ function Vote({ type, docId, user, className }) {
       <Button
         type="button"
         isUpvoted={vote === 1}
-        onClick={() => {
+        onClick={(e) => {
+          e.preventDefault();
           user ? handleUpvote(type, docId, user.uid, vote) : openSignUp();
         }}
         appearance={type}
@@ -32,7 +33,8 @@ function Vote({ type, docId, user, className }) {
       <Button
         type="button"
         isDownvoted={vote === -1}
-        onClick={() => {
+        onClick={(e) => {
+          e.preventDefault();
           user ? handleDownvote(type, docId, user.uid, vote) : openSignUp();
         }}
         appearance={type}

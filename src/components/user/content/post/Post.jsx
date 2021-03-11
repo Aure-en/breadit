@@ -3,13 +3,13 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import formatDistanceStrict from "date-fns/formatDistanceStrict";
-import { useAuth } from "../../../contexts/AuthContext";
-import Vote from "../../content/shared/Vote";
+import { useAuth } from "../../../../contexts/AuthContext";
+import Vote from "../../../content/shared/Vote";
 import Buttons from "./Buttons";
 
 // Icons
-import { ReactComponent as IconPost } from "../../../assets/icons/general/icon-post.svg";
-import { ReactComponent as IconLink } from "../../../assets/icons/general/icon-link.svg";
+import { ReactComponent as IconPost } from "../../../../assets/icons/general/icon-post.svg";
+import { ReactComponent as IconLink } from "../../../../assets/icons/general/icon-link.svg";
 
 function Post({ author, id, title, subreadit, type, content, date }) {
   const { currentUser } = useAuth();

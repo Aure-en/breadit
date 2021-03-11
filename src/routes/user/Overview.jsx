@@ -4,13 +4,16 @@ import styled from "styled-components";
 import useUser from "../../hooks/useUser";
 import usePost from "../../hooks/usePost";
 import useScroll from "../../hooks/useScroll";
-import Post from "../../components/user/content/Post";
-import Comment from "../../components/user/content/Comment";
+import useInitial from "../../hooks/useInitial";
+import Post from "../../components/user/content/post/Post";
+import Comment from "../../components/user/content/comment/Comment";
 
 function Overview({ username }) {
   const [comments, setComments] = useState([]);
   const [posts, setPosts] = useState([]);
   const [overview, setOverview] = useState();
+  const [postsLoading, setPostsLoading] = useState(true);
+  const [commentsLoading, setCommentsLoading] = useState(true);
   const [loading, setLoading] = useState(true);
   const { getUserByName, getUserComments, getUserPosts } = useUser();
   const { getPost } = usePost();
@@ -49,7 +52,6 @@ function Overview({ username }) {
       // Get posts
       const posts = await getUserPosts(user.id, limit);
       setPosts(posts);
-      setLoading(false);
     })();
   }, [limit, username]);
 
@@ -68,6 +70,15 @@ function Overview({ username }) {
         .sort((a, b) => b.date.seconds - a.date.seconds);
     });
   }, [comments, posts]);
+
+  useInitial(() => setPostsLoading(false), [posts]);
+  useInitial(() => setCommentsLoading(false), [comments]);
+
+  useEffect(() => {
+    if (!postsLoading && !commentsLoading) {
+      setLoading(false);
+    }
+  }, [overview]);
 
   return (
     <>

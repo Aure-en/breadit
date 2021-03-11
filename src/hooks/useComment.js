@@ -31,6 +31,10 @@ function useComment() {
           id: post.author.id,
           name: post.author.name,
         },
+        subreadit: {
+          id: post.subreadit.id,
+          name: post.subreadit.name,
+        },
       },
       isDeleted: false,
       id: ref.id,

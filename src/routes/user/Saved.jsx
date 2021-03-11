@@ -4,8 +4,9 @@ import { useAuth } from "../../contexts/AuthContext";
 import { useSave } from "../../contexts/SaveContext";
 import usePost from "../../hooks/usePost";
 import useComment from "../../hooks/useComment";
-import Post from "../../components/user/content/Post";
-import Comment from "../../components/user/content/Comment";
+import useInitial from "../../hooks/useInitial";
+import Post from "../../components/user/content/post/Post";
+import Comment from "../../components/user/content/comment/Comment";
 
 function Saved({ username }) {
   const { currentUser } = useAuth();
@@ -42,9 +43,10 @@ function Saved({ username }) {
         })
       );
       setDocs(saved);
-      setLoading(false);
     })();
   }, [saved, username]);
+
+  useInitial(() => setLoading(false), [docs]);
 
   const renderWrongUser = () => {
     return (

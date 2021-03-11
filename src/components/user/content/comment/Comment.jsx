@@ -4,10 +4,11 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 import formatDistanceStrict from "date-fns/formatDistanceStrict";
 import { Link } from "react-router-dom";
-import { renderers } from "../../shared/TextEditor";
+import { renderers } from "../../../shared/TextEditor";
+import Buttons from "./Buttons";
 
 // Icon
-import { ReactComponent as IconComment } from "../../../assets/icons/general/icon-comment.svg";
+import { ReactComponent as IconComment } from "../../../../assets/icons/general/icon-comment.svg";
 
 function Comment({ author, content, date, post, id }) {
   return (
@@ -24,7 +25,8 @@ function Comment({ author, content, date, post, id }) {
             {post.subreadit.name}
           </StrongLink>
           {"\u00A0"}
-          • Posted by{" "}
+• Posted by
+{" "}
           <UnderlineLink to={`/u/${post.author.id}`}>
             {post.author.name}
           </UnderlineLink>
@@ -39,12 +41,17 @@ function Comment({ author, content, date, post, id }) {
                 new Date(date.seconds * 1000),
                 new Date()
               )}
-              {" "}
+{" "}
               ago
             </Informations>
             <Content>{redraft(JSON.parse(content), renderers)}</Content>
           </div>
         </Main>
+        <Buttons
+          commentId={id}
+          postId={post.id}
+          subreadit={post.subreadit.name}
+        />
       </Container>
     </article>
   );
@@ -116,7 +123,7 @@ const Header = styled(Informations)`
 
 const Main = styled.div`
   display: flex;
-  padding: 0 1rem 1rem 1rem;
+  padding: 0 1rem;
 
   &:before {
     display: block;

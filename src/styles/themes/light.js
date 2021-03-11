@@ -37,10 +37,10 @@ export const colors = {
 
   border: "rgb(223, 223, 222)",
   borderHover: "rgb(209, 163, 155)",
-  borderSecondary: "rgb(242,234,230)",
+  borderSecondary: "rgb(242, 234, 230)",
 
   upvote: "rgb(191, 104, 104)", // Upvote arrow
-  neutral: "rgb(209, 163, 155)", // No vote arrow
+  neutral: "rgba(209, 163, 155, .5)", // No vote arrow
   downvote: "rgb(126, 192, 196)", // Downvote arrow
   arrowHover: "rgb(237, 212, 194)",
 };

@@ -4,13 +4,14 @@ import styled from "styled-components";
 import useUser from "../../hooks/useUser";
 import usePost from "../../hooks/usePost";
 import useScroll from "../../hooks/useScroll";
+import useInitial from "../../hooks/useInitial";
 import useWindowSize from "../../hooks/useWindowSize";
-import Comment from "../../components/user/content/Comment";
+import Comment from "../../components/user/content/comment/Comment";
 import SortDropdown from "../../components/sort/SortDropdown";
 import Sort from "../../components/sort/Sort";
 
 function Comments({ username }) {
-  const [comments, setComments] = useState([]);
+  const [comments, setComments] = useState();
   const [loading, setLoading] = useState(true);
   const [sort, setSort] = useState("top");
   const {
@@ -56,9 +57,10 @@ function Comments({ username }) {
         return { ...comment, votes };
       });
       setComments(userComments);
-      setLoading(false);
     })();
   }, [limit, sort]);
+
+  useInitial(() => setLoading(false), [comments]);
 
   return (
     <>

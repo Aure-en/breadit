@@ -11,7 +11,7 @@ import Information from "./Information";
 import Buttons from "./Buttons";
 import ExtraButtons from "../shared/Buttons";
 
-function Comment({ className, commentId, post }) {
+function Comment({ className, commentId }) {
   const [comment, setComment] = useState();
   const [reply, setReply] = useState("");
   const [isReplying, setIsReplying] = useState(false);
@@ -93,8 +93,8 @@ function Comment({ className, commentId, post }) {
                   <Buttons
                     user={currentUser}
                     commentId={commentId}
-                    postId={post.id}
-                    subreadit={post.subreadit.name}
+                    postId={comment.post.id}
+                    subreadit={comment.post.subreadit.name}
                     onReplyClick={() => setIsReplying(!isReplying)}
                   />
                   <ExtraButtons
@@ -109,7 +109,7 @@ function Comment({ className, commentId, post }) {
                       setEdit(comment.content);
                     }}
                     onDelete={() => deleteComment(commentId)}
-                    copy={`${post.subreadit.name}/${post.id}/${commentId}`}
+                    copy={`${comment.post.subreadit.name}/${comment.post.id}/${commentId}`}
                     type="comment"
                   />
                 </ButtonsGroup>
@@ -118,7 +118,12 @@ function Comment({ className, commentId, post }) {
                   <Form
                     onSubmit={(e) => {
                       e.preventDefault();
-                      createComment(post, currentUser, reply, commentId);
+                      createComment(
+                        comment.post,
+                        currentUser,
+                        reply,
+                        commentId
+                      );
                       setIsReplying(false);
                     }}
                   >
@@ -138,7 +143,7 @@ function Comment({ className, commentId, post }) {
             )}
 
             {comment.children.map((childId) => {
-              return <Comment key={childId} commentId={childId} post={post} />;
+              return <Comment key={childId} commentId={childId} />;
             })}
           </Container>
         </>
@@ -149,16 +154,6 @@ function Comment({ className, commentId, post }) {
 
 Comment.propTypes = {
   commentId: PropTypes.string.isRequired,
-  post: PropTypes.shape({
-    id: PropTypes.string,
-    author: PropTypes.shape({
-      id: PropTypes.string,
-      name: PropTypes.string,
-    }),
-    subreadit: PropTypes.shape({
-      name: PropTypes.string,
-    }),
-  }).isRequired,
   className: PropTypes.string,
 };
 

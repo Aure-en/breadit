@@ -27,6 +27,11 @@ const Header = styled.div`
   justify-content: space-between;
   align-items: center;
   margin: 0 1rem;
+
+  @media all and (min-width: 40rem) {
+    width: 100vw;
+    max-width: 38rem;
+  }
 `;
 
 const StyledLink = styled(Link)`

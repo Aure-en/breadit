@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import { useAuth } from "../../contexts/AuthContext";
 import usePost from "../../hooks/usePost";
 import useComment from "../../hooks/useComment";
+import useInitial from "../../hooks/useInitial";
 import PostContent from "../../components/content/post/Post";
 import Comment from "../../components/content/comment/Comment";
 import Nonexistent from "../../components/content/post/Nonexistent";
@@ -16,7 +17,7 @@ import { ReactComponent as IconComment } from "../../assets/icons/general/icon-c
 function Post({ match }) {
   const { postId, subreadit } = match.params;
   const [loading, setLoading] = useState(true);
-  const [post, setPost] = useState();
+  const [post, setPost] = useState(null);
   const [comments, setComments] = useState([]);
   const [comment, setComment] = useState("");
   const [limit, setLimit] = useState(20);
@@ -36,9 +37,10 @@ function Post({ match }) {
     (async () => {
       const post = await getPost(postId);
       setPost(post.data());
-      setLoading(false);
     })();
   }, [match]);
+
+  useInitial(() => setLoading(false), [post]);
 
   // Load the comments
   useEffect(() => {

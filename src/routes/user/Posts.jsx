@@ -5,7 +5,7 @@ import useUser from "../../hooks/useUser";
 import useScroll from "../../hooks/useScroll";
 import useComment from "../../hooks/useComment";
 import useWindowSize from "../../hooks/useWindowSize";
-import Post from "../../components/user/content/Post";
+import Post from "../../components/user/content/post/Post";
 import Sort from "../../components/sort/Sort";
 import SortDropdown from "../../components/sort/SortDropdown";
 

@@ -5,11 +5,13 @@ import useScroll from "../../hooks/useScroll";
 import usePost from "../../hooks/usePost";
 import useNotification from "../../hooks/useNotification";
 import useComment from "../../hooks/useComment";
+import useInitial from "../../hooks/useInitial";
 import PostNotification from "../../components/inbox/notifications/PostNotification";
 import CommentNotification from "../../components/inbox/notifications/CommentNotification";
 
 function Notifications() {
   const [notifications, setNotifications] = useState();
+  const [loading, setLoading] = useState(true);
   const { currentUser } = useAuth();
   const {
     getNotifications,
@@ -65,36 +67,42 @@ function Notifications() {
     readNotifications(currentUser.uid);
   }, []);
 
+  useInitial(() => setLoading(false), [notifications]);
+
   return (
     <>
-      {notifications && (
+      {!loading && (
         <>
-          {notifications.length > 0 ? (
-            <List ref={listRef}>
-              {notifications.map((notification) => {
-                return notification.document.type === "post" ? (
-                  <PostNotification
-                    key={notification.id}
-                    id={notification.id}
-                    content={notification.content}
-                  />
-                ) : (
-                  <CommentNotification
-                    key={notification.id}
-                    id={notification.id}
-                    type={notification.type}
-                    date={notification.date}
-                    content={notification.content}
-                    post={notification.post}
-                  />
-                );
-              })}
-            </List>
-          ) : (
-            <Empty>
-              <h4>Nothing to see here.</h4>
-              You will be notified if someone interacts with you.
-            </Empty>
+          {notifications && (
+            <>
+              {notifications.length > 0 ? (
+                <List ref={listRef}>
+                  {notifications.map((notification) => {
+                    return notification.document.type === "post" ? (
+                      <PostNotification
+                        key={notification.id}
+                        id={notification.id}
+                        content={notification.content}
+                      />
+                    ) : (
+                      <CommentNotification
+                        key={notification.id}
+                        id={notification.id}
+                        type={notification.type}
+                        date={notification.date}
+                        content={notification.content}
+                        post={notification.post}
+                      />
+                    );
+                  })}
+                </List>
+              ) : (
+                <Empty>
+                  <h4>Nothing to see here.</h4>
+                  You will be notified if someone interacts with you.
+                </Empty>
+              )}
+            </>
           )}
         </>
       )}

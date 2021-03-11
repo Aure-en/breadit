@@ -44,8 +44,8 @@ const LinkIcon = styled(Link)`
 
 const Notification = styled.span`
   position: absolute;
-  top: -1rem;
-  right: -0.5rem;
+  top: -0.15rem;
+  right: -0.15rem;
   width: 1rem;
   height: 1rem;
   border-radius: 50%;

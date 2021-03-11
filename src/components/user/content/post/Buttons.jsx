@@ -2,21 +2,21 @@ import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import { useAuth } from "../../../contexts/AuthContext";
-import { useSave } from "../../../contexts/SaveContext";
-import { useEntry } from "../../../contexts/EntryContext";
-import useComment from "../../../hooks/useComment";
-import useWindowSize from "../../../hooks/useWindowSize";
-import useDropdown from "../../../hooks/useDropdown";
-import { BREADIT_URL } from "../../../utils/const";
+import { useAuth } from "../../../../contexts/AuthContext";
+import { useSave } from "../../../../contexts/SaveContext";
+import { useEntry } from "../../../../contexts/EntryContext";
+import useComment from "../../../../hooks/useComment";
+import useWindowSize from "../../../../hooks/useWindowSize";
+import useDropdown from "../../../../hooks/useDropdown";
+import { BREADIT_URL } from "../../../../utils/const";
 
 // Icons
-import { ReactComponent as IconComment } from "../../../assets/icons/general/icon-comment.svg";
-import { ReactComponent as IconSave } from "../../../assets/icons/general/icon-save.svg";
-import { ReactComponent as IconSaved } from "../../../assets/icons/general/icon-save-filled.svg";
-import { ReactComponent as IconHide } from "../../../assets/icons/general/icon-hide.svg";
-import { ReactComponent as IconLink } from "../../../assets/icons/general/icon-link-small.svg";
-import { ReactComponent as IconDots } from "../../../assets/icons/content/icon-dots.svg";
+import { ReactComponent as IconComment } from "../../../../assets/icons/general/icon-comment.svg";
+import { ReactComponent as IconSave } from "../../../../assets/icons/general/icon-save.svg";
+import { ReactComponent as IconSaved } from "../../../../assets/icons/general/icon-save-filled.svg";
+import { ReactComponent as IconHide } from "../../../../assets/icons/general/icon-hide.svg";
+import { ReactComponent as IconLink } from "../../../../assets/icons/general/icon-link-small.svg";
+import { ReactComponent as IconDots } from "../../../../assets/icons/content/icon-dots.svg";
 
 function Buttons({ postId, subreadit, hide, user }) {
   const [commentsNumber, setCommentsNumber] = useState(0);

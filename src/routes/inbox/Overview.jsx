@@ -9,11 +9,15 @@ import useComment from "../../hooks/useComment";
 import Message from "../../components/inbox/messages/Message";
 import PostNotification from "../../components/inbox/notifications/PostNotification";
 import CommentNotification from "../../components/inbox/notifications/CommentNotification";
+import useInitial from "../../hooks/useInitial";
 
 function Overview() {
   const [notifications, setNotifications] = useState([]);
   const [messages, setMessages] = useState([]);
   const [all, setAll] = useState([]);
+  const [notificationsLoading, setNotificationsLoading] = useState(true);
+  const [messagesLoading, setMessagesLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
   const [overview, setOverview] = useState();
   const { currentUser } = useAuth();
   const { getAllMessages, deleteMessageListener, readMessages } = useMessage();
@@ -104,51 +108,64 @@ function Overview() {
     readMessages(currentUser.uid);
   }, []);
 
+  useInitial(() => setNotificationsLoading(false), [notifications]);
+  useInitial(() => setMessagesLoading(false), [messages]);
+
+  useEffect(() => {
+    if (!notificationsLoading && !messagesLoading) {
+      setLoading(false);
+    }
+  }, [all]);
+
   return (
     <>
-      {overview && (
+      {!loading && (
         <>
-          {overview.length > 0 ? (
-            <List ref={listRef}>
-              {overview.map((doc) => {
-                if (messages.includes(doc)) {
-                  return (
-                    <Message
-                      key={doc.id}
-                      id={doc.id}
-                      sender={doc.sender}
-                      recipient={doc.recipient}
-                      content={doc.content}
-                      date={doc.date}
-                      isSent={false}
-                    />
-                  );
-                }
-                if (notifications.includes(doc)) {
-                  return doc.document.type === "post" ? (
-                    <PostNotification
-                      key={doc.id}
-                      id={doc.id}
-                      content={doc.content}
-                    />
-                  ) : (
-                    <CommentNotification
-                      key={doc.id}
-                      id={doc.id}
-                      type={doc.type}
-                      date={doc.date}
-                      content={doc.content}
-                      post={doc.post}
-                    />
-                  );
-                }
-              })}
-            </List>
-          ) : (
-            <Empty>
-              <h4>Nothing to see here.</h4>
-              Chat with others to fill your inbox.
-            </Empty>
+          {overview && (
+            <>
+              {overview.length > 0 ? (
+                <List ref={listRef}>
+                  {overview.map((doc) => {
+                    if (messages.includes(doc)) {
+                      return (
+                        <Message
+                          key={doc.id}
+                          id={doc.id}
+                          sender={doc.sender}
+                          recipient={doc.recipient}
+                          content={doc.content}
+                          date={doc.date}
+                          isSent={false}
+                        />
+                      );
+                    }
+                    if (notifications.includes(doc)) {
+                      return doc.document.type === "post" ? (
+                        <PostNotification
+                          key={doc.id}
+                          id={doc.id}
+                          content={doc.content}
+                        />
+                      ) : (
+                        <CommentNotification
+                          key={doc.id}
+                          id={doc.id}
+                          type={doc.type}
+                          date={doc.date}
+                          content={doc.content}
+                          post={doc.post}
+                        />
+                      );
+                    }
+                  })}
+                </List>
+              ) : (
+                <Empty>
+                  <h4>Nothing to see here.</h4>
+                  Chat with others to fill your inbox.
+                </Empty>
+              )}
+            </>
           )}
         </>
       )}

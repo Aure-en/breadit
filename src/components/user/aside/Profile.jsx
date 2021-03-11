@@ -6,12 +6,14 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../../../contexts/AuthContext";
 import { useEntry } from "../../../contexts/EntryContext";
 import useUser from "../../../hooks/useUser";
+import useWindowSize from "../../../hooks/useWindowSize";
 
 function Profile({ username }) {
   const { currentUser } = useAuth();
   const [user, setUser] = useState();
   const { getUserByName, getKarma } = useUser();
   const { openSignUp } = useEntry();
+  const { windowSize } = useWindowSize();
 
   useEffect(() => {
     (async () => {
@@ -42,22 +44,26 @@ function Profile({ username }) {
             </div>
           </Informations>
 
-          {currentUser && currentUser.displayName !== username && (
-            <Button
-              as={Link}
-              to={{
-                pathname: "/message/compose",
-                recipient: user.username,
-              }}
-            >
-              Send a message
-            </Button>
-          )}
+          {windowSize.width > 992 && (
+            <>
+              {currentUser && currentUser.displayName !== username && (
+                <Button
+                  as={Link}
+                  to={{
+                    pathname: "/message/compose",
+                    recipient: user.username,
+                  }}
+                >
+                  Send a message
+                </Button>
+              )}
 
-          {!currentUser && (
-            <Button type="button" onClick={openSignUp}>
-              Send a message
-            </Button>
+              {!currentUser && (
+                <Button type="button" onClick={openSignUp}>
+                  Send a message
+                </Button>
+              )}
+            </>
           )}
         </Container>
       )}

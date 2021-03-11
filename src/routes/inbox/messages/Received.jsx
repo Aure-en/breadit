@@ -3,10 +3,12 @@ import styled from "styled-components";
 import { useAuth } from "../../../contexts/AuthContext";
 import useMessage from "../../../hooks/useMessage";
 import useScroll from "../../../hooks/useScroll";
+import useInitial from "../../../hooks/useInitial";
 import Message from "../../../components/inbox/messages/Message";
 
 function Received() {
   const [messages, setMessages] = useState();
+  const [loading, setLoading] = useState(true);
   const { currentUser } = useAuth();
   const { getMessages, deleteMessageListener, readMessages } = useMessage();
   const listRef = useRef();
@@ -38,31 +40,37 @@ function Received() {
     })();
   }, [limit]);
 
+  useInitial(() => setLoading(false), [messages]);
+
   return (
     <>
-      {messages && (
+      {!loading && (
         <>
-          {messages.length > 0 ? (
-            <List ref={listRef}>
-              {messages.map((message) => {
-                return (
-                  <Message
-                    key={message.id}
-                    id={message.id}
-                    sender={message.sender}
-                    recipient={message.recipient}
-                    content={message.content}
-                    date={message.date}
-                    isSent={false}
-                  />
-                );
-              })}
-            </List>
-          ) : (
-            <Empty>
-              <h4>Nothing to see here.</h4>
-              We will notify you if you receive a message.
-            </Empty>
+          {messages && (
+            <>
+              {messages.length > 0 ? (
+                <List ref={listRef}>
+                  {messages.map((message) => {
+                    return (
+                      <Message
+                        key={message.id}
+                        id={message.id}
+                        sender={message.sender}
+                        recipient={message.recipient}
+                        content={message.content}
+                        date={message.date}
+                        isSent={false}
+                      />
+                    );
+                  })}
+                </List>
+              ) : (
+                <Empty>
+                  <h4>Nothing to see here.</h4>
+                  We will notify you if you receive a message.
+                </Empty>
+              )}
+            </>
           )}
         </>
       )}
