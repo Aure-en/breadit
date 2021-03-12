@@ -3,16 +3,16 @@ import styled from "styled-components";
 import { useAuth } from "../../../contexts/AuthContext";
 import useMessage from "../../../hooks/useMessage";
 import useScroll from "../../../hooks/useScroll";
-import useInitial from "../../../hooks/useInitial";
+import useLoading from "../../../hooks/useLoading";
 import Message from "../../../components/inbox/messages/Message";
 
 function Sent() {
   const [messages, setMessages] = useState([]);
-  const [loading, setLoading] = useState(true);
   const { currentUser } = useAuth();
   const { getSentMessages } = useMessage();
   const listRef = useRef();
   const { limit } = useScroll(listRef, 20, 10);
+  const loading = useLoading(messages);
 
   useEffect(() => {
     (async () => {
@@ -20,8 +20,6 @@ function Sent() {
       setMessages(sent);
     })();
   }, [limit]);
-
-  useInitial(() => setLoading(false), [messages]);
 
   return (
     <>

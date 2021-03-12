@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import { useAuth } from "../../contexts/AuthContext";
 import usePost from "../../hooks/usePost";
 import useComment from "../../hooks/useComment";
-import useInitial from "../../hooks/useInitial";
+import useLoading from "../../hooks/useLoading";
 import PostContent from "../../components/content/post/Post";
 import Comment from "../../components/content/comment/Comment";
 import Nonexistent from "../../components/content/post/Nonexistent";
@@ -16,7 +16,6 @@ import { ReactComponent as IconComment } from "../../assets/icons/general/icon-c
 
 function Post({ match }) {
   const { postId, subreadit } = match.params;
-  const [loading, setLoading] = useState(true);
   const [post, setPost] = useState(null);
   const [comments, setComments] = useState([]);
   const [comment, setComment] = useState("");
@@ -31,6 +30,8 @@ function Post({ match }) {
   } = useComment();
   const { currentUser } = useAuth();
   const textEditorRef = useRef();
+  const postLoading = useLoading(post);
+  const commentsLoading = useLoading(comments);
 
   // Load the post itself
   useEffect(() => {
@@ -39,8 +40,6 @@ function Post({ match }) {
       setPost(post.data());
     })();
   }, [match]);
-
-  useInitial(() => setLoading(false), [post]);
 
   // Load the comments
   useEffect(() => {
@@ -78,7 +77,7 @@ function Post({ match }) {
 
   return (
     <>
-      {!loading && (
+      {!postLoading && (
         <>
           {post ? (
             <Container>
@@ -102,31 +101,37 @@ function Post({ match }) {
                 <Button type="submit">Comment</Button>
               </Form>
 
-              {comments.length === 0 ? (
-                <>
-                  <NoComment>
-                    <Icon>
-                      <IconComment />
-                    </Icon>
-                    <h4>No comments here yet.</h4>
-                    Be the first to share what you think!
-                  </NoComment>
-                </>
-              ) : (
-                <Comments>
-                  <SortDropdown setSort={setSort} sort={sort} />
-                  {comments &&
-                    comments.map((commentId) => {
-                      return (
-                        <StyledComment
-                          key={commentId}
-                          commentId={commentId}
-                          post={post}
-                        />
-                      );
-                    })}
-                </Comments>
-              )}
+              <>
+                {!commentsLoading && (
+                  <>
+                    {comments.length === 0 ? (
+                      <>
+                        <NoComment>
+                          <Icon>
+                            <IconComment />
+                          </Icon>
+                          <h4>No comments here yet.</h4>
+                          Be the first to share what you think!
+                        </NoComment>
+                      </>
+                    ) : (
+                      <Comments>
+                        <SortDropdown setSort={setSort} sort={sort} />
+                        {comments &&
+                          comments.map((commentId) => {
+                            return (
+                              <StyledComment
+                                key={commentId}
+                                commentId={commentId}
+                                post={post}
+                              />
+                            );
+                          })}
+                      </Comments>
+                    )}
+                  </>
+                )}
+              </>
             </Container>
           ) : (
             <Nonexistent />

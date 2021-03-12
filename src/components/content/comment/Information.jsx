@@ -4,13 +4,15 @@ import PropTypes from "prop-types";
 import formatDistanceStrict from "date-fns/formatDistanceStrict";
 import { Link } from "react-router-dom";
 import useUser from "../../../hooks/useUser";
+import { BREADITOR_AVATAR } from "../../../utils/const";
 
-function Information({ author, date }) {
+function Information({ author, date, isDeleted }) {
   const [user, setUser] = useState();
   const { getUser } = useUser();
 
   // Gets the author informations (avatar, karma...)
   useEffect(() => {
+    if (isDeleted) return;
     (async () => {
       const user = await getUser(author.id);
       setUser(user.data());
@@ -19,13 +21,21 @@ function Information({ author, date }) {
 
   return (
     <Container>
-      {user && <Icon src={user.avatar} alt={`${author.name}'s avatar`} />}
-      <AuthorLink to={`/u/${author.name}`}>{author.name}</AuthorLink>
+      {user ? (
+        <Icon src={user.avatar} alt={`${author.name}'s avatar`} />
+      ) : (
+        <Icon src={BREADITOR_AVATAR} alt="Default Breaditor Avatar" />
+      )}
+
+      {isDeleted ? (
+        <div>[deleted]</div>
+      ) : (
+        <AuthorLink to={`/u/${author.name}`}>{author.name}</AuthorLink>
+      )}
 
       <Secondary>
         <span>&nbsp;•&nbsp;</span>
-        {formatDistanceStrict(new Date(date.seconds * 1000), new Date())}
-        {" "}
+        {formatDistanceStrict(new Date(date.seconds * 1000), new Date())}{" "}
       </Secondary>
     </Container>
   );

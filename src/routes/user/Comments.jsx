@@ -4,7 +4,7 @@ import styled from "styled-components";
 import useUser from "../../hooks/useUser";
 import usePost from "../../hooks/usePost";
 import useScroll from "../../hooks/useScroll";
-import useInitial from "../../hooks/useInitial";
+import useLoading from "../../hooks/useLoading";
 import useWindowSize from "../../hooks/useWindowSize";
 import Comment from "../../components/user/content/comment/Comment";
 import SortDropdown from "../../components/sort/SortDropdown";
@@ -12,7 +12,6 @@ import Sort from "../../components/sort/Sort";
 
 function Comments({ username }) {
   const [comments, setComments] = useState();
-  const [loading, setLoading] = useState(true);
   const [sort, setSort] = useState("top");
   const {
     getUserByName,
@@ -23,6 +22,7 @@ function Comments({ username }) {
   const commentsRef = useRef();
   const { limit } = useScroll(commentsRef, 20, 10);
   const { windowSize } = useWindowSize();
+  const loading = useLoading(comments);
 
   // Get comments
   useEffect(() => {
@@ -59,8 +59,6 @@ function Comments({ username }) {
       setComments(userComments);
     })();
   }, [limit, sort]);
-
-  useInitial(() => setLoading(false), [comments]);
 
   return (
     <>

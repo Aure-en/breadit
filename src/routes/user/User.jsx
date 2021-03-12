@@ -102,6 +102,7 @@ const Container = styled.div`
 const Content = styled.div`
   @media all and (min-width: 40rem) {
     max-width: 40rem;
+    width: 100vw;
     grid-column: 2;
     align-self: center;
   }

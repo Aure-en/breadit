@@ -4,7 +4,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import { useSave } from "../../contexts/SaveContext";
 import usePost from "../../hooks/usePost";
 import useComment from "../../hooks/useComment";
-import useInitial from "../../hooks/useInitial";
+import useLoading from "../../hooks/useLoading";
 import Post from "../../components/user/content/post/Post";
 import Comment from "../../components/user/content/comment/Comment";
 
@@ -14,7 +14,7 @@ function Saved({ username }) {
   const { getPost } = usePost();
   const { getComment, getCommentsNumber } = useComment();
   const [docs, setDocs] = useState();
-  const [loading, setLoading] = useState(true);
+  const loading = useLoading(docs);
 
   useEffect(() => {
     if (!currentUser.uid) return;
@@ -45,8 +45,6 @@ function Saved({ username }) {
       setDocs(saved);
     })();
   }, [saved, username]);
-
-  useInitial(() => setLoading(false), [docs]);
 
   const renderWrongUser = () => {
     return (

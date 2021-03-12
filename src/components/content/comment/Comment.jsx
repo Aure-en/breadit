@@ -57,7 +57,11 @@ function Comment({ className, commentId }) {
           <Container className={className}>
             <>
               {comment.isDeleted ? (
-                <div>[deleted]</div>
+                <Information
+                  author={comment.author}
+                  date={comment.date}
+                  isDeleted
+                />
               ) : (
                 <Information author={comment.author} date={comment.date} />
               )}
@@ -83,7 +87,7 @@ function Comment({ className, commentId }) {
               <>
                 <>
                   {comment.isDeleted ? (
-                    <div>[deleted]</div>
+                    <p>[deleted]</p>
                   ) : (
                     <div>{redraft(JSON.parse(comment.content), renderers)}</div>
                   )}

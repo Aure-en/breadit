@@ -4,7 +4,7 @@ import styled from "styled-components";
 import useUser from "../../hooks/useUser";
 import usePost from "../../hooks/usePost";
 import useScroll from "../../hooks/useScroll";
-import useInitial from "../../hooks/useInitial";
+import useLoading from "../../hooks/useLoading";
 import Post from "../../components/user/content/post/Post";
 import Comment from "../../components/user/content/comment/Comment";
 
@@ -12,8 +12,6 @@ function Overview({ username }) {
   const [comments, setComments] = useState([]);
   const [posts, setPosts] = useState([]);
   const [overview, setOverview] = useState();
-  const [postsLoading, setPostsLoading] = useState(true);
-  const [commentsLoading, setCommentsLoading] = useState(true);
   const [loading, setLoading] = useState(true);
   const { getUserByName, getUserComments, getUserPosts } = useUser();
   const { getPost } = usePost();
@@ -71,8 +69,8 @@ function Overview({ username }) {
     });
   }, [comments, posts]);
 
-  useInitial(() => setPostsLoading(false), [posts]);
-  useInitial(() => setCommentsLoading(false), [comments]);
+  const postsLoading = useLoading(posts);
+  const commentsLoading = useLoading(comments);
 
   useEffect(() => {
     if (!postsLoading && !commentsLoading) {

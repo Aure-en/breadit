@@ -9,7 +9,7 @@ import useComment from "../../hooks/useComment";
 import Message from "../../components/inbox/messages/Message";
 import PostNotification from "../../components/inbox/notifications/PostNotification";
 import CommentNotification from "../../components/inbox/notifications/CommentNotification";
-import useInitial from "../../hooks/useInitial";
+import useLoading from "../../hooks/useLoading";
 
 function Overview() {
   const [notifications, setNotifications] = useState([]);
@@ -108,8 +108,8 @@ function Overview() {
     readMessages(currentUser.uid);
   }, []);
 
-  useInitial(() => setNotificationsLoading(false), [notifications]);
-  useInitial(() => setMessagesLoading(false), [messages]);
+  useLoading(() => setNotificationsLoading(false), [notifications]);
+  useLoading(() => setMessagesLoading(false), [messages]);
 
   useEffect(() => {
     if (!notificationsLoading && !messagesLoading) {

@@ -3,12 +3,11 @@ import styled from "styled-components";
 import { useAuth } from "../../../contexts/AuthContext";
 import useMessage from "../../../hooks/useMessage";
 import useScroll from "../../../hooks/useScroll";
-import useInitial from "../../../hooks/useInitial";
+import useLoading from "../../../hooks/useLoading";
 import Message from "../../../components/inbox/messages/Message";
 
 function Received() {
   const [messages, setMessages] = useState();
-  const [loading, setLoading] = useState(true);
   const { currentUser } = useAuth();
   const { getMessages, deleteMessageListener, readMessages } = useMessage();
   const listRef = useRef();
@@ -40,7 +39,7 @@ function Received() {
     })();
   }, [limit]);
 
-  useInitial(() => setLoading(false), [messages]);
+  useLoading(messages);
 
   return (
     <>

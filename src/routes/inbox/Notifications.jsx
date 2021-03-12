@@ -5,7 +5,7 @@ import useScroll from "../../hooks/useScroll";
 import usePost from "../../hooks/usePost";
 import useNotification from "../../hooks/useNotification";
 import useComment from "../../hooks/useComment";
-import useInitial from "../../hooks/useInitial";
+import useLoading from "../../hooks/useLoading";
 import PostNotification from "../../components/inbox/notifications/PostNotification";
 import CommentNotification from "../../components/inbox/notifications/CommentNotification";
 
@@ -67,7 +67,7 @@ function Notifications() {
     readNotifications(currentUser.uid);
   }, []);
 
-  useInitial(() => setLoading(false), [notifications]);
+  useLoading(() => setLoading(false), [notifications]);
 
   return (
     <>
