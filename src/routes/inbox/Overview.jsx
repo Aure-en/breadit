@@ -15,8 +15,6 @@ function Overview() {
   const [notifications, setNotifications] = useState([]);
   const [messages, setMessages] = useState([]);
   const [all, setAll] = useState([]);
-  const [notificationsLoading, setNotificationsLoading] = useState(true);
-  const [messagesLoading, setMessagesLoading] = useState(true);
   const [loading, setLoading] = useState(true);
   const [overview, setOverview] = useState();
   const { currentUser } = useAuth();
@@ -30,6 +28,8 @@ function Overview() {
   const { getPost } = usePost();
   const listRef = useRef();
   const { limit } = useScroll(listRef, 20, 10);
+  const notificationsLoading = useLoading(notifications);
+  const messagesLoading = useLoading(messages);
 
   const formatNotifications = async (notifications) => {
     return Promise.all(
@@ -107,9 +107,6 @@ function Overview() {
     readNotifications(currentUser.uid);
     readMessages(currentUser.uid);
   }, []);
-
-  useLoading(() => setNotificationsLoading(false), [notifications]);
-  useLoading(() => setMessagesLoading(false), [messages]);
 
   useEffect(() => {
     if (!notificationsLoading && !messagesLoading) {

@@ -99,7 +99,7 @@ function Comment({ className, commentId }) {
                     commentId={commentId}
                     postId={comment.post.id}
                     subreadit={comment.post.subreadit.name}
-                    onReplyClick={() => setIsReplying(!isReplying)}
+                    onReply={() => setIsReplying(!isReplying)}
                   />
                   <ExtraButtons
                     canEdit={

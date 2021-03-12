@@ -1,42 +1,14 @@
 import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import { useAuth } from "../../../contexts/AuthContext";
-import { useSave } from "../../../contexts/SaveContext";
-import { useEntry } from "../../../contexts/EntryContext";
+import SaveButton from "../shared/buttons/SaveButton";
+import ReplyButton from "../shared/buttons/ReplyButton";
 
-// Icons
-import { ReactComponent as IconSave } from "../../../assets/icons/general/icon-save.svg";
-import { ReactComponent as IconSaved } from "../../../assets/icons/general/icon-save-filled.svg";
-import { ReactComponent as IconReply } from "../../../assets/icons/content/icon-reply.svg";
-
-function Buttons({ user, commentId, onReplyClick }) {
-  const { currentUser } = useAuth();
-  const { saved, handleSave } = useSave();
-  const { openSignUp } = useEntry();
-
+function Buttons({ commentId, onReply }) {
   return (
     <Container>
-      <Button
-        type="button"
-        onClick={() => {
-          currentUser ? onReplyClick() : openSignUp();
-        }}
-      >
-        <IconReply />
-        Reply
-      </Button>
-      <Button
-        type="button"
-        onClick={() => {
-          currentUser ?
-          handleSave(user.uid, commentId, "comment")
-          : openSignUp();
-        }}
-      >
-        {saved.includes(commentId) ? <IconSaved /> : <IconSave />}
-        Save
-      </Button>
+      <ReplyButton onReply={onReply} />
+      <SaveButton docId={commentId} type="comment" />
     </Container>
   );
 }
@@ -48,12 +20,12 @@ Buttons.propTypes = {
     uid: PropTypes.string,
   }),
   commentId: PropTypes.string.isRequired,
-  onReplyClick: PropTypes.func,
+  onReply: PropTypes.func,
 };
 
 Buttons.defaultProps = {
   user: null,
-  onReplyClick: () => {},
+  onReply: () => {},
 };
 
 const Container = styled.div`
@@ -76,19 +48,5 @@ const Container = styled.div`
 
   @media all and (min-width: 768px) {
     padding: 0.5rem 0;
-  }
-`;
-
-const Button = styled.button`
-  font-size: 0.75rem;
-  font-weight: 500;
-  color: ${(props) => props.theme.secondary};
-
-  & > *:first-child {
-    margin-right: 0.15rem;
-  }
-
-  & > a {
-    height: 100%;
   }
 `;

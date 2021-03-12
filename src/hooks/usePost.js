@@ -60,7 +60,7 @@ function usePost() {
     const commentsId = [];
     const comments = await firestore
       .collection("comments")
-      .where("post", "==", postId)
+      .where("post.id", "==", postId)
       .get();
     comments.docs.forEach((comment) => commentsId.push(comment.data().id));
 

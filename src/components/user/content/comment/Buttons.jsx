@@ -1,32 +1,14 @@
-import React, { useRef } from "react";
+import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import { useAuth } from "../../../../contexts/AuthContext";
-import { useSave } from "../../../../contexts/SaveContext";
-import { useEntry } from "../../../../contexts/EntryContext";
-import { BREADIT_URL } from "../../../../utils/const";
+import ShareButton from "../../../content/shared/buttons/ShareButton";
+import SaveButton from "../../../content/shared/buttons/SaveButton";
 
 // Icons
-import { ReactComponent as IconSave } from "../../../../assets/icons/general/icon-save.svg";
-import { ReactComponent as IconSaved } from "../../../../assets/icons/general/icon-save-filled.svg";
-import { ReactComponent as IconLink } from "../../../../assets/icons/general/icon-link-small.svg";
 import { ReactComponent as IconReply } from "../../../../assets/icons/content/icon-reply.svg";
 
 function Buttons({ commentId, postId, subreadit }) {
-  const { currentUser } = useAuth();
-  const { saved, handleSave } = useSave();
-  const { openSignUp } = useEntry();
-  const copyRef = useRef();
-
-  // Copy the post link
-  const copyLink = () => {
-    if (!copyRef) return;
-    copyRef.current.select();
-    copyRef.current.setSelectionRange(0, 99999);
-    document.execCommand("copy");
-  };
-
   return (
     <>
       <Container>
@@ -34,38 +16,9 @@ function Buttons({ commentId, postId, subreadit }) {
           <IconReply />
           View
         </Button>
-
-        <Button
-          type="button"
-          onClick={(e) => {
-            e.preventDefault();
-            currentUser
-              ? handleSave(currentUser.uid, commentId, "comment")
-              : openSignUp();
-          }}
-        >
-          {saved.includes(commentId) ? <IconSaved /> : <IconSave />}
-          Save
-        </Button>
-
-        <Button
-          type="button"
-          onClick={(e) => {
-            e.preventDefault();
-            copyLink();
-          }}
-        >
-          <IconLink />
-          Share
-        </Button>
+        <SaveButton docId={commentId} type="comment" />
+        <ShareButton copy={`${subreadit}/${postId}/${commentId}`} />
       </Container>
-
-      <Copy
-        type="text"
-        value={`${BREADIT_URL}/b/${subreadit}/${postId}/${commentId}`}
-        ref={copyRef}
-        readOnly
-      />
     </>
   );
 }
@@ -121,11 +74,4 @@ const Button = styled.button`
   &:hover {
     background: ${(props) => props.theme.backgroundTertiary};
   }
-`;
-
-const Copy = styled.input`
-  position: absolute;
-  top: -9999px;
-  left: -9999px;
-  height: 0;
 `;

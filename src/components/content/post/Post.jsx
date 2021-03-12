@@ -195,6 +195,7 @@ const ButtonsContainer = styled.div`
   @media all and (min-width: 768px) {
     grid-row: 2;
     grid-column: 1 / -1;
+    margin-left: 1rem;
   }
 `;
 

@@ -11,7 +11,6 @@ import CommentNotification from "../../components/inbox/notifications/CommentNot
 
 function Notifications() {
   const [notifications, setNotifications] = useState();
-  const [loading, setLoading] = useState(true);
   const { currentUser } = useAuth();
   const {
     getNotifications,
@@ -22,6 +21,7 @@ function Notifications() {
   const { getPost } = usePost();
   const listRef = useRef();
   const { limit } = useScroll(listRef, 20, 10);
+  const loading = useLoading(notifications);
 
   const formatNotifications = async (notifications) => {
     return Promise.all(
@@ -66,8 +66,6 @@ function Notifications() {
   useEffect(() => {
     readNotifications(currentUser.uid);
   }, []);
-
-  useLoading(() => setLoading(false), [notifications]);
 
   return (
     <>

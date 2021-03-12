@@ -18,7 +18,7 @@ function User({ match }) {
 
   useEffect(() => {
     (async () => {
-      const user = await getUserByName(match.params.username);
+      const user = await getUserByName(match.params.username.toLowerCase());
       setUser(user);
       setLoading(false);
     })();

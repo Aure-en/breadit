@@ -1,92 +1,18 @@
-import React, { useState, useEffect, useRef } from "react";
+import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
-import { useAuth } from "../../../contexts/AuthContext";
-import { useEntry } from "../../../contexts/EntryContext";
-import { useSave } from "../../../contexts/SaveContext";
-import useComment from "../../../hooks/useComment";
-import useWindowSize from "../../../hooks/useWindowSize";
-import { BREADIT_URL } from "../../../utils/const";
+import ShareButton from "../shared/buttons/ShareButton";
+import CommentButton from "../shared/buttons/CommentButton";
+import SaveButton from "../shared/buttons/SaveButton";
+import HideButton from "../shared/buttons/HideButton";
 
-// Icons
-import { ReactComponent as IconComment } from "../../../assets/icons/general/icon-comment.svg";
-import { ReactComponent as IconSave } from "../../../assets/icons/general/icon-save.svg";
-import { ReactComponent as IconSaved } from "../../../assets/icons/general/icon-save-filled.svg";
-import { ReactComponent as IconHide } from "../../../assets/icons/general/icon-hide.svg";
-import { ReactComponent as IconLink } from "../../../assets/icons/general/icon-link-small.svg";
-
-function Buttons({ postId, subreadit, hide, user, className }) {
-  const [commentsNumber, setCommentsNumber] = useState(0);
-  const { currentUser } = useAuth();
-  const { openSignUp } = useEntry();
-  const { saved, handleSave } = useSave();
-  const { getCommentsNumber } = useComment();
-  const { windowSize } = useWindowSize();
-  const copyRef = useRef();
-
-  useEffect(() => {
-    (async () => {
-      const comments = await getCommentsNumber(postId);
-      setCommentsNumber(comments);
-    })();
-  }, []);
-
-  // Copy the post link
-  const copyLink = () => {
-    if (!copyRef) return;
-    copyRef.current.select();
-    copyRef.current.setSelectionRange(0, 99999);
-    document.execCommand("copy");
-  };
-
+function Buttons({ postId, subreadit, hide, className }) {
   return (
     <Container className={className}>
-      <Button as={Link} to={`/b/${subreadit}/${postId}`}>
-        <IconComment />
-        {commentsNumber}
-        {windowSize.width > 768 && " Comment"}
-        {windowSize.width > 768 && commentsNumber !== 1 && "s"}
-      </Button>
-
-      <Button
-        type="button"
-        onClick={(e) => {
-          e.preventDefault();
-          currentUser ? handleSave(user.uid, postId, "post") : openSignUp();
-        }}
-      >
-        {saved.includes(postId) ? <IconSaved /> : <IconSave />}
-        Save
-      </Button>
-
-      <Button
-        type="button"
-        onClick={(e) => {
-          e.preventDefault();
-          copyLink();
-        }}
-      >
-        <IconLink />
-        Share
-        <Copy
-          type="text"
-          value={`${BREADIT_URL}/b/${subreadit}/${postId}`}
-          ref={copyRef}
-          readOnly
-        />
-      </Button>
-
-      <Button
-        type="button"
-        onClick={(e) => {
-          e.preventDefault();
-          hide(true);
-        }}
-      >
-        <IconHide />
-        Hide
-      </Button>
+      <CommentButton subreadit={subreadit} postId={postId} />
+      <SaveButton docId={postId} type="post" />
+      <ShareButton copy={`${subreadit}/${postId}`} />
+      <HideButton onHide={hide} />
     </Container>
   );
 }
@@ -96,16 +22,11 @@ export default Buttons;
 Buttons.propTypes = {
   postId: PropTypes.string.isRequired,
   subreadit: PropTypes.string.isRequired,
-  hide: PropTypes.func,
-  user: PropTypes.shape({
-    uid: PropTypes.string,
-  }),
+  hide: PropTypes.func.isRequired,
   className: PropTypes.string,
 };
 
 Buttons.defaultProps = {
-  hide: () => {},
-  user: null,
   className: "",
 };
 
@@ -126,25 +47,4 @@ const Container = styled.div`
   & > *:hover {
     background: ${(props) => props.theme.backgroundTertiary};
   }
-`;
-
-const Button = styled.button`
-  font-size: 0.75rem;
-  font-weight: 500;
-  color: ${(props) => props.theme.secondary};
-
-  & > *:first-child {
-    margin-right: 0.15rem;
-  }
-
-  & > a {
-    height: 100%;
-  }
-`;
-
-const Copy = styled.input`
-  position: absolute;
-  top: -9999px;
-  left: -9999px;
-  height: 0;
 `;

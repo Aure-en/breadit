@@ -1,30 +1,19 @@
-import React, { useState, useRef } from "react";
+import React, { useRef } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import useDropdown from "../../../hooks/useDropdown";
 import useWindowSize from "../../../hooks/useWindowSize";
-import Delete from "./Delete";
-import { BREADIT_URL } from "../../../utils/const";
+import DeleteButton from "./buttons/DeleteButton";
+import ShareButton from "./buttons/ShareButton";
+import EditButton from "./buttons/EditButton";
 
 // Icons
 import { ReactComponent as IconDots } from "../../../assets/icons/content/icon-dots.svg";
-import { ReactComponent as IconEdit } from "../../../assets/icons/content/icon-edit.svg";
-import { ReactComponent as IconDelete } from "../../../assets/icons/content/icon-delete.svg";
-import { ReactComponent as IconLink } from "../../../assets/icons/general/icon-link-small.svg";
 
 function Buttons({ canEdit, canDelete, onEdit, onDelete, copy, type }) {
   const dropdownRef = useRef();
-  const copyRef = useRef();
-  const { windowSize } = useWindowSize();
   const { isDropdownOpen, setIsDropdownOpen } = useDropdown(dropdownRef);
-
-  // Copy the post link
-  const copyLink = () => {
-    if (!copyRef) return;
-    copyRef.current.select();
-    copyRef.current.setSelectionRange(0, 99999);
-    document.execCommand("copy");
-  };
+  const { windowSize } = useWindowSize();
 
   return (
     <>
@@ -36,26 +25,16 @@ function Buttons({ canEdit, canDelete, onEdit, onDelete, copy, type }) {
           >
             <IconDots />
           </DropdownHeader>
+
           {isDropdownOpen && (
             <DropdownList>
-              <Choice
-                type="button"
-                onClick={() => {
-                  copyLink();
-                  setIsDropdownOpen(false);
-                }}
-              >
-                <IconLink />
-                Share
-              </Choice>
-              {canEdit && (
-                <Choice type="button" onClick={onEdit}>
-                  <IconEdit />
-                  Edit
-                </Choice>
-              )}
+              <ShareButton
+                copy={copy}
+                onClick={() => setIsDropdownOpen(false)}
+              />
+              {canEdit && <EditButton onEdit={onEdit} />}
               {canDelete && (
-                <DeleteChoice
+                <DeleteButton
                   onClick={() => setIsDropdownOpen(false)}
                   onDelete={onDelete}
                   type={type}
@@ -68,77 +47,10 @@ function Buttons({ canEdit, canDelete, onEdit, onDelete, copy, type }) {
 
       {windowSize.width > 768 && (
         <Container>
-          <Button
-            type="button"
-            onClick={(e) => {
-              e.preventDefault();
-              copyLink();
-            }}
-          >
-            <IconLink />
-            Share
-          </Button>
-
-          {canEdit && (
-            <Button type="button" onClick={onEdit}>
-              <IconEdit />
-              Edit
-            </Button>
-          )}
+          <ShareButton copy={copy} onClick={() => setIsDropdownOpen(false)} />
+          {canEdit && <EditButton onEdit={onEdit} />}
           {canDelete && <DeleteButton onDelete={onDelete} type={type} />}
         </Container>
-      )}
-
-      <Copy
-        type="text"
-        value={`${BREADIT_URL}/b/${copy}`}
-        ref={copyRef}
-        readOnly
-      />
-    </>
-  );
-}
-
-function DeleteButton({ onDelete, type }) {
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-
-  return (
-    <>
-      <Button type="button" onClick={() => setIsDeleteModalOpen(true)}>
-        <IconDelete />
-        Delete
-      </Button>
-      {isDeleteModalOpen && (
-        <Delete
-          closeModal={() => setIsDeleteModalOpen(false)}
-          type={type}
-          onDelete={onDelete}
-        />
-      )}
-    </>
-  );
-}
-
-function DeleteChoice({ onDelete, type }) {
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-
-  return (
-    <>
-      <Choice
-        type="button"
-        onClick={() => {
-          setIsDeleteModalOpen(true);
-        }}
-      >
-        <IconDelete />
-        Delete
-      </Choice>
-      {isDeleteModalOpen && (
-        <Delete
-          closeModal={() => setIsDeleteModalOpen(false)}
-          type={type}
-          onDelete={onDelete}
-        />
       )}
     </>
   );
@@ -161,16 +73,6 @@ Buttons.defaultProps = {
   onEdit: () => {},
   onDelete: () => {},
   type: "post",
-};
-
-DeleteChoice.propTypes = {
-  onDelete: PropTypes.func.isRequired,
-  type: PropTypes.string.isRequired,
-};
-
-DeleteButton.propTypes = {
-  onDelete: PropTypes.func.isRequired,
-  type: PropTypes.string.isRequired,
 };
 
 const Container = styled.div`
@@ -197,16 +99,6 @@ const Container = styled.div`
   }
 `;
 
-const Button = styled.button`
-  font-size: 0.75rem;
-  font-weight: 500;
-  color: ${(props) => props.theme.secondary};
-
-  & > *:first-child {
-    margin-right: 0.15rem;
-  }
-`;
-
 const DropdownHeader = styled.button`
   color: ${(props) => props.theme.secondary};
 `;
@@ -222,22 +114,14 @@ const DropdownList = styled.div`
   right: 0;
   padding: 0;
   z-index: 5;
-`;
 
-const Choice = styled.button`
-  display: flex;
-  padding: 0.25rem 0.5rem;
-  width: 100%;
-  color: ${(props) => props.theme.secondary};
-
-  &:hover {
-    background: ${(props) => props.theme.accentBackground};
+  & > * {
+    display: flex;
+    padding: 0.25rem 0.5rem;
+    width: 100%;
   }
-`;
 
-const Copy = styled.input`
-  position: absolute;
-  top: -9999px;
-  left: -9999px;
-  height: 0;
+  & > *:hover {
+    background: ${(props) => props.theme.backgroundTertiary};
+  }
 `;

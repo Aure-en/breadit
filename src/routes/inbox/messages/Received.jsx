@@ -12,6 +12,7 @@ function Received() {
   const { getMessages, deleteMessageListener, readMessages } = useMessage();
   const listRef = useRef();
   const { limit } = useScroll(listRef, 20, 10);
+  const loading = useLoading(messages);
 
   // When the user deletes the message, hides it from them.
   useEffect(() => {
@@ -38,8 +39,6 @@ function Received() {
       setMessages(received);
     })();
   }, [limit]);
-
-  useLoading(messages);
 
   return (
     <>

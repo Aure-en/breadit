@@ -1,103 +1,30 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useRef } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
-import { useAuth } from "../../../../contexts/AuthContext";
-import { useSave } from "../../../../contexts/SaveContext";
-import { useEntry } from "../../../../contexts/EntryContext";
-import useComment from "../../../../hooks/useComment";
 import useWindowSize from "../../../../hooks/useWindowSize";
 import useDropdown from "../../../../hooks/useDropdown";
-import { BREADIT_URL } from "../../../../utils/const";
+import CommentButton from "../../../content/shared/buttons/CommentButton";
+import ShareButton from "../../../content/shared/buttons/ShareButton";
+import SaveButton from "../../../content/shared/buttons/SaveButton";
+import HideButton from "../../../content/shared/buttons/HideButton";
 
 // Icons
-import { ReactComponent as IconComment } from "../../../../assets/icons/general/icon-comment.svg";
-import { ReactComponent as IconSave } from "../../../../assets/icons/general/icon-save.svg";
-import { ReactComponent as IconSaved } from "../../../../assets/icons/general/icon-save-filled.svg";
-import { ReactComponent as IconHide } from "../../../../assets/icons/general/icon-hide.svg";
-import { ReactComponent as IconLink } from "../../../../assets/icons/general/icon-link-small.svg";
 import { ReactComponent as IconDots } from "../../../../assets/icons/content/icon-dots.svg";
 
-function Buttons({ postId, subreadit, hide, user }) {
-  const [commentsNumber, setCommentsNumber] = useState(0);
-  const { currentUser } = useAuth();
-  const { saved, handleSave } = useSave();
-  const { getCommentsNumber } = useComment();
+function Buttons({ postId, subreadit, hide }) {
   const { windowSize } = useWindowSize();
-  const { openSignUp } = useEntry();
-  const copyRef = useRef();
   const dropdownRef = useRef();
   const { isDropdownOpen, setIsDropdownOpen } = useDropdown(dropdownRef);
 
-  useEffect(() => {
-    (async () => {
-      const comments = await getCommentsNumber(postId);
-      setCommentsNumber(comments);
-    })();
-  }, []);
-
-  // Copy the post link
-  const copyLink = () => {
-    if (!copyRef) return;
-    copyRef.current.select();
-    copyRef.current.setSelectionRange(0, 99999);
-    document.execCommand("copy");
-  };
-
   return (
     <Container>
-      <Button as={Link} to={`/b/${subreadit}/${postId}`}>
-        <IconComment />
-        {commentsNumber}
-        {windowSize.width > 576 && (
-          <>
-            {" "}
-            Comment
-            {commentsNumber !== 1 && "s"}
-          </>
-        )}
-      </Button>
+      <CommentButton subreadit={subreadit} postId={postId} />
 
       {windowSize.width > 576 ? (
         <>
-          <Button
-            type="button"
-            onClick={(e) => {
-              e.preventDefault();
-              currentUser ? handleSave(user.uid, postId, "post") : openSignUp();
-            }}
-          >
-            {saved.includes(postId) ? <IconSaved /> : <IconSave />}
-            Save
-          </Button>
-
-          <Button
-            type="button"
-            onClick={(e) => {
-              e.preventDefault();
-              copyLink();
-            }}
-          >
-            <IconLink />
-            Share
-            <Copy
-              type="text"
-              value={`${BREADIT_URL}/b/${subreadit}/${postId}`}
-              ref={copyRef}
-              readOnly
-            />
-          </Button>
-
-          <Button
-            type="button"
-            onClick={(e) => {
-              e.preventDefault();
-              hide(true);
-            }}
-          >
-            <IconHide />
-            Hide
-          </Button>
+          <SaveButton docId={postId} type="post" />
+          <ShareButton copy={`${subreadit}/${postId}`} />
+          <HideButton onHide={() => hide(true)} />
         </>
       ) : (
         <Dropdown ref={dropdownRef}>
@@ -113,44 +40,19 @@ function Buttons({ postId, subreadit, hide, user }) {
 
           {isDropdownOpen && (
             <DropdownList>
-              <Choice
-                type="button"
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleSave(user.uid, postId, "post");
-                }}
-              >
-                {saved.includes(postId) ? <IconSaved /> : <IconSave />}
-                Save
-              </Choice>
-
-              <Choice
-                type="button"
-                onClick={(e) => {
-                  e.preventDefault();
-                  copyLink();
-                }}
-              >
-                <IconLink />
-                Share
-                <Copy
-                  type="text"
-                  value={`${BREADIT_URL}/b/${subreadit}/${postId}`}
-                  ref={copyRef}
-                  readOnly
-                />
-              </Choice>
-
-              <Choice
-                type="button"
-                onClick={(e) => {
-                  e.preventDefault();
-                  hide(true);
-                }}
-              >
-                <IconHide />
-                Hide
-              </Choice>
+              <SaveButton
+                docId={postId}
+                type="post"
+                onClick={() => setIsDropdownOpen(false)}
+              />
+              <ShareButton
+                copy={`${subreadit}/${postId}`}
+                onClick={() => setIsDropdownOpen(false)}
+              />
+              <HideButton
+                onHide={() => hide(true)}
+                onClick={() => setIsDropdownOpen(false)}
+              />
             </DropdownList>
           )}
         </Dropdown>
@@ -165,14 +67,10 @@ Buttons.propTypes = {
   postId: PropTypes.string.isRequired,
   subreadit: PropTypes.string.isRequired,
   hide: PropTypes.func,
-  user: PropTypes.shape({
-    uid: PropTypes.string,
-  }),
 };
 
 Buttons.defaultProps = {
   hide: () => {},
-  user: null,
 };
 
 const Container = styled.div`
@@ -192,28 +90,6 @@ const Container = styled.div`
   & > *:hover {
     background: ${(props) => props.theme.backgroundTertiary};
   }
-`;
-
-const Button = styled.button`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.75rem;
-  font-weight: 500;
-  color: ${(props) => props.theme.secondary};
-
-  & > *:first-child {
-    margin-right: 0.15rem;
-  }
-
-  & > a {
-    height: 100%;
-  }
-`;
-
-const Copy = styled.input`
-  position: absolute;
-  top: -9999px;
 `;
 
 const Dropdown = styled.div`
@@ -238,20 +114,14 @@ const DropdownList = styled.div`
   right: 0;
   padding: 0;
   z-index: 5;
-`;
 
-const Choice = styled.button`
-  display: flex;
-  padding: 0.25rem 0.5rem;
-  width: 100%;
-  color: ${(props) => props.theme.secondary};
-  font-weight: 500;
-
-  & > svg {
-    margin-right: 0.5rem;
+  & > * {
+    display: flex;
+    padding: 0.25rem 0.5rem;
+    width: 100%;
   }
 
-  &:hover {
+  & > *:hover {
     background: ${(props) => props.theme.backgroundTertiary};
   }
 `;
