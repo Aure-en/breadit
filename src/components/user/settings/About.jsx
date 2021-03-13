@@ -55,7 +55,7 @@ export default About;
 const Textarea = styled.textarea`
   width: 100%;
   min-height: 8rem;
-  background: ${(props) => props.theme.bg_container};
+  background: ${(props) => props.theme.input_bg};
 
   &:focus {
     outline: 1px solid transparent;

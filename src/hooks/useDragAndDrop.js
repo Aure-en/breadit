@@ -2,16 +2,6 @@ import { useState } from "react";
 
 function useDragAndDrop() {
   const [inDragZone, setInDragZone] = useState(false);
-  const [files, setFiles] = useState([]);
-  const [preview, setPreview] = useState([]);
-
-  const displayPreview = (draggedFiles) => {
-    const previewFiles = [];
-    draggedFiles.forEach((file) =>
-      previewFiles.push(URL.createObjectURL(file))
-    );
-    setPreview(previewFiles);
-  };
 
   const handleDragEnter = (e) => {
     e.preventDefault();
@@ -32,28 +22,15 @@ function useDragAndDrop() {
     e.stopPropagation();
   };
 
-  const handleDrop = (e) => {
+  const handleDrop = (e, callback) => {
     e.preventDefault();
     e.stopPropagation();
-    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-      setFiles([...files, ...e.dataTransfer.files]);
-      displayPreview([...files, ...e.dataTransfer.files]);
-    }
+    callback(e);
     setInDragZone(false);
-  };
-
-  const deleteFile = (index) => {
-    const newFiles = [...files];
-    newFiles.splice(index, 1);
-    setFiles(newFiles);
-    displayPreview(newFiles);
   };
 
   return {
     inDragZone,
-    files,
-    deleteFile,
-    preview,
     handleDragEnter,
     handleDragLeave,
     handleDragOver,

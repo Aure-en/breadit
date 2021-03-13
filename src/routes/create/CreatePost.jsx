@@ -9,6 +9,7 @@ import useSubreadit from "../../hooks/useSubreadit";
 import useDragAndDrop from "../../hooks/useDragAndDrop";
 import useStorage from "../../hooks/useStorage";
 import useDropdown from "../../hooks/useDropdown";
+import useImage from "../../hooks/useImage";
 import TextEditor from "../../components/shared/TextEditor";
 
 // Icons
@@ -19,12 +20,12 @@ import { ReactComponent as IconLink } from "../../assets/icons/general/icon-link
 import { ReactComponent as IconPlus } from "../../assets/icons/general/icon-plus.svg";
 import { ReactComponent as IconCheck } from "../../assets/icons/general/icon-check.svg";
 import { ReactComponent as IconClose } from "../../assets/icons/general/icon-x.svg";
+import { ReactComponent as IconAdd } from "../../assets/icons/content/icon-add.svg";
 
 function CreatePost({ location }) {
   const [type, setType] = useState("post");
   const [title, setTitle] = useState("");
   const [post, setPost] = useState("");
-  const [images, setImages] = useState("");
   const [link, setLink] = useState("");
   const [linkError, setLinkError] = useState("");
   const [spoiler, setSpoiler] = useState(false);
@@ -38,9 +39,6 @@ function CreatePost({ location }) {
   const history = useHistory();
   const {
     inDragZone,
-    files,
-    deleteFile,
-    preview,
     handleDragEnter,
     handleDragLeave,
     handleDragOver,
@@ -53,6 +51,7 @@ function CreatePost({ location }) {
     current,
     handleChoice,
   } = useDropdown(dropdownRef);
+  const { images, preview, dropImages, uploadImages, deleteImage } = useImage();
 
   // Get list of subreadits
   useEffect(() => {
@@ -77,7 +76,7 @@ function CreatePost({ location }) {
         // Upload the images to the storage and turns them into links.
         const imagesUrls = [];
         await Promise.all(
-          files.map(async (file) => {
+          images.map(async (file) => {
             const imageUrl = await uploadImage(file);
             imagesUrls.push(imageUrl);
           })
@@ -217,11 +216,11 @@ function CreatePost({ location }) {
                   onDragOver={handleDragOver}
                   onDragEnter={handleDragEnter}
                   onDragLeave={handleDragLeave}
-                  onDrop={handleDrop}
+                  onDrop={(e) => handleDrop(e, dropImages)}
                   areFilesDragged={inDragZone}
-                  center={files.length === 0}
+                  center={images.length === 0}
                 >
-                  {files.length !== 0 ? (
+                  {images.length !== 0 ? (
                     <Preview>
                       {preview.map((image, index) => {
                         return (
@@ -232,19 +231,32 @@ function CreatePost({ location }) {
                           >
                             <Image src={image} alt="preview" />
                             {isHovered === index && (
-                              <DeleteButton onClick={() => deleteFile(index)}>
+                              <DeleteButton onClick={() => deleteImage(index)}>
                                 <IconClose />
                               </DeleteButton>
                             )}
                           </ImageContainer>
                         );
                       })}
+
+                      <AddImage>
+                        <HiddenInput
+                          type="file"
+                          onChange={uploadImages}
+                          multiple
+                        />
+                        <IconAdd />
+                      </AddImage>
                     </Preview>
                   ) : (
                     <div>
                       Drag and drop or{" "}
                       <Upload>
-                        <HiddenInput type="file" />
+                        <HiddenInput
+                          type="file"
+                          onChange={uploadImages}
+                          multiple
+                        />
                         Upload
                       </Upload>
                     </div>
@@ -269,14 +281,6 @@ function CreatePost({ location }) {
             )}
 
             <Buttons>
-              <ButtonBool
-                type="button"
-                onClick={() => setSpoiler(!spoiler)}
-                isChecked={spoiler === true}
-              >
-                {spoiler ? <IconCheck /> : <IconPlus />}
-                Spoiler
-              </ButtonBool>
               <SubmitBtn
                 type="submit"
                 disabled={
@@ -334,7 +338,8 @@ const Tab = styled.button`
   justify-content: center;
   padding-right: -0.5rem;
   font-weight: ${(props) => props.isSelected && "500"};
-  color: ${(props) => props.isSelected ? props.theme.accent_secondary : props.theme.text_primary};
+  color: ${(props) =>
+    props.isSelected ? props.theme.accent_secondary : props.theme.text_primary};
   border-bottom: ${(props) =>
     props.isSelected
       ? `2px solid ${props.theme.accent_secondary}`
@@ -360,7 +365,7 @@ const Dropdown = styled.div`
 const DropdownHeader = styled.button`
   display: grid;
   grid-template-columns: 1fr auto;
-  background: ${(props) => props.theme.bg_container};
+  background: ${(props) => props.theme.input_bg};
   color: ${(props) => props.theme.text_primary};
   padding: 0.75rem;
   border-radius: ${(props) => (props.isDropdownOpen ? "5px 5px 0 0" : "5px")};
@@ -373,7 +378,7 @@ const DropdownList = styled.ul`
   position: absolute;
   left: 0;
   right: 0;
-  background: ${(props) => props.theme.bg_container};
+  background: ${(props) => props.theme.input_bg};
   max-height: 25rem;
   overflow-y: auto;
   padding: 0.75rem 0;
@@ -428,7 +433,8 @@ const Field = styled.div`
 const Input = styled.input`
   border: none;
   width: 100%;
-  background: ${(props) => props.theme.bg_container};
+  background: ${(props) => props.theme.input_bg};
+  color: ${(props) => props.theme.text_primary};
 
   &:focus {
     outline: 1px solid transparent;
@@ -443,6 +449,7 @@ const Title = styled.div`
   padding: 0.5rem;
   border-radius: 5px;
   border: 1px solid ${(props) => props.theme.border_secondary};
+  background: ${(props) => props.theme.input_bg};
 
   &:focus-within {
     border: 1px solid ${(props) => props.theme.border_active};
@@ -459,6 +466,8 @@ const Textarea = styled.textarea`
   border: 1px solid ${(props) => props.theme.border_secondary};
   padding: 0.5rem;
   border-radius: 5px;
+  background: ${(props) => props.theme.input_bg};
+  color: ${(props) => props.theme.text_primary};
 
   &:focus {
     outline: 1px solid transparent;
@@ -479,6 +488,7 @@ const DropArea = styled.div`
     align-items: center;
     justify-content: center;
   `}
+  background: ${(props) => props.theme.input_bg};
 `;
 
 const Preview = styled.div`
@@ -511,6 +521,16 @@ const Image = styled.img`
   object-fit: cover;
 `;
 
+const AddImage = styled.label`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-basis: calc(25% - 1.125rem);
+  border: 2px dashed ${(props) => props.theme.text_secondary};
+  margin: 0.5rem;
+  cursor: pointer;
+`;
+
 const button = `
   border-radius: 5rem;
   padding: 0.45rem 1.25rem;
@@ -520,7 +540,7 @@ const button = `
 const Buttons = styled.div`
   padding: 1rem 0;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
 `;
 
 const Button = styled.button`
@@ -553,26 +573,6 @@ const Upload = styled.label`
 const HiddenInput = styled.input`
   position: absolute;
   top: -9999px;
-`;
-
-const ButtonBool = styled(Button)`
-  display: flex;
-  align-items: center;
-  border: 1px solid
-    ${(props) =>
-      props.isChecked
-        ? props.theme.accent_secondary
-        : props.theme.accent_secondary_disabled};
-  color: ${(props) =>
-    props.isChecked
-      ? props.theme.bg_container
-      : props.theme.accent_secondary_disabled};
-  background: ${(props) => props.isChecked && props.theme.accent_secondary};
-
-  & > *:first-child {
-    margin-left: -0.5rem;
-    margin-right: 0.5rem;
-  }
 `;
 
 const SubmitBtn = styled(Button)`

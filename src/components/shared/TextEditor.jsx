@@ -549,7 +549,7 @@ const Wrapper = styled.div`
 const Container = styled.div`
   min-height: 8rem;
   padding: 1rem;
-  background: ${(props) => props.theme.bg_container};
+  background: ${(props) => props.theme.input_bg};
   cursor: text;
   display: flex;
   flex-direction: column;
@@ -631,6 +631,7 @@ const Input = styled.input`
   padding: 0.5rem;
   border-radius: 5px;
   margin-bottom: 0.5rem;
+  background: ${(props) => props.theme.input_bg};
 
   &:focus {
     outline: 1px solid transparent;

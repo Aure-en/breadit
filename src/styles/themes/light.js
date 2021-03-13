@@ -41,6 +41,7 @@ export const colors = {
   vote_down: "rgb(126, 192, 196)",
   vote_hover: "rgb(237, 212, 194)",
 
+  input_bg: "rgb(255, 255, 255)",
   text_editor_bg: "rgb(255, 240, 219)",
   text_editor_button: "rgba(74, 73, 72)",
   text_editor_button_active: "rgb(0, 0, 0)",
