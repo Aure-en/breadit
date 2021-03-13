@@ -112,7 +112,7 @@ const Container = styled.div`
 `;
 
 const Main = styled.main`
-  background: ${(props) => props.theme.backgroundSecondary};
+  background: ${(props) => props.theme.bg_container};
   padding: 1rem;
   margin: 2rem 0;
   border-radius: 5px;
@@ -132,10 +132,10 @@ const Input = styled.input`
   border-radius: 3px;
   width: 100%;
   border: 1px solid
-    ${(props) => (props.hasError ? props.theme.error : props.theme.secondary)};
+    ${(props) => (props.hasError ? props.theme.error : props.theme.text_secondary)};
 
   &:focus {
-    outline: none;
+    outline: 1px solid transparent;
     border: 1px solid ${(props) => props.theme.accent};
   }
 `;
@@ -158,7 +158,7 @@ const Bottom = styled.div`
 
 const Button = styled.button`
   display: block;
-  color: ${(props) => props.theme.backgroundSecondary};
+  color: ${(props) => props.theme.bg_container};
   background-color: ${(props) => props.theme.accent};
   border: 1px solid ${(props) => props.theme.accent};
   border-radius: 5rem;
@@ -168,8 +168,8 @@ const Button = styled.button`
   text-align: center;
 
   &:disabled {
-    background-color: ${(props) => props.theme.accentDisabled};
-    border: 1px solid ${(props) => props.theme.accentDisabled};
+    background-color: ${(props) => props.theme.accent_disabled};
+    border: 1px solid ${(props) => props.theme.accent_disabled};
     cursor: not-allowed;
   }
 `;

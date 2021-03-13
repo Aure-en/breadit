@@ -20,7 +20,7 @@ export default Rules;
 
 const Container = styled.div`
   padding: 1rem;
-  background: ${(props) => props.theme.backgroundSecondary};
+  background: ${(props) => props.theme.bg_container};
   border-radius: 5px;
 `;
 

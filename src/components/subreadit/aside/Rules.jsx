@@ -72,7 +72,7 @@ const Container = styled.aside`
   position: relative;
   display: flex;
   flex-direction: column;
-  background: ${(props) => props.theme.backgroundSecondary};
+  background: ${(props) => props.theme.bg_container};
   line-height: 1.25rem;
   border-radius: 0.25rem;
   box-shadow: 0 2px 3px -4px ${(props) => props.theme.shadow};
@@ -80,7 +80,7 @@ const Container = styled.aside`
 `;
 
 const Header = styled.div`
-  color: ${(props) => props.theme.backgroundSecondary};
+  color: ${(props) => props.theme.bg_container};
   background: ${(props) => props.theme.accent};
   padding: 0.75rem 1rem;
   font-weight: 500;
@@ -99,6 +99,7 @@ const DropdownHeader = styled.button`
   display: flex;
   justify-content: space-between;
   padding: 0.5rem 0;
+  color: ${(props) => props.theme.text_primary};
 `;
 
 const Title = styled.div`

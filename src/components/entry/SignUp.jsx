@@ -124,10 +124,10 @@ const Input = styled.input`
   border-radius: 3px;
   border: 1px solid
     ${(props) =>
-      props.hasError ? props.theme.error : props.theme.borderSecondary};
+      props.hasError ? props.theme.error : props.theme.border_secondary};
 
   &:focus {
-    outline: none;
+    outline: 1px solid transparent;
     border: 1px solid ${(props) => props.theme.accent};
   }
 
@@ -140,7 +140,7 @@ const Input = styled.input`
 
 const Message = styled.div`
   font-size: 0.75rem;
-  color: ${(props) => props.theme.secondary};
+  color: ${(props) => props.theme.text_secondary};
   margin-bottom: 0.5rem;
 `;
 
@@ -156,7 +156,7 @@ const MessageSuccess = styled(Message)`
 
 const Button = styled.button`
   display: block;
-  color: ${(props) => props.theme.backgroundSecondary};
+  color: ${(props) => props.theme.bg_container};
   background-color: ${(props) => props.theme.accent};
   border: 1px solid ${(props) => props.theme.accent};
   border-radius: 5rem;
@@ -167,15 +167,15 @@ const Button = styled.button`
   margin: 0.75rem 0;
 
   &:disabled {
-    background-color: ${(props) => props.theme.accentDisabled};
-    border: 1px solid ${(props) => props.theme.accentDisabled};
+    background-color: ${(props) => props.theme.accent_disabled};
+    border: 1px solid ${(props) => props.theme.accent_disabled};
     cursor: disabled;
   }
 
   &:hover {
-    color: ${(props) => props.theme.backgroundSecondary};
-    background-color: ${(props) => props.theme.accentHover};
-    border: 1px solid ${(props) => props.theme.accentHover};
+    color: ${(props) => props.theme.bg_container};
+    background-color: ${(props) => props.theme.accent_active};
+    border: 1px solid ${(props) => props.theme.accent_active};
   }
 `;
 

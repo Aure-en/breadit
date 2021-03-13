@@ -108,8 +108,8 @@ const Button = styled.button`
   border-radius: 50%;
   width: 2.5rem;
   height: 2.5rem;
-  box-shadow: 0 0 10px ${(props) => props.theme.shadowSecondary};
-  background: ${(props) => props.theme.backgroundSecondary};
+  box-shadow: 0 0 10px ${(props) => props.theme.carousel_shadow};
+  background: ${(props) => props.theme.bg_container};
   padding: 0;
   top: 50%;
   transform: translateY(-50%);
@@ -137,8 +137,8 @@ const SlideNumber = styled.span`
   top: 1rem;
   right: 1rem;
   font-size: 0.75rem;
-  color: ${(props) => props.theme.backgroundSecondary};
-  background: ${(props) => props.theme.overlayTertiary};
+  color: ${(props) => props.theme.bg_container};
+  background: ${(props) => props.theme.carousel_overlay};
   padding: 0.25rem 0.45rem;
   border-radius: 50px;
   z-index: 1;

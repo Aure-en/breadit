@@ -86,6 +86,7 @@ const DropdownHeader = styled.button`
   justify-items: start;
   padding: 0.35rem 1.75rem;
   width: 100%;
+  color: ${(props) => props.theme.text_primary};
 
   & > *:first-child {
     margin-right: 1rem;
@@ -114,6 +115,6 @@ const Choice = styled(Link)`
   }
 
   &:hover {
-    background: ${(props) => props.theme.backgroundTertiary};
+    background: ${(props) => props.theme.vote_bg};
   }
 `;

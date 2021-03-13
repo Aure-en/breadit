@@ -49,7 +49,7 @@ const Container = styled.aside`
   display: flex;
   flex-direction: column;
   padding-bottom: 1rem;
-  background: ${(props) => props.theme.backgroundSecondary};
+  background: ${(props) => props.theme.bg_container};
   line-height: 1.25rem;
   border-radius: 0.25rem;
   box-shadow: 0 2px 3px -4px ${(props) => props.theme.shadow};
@@ -57,7 +57,7 @@ const Container = styled.aside`
 `;
 
 const Header = styled.div`
-  color: ${(props) => props.theme.backgroundSecondary};
+  color: ${(props) => props.theme.bg_container};
   background: ${(props) => props.theme.accent};
   padding: 0.75rem 1rem;
   font-weight: 500;
@@ -76,6 +76,6 @@ const Informations = styled.div`
 
 const Information = styled.div`
   font-size: 0.825rem;
-  color: ${(props) => props.theme.secondary};
+  color: ${(props) => props.theme.text_secondary};
   font-weight: initial;
 `;

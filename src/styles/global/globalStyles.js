@@ -9,8 +9,8 @@ const GlobalStyles = createGlobalStyle`
   body {
     font-family: 'IBM Plex Sans', 'Noto Sans JP', 'IBM Plex Mono', sans-serif;
     font-size: .875rem;
-    background: ${({ theme }) => theme.backgroundPrimary};
-    color: ${({ theme }) => theme.primary};
+    background: ${({ theme }) => theme.bg_app};
+    color: ${({ theme }) => theme.text_primary};
     line-height: 1.25rem;
   }
 

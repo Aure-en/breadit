@@ -96,7 +96,7 @@ const Wrapper = styled.div`
   justify-content: center;
   flex: 1;
   padding: 1rem;
-  background: ${(props) => props.theme.backgroundSecondary};
+  background: ${(props) => props.theme.bg_container};
 
   @media all and (min-width: 576px) {
     padding: 3rem;
@@ -120,8 +120,8 @@ const Category = styled.h2`
   font-size: 0.75rem;
   text-transform: uppercase;
   line-height: 1.5rem;
-  color: ${(props) => props.theme.secondary};
-  border-bottom: 1px solid ${(props) => props.theme.secondary};
+  color: ${(props) => props.theme.text_secondary};
+  border-bottom: 1px solid ${(props) => props.theme.text_secondary};
 `;
 
 const Setting = styled.div`
@@ -142,7 +142,7 @@ const SettingType = styled.h3`
 
 const Message = styled.div`
   font-size: 0.75rem;
-  color: ${(props) => props.theme.secondary};
+  color: ${(props) => props.theme.text_secondary};
   margin-bottom: 0.5rem;
   margin-right: 1rem;
 `;

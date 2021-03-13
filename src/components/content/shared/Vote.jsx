@@ -65,14 +65,14 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   font-size: 0.75rem;
-  color: ${(props) => props.theme.secondary};
+  color: ${(props) => props.theme.text_secondary};
 
   & > * {
     padding: 0 0.1rem;
   }
 
   & > button:hover {
-    background: ${(props) => props.theme.backgroundTertiary};
+    background: ${(props) => props.theme.vote_bg};
   }
 
   ${(props) =>
@@ -89,10 +89,10 @@ const Container = styled.div`
 const Button = styled.button`
   color: ${(props) =>
     props.isUpvoted
-      ? props.theme.upvote
+      ? props.theme.vote_up
       : props.isDownvoted
-      ? props.theme.downvote
-      : props.theme.secondary};
+      ? props.theme.vote_down
+      : props.theme.text_secondary};
   border-radius: 3px;
 
   ${(props) =>
@@ -101,10 +101,10 @@ const Button = styled.button`
     @media all and (min-width: 768px) {
       color: ${(props) =>
         props.isUpvoted
-          ? props.theme.upvote
+          ? props.theme.vote_up
           : props.isDownvoted
-          ? props.theme.downvote
-          : props.theme.neutral};
+          ? props.theme.vote_down
+          : props.theme.vote_neutral};
       cursor: pointer;
       padding: 0;
       border-radius: 0.15rem;
@@ -112,7 +112,7 @@ const Button = styled.button`
       height: 1.5rem;
   
       &:hover {
-        background: ${props.theme.arrowHover};
+        background: ${props.theme.vote_hover};
       }
     `}
   }

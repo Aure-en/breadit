@@ -47,7 +47,7 @@ const Dropdown = styled.div`
   position: relative;
   display: inline-block;
   z-index: 5;
-  color: ${(props) => props.theme.secondary};
+  color: ${(props) => props.theme.text_secondary};
   padding: 0.5rem 0;
 `;
 
@@ -69,8 +69,8 @@ const DropdownList = styled.div`
   right: 0;
   display: flex;
   flex-direction: column;
-  background: ${(props) => props.theme.backgroundSecondary};
-  border: 1px solid ${(props) => props.theme.secondary};
+  background: ${(props) => props.theme.bg_container};
+  border: 1px solid ${(props) => props.theme.text_secondary};
   max-height: 30rem;
   z-index: 5;
   font-size: 0.75rem;
@@ -79,9 +79,9 @@ const DropdownList = styled.div`
 const Option = styled(Link)`
   padding: 0.35rem 1rem;
   font-weight: 500;
-  color: ${(props) => props.theme.secondary};
+  color: ${(props) => props.theme.text_secondary};
 
   &:hover {
-    background: ${(props) => props.theme.accentSoft};
+    background: ${(props) => props.theme.accent_soft};
   }
 `;

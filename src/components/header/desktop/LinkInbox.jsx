@@ -35,10 +35,10 @@ export default LinkInbox;
 const LinkIcon = styled(Link)`
   position: relative;
   padding: 0.15rem 0.25rem;
-  color: ${(props) => props.theme.accentTertiary};
+  color: ${(props) => props.theme.header_text};
 
   &:hover {
-    color: ${(props) => props.theme.accentTertiaryHover};
+    color: ${(props) => props.theme.header_text_active};
   }
 `;
 
@@ -50,7 +50,7 @@ const Notification = styled.span`
   height: 1rem;
   border-radius: 50%;
   background: ${(props) => props.theme.accent};
-  color: white;
+  color: ${(props) => props.theme.bg_container};
   font-size: 0.75rem;
   display: flex;
   align-items: center;

@@ -42,7 +42,7 @@ const Container = styled.div`
   display: flex;
   font-size: 0.75rem;
   font-weight: 500;
-  color: ${(props) => props.theme.secondary};
+  color: ${(props) => props.theme.text_secondary};
   padding: 0.5rem 0;
   margin-left: 0.5rem;
 
@@ -61,7 +61,7 @@ const Container = styled.div`
 const Button = styled.button`
   font-size: 0.75rem;
   font-weight: 500;
-  color: ${(props) => props.theme.secondary};
+  color: ${(props) => props.theme.text_secondary};
 
   & > *:first-child {
     margin-right: 0.15rem;
@@ -72,6 +72,6 @@ const Button = styled.button`
   }
 
   &:hover {
-    background: ${(props) => props.theme.backgroundTertiary};
+    background: ${(props) => props.theme.vote_bg};
   }
 `;

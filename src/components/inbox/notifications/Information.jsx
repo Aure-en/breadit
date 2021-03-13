@@ -52,7 +52,7 @@ Information.propTypes = {
 
 const Container = styled.div`
   font-size: 0.75rem;
-  color: ${(props) => props.theme.secondary};
+  color: ${(props) => props.theme.text_secondary};
 `;
 
 const UnderlineLink = styled(Link)`
@@ -62,7 +62,7 @@ const UnderlineLink = styled(Link)`
 `;
 
 const PostLink = styled(Link)`
-  color: ${(props) => props.theme.primary};
+  color: ${(props) => props.theme.text_primary};
 `;
 
 const StrongLink = styled(PostLink)`

@@ -41,7 +41,7 @@ function Latest() {
                     <Informations>
                       {post.votes.sum} point
                       {post.votes.sum !== 1 && post.votes.sum !== -1 && "s"} •{" "}
-                      {post.comments} comments •{" "}
+                      {post.comments} comment{post.comments > 1 && "s"} •{" "}
                       {formatDistanceStrict(
                         new Date(post.date.seconds * 1000),
                         new Date()
@@ -61,8 +61,8 @@ export default Latest;
 
 const Container = styled.div`
   padding: 1rem;
-  border: 1px solid ${(props) => props.theme.neutral};
-  background: ${(props) => props.theme.backgroundSecondary};
+  border: 1px solid ${(props) => props.theme.border};
+  background: ${(props) => props.theme.bg_container};
   box-shadow: 0 0 10px -5px ${(props) => props.theme.shadow};
   line-height: 1.25rem;
   border-radius: 0.25rem;
@@ -102,7 +102,7 @@ const Preview = styled.div`
   height: 3rem;
   min-width: 4rem;
   min-height: 3rem;
-  border: 1px solid ${(props) => props.theme.secondary};
+  border: 1px solid ${(props) => props.theme.text_secondary};
   border-radius: 5px;
   margin-right: 1rem;
   display: flex;
@@ -131,6 +131,6 @@ const Title = styled.div`
 `;
 
 const Informations = styled.div`
-  color: ${(props) => props.theme.secondary};
+  color: ${(props) => props.theme.text_secondary};
   font-size: 0.75rem;
 `;

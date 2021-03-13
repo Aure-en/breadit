@@ -57,7 +57,7 @@ function Images({ prevAvatar, prevBanner }) {
         onMouseLeave={() => setAvatarHover(false)}
       >
         <Avatar src={avatar} alt="Current avatar">
-          {avatar && avatarHover && (
+          {avatar !== BREADITOR_AVATAR && avatarHover && (
             <Icon
               onClick={(e) => {
                 e.preventDefault();
@@ -67,11 +67,11 @@ function Images({ prevAvatar, prevBanner }) {
               <IconClose />
             </Icon>
           )}
-          {!avatar && (
+          {avatar === BREADITOR_AVATAR && (
             <div>
               Upload 
-{' '}
-<br />
+              {' '}
+              <br />
               <strong>Avatar</strong>
             </div>
           )}
@@ -93,7 +93,7 @@ function Images({ prevAvatar, prevBanner }) {
         onMouseLeave={() => setBannerHover(false)}
       >
         <Banner src={banner} alt="Current banner">
-          {banner && bannerHover && (
+          {banner !== BREADITOR_BANNER && bannerHover && (
             <Icon
               onClick={(e) => {
                 e.preventDefault();
@@ -103,12 +103,12 @@ function Images({ prevAvatar, prevBanner }) {
               <IconClose />
             </Icon>
           )}
-          {!banner && (
+          {banner === BREADITOR_BANNER && (
             <div>
               Upload <strong>Banner</strong>
-{' '}
-Image
-</div>
+              {' '}
+              Image
+              </div>
           )}
         </Banner>
       </label>
@@ -133,7 +133,7 @@ const Container = styled.div`
   flex-direction: column;
   margin-top: 1rem;
   font-size: 0.75rem;
-  color: ${(props) => props.theme.secondary};
+  color: ${(props) => props.theme.text_secondary};
 
   @media all and (min-width: 400px) {
     flex-direction: row;
@@ -170,11 +170,11 @@ const Image = styled.div`
   cursor: pointer;
   background: ${(props) =>
     !(props.src === BREADITOR_BANNER || props.src === BREADITOR_AVATAR)
-      ? `url("${props.src}") ${props.theme.backgroundQuaternary}`
-      : props.theme.accentSoft};
+      ? `url("${props.src}") ${props.theme.header_bg}`
+      : props.theme.accent_soft};
   border: ${(props) =>
     (props.src === BREADITOR_BANNER || props.src === BREADITOR_AVATAR) &&
-    `1px dashed ${props.theme.secondary}`};
+    `1px dashed ${props.theme.text_secondary}`};
   background-position: center;
   background-size: cover;
   text-align: center;

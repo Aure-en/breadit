@@ -49,7 +49,7 @@ ShareButton.propTypes = {
 const Button = styled.button`
   font-size: 0.75rem;
   font-weight: 500;
-  color: ${(props) => props.theme.secondary};
+  color: ${(props) => props.theme.text_secondary};
 
   & > *:first-child {
     margin-right: 0.15rem;

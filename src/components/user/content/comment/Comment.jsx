@@ -85,7 +85,7 @@ export default Comment;
 
 const Container = styled(Link)`
   display: block;
-  background: ${(props) => props.theme.backgroundSecondary};
+  background: ${(props) => props.theme.bg_container};
   cursor: pointer;
   box-shadow: 0 2px 3px -4px ${(props) => props.theme.shadow};
   border-bottom: 1px solid ${(props) => props.theme.border};
@@ -94,8 +94,8 @@ const Container = styled(Link)`
   border-right: 1px solid transparent;
 
   &:hover {
-    border-bottom: 1px solid ${(props) => props.theme.borderHover};
-    border-top: 1px solid ${(props) => props.theme.borderHover};
+    border-bottom: 1px solid ${(props) => props.theme.border_active};
+    border-top: 1px solid ${(props) => props.theme.border_active};
   }
 
   @media all and (min-width: 40rem) {
@@ -103,14 +103,14 @@ const Container = styled(Link)`
     border: 1px solid ${(props) => props.theme.border};
 
     &:hover {
-      border: 1px solid ${(props) => props.theme.borderHover};
+      border: 1px solid ${(props) => props.theme.border_active};
     }
   }
 `;
 
 const Informations = styled.div`
   font-size: 0.75rem;
-  color: ${(props) => props.theme.secondary};
+  color: ${(props) => props.theme.text_secondary};
 `;
 
 const Header = styled(Informations)`
@@ -129,7 +129,7 @@ const Main = styled.div`
     display: block;
     content: "";
     align-self: stretch;
-    border-left: 2px solid ${(props) => props.theme.accentSoft};
+    border-left: 2px solid ${(props) => props.theme.accent_soft};
     margin-right: 1rem;
   }
 `;
@@ -143,10 +143,10 @@ const UnderlineLink = styled(Link)`
 `;
 
 const PostLink = styled(Link)`
-  color: ${(props) => props.theme.primary};
+  color: ${(props) => props.theme.text_primary};
 `;
 
 const StrongLink = styled(UnderlineLink)`
   font-weight: 500;
-  color: ${(props) => props.theme.primary};
+  color: ${(props) => props.theme.text_primary};
 `;

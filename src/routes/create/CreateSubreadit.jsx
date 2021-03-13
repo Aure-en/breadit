@@ -107,11 +107,11 @@ const Container = styled.div`
 const Form = styled.form`
   display: flex;
   flex-direction: column;
-  background: ${(props) => props.theme.backgroundSecondary};
+  background: ${(props) => props.theme.bg_container};
   margin-top: 1rem;
   padding: 1rem;
   border-radius: 5px;
-  box-shadow: 0 0 10px -5px ${(props) => props.theme.neutral};
+  box-shadow: 0 0 10px -5px ${(props) => props.theme.vote_neutral};
 `;
 
 const Field = styled.div`
@@ -120,37 +120,37 @@ const Field = styled.div`
 
 const Label = styled.label`
   font-weight: 500;
-  color: ${(props) => props.theme.accentSecondary};
+  color: ${(props) => props.theme.accent_secondary};
 `;
 
 const Input = styled.input`
   width: 100%;
-  border: 1px solid ${(props) => props.theme.borderSecondary};
+  border: 1px solid ${(props) => props.theme.border_secondary};
   padding: 0.5rem;
   border-radius: 5px;
 
   &:focus {
-    outline: none;
-    border: 1px solid ${(props) => props.theme.borderHover};
+    outline: 1px solid transparent;
+    border: 1px solid ${(props) => props.theme.border_active};
   }
 `;
 
 const Textarea = styled.textarea`
   width: 100%;
-  border: 1px solid ${(props) => props.theme.borderSecondary};
+  border: 1px solid ${(props) => props.theme.border_secondary};
   padding: 0.5rem;
   border-radius: 5px;
 
   &:focus {
-    outline: none;
-    border: 1px solid ${(props) => props.theme.borderHover};
+    outline: 1px solid transparent;
+    border: 1px solid ${(props) => props.theme.border_active};
   }
 `;
 
 const Message = styled.div`
   position: relative;
   font-size: 0.75rem;
-  color: ${(props) => props.theme.secondary};
+  color: ${(props) => props.theme.text_secondary};
   line-height: 0.85rem;
   margin-bottom: 0.5rem;
 `;
@@ -164,7 +164,7 @@ const Button = styled.button`
   border-radius: 5rem;
   padding: 0.45rem 1.25rem;
   font-weight: 500;
-  color: ${(props) => props.theme.backgroundSecondary};
-  background: ${(props) => props.theme.accentSecondary};
+  color: ${(props) => props.theme.bg_container};
+  background: ${(props) => props.theme.accent_secondary};
   border: 1px solid transparent;
 `;

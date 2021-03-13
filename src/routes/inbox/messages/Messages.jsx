@@ -36,7 +36,7 @@ const Header = styled.div`
 
 const StyledLink = styled(Link)`
   font-weight: 500;
-  color: ${(props) => props.theme.secondary};
+  color: ${(props) => props.theme.text_secondary};
   text-transform: uppercase;
   font-size: 0.75rem;
 

@@ -160,7 +160,7 @@ const Container = styled.div`
   align-self: flex-start;
   flex: 1;
   border-radius: 5px;
-  background: ${(props) => props.theme.backgroundSecondary};
+  background: ${(props) => props.theme.bg_container};
   border-bottom: 1px solid ${(props) => props.theme.border};
   border-top: 1px solid ${(props) => props.theme.border};
   border-left: 1px solid transparent;
@@ -171,7 +171,7 @@ const Container = styled.div`
   }
 
   @media all and (min-width: 768px) {
-    border: 1px solid ${(props) => props.theme.neutral};
+    border: 1px solid ${(props) => props.theme.border};
     align-items: center;
     margin: 1rem;
     max-width: 40rem;
@@ -211,7 +211,7 @@ const Comments = styled.div`
 
 const Button = styled.button`
   display: block;
-  color: ${(props) => props.theme.backgroundSecondary};
+  color: ${(props) => props.theme.bg_container};
   background-color: ${(props) => props.theme.accent};
   border: 1px solid ${(props) => props.theme.accent};
   border-radius: 5rem;

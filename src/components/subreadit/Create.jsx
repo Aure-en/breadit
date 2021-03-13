@@ -85,7 +85,7 @@ Create.propTypes = {
 const Container = styled.div`
   display: grid;
   grid-template-columns: auto 1fr repeat(2, auto);
-  background: ${(props) => props.theme.backgroundSecondary};
+  background: ${(props) => props.theme.bg_container};
   border: 1px solid ${(props) => props.theme.border};
   border-radius: 0.25rem;
   box-shadow: 0 0 5px -4px ${(props) => props.theme.shadow};
@@ -98,12 +98,12 @@ const Icon = styled.img`
   width: 2.25rem;
   height: 2.25rem;
   border-radius: 50%;
-  border: 2px solid ${(props) => props.theme.accentBackground};
-  background: ${(props) => props.theme.backgroundQuaternary};
+  border: 2px solid ${(props) => props.theme.accent_bg};
+  background: ${(props) => props.theme.header_bg};
 `;
 
 const Input = styled.div`
-  background: ${(props) => props.theme.accentBackground};
+  background: ${(props) => props.theme.accent_bg};
   border: 1px solid ${(props) => props.theme.border};
   border-radius: 0.25rem;
   height: 100%;
@@ -112,7 +112,7 @@ const Input = styled.div`
   align-items: center;
   padding: 0.5rem 1rem;
   margin: 0 0.5rem;
-  color: ${(props) => props.theme.secondary};
+  color: ${(props) => props.theme.text_secondary};
   font-size: 0.825rem;
 
   &:hover {
@@ -127,9 +127,9 @@ const LinkIcon = styled(Link)`
   width: 2.25rem;
   height: 2.25rem;
   justify-content: center;
-  color: ${(props) => props.theme.secondary};
+  color: ${(props) => props.theme.text_secondary};
 
   &:hover {
-    background: ${(props) => props.theme.accentBackground};
+    background: ${(props) => props.theme.accent_bg};
   }
 `;

@@ -82,7 +82,7 @@ const Container = styled.aside`
   flex-direction: column;
   position: relative;
   padding: 8rem 1rem 1rem 1rem;
-  background: ${(props) => props.theme.backgroundSecondary};
+  background: ${(props) => props.theme.bg_container};
   line-height: 1.25rem;
   border-radius: 5px;
 
@@ -104,7 +104,7 @@ const Banner = styled.img`
   width: 100%;
   object-fit: cover;
   border-radius: 5px 5px 0 0;
-  background: ${(props) => props.theme.backgroundQuaternary};
+  background: ${(props) => props.theme.header_bg};
 `;
 
 const Avatar = styled.img`
@@ -114,8 +114,8 @@ const Avatar = styled.img`
   left: 50%;
   top: 2.5rem;
   transform: translateX(-50%);
-  border: 2px solid ${(props) => props.theme.backgroundSecondary};
-  background: ${(props) => props.theme.backgroundQuaternary};
+  border: 2px solid ${(props) => props.theme.bg_container};
+  background: ${(props) => props.theme.header_bg};
 `;
 
 const Heading = styled.h2`
@@ -132,13 +132,13 @@ const Informations = styled.div`
 
 const Information = styled.div`
   font-size: 0.825rem;
-  color: ${(props) => props.theme.secondary};
+  color: ${(props) => props.theme.text_secondary};
   font-weight: initial;
 `;
 
 const Button = styled.button`
   display: block;
-  color: ${(props) => props.theme.backgroundSecondary};
+  color: ${(props) => props.theme.bg_container};
   background-color: ${(props) => props.theme.accent};
   border: 1px solid ${(props) => props.theme.accent};
   border-radius: 5rem;
@@ -149,7 +149,7 @@ const Button = styled.button`
   margin-top: 1rem;
 
   &:hover {
-    background-color: ${(props) => props.theme.accentHover};
-    border: 1px solid ${(props) => props.theme.accentHover};
+    background-color: ${(props) => props.theme.accent_active};
+    border: 1px solid ${(props) => props.theme.accent_active};
   }
 `;

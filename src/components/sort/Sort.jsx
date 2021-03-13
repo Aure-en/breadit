@@ -34,7 +34,7 @@ export default Sort;
 const Container = styled.div`
   display: flex;
   justify-content: space-around;
-  background: ${(props) => props.theme.backgroundSecondary};
+  background: ${(props) => props.theme.bg_container};
   border: 1px solid ${(props) => props.theme.border};
   margin-bottom: 1rem;
 
@@ -50,7 +50,7 @@ const Option = styled.button`
   justify-content: center;
   font-weight: ${(props) => props.isSelected && "500"};
   color: ${(props) =>
-    props.isSelected ? props.theme.accent : props.theme.secondary};
+    props.isSelected ? props.theme.accent : props.theme.text_secondary};
   padding: .5rem .85rem;
   border-radius: 1rem;
 

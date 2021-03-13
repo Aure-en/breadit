@@ -46,7 +46,7 @@ const Overlay = styled.div`
 
 const Container = styled.div`
   position: absolute;
-  background: ${(props) => props.theme.backgroundSecondary};
+  background: ${(props) => props.theme.bg_container};
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -64,7 +64,7 @@ const Container = styled.div`
     background: linear-gradient(
         to right,
         transparent 30%,
-        ${(props) => props.theme.backgroundSecondary} 30%
+        ${(props) => props.theme.bg_container} 30%
       ),
       url(${ENTRY_IMG});
     display: flex;

@@ -21,7 +21,7 @@ const Container = styled.div`
   margin-top: 0.5rem;
   width: 100vw;
   max-width: 100%;
-  background: ${(props) => props.theme.backgroundSecondary};
+  background: ${(props) => props.theme.bg_container};
   border-bottom: 1px solid ${(props) => props.theme.border};
   border-top: 1px solid ${(props) => props.theme.border};
   border-left: 1px solid transparent;
@@ -51,20 +51,20 @@ const Button = styled(Link)`
   text-align: center;
 
   &:hover {
-    color: ${(props) => props.theme.accentHover};
-    border: 1px solid ${(props) => props.theme.accentHover};
+    color: ${(props) => props.theme.accent_active};
+    border: 1px solid ${(props) => props.theme.accent_active};
   }
 `;
 
 const ButtonFilled = styled(Button)`
-  color: ${(props) => props.theme.backgroundSecondary};
+  color: ${(props) => props.theme.bg_container};
   background-color: ${(props) => props.theme.accent};
   border: 1px solid ${(props) => props.theme.accent};
 
   &:hover {
-    color: ${(props) => props.theme.backgroundSecondary};
-    background-color: ${(props) => props.theme.accentHover};
-    border: 1px solid ${(props) => props.theme.accentHover};
+    color: ${(props) => props.theme.bg_container};
+    background-color: ${(props) => props.theme.accent_active};
+    border: 1px solid ${(props) => props.theme.accent_active};
   }
 `;
 

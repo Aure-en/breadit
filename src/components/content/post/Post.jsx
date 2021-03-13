@@ -211,7 +211,7 @@ const Button = styled.button`
 `;
 
 const ButtonFilled = styled(Button)`
-  color: ${(props) => props.theme.backgroundSecondary};
+  color: ${(props) => props.theme.bg_container};
   background-color: ${(props) => props.theme.accent};
   border: 1px solid ${(props) => props.theme.accent};
 `;

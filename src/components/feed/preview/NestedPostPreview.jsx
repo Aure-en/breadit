@@ -76,7 +76,7 @@ function NestedPostPreview({ postId }) {
                 u/
                 {post.author.name}
               </Link>
-              {" "}
+              <span> • </span>
               <Link to={`/b/${subreadit.name}/${postId}`}>
                 {formatDistanceStrict(
                   new Date(post.date.seconds * 1000),
@@ -117,24 +117,24 @@ NestedPostPreview.propTypes = {
 export default NestedPostPreview;
 
 const Container = styled.article`
-  border: 1px solid ${(props) => props.theme.neutral};
+  border: 1px solid ${(props) => props.theme.border};
   border-radius: 0.25rem;
   margin: 1rem 0.5rem;
 
   &:hover {
-    border: 1px solid ${(props) => props.theme.borderHover};
+    border: 1px solid ${(props) => props.theme.border_active};
   }
 `;
 
 const BoldPrimary = styled.div`
   font-weight: 600;
-  color: ${(props) => props.theme.primary};
+  color: ${(props) => props.theme.text_primary};
 `;
 
 const Informations = styled.div`
   display: flex;
   font-size: 0.75rem;
-  color: ${(props) => props.theme.secondary};
+  color: ${(props) => props.theme.text_secondary};
   padding: 0.5rem 0 0 0.5rem;
 
   & > * {

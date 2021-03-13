@@ -55,9 +55,10 @@ export default About;
 const Textarea = styled.textarea`
   width: 100%;
   min-height: 8rem;
+  background: ${(props) => props.theme.bg_container};
 
   &:focus {
-    outline: none;
+    outline: 1px solid transparent;
     border: 1px solid ${(props) => props.theme.accent};
   }
 `;
@@ -86,12 +87,12 @@ const ButtonFilled = styled.button`
   padding: 0.45rem 1.25rem;
   font-weight: 500;
   align-self: center;
-  color: ${(props) => props.theme.backgroundSecondary};
+  color: ${(props) => props.theme.bg_container};
   background-color: ${(props) => props.theme.accent};
   border: 1px solid ${(props) => props.theme.accent};
 
   &:hover {
-    background-color: ${(props) => props.theme.accentHover};
-    border: 1px solid ${(props) => props.theme.accentHover};
+    background-color: ${(props) => props.theme.accent_active};
+    border: 1px solid ${(props) => props.theme.accent_active};
   }
 `;

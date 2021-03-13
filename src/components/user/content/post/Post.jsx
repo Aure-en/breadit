@@ -90,7 +90,7 @@ const Container = styled.article`
   display: grid;
   grid-template: repeat(3, auto) / repeat(2, auto) 1fr;
   padding: 0.5rem;
-  background: ${(props) => props.theme.backgroundSecondary};
+  background: ${(props) => props.theme.bg_container};
   cursor: pointer;
   box-shadow: 0 2px 3px -4px ${(props) => props.theme.shadow};
   border-bottom: 1px solid ${(props) => props.theme.border};
@@ -99,8 +99,8 @@ const Container = styled.article`
   border-right: 1px solid transparent;
 
   &:hover {
-    border-bottom: 1px solid ${(props) => props.theme.borderHover};
-    border-top: 1px solid ${(props) => props.theme.borderHover};
+    border-bottom: 1px solid ${(props) => props.theme.border_active};
+    border-top: 1px solid ${(props) => props.theme.border_active};
   }
 
   @media all and (min-width: 40rem) {
@@ -108,7 +108,7 @@ const Container = styled.article`
     border: 1px solid ${(props) => props.theme.border};
 
     &:hover {
-      border: 1px solid ${(props) => props.theme.borderHover};
+      border: 1px solid ${(props) => props.theme.border_active};
     }
   }
 `;
@@ -125,7 +125,7 @@ const Preview = styled(Link)`
   height: 3.5rem;
   min-width: 4rem;
   min-height: 3rem;
-  border: 1px solid ${(props) => props.theme.secondary};
+  border: 1px solid ${(props) => props.theme.text_secondary};
   border-radius: 5px;
   display: flex;
   align-items: center;
@@ -164,7 +164,7 @@ const Title = styled.div`
 
 const Information = styled.div`
   font-size: 0.75rem;
-  color: ${(props) => props.theme.secondary};
+  color: ${(props) => props.theme.text_secondary};
   grid-row: 1;
   grid-column: 2 / -1;
 
@@ -175,7 +175,7 @@ const Information = styled.div`
 
 const SubreaditLink = styled(Link)`
   font-weight: 500;
-  color: ${(props) => props.theme.primary};
+  color: ${(props) => props.theme.text_primary};
 
   &:hover {
     text-decoration: underline;

@@ -169,7 +169,7 @@ export default Comment;
 
 const Container = styled.div`
   position: relative;
-  background: ${(props) => props.theme.backgroundSecondary};
+  background: ${(props) => props.theme.bg_container};
   margin: 1rem 0;
 
   & > * {
@@ -232,7 +232,7 @@ const Button = styled.button`
 `;
 
 const ButtonFilled = styled(Button)`
-  color: ${(props) => props.theme.backgroundSecondary};
+  color: ${(props) => props.theme.bg_container};
   background-color: ${(props) => props.theme.accent};
   border: 1px solid ${(props) => props.theme.accent};
 `;

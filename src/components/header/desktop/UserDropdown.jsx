@@ -5,6 +5,7 @@ import { useAuth } from "../../../contexts/AuthContext";
 import { useEntry } from "../../../contexts/EntryContext";
 import useDropdown from "../../../hooks/useDropdown";
 import useUser from "../../../hooks/useUser";
+import ThemeSwitch from "./ThemeSwitch";
 
 // Icons
 import { ReactComponent as IconUser } from "../../../assets/icons/header/icon-user.svg";
@@ -47,10 +48,10 @@ function UserDropdown() {
               <Informations>
                 <Name>{user.username}</Name>
                 <div>
-                  {user.karma}
+{user.karma}
                   {' '}
                   karma
-                </div>
+</div>
               </Informations>
             </User>
           ) : (
@@ -65,19 +66,12 @@ function UserDropdown() {
                 <Category>My stuff</Category>
                 <Choice
                   to={`/u/${currentUser.displayName}`}
-                  onClick={() => {
-                    setIsDropdownOpen(false);
-                  }}
+                  onClick={() => setIsDropdownOpen(false)}
                 >
                   <IconUser />
                   <div>Profile</div>
                 </Choice>
-                <Choice
-                  to="/settings"
-                  onClick={() => {
-                    setIsDropdownOpen(false);
-                  }}
-                >
+                <Choice to="/settings" onClick={() => setIsDropdownOpen(false)}>
                   <IconSettings />
                   <div>User Settings</div>
                 </Choice>
@@ -85,16 +79,7 @@ function UserDropdown() {
             )}
 
             <Category>View Options</Category>
-            <Choice
-              as="button"
-              type="button"
-              onClick={() => {
-                setIsDropdownOpen(false);
-              }}
-            >
-              <IconLight />
-              <div>Night Mode</div>
-            </Choice>
+            <ThemeSwitch onClick={() => setIsDropdownOpen(false)} />
 
             {currentUser ? (
               <Choice
@@ -138,16 +123,19 @@ const DropdownHeader = styled.button`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  color: ${(props) => props.theme.accentTertiary};
+  color: ${(props) => props.theme.header_text};
   border: 1px solid
     ${(props) =>
-      props.isDropdownOpen ? props.theme.accentTertiary : "transparent"};
+      props.isDropdownOpen ? props.theme.header_text : "transparent"};
+  border-bottom: ${(props) => props.isDropdownOpen && "1px solid transparent"};
   border-radius: 3px 0 3px 3px;
   padding: 0.1rem 0.5rem;
   cursor: pointer;
 
   &:hover {
-    border: 1px solid ${(props) => props.theme.accentTertiary};
+    border: 1px solid ${(props) => props.theme.header_text};
+    border-bottom: ${(props) =>
+      props.isDropdownOpen && "1px solid transparent"};
   }
 
   & > svg:last-child {
@@ -160,8 +148,8 @@ const DropdownList = styled.div`
   right: 0;
   display: flex;
   flex-direction: column;
-  background: ${(props) => props.theme.backgroundSecondary};
-  border: 1px solid ${(props) => props.theme.border};
+  background: ${(props) => props.theme.bg_container};
+  border: 1px solid ${(props) => props.theme.header_text};
   padding-bottom: 1rem;
   max-height: 30rem;
   overflow: auto;
@@ -174,7 +162,7 @@ const Category = styled.div`
   font-weight: 500;
   font-size: 0.65rem;
   margin: 0.5rem 1rem;
-  color: ${(props) => props.theme.secondary};
+  color: ${(props) => props.theme.text_secondary};
 `;
 
 const Choice = styled(Link)`
@@ -184,13 +172,14 @@ const Choice = styled(Link)`
   align-items: center;
   padding: 0.25rem 1rem;
   justify-items: start;
+  color: ${(props) => props.theme.text_primary};
 
   & > svg:first-child {
-    color: ${(props) => props.theme.secondary};
+    color: ${(props) => props.theme.text_secondary};
   }
 
   &:hover {
-    background: ${(props) => props.theme.accentTertiarySoft};
+    background: ${(props) => props.theme.header_bg_secondary};
   }
 `;
 
@@ -215,5 +204,5 @@ const Icon = styled.img`
   width: 2rem;
   height: 2rem;
   border-radius: 3px;
-  background: ${(props) => props.theme.backgroundQuaternary};
+  background: ${(props) => props.theme.header_bg};
 `;

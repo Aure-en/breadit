@@ -54,15 +54,15 @@ export default Nav;
 
 const Wrapper = styled.div`
   width: 100%;
-  background: ${(props) => props.theme.backgroundSecondary};
-  border-bottom: 1px solid ${(props) => props.theme.accentSoft};
+  background: ${(props) => props.theme.bg_container};
+  border-bottom: 1px solid ${(props) => props.theme.accent_soft};
 `;
 
 const Container = styled.nav`
   display: flex;
   justify-content: space-around;
   padding-top: 0.5rem;
-  background: ${(props) => props.theme.backgroundSecondary};
+  background: ${(props) => props.theme.bg_container};
   margin: 0 auto;
   max-width: 40rem;
 

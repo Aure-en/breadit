@@ -113,24 +113,24 @@ export default PostPreview;
 const Container = styled.article`
   display: grid;
   grid-template: min-content auto / min-content 1fr;
-  border-bottom: 1px solid ${(props) => props.theme.neutral};
-  border-top: 1px solid ${(props) => props.theme.neutral};
+  border-bottom: 1px solid ${(props) => props.theme.border};
+  border-top: 1px solid ${(props) => props.theme.border};
   border-left: 1px solid transparent;
   border-right: 1px solid transparent;
-  background: ${(props) => props.theme.backgroundSecondary};
+  background: ${(props) => props.theme.bg_container};
   box-shadow: 0 0 10px -5px ${(props) => props.theme.shadow};
 
   &:hover {
-    border-bottom: 1px solid ${(props) => props.theme.borderHover};
-    border-top: 1px solid ${(props) => props.theme.borderHover};
+    border-bottom: 1px solid ${(props) => props.theme.border_active};
+    border-top: 1px solid ${(props) => props.theme.border_active};
   }
 
   @media all and (min-width: 40rem) {
     border-radius: 0.25rem;
-    border: 1px solid ${(props) => props.theme.neutral};
+    border: 1px solid ${(props) => props.theme.border};
 
     &:hover {
-      border: 1px solid ${(props) => props.theme.borderHover};
+      border: 1px solid ${(props) => props.theme.border_active};
     }
   }
 `;
@@ -176,7 +176,10 @@ const Text = styled.div`
     position: absolute;
     left: 0;
     top: 0;
-    background: linear-gradient(transparent 5rem, white);
+    background: linear-gradient(
+      transparent 5rem,
+      ${(props) => props.theme.bg_container}
+    );
   }
 `;
 
@@ -185,7 +188,7 @@ const StyledVote = styled(Vote)`
   align-items: center;
 
   @media all and (min-width: 768px) {
-    background: ${(props) => props.theme.backgroundTertiary};
+    background: ${(props) => props.theme.vote_bg};
     grid-row: 1 / -1;
     padding: 0.5rem 0.5rem 0 0.5rem;
   }

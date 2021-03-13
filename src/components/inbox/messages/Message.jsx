@@ -132,21 +132,21 @@ const Container = styled.div`
   border-top: 1px solid ${(props) => props.theme.border};
   border-left: 1px solid transparent;
   border-right: 1px solid transparent;
-  background: ${(props) => props.theme.backgroundSecondary};
+  background: ${(props) => props.theme.bg_container};
   cursor: pointer;
   padding: 0.5rem;
   box-shadow: 0 0 10px -5px ${(props) => props.theme.shadow};
 
   &:hover {
-    border-bottom: 1px solid ${(props) => props.theme.borderHover};
-    border-top: 1px solid ${(props) => props.theme.borderHover};
+    border-bottom: 1px solid ${(props) => props.theme.border_active};
+    border-top: 1px solid ${(props) => props.theme.border_active};
   }
 
   @media all and (min-width: 40rem) {
     border: 1px solid ${(props) => props.theme.border};
 
     &:hover {
-      border: 1px solid ${(props) => props.theme.borderHover};
+      border: 1px solid ${(props) => props.theme.border_active};
     }
   }
 `;
@@ -155,7 +155,7 @@ const Content = styled.div``;
 
 const Informations = styled.div`
   font-size: 0.75rem;
-  color: ${(props) => props.theme.secondary};
+  color: ${(props) => props.theme.text_secondary};
 `;
 
 const Buttons = styled.div`
@@ -169,14 +169,14 @@ const Buttons = styled.div`
   }
 
   & > *:hover {
-    background: ${(props) => props.theme.backgroundTertiary};
+    background: ${(props) => props.theme.vote_bg};
   }
 `;
 
 const Button = styled.button`
   font-size: 0.75rem;
   font-weight: 500;
-  color: ${(props) => props.theme.secondary};
+  color: ${(props) => props.theme.text_secondary};
 
   & > *:first-child {
     margin-right: 0.15rem;
@@ -223,13 +223,13 @@ const ButtonForm = styled.button`
 `;
 
 const ButtonFilled = styled(ButtonForm)`
-  color: ${(props) => props.theme.backgroundSecondary};
+  color: ${(props) => props.theme.bg_container};
   background-color: ${(props) => props.theme.accent};
   border: 1px solid ${(props) => props.theme.accent};
 
   &:disabled {
-    background-color: ${(props) => props.theme.accentDisabled};
-    border: 1px solid ${(props) => props.theme.accentDisabled};
+    background-color: ${(props) => props.theme.accent_disabled};
+    border: 1px solid ${(props) => props.theme.accent_disabled};
     cursor: not-allowed;
   }
 `;

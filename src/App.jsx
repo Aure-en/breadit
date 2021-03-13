@@ -1,13 +1,13 @@
 import React from "react";
 import Modal from "react-modal";
-import styled, { ThemeProvider } from "styled-components";
+import styled from "styled-components";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import GlobalStyles from "./styles/global/globalStyles";
-import light from "./styles/themes/light";
 import { AuthProvider } from "./contexts/AuthContext";
 import { EntryProvider } from "./contexts/EntryContext";
 import { SubscriptionProvider } from "./contexts/SubscriptionContext";
 import { SaveProvider } from "./contexts/SaveContext";
+import { ThemeProvider } from "./contexts/ThemeContext";
 import useWindowSize from "./hooks/useWindowSize";
 import PrivateRoute from "./routes/PrivateRoute";
 import CreateSubreadit from "./routes/create/CreateSubreadit";
@@ -49,7 +49,7 @@ function App() {
 
   return (
     <Router>
-      <ThemeProvider theme={light}>
+      <ThemeProvider>
         <GlobalStyles />
         <Wrapper>
           <AuthProvider>

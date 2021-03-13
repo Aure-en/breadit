@@ -76,7 +76,7 @@ Buttons.defaultProps = {
 const Container = styled.div`
   font-size: 0.75rem;
   font-weight: 500;
-  color: ${(props) => props.theme.secondary};
+  color: ${(props) => props.theme.text_secondary};
   display: flex;
   align-items: stretch;
 
@@ -88,7 +88,7 @@ const Container = styled.div`
   }
 
   & > *:hover {
-    background: ${(props) => props.theme.backgroundTertiary};
+    background: ${(props) => props.theme.vote_bg};
   }
 `;
 
@@ -100,7 +100,7 @@ const DropdownHeader = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  color: ${(props) => props.theme.secondary};
+  color: ${(props) => props.theme.text_secondary};
 `;
 
 const DropdownList = styled.div`
@@ -108,8 +108,8 @@ const DropdownList = styled.div`
   display: flex;
   align-items: flex-start;
   flex-direction: column;
-  border: 1px solid ${(props) => props.theme.secondary};
-  background: ${(props) => props.theme.backgroundSecondary};
+  border: 1px solid ${(props) => props.theme.text_secondary};
+  background: ${(props) => props.theme.bg_container};
   top: 1.5rem;
   right: 0;
   padding: 0;
@@ -122,6 +122,6 @@ const DropdownList = styled.div`
   }
 
   & > *:hover {
-    background: ${(props) => props.theme.backgroundTertiary};
+    background: ${(props) => props.theme.vote_bg};
   }
 `;

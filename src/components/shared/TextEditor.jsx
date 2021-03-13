@@ -81,7 +81,7 @@ const Mention = ({ children }) => {
     <LinkToUser
       to={children}
       onClick={() => {
-        window.open(`https://breadit-296d8.web.app/${children[0].props.text}`);
+        window.open(`${BREADIT_URL}/${children[0].props.text}`);
       }}
     >
       {children}
@@ -540,14 +540,16 @@ const Wrapper = styled.div`
   flex-direction: ${(props) => (props.isPost ? "column" : "column-reverse")};
   border: 1px solid
     ${(props) =>
-      props.isActive ? props.theme.borderHover : props.theme.borderSecondary};
+      props.isActive
+        ? props.theme.border_active
+        : props.theme.border_secondary};
   border-radius: 5px;
 `;
 
 const Container = styled.div`
   min-height: 8rem;
   padding: 1rem;
-  background: ${(props) => props.theme.backgroundSecondary};
+  background: ${(props) => props.theme.bg_container};
   cursor: text;
   display: flex;
   flex-direction: column;
@@ -557,7 +559,7 @@ const Container = styled.div`
 `;
 
 const Buttons = styled.div`
-  background: ${(props) => props.theme.backgroundPrimary};
+  background: ${(props) => props.theme.text_editor_bg};
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   justify-items: center;
@@ -574,16 +576,19 @@ const Button = styled.button`
   align-items: center;
   justify-content: center;
   border-radius: 3px;
-  color: ${(props) => !props.active && props.theme.tertiary};
+  color: ${(props) =>
+    props.active
+      ? props.theme.text_editor_button_active
+      : props.theme.text_editor_button};
 
   &:hover {
-    background: ${(props) => props.theme.backgroundPrimaryHover};
+    background: ${(props) => props.theme.text_editor_button_hover};
   }
 `;
 
 const LinkBox = styled.div`
   position: absolute;
-  background: ${(props) => props.theme.backgroundPrimary};
+  background: ${(props) => props.theme.bg_app};
   padding: 1rem;
   border-radius: 5px;
   top: ${(props) => props.selection && `calc(${props.selection.top}px + 1rem)`};
@@ -594,7 +599,7 @@ const LinkBox = styled.div`
   &:before {
     content: "";
     border: 7px solid transparent;
-    border-bottom: 10px solid ${(props) => props.theme.backgroundPrimary};
+    border-bottom: 10px solid ${(props) => props.theme.bg_app};
     z-index: 3;
     position: absolute;
     top: calc(-0.75rem - 5px);
@@ -622,13 +627,13 @@ const LinkToUser = styled(Link)`
 `;
 
 const Input = styled.input`
-  border: 1px solid ${(props) => props.theme.borderSecondary};
+  border: 1px solid ${(props) => props.theme.border_secondary};
   padding: 0.5rem;
   border-radius: 5px;
   margin-bottom: 0.5rem;
 
   &:focus {
-    outline: none;
-    border: 1px solid ${(props) => props.theme.borderHover};
+    outline: 1px solid transparent;
+    border: 1px solid ${(props) => props.theme.border_active};
   }
 `;

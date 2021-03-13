@@ -1,48 +1,50 @@
 export const colors = {
-  primary: "rgba(0, 0, 0)", // Main text (headings, etc)
-  secondary: "rgba(128, 127, 126)", // Small text (informations, buttons)
-  tertiary: "rgb(84, 84, 84)",
+  text_primary: "rgba(0, 0, 0)", // Main text (headings, etc)
+  text_secondary: "rgba(128, 127, 126)", // Small text (informations, buttons)
 
-  backgroundPrimary: "rgb(255, 240, 219)", // App background
-  backgroundPrimaryHover: "rgb(251, 224, 200)",
-  backgroundSecondary: "rgb(255, 255, 255)", // Posts, comments background
-  backgroundTertiary: "rgb(255, 248, 242)", // Vote, hover background
-  backgroundQuaternary: "rgb(93, 70, 63)", // Header
+  bg_app: "rgb(255, 240, 219)",
+  bg_container: "rgb(255, 255, 255)", // Posts, comments background
 
-  overlay: "rgb(107, 69, 56, .2)", // Modals overlay
-  overlaySecondary: "rgb(105, 84, 76, .5)",
-  overlayTertiary: "rgba(0, 0, 0, .5)", // Carousel
+  overlay: "rgb(107, 69, 56, .2)",
+  settings_overlay: "rgb(105, 84, 76, .5)",
 
   shadow: "rgba(103, 188, 194, .25)",
-  shadowSecondary: "rgba(0, 0, 0, .4)", // Carousel
 
-  accent: "rgb(103, 188, 194)", // Buttons, notifications... (blue)
-  accentHover: "rgb(111, 207, 214)",
-  accentDisabled: "rgba(173, 221, 224)",
-  accentSoft: "rgb(232, 245, 246)",
-  accentBackground: "rgb(245, 247, 246)",
+  carousel_shadow: "rgba(0, 0, 0, .4)",
+  carousel_overlay: "rgba(0, 0, 0, .5)",
 
-  accentSecondary: "rgb(179, 72, 54)", // Pink
-  accentSecondaryHover: "rgb(162, 53, 35)",
-  accentSecondaryDisabled: "rgb(232, 185, 177)",
+  accent: "rgb(103, 188, 194)",
+  accent_active: "rgb(111, 207, 214)",
+  accent_disabled: "rgba(173, 221, 224)",
+  accent_soft: "rgb(232, 245, 246)",
+  accent_bg: "rgb(245, 247, 246)",
 
-  accentTertiary: "rgb(208, 188, 173)", // Header
-  accentTertiaryHover: "rgb(255, 248, 222)",
-  accentTertiarySoft: "rgb(255, 249, 245)",
+  accent_secondary: "rgb(179, 72, 54)",
+  accent_secondary_active: "rgb(162, 53, 35)",
+  accent_secondary_disabled: "rgb(232, 185, 177)",
 
-  disabled: "rgb(209, 189, 171)", // Disabled buttons
+  header_bg: "rgb(93, 70, 63)",
+  header_text: "rgb(208, 188, 173)",
+  header_text_active: "rgb(255, 248, 222)",
+  header_bg_secondary: "rgb(255, 249, 245)",
 
   error: "rgb(168, 31, 5)",
   success: "rgb(65, 150, 156)",
 
-  border: "rgb(223, 223, 222)",
-  borderHover: "rgb(209, 163, 155)",
-  borderSecondary: "rgb(242, 234, 230)",
+  border: "rgba(209, 163, 155, .5)",
+  border_active: "rgb(209, 163, 155)",
+  border_secondary: "rgb(242, 234, 230)",
 
-  upvote: "rgb(191, 104, 104)", // Upvote arrow
-  neutral: "rgba(209, 163, 155, .5)", // No vote arrow
-  downvote: "rgb(126, 192, 196)", // Downvote arrow
-  arrowHover: "rgb(237, 212, 194)",
+  vote_bg: "rgb(255, 248, 242)",
+  vote_up: "rgb(191, 104, 104)",
+  vote_neutral: "rgba(209, 163, 155, .5)",
+  vote_down: "rgb(126, 192, 196)",
+  vote_hover: "rgb(237, 212, 194)",
+
+  text_editor_bg: "rgb(255, 240, 219)",
+  text_editor_button: "rgba(74, 73, 72)",
+  text_editor_button_active: "rgb(0, 0, 0)",
+  text_editor_button_hover: "rgb(251, 229, 206)",
 };
 
 export default colors;

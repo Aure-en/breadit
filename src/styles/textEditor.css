@@ -15,7 +15,7 @@
 
 /* Code Block */
 .codeBlock {
-  background: rgb(241, 236, 230);
+  background: rgb(241, 236, 230, .3);
   padding: .5rem;
   margin: 1rem;
   font-family: "Monospace";

@@ -53,8 +53,8 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   border-radius: 0.5rem;
-  color: ${(props) => props.theme.primary};
-  background: ${(props) => props.theme.backgroundSecondary};
+  color: ${(props) => props.theme.text_primary};
+  background: ${(props) => props.theme.bg_container};
   box-shadow: 0 0 15px ${(props) => props.theme.shadow};
   font-size: 0.875rem;
   font-weight: 400;
@@ -100,19 +100,19 @@ const Button = styled.button`
   text-align: center;
 
   &:hover {
-    color: ${(props) => props.theme.accentHover};
-    border: 1px solid ${(props) => props.theme.accentHover};
+    color: ${(props) => props.theme.accent_active};
+    border: 1px solid ${(props) => props.theme.accent_active};
   }
 `;
 
 const ButtonFilled = styled(Button)`
-  color: ${(props) => props.theme.backgroundSecondary};
+  color: ${(props) => props.theme.bg_container};
   background-color: ${(props) => props.theme.accent};
   border: 1px solid ${(props) => props.theme.accent};
 
   &:hover {
-    color: ${(props) => props.theme.backgroundSecondary};
-    background-color: ${(props) => props.theme.accentHover};
-    border: 1px solid ${(props) => props.theme.accentHover};
+    color: ${(props) => props.theme.bg_container};
+    background-color: ${(props) => props.theme.accent_active};
+    border: 1px solid ${(props) => props.theme.accent_active};
   }
 `;

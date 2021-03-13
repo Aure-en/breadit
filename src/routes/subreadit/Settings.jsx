@@ -281,7 +281,7 @@ const Wrapper = styled.div`
   justify-content: center;
   padding: 3rem;
   flex: 1;
-  background: ${(props) => props.theme.backgroundSecondary};
+  background: ${(props) => props.theme.bg_container};
 `;
 
 const Container = styled.div`
@@ -301,8 +301,8 @@ const Category = styled.h2`
   font-size: 0.75rem;
   text-transform: uppercase;
   line-height: 1.5rem;
-  color: ${(props) => props.theme.secondary};
-  border-bottom: 1px solid ${(props) => props.theme.secondary};
+  color: ${(props) => props.theme.text_secondary};
+  border-bottom: 1px solid ${(props) => props.theme.text_secondary};
 `;
 
 const Setting = styled.div`
@@ -319,28 +319,28 @@ const SettingType = styled.h3`
 
 const Message = styled.div`
   font-size: 0.75rem;
-  color: ${(props) => props.theme.secondary};
+  color: ${(props) => props.theme.text_secondary};
   margin-bottom: 0.5rem;
 `;
 
 const Textarea = styled.textarea`
   width: 100%;
   min-height: 8rem;
-  border: 1px solid ${(props) => props.theme.secondary};
+  border: 1px solid ${(props) => props.theme.text_secondary};
   padding: 0.5rem;
   box-sizing: border-box;
 
   &:focus {
-    outline: none;
+    outline: 1px solid transparent;
     border: 1px solid ${(props) => props.theme.accent};
   }
 `;
 
 const IconButton = styled.button`
-  color: ${(props) => props.theme.secondary};
+  color: ${(props) => props.theme.text_secondary};
 
   &:hover {
-    color: ${(props) => props.theme.backgroundQuaternary};
+    color: ${(props) => props.theme.header_bg};
   }
 `;
 
@@ -352,7 +352,7 @@ const RuleButton = styled.button`
   align-self: flex-end;
 
   &:hover {
-    color: ${(props) => props.theme.accentHover};
+    color: ${(props) => props.theme.accent_active};
   }
 `;
 
@@ -368,7 +368,7 @@ const Button = styled.button`
 `;
 
 const ButtonFilled = styled(Button)`
-  color: ${(props) => props.theme.backgroundSecondary};
+  color: ${(props) => props.theme.bg_container};
   background-color: ${(props) => props.theme.accent};
   border: 1px solid ${(props) => props.theme.accent};
   margin-left: auto;
@@ -379,7 +379,7 @@ const Images = styled.div`
   flex-direction: column;
   margin-top: 1rem;
   font-size: 0.75rem;
-  color: ${(props) => props.theme.secondary};
+  color: ${(props) => props.theme.text_secondary};
 
   @media all and (min-width: 400px) {
     flex-direction: row;
@@ -416,11 +416,11 @@ const Image = styled.div`
   cursor: pointer;
   background: ${(props) =>
     !(props.src === SUBREADIT_BANNER || props.src === SUBREADIT_ICON)
-      ? `url("${props.src}") ${props.theme.backgroundQuaternary}`
-      : props.theme.accentSoft};
+      ? `url("${props.src}") ${props.theme.header_bg}`
+      : props.theme.accent_soft};
   border: ${(props) =>
     (props.src === SUBREADIT_BANNER || props.src === SUBREADIT_ICON) &&
-    `1px dashed ${props.theme.secondary}`};
+    `1px dashed ${props.theme.text_secondary}`};
   background-position: center;
   background-size: cover;
   text-align: center;
@@ -472,12 +472,12 @@ const RuleNumber = styled.div`
 
 const Input = styled.input`
   padding: 0.75rem;
-  border: 1px solid ${(props) => props.theme.secondary};
+  border: 1px solid ${(props) => props.theme.text_secondary};
   width: 100%;
   margin-bottom: 1rem;
 
   &:focus {
-    outline: none;
+    outline: 1px solid transparent;
     border: 1px solid ${(props) => props.theme.accent};
   }
 `;

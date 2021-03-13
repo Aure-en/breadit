@@ -52,20 +52,31 @@ JoinButton.defaultProps = {
 export default JoinButton;
 
 const Button = styled.button`
+  display: block;
   border: 1px solid ${(props) => props.theme.accent};
   color: ${(props) => props.theme.accent};
   border-radius: 5rem;
-  padding: 0.45rem 1.25rem;
+  padding: 0.35rem 1.25rem;
   font-weight: 500;
-  align-self: center;
+  text-align: center;
   width: 6rem;
+
+  &:hover {
+    color: ${(props) => props.theme.accent_active};
+    border: 1px solid ${(props) => props.theme.accent_active};
+  }
 `;
 
 const ButtonFilled = styled(Button)`
-  color: ${(props) => props.theme.backgroundSecondary};
+  color: ${(props) => props.theme.bg_container};
   background-color: ${(props) => props.theme.accent};
   border: 1px solid ${(props) => props.theme.accent};
 
+  &:hover {
+    color: ${(props) => props.theme.bg_container};
+    background-color: ${(props) => props.theme.accent_active};
+    border: 1px solid ${(props) => props.theme.accent_active};
+  }
   &::disabled {
     background-color: ${(props) => props.theme.disabled};
     border: 1px solid ${(props) => props.theme.disabled};

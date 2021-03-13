@@ -147,17 +147,17 @@ const DropdownHeader = styled.button`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  color: ${(props) => props.theme.accentTertiary};
+  color: ${(props) => props.theme.header_text};
   border: 1px solid
     ${(props) =>
-      props.isDropdownOpen ? props.theme.accentTertiary : "transparent"};
+      props.isDropdownOpen ? props.theme.header_text : "transparent"};
   border-radius: 3px 3px 0 0;
   padding: 0.5rem 0.75rem;
   cursor: pointer;
   width: 15rem;
 
   &:hover {
-    border: 1px solid ${(props) => props.theme.accentTertiary};
+    border: 1px solid ${(props) => props.theme.header_text};
   }
 
   & > svg:last-child {
@@ -169,8 +169,9 @@ const DropdownList = styled.div`
   position: absolute;
   display: flex;
   flex-direction: column;
-  background: ${(props) => props.theme.backgroundSecondary};
-  border: 1px solid ${(props) => props.theme.border};
+  background: ${(props) => props.theme.bg_container};
+  border: 1px solid ${(props) => props.theme.header_text};
+  border-top: 1px solid transparent;
   padding-bottom: 1rem;
   max-height: 30rem;
   overflow: auto;
@@ -178,16 +179,16 @@ const DropdownList = styled.div`
   border-radius: 0 0 3px 3px;
 
   &::-webkit-scrollbar-track {
-    background-color: ${(props) => props.theme.backgroundTertiary};
+    background-color: ${(props) => props.theme.vote_bg};
   }
 
   &::-webkit-scrollbar {
     width: 8px;
-    background-color: ${(props) => props.theme.accentTertiary};
+    background-color: ${(props) => props.theme.header_text};
   }
 
   &::-webkit-scrollbar-thumb {
-    background-color: ${(props) => props.theme.borderHover};
+    background-color: ${(props) => props.theme.border_active};
   }
 `;
 
@@ -196,7 +197,7 @@ const Category = styled.div`
   font-weight: 500;
   font-size: 0.65rem;
   margin: 0.5rem 1rem;
-  color: ${(props) => props.theme.secondary};
+  color: ${(props) => props.theme.text_secondary};
 `;
 
 const Choice = styled(Link)`
@@ -208,11 +209,11 @@ const Choice = styled(Link)`
   justify-items: start;
 
   & > svg:first-child {
-    color: ${(props) => props.theme.secondary};
+    color: ${(props) => props.theme.text_secondary};
   }
 
   &:hover {
-    background: ${(props) => props.theme.accentTertiarySoft};
+    background: ${(props) => props.theme.header_bg_secondary};
   }
 `;
 

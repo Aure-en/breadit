@@ -58,8 +58,8 @@ export default TopSubreadits;
 
 const Container = styled.div`
   padding: 1rem;
-  border: 1px solid ${(props) => props.theme.neutral};
-  background: ${(props) => props.theme.backgroundSecondary};
+  border: 1px solid ${(props) => props.theme.border};
+  background: ${(props) => props.theme.bg_container};
   box-shadow: 0 0 10px -5px ${(props) => props.theme.shadow};
   line-height: 1.25rem;
   border-radius: 0.25rem;
@@ -106,5 +106,5 @@ const Name = styled(Link)`
 
 const Small = styled.div`
   font-size: 0.75rem;
-  color: ${(props) => props.theme.secondary};
+  color: ${(props) => props.theme.text_secondary};
 `;

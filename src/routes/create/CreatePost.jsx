@@ -311,10 +311,9 @@ const Container = styled.div`
 `;
 
 const Main = styled.div`
-  background: ${(props) => props.theme.backgroundSecondary};
+  background: ${(props) => props.theme.bg_container};
   margin-top: 1rem;
   border-radius: 5px;
-  box-shadow: 0 0 10px -5px ${(props) => props.theme.neutral};
 `;
 
 const Header = styled.div`
@@ -323,22 +322,22 @@ const Header = styled.div`
 
 const Tabs = styled.div`
   display: flex;
-  border-bottom: 1px solid ${(props) => props.theme.borderSecondary};
+  border-bottom: 1px solid ${(props) => props.theme.border_secondary};
 `;
 
 const Tab = styled.button`
   flex: 1;
   padding: 1rem;
-  border-left: 1px solid ${(props) => props.theme.borderSecondary};
+  border-left: 1px solid ${(props) => props.theme.border_secondary};
   display: flex;
   align-items: center;
   justify-content: center;
   padding-right: -0.5rem;
   font-weight: ${(props) => props.isSelected && "500"};
-  color: ${(props) => props.isSelected && props.theme.accentSecondary};
+  color: ${(props) => props.isSelected ? props.theme.accent_secondary : props.theme.text_primary};
   border-bottom: ${(props) =>
     props.isSelected
-      ? `2px solid ${props.theme.accentSecondary}`
+      ? `2px solid ${props.theme.accent_secondary}`
       : "2px solid transparent"};
 
   & > *:first-child {
@@ -353,15 +352,16 @@ const Heading = styled.h2`
 const Dropdown = styled.div`
   position: relative;
   max-width: 20rem;
-  border: 1px solid ${(props) => props.theme.borderSecondary};
+  border: 1px solid ${(props) => props.theme.border_secondary};
   z-index: 2;
-  box-shadow: 0 0 10px -5px ${(props) => props.theme.neutral};
+  box-shadow: 0 0 10px -5px ${(props) => props.theme.vote_neutral};
 `;
 
 const DropdownHeader = styled.button`
   display: grid;
   grid-template-columns: 1fr auto;
-  background: ${(props) => props.theme.backgroundSecondary};
+  background: ${(props) => props.theme.bg_container};
+  color: ${(props) => props.theme.text_primary};
   padding: 0.75rem;
   border-radius: ${(props) => (props.isDropdownOpen ? "5px 5px 0 0" : "5px")};
   cursor: pointer;
@@ -373,13 +373,13 @@ const DropdownList = styled.ul`
   position: absolute;
   left: 0;
   right: 0;
-  background: ${(props) => props.theme.backgroundSecondary};
+  background: ${(props) => props.theme.bg_container};
   max-height: 25rem;
   overflow-y: auto;
   padding: 0.75rem 0;
   margin: 0;
   border: 1px solid transparent;
-  outline: 1px solid ${(props) => props.theme.borderSecondary};
+  outline: 1px solid ${(props) => props.theme.border_secondary};
 
   & > li {
     margin: 0 0.5rem 1rem 0.5rem;
@@ -392,6 +392,7 @@ const DropdownList = styled.ul`
 
 const DropdownChoice = styled.button`
   display: flex;
+  color: ${(props) => props.theme.text_primary};
   align-items: center;
   width: 100%;
   padding: 0;
@@ -412,7 +413,7 @@ const SubreaditIcon = styled.img`
 
 const Small = styled.div`
   font-size: 0.75rem;
-  color: ${(props) => props.theme.secondary};
+  color: ${(props) => props.theme.text_secondary};
 `;
 
 const Form = styled.form`
@@ -427,9 +428,10 @@ const Field = styled.div`
 const Input = styled.input`
   border: none;
   width: 100%;
+  background: ${(props) => props.theme.bg_container};
 
   &:focus {
-    outline: none;
+    outline: 1px solid transparent;
   }
 `;
 
@@ -440,10 +442,10 @@ const Title = styled.div`
   width: 100%;
   padding: 0.5rem;
   border-radius: 5px;
-  border: 1px solid ${(props) => props.theme.borderSecondary};
+  border: 1px solid ${(props) => props.theme.border_secondary};
 
   &:focus-within {
-    border: 1px solid ${(props) => props.theme.borderHover};
+    border: 1px solid ${(props) => props.theme.border_active};
   }
 `;
 
@@ -454,13 +456,13 @@ const TitleLength = styled.span`
 
 const Textarea = styled.textarea`
   width: 100%;
-  border: 1px solid ${(props) => props.theme.borderSecondary};
+  border: 1px solid ${(props) => props.theme.border_secondary};
   padding: 0.5rem;
   border-radius: 5px;
 
   &:focus {
-    outline: none;
-    border: 1px solid ${(props) => props.theme.borderHover};
+    outline: 1px solid transparent;
+    border: 1px solid ${(props) => props.theme.border_active};
   }
 `;
 
@@ -469,8 +471,8 @@ const DropArea = styled.div`
   min-height: 200px;
   border: ${(props) =>
     props.areFilesDragged
-      ? `2px dashed ${props.theme.borderHover}`
-      : `1px dashed ${props.theme.borderSecondary}`};
+      ? `2px dashed ${props.theme.border_active}`
+      : `1px dashed ${props.theme.border_secondary}`};
   ${(props) =>
     props.center &&
     `display: flex;
@@ -488,7 +490,7 @@ const Preview = styled.div`
 
 const ImageContainer = styled.div`
   position: relative;
-  border: 1px solid ${(props) => props.theme.borderSecondary};
+  border: 1px solid ${(props) => props.theme.border_secondary};
   flex-basis: calc(25% - 1.125rem);
   display: flex;
   margin: 0.5rem;
@@ -536,14 +538,14 @@ const DeleteButton = styled.button`
   padding: 0;
   width: 1.5rem;
   height: 1.5rem;
-  color: ${(props) => props.theme.borderSecondary};
+  color: ${(props) => props.theme.border_secondary};
 `;
 
 const Upload = styled.label`
   ${button}
   display: inline-block;
-  color: ${(props) => props.theme.accentSecondary};
-  border: 1px solid ${(props) => props.theme.accentSecondary};
+  color: ${(props) => props.theme.accent_secondary};
+  border: 1px solid ${(props) => props.theme.accent_secondary};
   cursor: pointer;
   margin-left: 0.5rem;
 `;
@@ -559,13 +561,13 @@ const ButtonBool = styled(Button)`
   border: 1px solid
     ${(props) =>
       props.isChecked
-        ? props.theme.accentSecondary
-        : props.theme.accentSecondaryDisabled};
+        ? props.theme.accent_secondary
+        : props.theme.accent_secondary_disabled};
   color: ${(props) =>
     props.isChecked
-      ? props.theme.backgroundSecondary
-      : props.theme.accentSecondaryDisabled};
-  background: ${(props) => props.isChecked && props.theme.accentSecondary};
+      ? props.theme.bg_container
+      : props.theme.accent_secondary_disabled};
+  background: ${(props) => props.isChecked && props.theme.accent_secondary};
 
   & > *:first-child {
     margin-left: -0.5rem;
@@ -574,12 +576,12 @@ const ButtonBool = styled(Button)`
 `;
 
 const SubmitBtn = styled(Button)`
-  color: ${(props) => props.theme.backgroundSecondary};
-  background: ${(props) => props.theme.accentSecondary};
+  color: ${(props) => props.theme.bg_container};
+  background: ${(props) => props.theme.accent_secondary};
   border: 1px solid transparent;
 
   &:disabled {
-    background: ${(props) => props.theme.accentSecondaryDisabled};
+    background: ${(props) => props.theme.accent_secondary_disabled};
     cursor: not-allowed;
   }
 `;

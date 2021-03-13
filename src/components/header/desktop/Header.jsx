@@ -72,7 +72,7 @@ const Container = styled.header`
   justify-content: space-between;
   align-items: center;
   z-index: 15;
-  background: ${(props) => props.theme.backgroundQuaternary};
+  background: ${(props) => props.theme.header_bg};
   padding: 0.25rem 1rem;
 `;
 
@@ -110,38 +110,38 @@ const Buttons = styled.div`
 `;
 
 const Button = styled.button`
-  border: 1px solid ${(props) => props.theme.accentTertiary};
-  color: ${(props) => props.theme.accentTertiary};
+  border: 1px solid ${(props) => props.theme.header_text};
+  color: ${(props) => props.theme.header_text};
   border-radius: 5rem;
   padding: 0.35rem 1.25rem;
   font-weight: 500;
   text-align: center;
 
   &:hover {
-    color: ${(props) => props.theme.accentTertiaryHover};
-    border: 1px solid ${(props) => props.theme.accentTertiaryHover};
+    color: ${(props) => props.theme.header_text_active};
+    border: 1px solid ${(props) => props.theme.header_text_active};
   }
 `;
 
 const ButtonFilled = styled(Button)`
-  color: ${(props) => props.theme.backgroundQuaternary};
-  background-color: ${(props) => props.theme.backgroundPrimary};
-  border: 1px solid ${(props) => props.theme.backgroundPrimary};
+  color: ${(props) => props.theme.header_bg};
+  background-color: ${(props) => props.theme.bg_app};
+  border: 1px solid ${(props) => props.theme.bg_app};
   opacity: 0.95;
 
   &:hover {
-    color: ${(props) => props.theme.backgroundQuaternary};
-    background-color: ${(props) => props.theme.accentTertiaryHover};
-    border: 1px solid ${(props) => props.theme.accentTertiaryHover};
+    color: ${(props) => props.theme.header_bg};
+    background-color: ${(props) => props.theme.header_text_active};
+    border: 1px solid ${(props) => props.theme.header_text_active};
     opacity: 1;
   }
 `;
 
 const LinkIcon = styled(Link)`
   padding: 0.15rem 0.25rem;
-  color: ${(props) => props.theme.accentTertiary};
+  color: ${(props) => props.theme.header_text};
 
   &:hover {
-    color: ${(props) => props.theme.accentTertiaryHover};
+    color: ${(props) => props.theme.header_text_active};
   }
 `;

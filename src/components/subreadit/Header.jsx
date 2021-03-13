@@ -62,7 +62,7 @@ const Container = styled.div`
   background-image: linear-gradient(
       to bottom,
       transparent 50%,
-      ${(props) => props.theme.backgroundSecondary} 50%
+      ${(props) => props.theme.bg_container} 50%
     ),
     url(${(props) => props.banner});
   background-repeat: no-repeat;
@@ -90,10 +90,10 @@ const Content = styled.div`
 const Icon = styled.img`
   width: 5.5rem;
   height: 5.5rem;
-  border: 3px solid ${(props) => props.theme.backgroundSecondary};
+  border: 3px solid ${(props) => props.theme.bg_container};
   border-radius: 50%;
   margin-right: 1rem;
-  background: ${(props) => props.theme.backgroundQuaternary};
+  background: ${(props) => props.theme.header_bg};
 `;
 
 const Informations = styled.div`
@@ -115,5 +115,5 @@ const Heading = styled.h2`
 
 const Subheading = styled.div`
   font-size: 0.825rem;
-  color: ${(props) => props.theme.secondary};
+  color: ${(props) => props.theme.text_secondary};
 `;

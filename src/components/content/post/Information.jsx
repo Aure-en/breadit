@@ -42,6 +42,7 @@ function Information({ subreaditId, author, date, user, className }) {
               u/
               {author}{" "}
             </UnderlineLink>
+            {" • "}
             {formatDistanceStrict(new Date(date.seconds * 1000), new Date())}{" "}
             ago
           </Details>
@@ -90,7 +91,7 @@ const Container = styled.div`
   align-items: center;
   grid-template: repeat(2, auto) / auto 1fr auto;
   font-size: 0.75rem;
-  color: ${(props) => props.theme.secondary};
+  color: ${(props) => props.theme.text_secondary};
 
   & > * {
     margin-right: 0.25rem;
@@ -107,7 +108,7 @@ const Container = styled.div`
 
 const SubreaditLink = styled(Link)`
   font-weight: 600;
-  color: ${(props) => props.theme.primary};
+  color: ${(props) => props.theme.text_primary};
   grid-row: 1;
 `;
 
@@ -128,7 +129,7 @@ const Icon = styled.img`
   border-radius: 50%;
   grid-row: 1 / span 2;
   margin-right: 0.5rem;
-  background: ${(props) => props.theme.backgroundQuaternary};
+  background: ${(props) => props.theme.header_bg};
 
   @media all and (min-width: 768px) {
     width: 1.5rem;
@@ -141,7 +142,7 @@ const Button = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  color: ${(props) => props.theme.backgroundSecondary};
+  color: ${(props) => props.theme.bg_container};
   background-color: ${(props) => props.theme.accent};
   border: 1px solid ${(props) => props.theme.accent};
   border-radius: 5rem;

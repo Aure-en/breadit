@@ -103,7 +103,7 @@ const Container = styled.header`
   grid-template-columns: 1fr auto auto;
   align-items: center;
   padding: 0 0.5rem;
-  background: ${(props) => props.theme.backgroundQuaternary};
+  background: ${(props) => props.theme.header_bg};
   z-index: 15;
 `;
 
@@ -127,10 +127,10 @@ const Brand = styled.img`
 
 const LinkIcon = styled(Link)`
   padding: 0.15rem 0.25rem;
-  color: ${(props) => props.theme.accentTertiary};
+  color: ${(props) => props.theme.header_text};
 
   &:hover {
-    color: ${(props) => props.theme.accentTertiaryHover};
+    color: ${(props) => props.theme.header_text_active};
   }
 `;
 
@@ -138,10 +138,10 @@ const Dropdown = styled.div``;
 
 const DropdownHeader = styled.button`
   padding: 0.5rem 0 0.5rem 0.25rem;
-  color: ${(props) => props.theme.accentTertiary};
+  color: ${(props) => props.theme.header_text};
 
   &:hover {
-    color: ${(props) => props.theme.accentTertiaryHover};
+    color: ${(props) => props.theme.header_text_active};
   }
 `;
 
@@ -152,8 +152,9 @@ const DropdownList = styled.div`
   left: 0;
   right: 0;
   padding: 0.5rem 0;
-  background: ${(props) => props.theme.backgroundSecondary};
-  box-shadow: 0 -3px 10px ${(props) => props.theme.backgroundQuaternary};
+  background: ${(props) => props.theme.bg_container};
+  box-shadow: 0 -3px 10px ${(props) => props.theme.header_bg};
+  border-bottom: 1px solid ${(props) => props.theme.border};
 `;
 
 const Choice = styled(Link)`
@@ -166,13 +167,13 @@ const Choice = styled(Link)`
   }
 
   &:hover {
-    background: ${(props) => props.theme.backgroundTertiary};
+    background: ${(props) => props.theme.vote_bg};
   }
 `;
 
 const Button = styled.button`
   display: block;
-  color: ${(props) => props.theme.backgroundSecondary};
+  color: ${(props) => props.theme.bg_container};
   background-color: ${(props) => props.theme.accent};
   border: 1px solid ${(props) => props.theme.accent};
   border-radius: 5rem;

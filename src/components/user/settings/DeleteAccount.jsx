@@ -51,7 +51,7 @@ function DeleteAccount() {
         onRequestClose={closeModal}
         style={{
           overlay: {
-            backgroundColor: colors.overlaySecondary,
+            backgroundColor: colors.settings_overlay,
           },
         }}
       >
@@ -106,7 +106,7 @@ function DeleteAccount() {
 export default DeleteAccount;
 
 const SettingsModal = styled(Modal)`
-  background: ${(props) => props.theme.backgroundSecondary};
+  background: ${(props) => props.theme.bg_container};
   width: 75vw;
   max-width: 25rem;
   position: absolute;
@@ -117,7 +117,7 @@ const SettingsModal = styled(Modal)`
   border-radius: 5px;
 
   &:focus {
-    outline: none;
+    outline: 1px solid transparent;
   }
 
   @media all and (min-width: 500px) {
@@ -149,20 +149,20 @@ const Button = styled.button`
   text-align: center;
 
   &:hover {
-    color: ${(props) => props.theme.accentHover};
-    border: 1px solid ${(props) => props.theme.accentHover};
+    color: ${(props) => props.theme.accent_active};
+    border: 1px solid ${(props) => props.theme.accent_active};
   }
 `;
 
 const ButtonFilled = styled(Button)`
-  color: ${(props) => props.theme.backgroundSecondary};
+  color: ${(props) => props.theme.bg_container};
   background-color: ${(props) => props.theme.accent};
   border: 1px solid ${(props) => props.theme.accent};
 
   &:hover {
-    color: ${(props) => props.theme.backgroundSecondary};
-    background-color: ${(props) => props.theme.accentHover};
-    border: 1px solid ${(props) => props.theme.accentHover};
+    color: ${(props) => props.theme.bg_container};
+    background-color: ${(props) => props.theme.accent_active};
+    border: 1px solid ${(props) => props.theme.accent_active};
   }
 `;
 
@@ -185,10 +185,10 @@ const Input = styled.input`
   width: 100%;
   border: 1px solid
     ${(props) =>
-      props.hasError ? props.theme.error : props.theme.secondary};
+      props.hasError ? props.theme.error : props.theme.text_secondary};
 
   &:focus {
-    outline: none;
+    outline: 1px solid transparent;
     border: 1px solid ${(props) => props.theme.accent};
   }
 
@@ -214,7 +214,7 @@ const ModalText = styled.p`
 
 const Message = styled.div`
   font-size: 0.75rem;
-  color: ${(props) => props.theme.secondary};
+  color: ${(props) => props.theme.text_secondary};
   margin-bottom: 0.5rem;
 `;
 

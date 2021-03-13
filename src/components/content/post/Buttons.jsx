@@ -33,7 +33,7 @@ Buttons.defaultProps = {
 const Container = styled.div`
   font-size: 0.75rem;
   font-weight: 500;
-  color: ${(props) => props.theme.secondary};
+  color: ${(props) => props.theme.text_secondary};
   display: flex;
   align-items: stretch;
 
@@ -45,6 +45,6 @@ const Container = styled.div`
   }
 
   & > *:hover {
-    background: ${(props) => props.theme.backgroundTertiary};
+    background: ${(props) => props.theme.vote_bg};
   }
 `;

@@ -63,7 +63,7 @@ const Icon = styled.img`
   height: 1.5rem;
   border-radius: 50%;
   margin-right: 0.5rem;
-  background: ${(props) => props.theme.backgroundQuaternary};
+  background: ${(props) => props.theme.header_bg};
 `;
 
 const AuthorLink = styled(Link)`
@@ -73,5 +73,5 @@ const AuthorLink = styled(Link)`
 `;
 
 const Secondary = styled.div`
-  color: ${(props) => props.theme.secondary};
+  color: ${(props) => props.theme.text_secondary};
 `;

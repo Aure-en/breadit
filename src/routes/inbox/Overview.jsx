@@ -191,7 +191,7 @@ const Empty = styled.div`
   margin-top: 0.5rem;
   width: 100vw;
   max-width: 100%;
-  background: ${(props) => props.theme.backgroundSecondary};
+  background: ${(props) => props.theme.bg_container};
   border-bottom: 1px solid ${(props) => props.theme.border};
   border-top: 1px solid ${(props) => props.theme.border};
   border-left: 1px solid transparent;
@@ -204,7 +204,7 @@ const Empty = styled.div`
   justify-content: center;
 
   @media all and (min-width: 768px) {
-    border: 1px solid ${(props) => props.theme.neutral};
+    border: 1px solid ${(props) => props.theme.border};
     align-items: center;
     margin: 1rem;
     max-width: 40rem;

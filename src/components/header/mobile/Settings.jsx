@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../../contexts/AuthContext";
 import useDropdown from "../../../hooks/useDropdown";
+import ThemeSwitch from "./ThemeSwitch";
 
 // Icons
 import { ReactComponent as IconDown } from "../../../assets/icons/general/icon-down.svg";
@@ -28,9 +29,7 @@ function Settings({ closeHeader }) {
 
       {isDropdownOpen && (
         <DropdownList>
-          <Choice as="button" type="button">
-            Night Mode
-          </Choice>
+          <ThemeSwitch />
           {currentUser && (
             <Choice to="/settings" onClick={closeHeader}>
               Account Settings
@@ -59,6 +58,7 @@ const DropdownHeader = styled.button`
   justify-items: start;
   padding: 0.35rem 1.75rem;
   width: 100%;
+  color: ${(props) => props.theme.text_primary};
 
   & > *:first-child {
     margin-right: 1rem;
@@ -81,6 +81,6 @@ const Choice = styled(Link)`
   }
 
   &:hover {
-    background: ${(props) => props.theme.backgroundTertiary};
+    background: ${(props) => props.theme.vote_bg};
   }
 `;

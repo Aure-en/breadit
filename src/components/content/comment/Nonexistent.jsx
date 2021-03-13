@@ -20,7 +20,7 @@ export default Nonexistant;
 
 const Container = styled.div`
   margin-top: 0.5rem;
-  background: ${(props) => props.theme.backgroundSecondary};
+  background: ${(props) => props.theme.bg_container};
   padding: 1rem;
   border-radius: 0.25rem;
   display: flex;

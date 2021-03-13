@@ -32,7 +32,7 @@ const Container = styled.div`
   display: flex;
   font-size: 0.75rem;
   font-weight: 500;
-  color: ${(props) => props.theme.secondary};
+  color: ${(props) => props.theme.text_secondary};
   padding: 0.5rem 0;
 
   & > * {
@@ -43,7 +43,7 @@ const Container = styled.div`
   }
 
   & > button:hover {
-    background: ${(props) => props.theme.backgroundTertiary};
+    background: ${(props) => props.theme.vote_bg};
   }
 
   @media all and (min-width: 768px) {

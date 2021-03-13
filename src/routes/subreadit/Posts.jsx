@@ -143,7 +143,7 @@ const Empty = styled.div`
   margin-top: 0.5rem;
   width: 100vw;
   max-width: 100%;
-  background: ${(props) => props.theme.backgroundSecondary};
+  background: ${(props) => props.theme.bg_container};
   border-bottom: 1px solid ${(props) => props.theme.border};
   border-top: 1px solid ${(props) => props.theme.border};
   border-left: 1px solid transparent;
