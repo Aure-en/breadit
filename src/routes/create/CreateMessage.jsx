@@ -132,7 +132,9 @@ const Input = styled.input`
   border-radius: 3px;
   width: 100%;
   border: 1px solid
-    ${(props) => (props.hasError ? props.theme.error : props.theme.text_secondary)};
+    ${(props) =>
+      props.hasError ? props.theme.error : props.theme.text_secondary};
+  background: ${(props) => props.theme.bg_container};
 
   &:focus {
     outline: 1px solid transparent;

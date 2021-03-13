@@ -18,10 +18,10 @@ function Overview() {
   const [loading, setLoading] = useState(true);
   const [overview, setOverview] = useState();
   const { currentUser } = useAuth();
-  const { getAllMessages, deleteMessageListener, readMessages } = useMessage();
+  const { getAllMessages, messagesListener, readMessages } = useMessage();
   const {
     getAllNotifications,
-    deleteNotificationListener,
+    notificationsListener,
     readNotifications,
   } = useNotification();
   const { getCommentsNumber } = useComment();
@@ -84,7 +84,7 @@ function Overview() {
         }
       });
     };
-    const unsubscribe = deleteNotificationListener(currentUser.uid, callback);
+    const unsubscribe = notificationsListener(currentUser.uid, callback);
     return unsubscribe;
   }, []);
 
@@ -98,7 +98,7 @@ function Overview() {
         }
       });
     };
-    const unsubscribe = deleteMessageListener(currentUser.uid, callback);
+    const unsubscribe = messagesListener(currentUser.uid, callback);
     return unsubscribe;
   }, []);
 

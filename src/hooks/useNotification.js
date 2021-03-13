@@ -100,7 +100,7 @@ function useNotification() {
     });
   };
 
-  const deleteNotificationListener = (userId, callback) => {
+  const notificationsListener = (userId, callback) => {
     return firestore
       .collection("notifications")
       .where("user.id", "==", userId)
@@ -115,7 +115,7 @@ function useNotification() {
     getAllNotifications,
     getNotificationsNumber,
     notifyMention,
-    deleteNotificationListener,
+    notificationsListener,
   };
 }
 

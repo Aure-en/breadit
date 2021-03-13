@@ -79,7 +79,7 @@ function useMessage() {
     return messages.docs.length;
   };
 
-  const deleteMessageListener = (userId, callback) => {
+  const messagesListener = (userId, callback) => {
     return firestore
       .collection("messages")
       .where("recipient.id", "==", userId)
@@ -94,7 +94,7 @@ function useMessage() {
     getAllMessages,
     getSentMessages,
     getUnreadNumber,
-    deleteMessageListener,
+    messagesListener,
   };
 }
 

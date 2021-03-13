@@ -9,7 +9,7 @@ import Message from "../../../components/inbox/messages/Message";
 function Received() {
   const [messages, setMessages] = useState();
   const { currentUser } = useAuth();
-  const { getMessages, deleteMessageListener, readMessages } = useMessage();
+  const { getMessages, messagesListener, readMessages } = useMessage();
   const listRef = useRef();
   const { limit } = useScroll(listRef, 20, 10);
   const loading = useLoading(messages);
@@ -24,7 +24,7 @@ function Received() {
         }
       });
     };
-    const unsubscribe = deleteMessageListener(currentUser.uid, callback);
+    const unsubscribe = messagesListener(currentUser.uid, callback);
     return unsubscribe;
   }, []);
 

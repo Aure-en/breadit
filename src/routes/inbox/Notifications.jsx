@@ -14,7 +14,7 @@ function Notifications() {
   const { currentUser } = useAuth();
   const {
     getNotifications,
-    deleteNotificationListener,
+    notificationsListener,
     readNotifications,
   } = useNotification();
   const { getCommentsNumber } = useComment();
@@ -58,7 +58,7 @@ function Notifications() {
         }
       });
     };
-    const unsubscribe = deleteNotificationListener(currentUser.uid, callback);
+    const unsubscribe = notificationsListener(currentUser.uid, callback);
     return unsubscribe;
   }, []);
 

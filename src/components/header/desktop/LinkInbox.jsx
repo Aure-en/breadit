@@ -11,15 +11,26 @@ import { ReactComponent as IconInbox } from "../../../assets/icons/header/icon-i
 function LinkInbox() {
   const { currentUser } = useAuth();
   const [number, setNumber] = useState(0);
-  const { getNotificationsNumber } = useNotification();
-  const { getUnreadNumber } = useMessage();
+  const { getNotificationsNumber, notificationsListener } = useNotification();
+  const { getUnreadNumber, messagesListener } = useMessage();
 
+  // Listeners
   useEffect(() => {
-    (async () => {
+    const unsubscribe = notificationsListener(currentUser.uid, async () => {
       const notifications = await getNotificationsNumber(currentUser.uid);
       const messages = await getUnreadNumber(currentUser.uid);
       setNumber(notifications + messages);
-    })();
+    });
+    return unsubscribe;
+  }, []);
+
+  useEffect(() => {
+    const unsubscribe = messagesListener(currentUser.uid, async () => {
+      const notifications = await getNotificationsNumber(currentUser.uid);
+      const messages = await getUnreadNumber(currentUser.uid);
+      setNumber(notifications + messages);
+    });
+    return unsubscribe;
   }, []);
 
   return (
