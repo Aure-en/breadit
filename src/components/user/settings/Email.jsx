@@ -1,9 +1,8 @@
-import React, { useState } from "react";
-import styled from "styled-components";
+import React, { useState, useContext } from "react";
+import styled, { ThemeContext } from "styled-components";
 import Modal from "react-modal";
 import { useAuth } from "../../../contexts/AuthContext";
 import useUserSettings from "../../../hooks/useUserSettings";
-import { colors } from "../../../styles/themes/light";
 
 // Icons
 import { ReactComponent as IconClose } from "../../../assets/icons/general/icon-x.svg";
@@ -18,6 +17,7 @@ function Email() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { checkPassword, updateEmail } = useUserSettings();
   const { currentUser } = useAuth();
+  const themeContext = useContext(ThemeContext);
 
   const clear = () => {
     setPasswordError("");
@@ -89,7 +89,7 @@ function Email() {
         onRequestClose={closeModal}
         style={{
           overlay: {
-            backgroundColor: colors.settings_overlay,
+            backgroundColor: themeContext.overlay,
           },
         }}
       >
@@ -166,7 +166,7 @@ const SettingsModal = styled(Modal)`
   border-radius: 5px;
 
   &:focus {
-    outline: 1px solid transparent;
+    outline: none;
   }
 
   @media all and (min-width: 500px) {
@@ -177,6 +177,7 @@ const SettingsModal = styled(Modal)`
 const ButtonsRight = styled.div`
   display: flex;
   justify-content: flex-end;
+  margin-top: 1rem;
 
   & > * {
     margin-left: 1rem;
@@ -198,8 +199,8 @@ const Button = styled.button`
   text-align: center;
 
   &:hover {
-    color: ${(props) => props.theme.accent_active};
-    border: 1px solid ${(props) => props.theme.accent_active};
+    color: ${(props) => props.theme.accentHover};
+    border: 1px solid ${(props) => props.theme.accent_hover};
   }
 `;
 
@@ -209,9 +210,9 @@ const ButtonFilled = styled(Button)`
   border: 1px solid ${(props) => props.theme.accent};
 
   &:hover {
-    color: ${(props) => props.theme.bg_container};
-    background-color: ${(props) => props.theme.accent_active};
-    border: 1px solid ${(props) => props.theme.accent_active};
+    color: ${(props) => props.theme.backgroundSecondary};
+    background-color: ${(props) => props.theme.accent_hover};
+    border: 1px solid ${(props) => props.theme.accent_hover};
   }
 `;
 
@@ -235,9 +236,11 @@ const Input = styled.input`
   border: 1px solid
     ${(props) =>
       props.hasError ? props.theme.error : props.theme.text_secondary};
+  background: ${(props) => props.theme.input_bg};
+  color: ${(props) => props.theme.text_primary};
 
   &:focus {
-    outline: 1px solid transparent;
+    outline: none;
     border: 1px solid ${(props) => props.theme.accent};
   }
 

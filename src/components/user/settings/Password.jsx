@@ -1,9 +1,8 @@
-import React, { useState } from "react";
-import styled from "styled-components";
+import React, { useState, useContext } from "react";
+import styled, { ThemeContext } from "styled-components";
 import Modal from "react-modal";
 import { useAuth } from "../../../contexts/AuthContext";
 import useUserSettings from "../../../hooks/useUserSettings";
-import { colors } from "../../../styles/themes/light";
 
 // Icons
 import { ReactComponent as IconClose } from "../../../assets/icons/general/icon-x.svg";
@@ -27,6 +26,7 @@ function Password() {
     updatePassword,
   } = useUserSettings();
   const { currentUser } = useAuth();
+  const themeContext = useContext(ThemeContext);
 
   const clear = () => {
     setPasswordError("");
@@ -107,7 +107,7 @@ function Password() {
         onRequestClose={closeModal}
         style={{
           overlay: {
-            backgroundColor: colors.settings_overlay,
+            backgroundColor: themeContext.overlay,
           },
         }}
       >
@@ -207,6 +207,7 @@ const SettingsModal = styled(Modal)`
 const ButtonsRight = styled.div`
   display: flex;
   justify-content: flex-end;
+  margin-top: 1rem;
 
   & > * {
     margin-left: 1rem;
@@ -264,6 +265,8 @@ const Input = styled.input`
   width: 100%;
   border: 1px solid
     ${(props) => (props.hasError ? props.theme.error : props.theme.text_secondary)};
+  background: ${(props) => props.theme.input_bg};
+  color: ${(props) => props.theme.text_primary};
 
   &:focus {
     outline: 1px solid transparent;

@@ -327,8 +327,10 @@ const Textarea = styled.textarea`
   width: 100%;
   min-height: 8rem;
   border: 1px solid ${(props) => props.theme.text_secondary};
-  padding: 0.5rem;
+  padding: 0.75rem;
   box-sizing: border-box;
+  background: ${(props) => props.theme.input_bg};
+  color: ${(props) => props.theme.text_primary};
 
   &:focus {
     outline: 1px solid transparent;
@@ -340,7 +342,7 @@ const IconButton = styled.button`
   color: ${(props) => props.theme.text_secondary};
 
   &:hover {
-    color: ${(props) => props.theme.header_bg};
+    color: ${(props) => props.theme.accent};
   }
 `;
 
@@ -475,6 +477,8 @@ const Input = styled.input`
   border: 1px solid ${(props) => props.theme.text_secondary};
   width: 100%;
   margin-bottom: 1rem;
+  background: ${(props) => props.theme.input_bg};
+  color: ${(props) => props.theme.text_primary};
 
   &:focus {
     outline: 1px solid transparent;

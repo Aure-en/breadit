@@ -5,7 +5,7 @@ export const colors = {
   bg_app: "rgb(33, 30, 29)", // App background
   bg_container: "rgb(43, 39, 39)", // Posts, comments background
 
-  overlay: "rgb(27, 25, 25, .2)", // Modals overlay
+  overlay: "rgb(27, 25, 25, .5)", // Modals overlay
   settings_overlay: "rgb(27, 25, 25, .2)",
   carousel_overlay: "rgba(0, 0, 0, .5)", // Carousel
 
@@ -15,7 +15,7 @@ export const colors = {
   accent: "rgb(193, 183, 176)", // Buttons, notifications, some text...
   accent_active: "rgb(224, 216, 203)",
   accent_disabled: "rgba(128, 118, 112)",
-  accent_soft: "rgb(48, 45, 44)",
+  accent_soft: "rgb(41, 39, 39)",
   accent_bg: "rgb(29, 28, 28)",
 
   accent_secondary: "rgb(193, 183, 176)",

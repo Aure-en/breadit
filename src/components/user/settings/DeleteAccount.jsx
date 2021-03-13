@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import styled from "styled-components";
+import React, { useState, useContext } from "react";
+import styled, { ThemeContext } from "styled-components";
 import Modal from "react-modal";
 import { useAuth } from "../../../contexts/AuthContext";
 import useUserSettings from "../../../hooks/useUserSettings";
@@ -15,6 +15,7 @@ function DeleteAccount() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { checkPassword, deleteAccount } = useUserSettings();
   const { currentUser } = useAuth();
+  const themeContext = useContext(ThemeContext);
 
   const clear = () => {
     setPasswordError("");
@@ -51,7 +52,7 @@ function DeleteAccount() {
         onRequestClose={closeModal}
         style={{
           overlay: {
-            backgroundColor: colors.settings_overlay,
+            backgroundColor: themeContext.overlay,
           },
         }}
       >
@@ -128,6 +129,7 @@ const SettingsModal = styled(Modal)`
 const ButtonsRight = styled.div`
   display: flex;
   justify-content: flex-end;
+  margin-top: 1rem;
 
   & > * {
     margin-left: 1rem;
@@ -186,6 +188,8 @@ const Input = styled.input`
   border: 1px solid
     ${(props) =>
       props.hasError ? props.theme.error : props.theme.text_secondary};
+  background: ${(props) => props.theme.input_bg};
+  color: ${(props) => props.theme.text_primary};
 
   &:focus {
     outline: 1px solid transparent;

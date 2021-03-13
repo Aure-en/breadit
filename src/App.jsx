@@ -24,6 +24,7 @@ import UserSettings from "./routes/user/Settings";
 import SubreaditSettings from "./routes/subreadit/Settings";
 import User from "./routes/user/User";
 import Inbox from "./routes/inbox/Inbox";
+import NotFound from "./routes/NotFound";
 import Entry from "./components/entry/Entry";
 import "normalize.css";
 
@@ -104,6 +105,7 @@ function App() {
                       />
                       <Route path="/u/:username" component={User} />
                       <PrivateRoute path="/inbox" component={Inbox} />
+                      <Route component={NotFound} />
                     </Switch>
                   </Container>
                   <Entry />
