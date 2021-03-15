@@ -7,10 +7,12 @@ export const colors = {
 
   overlay: "rgb(27, 25, 25, .5)", // Modals overlay
   settings_overlay: "rgb(27, 25, 25, .2)",
-  carousel_overlay: "rgba(0, 0, 0, .5)", // Carousel
 
   shadow: "rgba(103, 188, 194, .25)",
+
+  carousel_overlay: "rgba(0, 0, 0, .5)", // Carousel
   carousel_shadow: "rgba(0, 0, 0, .4)", // Carousel
+  carousel_text: "rgb(199, 199, 199)",
 
   accent: "rgb(193, 183, 176)", // Buttons, notifications, some text...
   accent_active: "rgb(224, 216, 203)",

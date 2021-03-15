@@ -55,7 +55,6 @@ const Container = styled.div`
   border-radius: 0.5rem;
   color: ${(props) => props.theme.text_primary};
   background: ${(props) => props.theme.bg_container};
-  box-shadow: 0 0 15px ${(props) => props.theme.shadow};
   font-size: 0.875rem;
   font-weight: 400;
   width: 80vw;

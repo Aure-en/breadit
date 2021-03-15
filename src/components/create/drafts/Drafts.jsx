@@ -2,16 +2,16 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import formatDistanceStrict from "date-fns/formatDistanceStrict";
-import { useAuth } from "../../contexts/AuthContext";
-import useDraft from "../../hooks/useDraft";
-import useLoading from "../../hooks/useLoading";
+import { useAuth } from "../../../contexts/AuthContext";
+import useDraft from "../../../hooks/useDraft";
+import useLoading from "../../../hooks/useLoading";
 
 // Icons
-import { ReactComponent as IconClose } from "../../assets/icons/general/icon-x.svg";
-import { ReactComponent as IconComment } from "../../assets/icons/general/icon-comment.svg";
-import { ReactComponent as IconDelete } from "../../assets/icons/content/icon-delete.svg";
+import { ReactComponent as IconClose } from "../../../assets/icons/general/icon-x.svg";
+import { ReactComponent as IconComment } from "../../../assets/icons/general/icon-comment.svg";
+import { ReactComponent as IconDelete } from "../../../assets/icons/content/icon-delete.svg";
 
-function Drafts() {
+function Drafts({ select }) {
   const [drafts, setDrafts] = useState([]);
   const [isDraftModalOpen, setIsDraftModalOpen] = useState(false);
   const { currentUser } = useAuth();
@@ -40,8 +40,8 @@ function Drafts() {
               <IconClose />
             </ButtonClose>
             <Header>
-              Drafts 
-              {' '}
+              Drafts
+              {" "}
               {drafts.length > 0 && <Secondary>({drafts.length})</Secondary>}
             </Header>
             {!loading && (
@@ -49,13 +49,24 @@ function Drafts() {
                 {drafts.length > 0 ? (
                   <div>
                     {drafts.map((draft) => {
-                      return <Draft draft={draft} key={draft.id} />;
+                      return (
+                        <Draft
+                          draft={draft}
+                          key={draft.id}
+                          onSelect={() => {
+                            select(draft);
+                            setIsDraftModalOpen(false);
+                          }}
+                        />
+                      );
                     })}
                   </div>
                 ) : (
                   <Empty>
-                  <Icon><IconComment /></Icon>
-                  <div>Your drafts will live here.</div>
+                    <Icon>
+                      <IconComment />
+                    </Icon>
+                    <div>Your drafts will live here.</div>
                   </Empty>
                 )}
               </>
@@ -67,21 +78,26 @@ function Drafts() {
   );
 }
 
-function Draft({ draft }) {
+function Draft({ draft, onSelect }) {
   const [confirm, setConfirm] = useState(false);
   const { deleteDraft } = useDraft();
 
   return (
-    <Container key={draft.id}>
+    <Container type="button" key={draft.id} onClick={onSelect}>
       <IconComment />
       <Title>{draft.title || "Untitled"}</Title>
       <Informations>
-        {draft.subreadit && `b/${draft.subreadit.name} • `}
-        Draft saved{" "}
-        {formatDistanceStrict(
-          new Date(draft.date.seconds * 1000),
-          new Date()
+        {draft.subreadit.name && (
+          <>
+            <strong>
+              b/
+              {draft.subreadit.name}
+            </strong>
+            <span> ᐧ </span>
+          </>
         )}
+        Draft saved{" "}
+        {formatDistanceStrict(new Date(draft.date.seconds * 1000), new Date())}
         {" "}
         ago
       </Informations>
@@ -112,6 +128,10 @@ function Draft({ draft }) {
 
 export default Drafts;
 
+Drafts.propTypes = {
+  select: PropTypes.func.isRequired,
+};
+
 Draft.propTypes = {
   draft: PropTypes.shape({
     id: PropTypes.string,
@@ -124,6 +144,7 @@ Draft.propTypes = {
       seconds: PropTypes.number,
     }),
   }).isRequired,
+  onSelect: PropTypes.func.isRequired,
 };
 
 const Button = styled.button`
@@ -146,7 +167,7 @@ const Header = styled.div`
 
 const Secondary = styled.span`
   color: ${(props) => props.theme.text_secondary};
-  font-weight: 0.825rem;
+  font-size: 0.825rem;
 `;
 
 const Overlay = styled.div`

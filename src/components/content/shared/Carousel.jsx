@@ -4,8 +4,8 @@ import PropTypes from "prop-types";
 import useCarousel from "../../../hooks/useCarousel";
 
 // Icons
-import { ReactComponent as IconLeft } from "../../../assets/icons/general/icon-left.svg";
-import { ReactComponent as IconRight } from "../../../assets/icons/general/icon-right.svg";
+import { ReactComponent as IconLeft } from "../../../assets/icons/content/icon-left.svg";
+import { ReactComponent as IconRight } from "../../../assets/icons/content/icon-right.svg";
 
 function Carousel({ images, title }) {
   const {
@@ -114,6 +114,7 @@ const Button = styled.button`
   top: 50%;
   transform: translateY(-50%);
   z-index: 1;
+  color: ${(props) => props.theme.text_primary};
 `;
 
 const ButtonLeft = styled(Button)`
@@ -137,7 +138,7 @@ const SlideNumber = styled.span`
   top: 1rem;
   right: 1rem;
   font-size: 0.75rem;
-  color: ${(props) => props.theme.bg_container};
+  color: ${(props) => props.theme.carousel_text};
   background: ${(props) => props.theme.carousel_overlay};
   padding: 0.25rem 0.45rem;
   border-radius: 50px;

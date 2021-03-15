@@ -6,7 +6,10 @@ function useImage() {
 
   const displayPreview = (files) => {
     const previewFiles = [];
-    files.forEach((file) => previewFiles.push(URL.createObjectURL(file)));
+    files.forEach((file) => {
+      URL.revokeObjectURL(file);
+      previewFiles.push(URL.createObjectURL(file));
+    });
     setPreview(previewFiles);
   };
 
@@ -19,7 +22,7 @@ function useImage() {
 
   const uploadImages = (e) => {
     if (e.target.files) {
-      setImages([...images, e.target.files]);
+      setImages([...images, ...e.target.files]);
       displayPreview([...images, ...e.target.files]);
     }
   };

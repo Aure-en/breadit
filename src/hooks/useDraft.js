@@ -46,7 +46,15 @@ function useDraft() {
     return drafts;
   };
 
-  const draftsListener = async (userId, callback) => {
+  const getDraft = (id) => {
+    return firestore.collection("drafts").doc(id).get();
+  };
+
+  const draftListener = (id, callback) => {
+    return firestore.collection("drafts").doc(id).onSnapshot(callback);
+  };
+
+  const draftsListener = (userId, callback) => {
     return firestore
       .collection("drafts")
       .where("author.id", "==", userId)
@@ -56,8 +64,10 @@ function useDraft() {
   return {
     createDraft,
     editDraft,
+    getDraft,
     getDrafts,
     deleteDraft,
+    draftListener,
     draftsListener,
   };
 }

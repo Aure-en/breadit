@@ -12,6 +12,7 @@ export const colors = {
 
   carousel_shadow: "rgba(0, 0, 0, .4)",
   carousel_overlay: "rgba(0, 0, 0, .5)",
+  carousel_text: "rgb(255, 255, 255)",
 
   accent: "rgb(103, 188, 194)",
   accent_active: "rgb(111, 207, 214)",
