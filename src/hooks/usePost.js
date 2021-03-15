@@ -3,14 +3,7 @@ import useNotification from "./useNotification";
 
 function usePost() {
   const { notifyMention } = useNotification();
-  const createPost = async (
-    author,
-    subreadit,
-    title,
-    type,
-    content,
-    spoiler
-  ) => {
+  const createPost = async (author, subreadit, title, type, content) => {
     const ref = await firestore.collection("posts").doc();
     const data = {
       author: {
@@ -31,7 +24,6 @@ function usePost() {
         id: subreadit.id,
         name: subreadit.name,
       },
-      spoiler,
       id: ref.id,
     };
     ref.set(data);

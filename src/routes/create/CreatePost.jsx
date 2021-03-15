@@ -5,20 +5,20 @@ import styled from "styled-components";
 import { useHistory } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import usePost from "../../hooks/usePost";
+import useDraft from "../../hooks/useDraft";
 import useSubreadit from "../../hooks/useSubreadit";
 import useDragAndDrop from "../../hooks/useDragAndDrop";
 import useStorage from "../../hooks/useStorage";
 import useDropdown from "../../hooks/useDropdown";
 import useImage from "../../hooks/useImage";
 import TextEditor from "../../components/shared/TextEditor";
+import Drafts from "../../components/create/Drafts";
 
 // Icons
 import { ReactComponent as IconDown } from "../../assets/icons/general/icon-down.svg";
 import { ReactComponent as IconPost } from "../../assets/icons/general/icon-post.svg";
 import { ReactComponent as IconImage } from "../../assets/icons/general/icon-image.svg";
 import { ReactComponent as IconLink } from "../../assets/icons/general/icon-link.svg";
-import { ReactComponent as IconPlus } from "../../assets/icons/general/icon-plus.svg";
-import { ReactComponent as IconCheck } from "../../assets/icons/general/icon-check.svg";
 import { ReactComponent as IconClose } from "../../assets/icons/general/icon-x.svg";
 import { ReactComponent as IconAdd } from "../../assets/icons/content/icon-add.svg";
 
@@ -28,9 +28,10 @@ function CreatePost({ location }) {
   const [post, setPost] = useState("");
   const [link, setLink] = useState("");
   const [linkError, setLinkError] = useState("");
-  const [spoiler, setSpoiler] = useState(false);
   const [subreadits, setSubreadits] = useState([]);
   const [isHovered, setIsHovered] = useState();
+  const [currentDraft, setCurrentDraft] = useState("");
+  const [draftButton, setDraftButton] = useState("Save Draft");
 
   const { currentUser } = useAuth();
   const { getSubreadits } = useSubreadit();
@@ -52,6 +53,7 @@ function CreatePost({ location }) {
     handleChoice,
   } = useDropdown(dropdownRef);
   const { images, preview, dropImages, uploadImages, deleteImage } = useImage();
+  const { createDraft, editDraft } = useDraft();
 
   // Get list of subreadits
   useEffect(() => {
@@ -104,23 +106,17 @@ function CreatePost({ location }) {
         break;
       default:
     }
-    const postId = await createPost(
-      currentUser,
-      current,
-      title,
-      type,
-      content,
-      spoiler
-    );
+    const postId = await createPost(currentUser, current, title, type, content);
     setTimeout(() => history.push(`/b/${current.name}/${postId}`), 1000);
   };
 
   return (
     <>
       <Container>
-        <div>
+        <Header>
           <Heading>Create a post</Heading>
-        </div>
+          <Drafts />
+        </Header>
 
         <Dropdown ref={dropdownRef}>
           <DropdownHeader
@@ -281,7 +277,27 @@ function CreatePost({ location }) {
             )}
 
             <Buttons>
-              <SubmitBtn
+              {type !== "image" && (
+                <Button
+                  type="button"
+                  onClick={async () => {
+                    const draftId = await createDraft(
+                      currentUser,
+                      current || { id: "", name: "" },
+                      title,
+                      type,
+                      type === "post" ? post : link
+                    );
+                    setCurrentDraft(draftId);
+                    setDraftButton("Draft Saved!");
+                    setTimeout(() => setDraftButton("Update Draft"), 1000);
+                  }}
+                  disabled={!post && !title && !current && !link}
+                >
+                  {draftButton}
+                </Button>
+              )}
+              <ButtonFilled
                 type="submit"
                 disabled={
                   (type === "post" && (!title || !current)) ||
@@ -290,7 +306,7 @@ function CreatePost({ location }) {
                 }
               >
                 Post
-              </SubmitBtn>
+              </ButtonFilled>
             </Buttons>
           </Form>
         </Main>
@@ -321,7 +337,8 @@ const Main = styled.div`
 `;
 
 const Header = styled.div`
-  border-bottom: 1px solid blue;
+  display: flex;
+  justify-content: space-between;
 `;
 
 const Tabs = styled.div`
@@ -541,10 +558,14 @@ const Buttons = styled.div`
   padding: 1rem 0;
   display: flex;
   justify-content: flex-end;
-`;
 
-const Button = styled.button`
-  ${button}
+  & > button {
+    margin-right: 1rem;
+  }
+
+  & > button:last-child {
+    margin-right: 0;
+  }
 `;
 
 const DeleteButton = styled.button`
@@ -575,14 +596,42 @@ const HiddenInput = styled.input`
   top: -9999px;
 `;
 
-const SubmitBtn = styled(Button)`
-  color: ${(props) => props.theme.bg_container};
-  background: ${(props) => props.theme.accent_secondary};
-  border: 1px solid transparent;
+const Button = styled.button`
+  display: block;
+  border: 1px solid ${(props) => props.theme.accent_secondary};
+  color: ${(props) => props.theme.accent_secondary};
+  border-radius: 5rem;
+  padding: 0.35rem 1.25rem;
+  font-weight: 500;
+  text-align: center;
+
+  &:hover {
+    color: ${(props) => props.theme.accent_secondary_active};
+    border: 1px solid ${(props) => props.theme.accent_secondary_active};
+  }
 
   &:disabled {
-    background: ${(props) => props.theme.accent_secondary_disabled};
     cursor: not-allowed;
+    color: ${(props) => props.theme.accent_secondary_disabled};
+    border: 1px solid ${(props) => props.theme.accent_secondary_disabled};
+  }
+`;
+
+const ButtonFilled = styled(Button)`
+  color: ${(props) => props.theme.bg_container};
+  background-color: ${(props) => props.theme.accent_secondary};
+  border: 1px solid ${(props) => props.theme.accent_secondary};
+
+  &:hover {
+    color: ${(props) => props.theme.bg_container};
+    background-color: ${(props) => props.theme.accent_secondary_active};
+    border: 1px solid ${(props) => props.theme.accent_secondary_active};
+  }
+
+  &:disabled {
+    color: ${(props) => props.theme.bg_container};
+    background-color: ${(props) => props.theme.accent_secondary_disabled};
+    border: 1px solid ${(props) => props.theme.accent_secondary_disabled};
   }
 `;
 

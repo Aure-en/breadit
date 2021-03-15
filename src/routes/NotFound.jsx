@@ -17,13 +17,13 @@ export default NotFound;
 const Container = styled.div`
   margin-top: 0.5rem;
   width: 100vw;
-  max-width: 100%;
+  max-width: 25rem;
   background: ${(props) => props.theme.bg_container};
   border-bottom: 1px solid ${(props) => props.theme.border};
   border-top: 1px solid ${(props) => props.theme.border};
   border-left: 1px solid transparent;
   border-right: 1px solid transparent;
-  padding: 1rem;
+  padding: 2rem 1rem;
   border-radius: 0.25rem;
   display: flex;
   flex-direction: column;
@@ -33,7 +33,6 @@ const Container = styled.div`
   @media all and (min-width: 768px) {
     border: 1px solid ${(props) => props.theme.border};
     align-items: center;
-    max-width: 40rem;
     align-self: center;
   }
 `;

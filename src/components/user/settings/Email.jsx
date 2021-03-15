@@ -251,7 +251,7 @@ const Input = styled.input`
   }
 `;
 
-const ButtonClose = styled.span`
+const ButtonClose = styled.button`
   position: absolute;
   top: 1rem;
   right: 1rem;
