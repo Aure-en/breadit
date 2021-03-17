@@ -28,8 +28,11 @@ service cloud.firestore {
       // Any logged-in user can create comments
     	allow create: if request.auth != null;
       
-      // Only the author can modify the comment.
-      allow update: if request.auth != null && request.auth.uid == resource.data.author.id;
+      // Author / mods can "modify" the document (=delete the comment)
+      allow update: if request.auth != null &&
+      	((request.auth.uid == resource.data.author.id) ||
+        (get(/databases/$(database)/documents/subreadits/$(resource.data.subreadit.id)).data.permissions.delete[request.auth.uid] == true) ||
+        (get(/databases/$(database)/documents/posts/$(resource.data.post.id)).author.id == request.auth.uid));
       
       // Only the author + subreadit mods + author post (when deleting post) can delete the comment.
       allow delete: if request.auth != null &&

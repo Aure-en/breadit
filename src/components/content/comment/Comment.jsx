@@ -6,6 +6,7 @@ import redraft from "redraft";
 import useComment from "../../../hooks/useComment";
 import TextEditor, { renderers } from "../../shared/TextEditor";
 import { useAuth } from "../../../contexts/AuthContext";
+import useSubreadit from "../../../hooks/useSubreadit";
 import Vote from "../shared/Vote";
 import Information from "./Information";
 import Buttons from "./Buttons";
@@ -17,7 +18,9 @@ function Comment({ className, commentId }) {
   const [isReplying, setIsReplying] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [edit, setEdit] = useState("");
+  const [permissions, setPermissions] = useState([]);
   const { currentUser } = useAuth();
+  const { getDeletePermissions } = useSubreadit();
   const {
     getComment,
     createComment,
@@ -32,7 +35,19 @@ function Comment({ className, commentId }) {
       const comment = await getComment(commentId);
       setComment(comment.data());
     })();
-  }, []);
+  }, [commentId]);
+
+  // Checks delete permissions:
+  // Both the author and subreadit mods can delete the post.
+  useEffect(() => {
+    if (!comment) return;
+    (async () => {
+      const permissions = await getDeletePermissions(
+        comment.post.subreadit.name
+      );
+      setPermissions(permissions);
+    })();
+  }, [comment]);
 
   // Listen to the comment:
   // - When the user replies to the comment, its children are updated.
@@ -107,8 +122,14 @@ function Comment({ className, commentId }) {
                   />
                   {!comment.isDeleted && (
                     <ExtraButtons
-                      authorId={comment.author.id}
-                      subreaditName={comment.post.subreadit.name}
+                      // Only the author can edit
+                      canEdit={currentUser.uid === comment.author.id}
+                      // Author and subreadits mods can delete
+                      canDelete={
+                        !comment.isDeleted &&
+                        (currentUser.uid === comment.author.id ||
+                          permissions[currentUser.uid])
+                      }
                       onEdit={() => {
                         setIsEditing(true);
                         setEdit(comment.content);

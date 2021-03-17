@@ -25,7 +25,7 @@ export const colors = {
   accent_secondary_disabled: "rgb(232, 185, 177)",
 
   header_bg: "rgb(93, 70, 63)",
-  header_text: "rgb(208, 188, 173)",
+  header_text: "rgb(243, 227, 200)",
   header_text_active: "rgb(255, 248, 222)",
   header_bg_secondary: "rgb(255, 249, 245)",
 

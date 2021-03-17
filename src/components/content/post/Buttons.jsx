@@ -4,12 +4,14 @@ import PropTypes from "prop-types";
 import CommentButton from "../shared/buttons/CommentButton";
 import SaveButton from "../shared/buttons/SaveButton";
 import HideButton from "../shared/buttons/HideButton";
+import ShareButton from "../shared/buttons/ShareButton";
 
-function Buttons({ postId, subreadit, hide, className }) {
+function Buttons({ postId, subreadit, hide, isPreview, className }) {
   return (
     <Container className={className}>
       <CommentButton subreadit={subreadit} postId={postId} />
       <SaveButton docId={postId} type="post" />
+      {isPreview && <ShareButton copy={`${subreadit}/${postId}`} />}
       {hide && <HideButton onHide={hide} />}
     </Container>
   );
@@ -22,11 +24,13 @@ Buttons.propTypes = {
   subreadit: PropTypes.string.isRequired,
   hide: PropTypes.func,
   className: PropTypes.string,
+  isPreview: PropTypes.bool,
 };
 
 Buttons.defaultProps = {
   className: "",
   hide: null,
+  isPreview: false,
 };
 
 const Container = styled.div`

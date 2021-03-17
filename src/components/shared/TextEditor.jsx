@@ -142,7 +142,7 @@ const TextEditor = forwardRef(
       if (!prevContent) return;
       const content = convertFromRaw(JSON.parse(prevContent));
       setEditorState(EditorState.createWithContent(content));
-    }, []);
+    }, [prevContent]);
 
     // Allows the user to use keyboard shortcuts (ex: Ctrl + B to bold)
     const handleKeyCommand = (command) => {

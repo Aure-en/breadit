@@ -97,6 +97,7 @@ function PostPreview({ postId }) {
               subreadit={post.subreadit.name}
               hide={setIsHidden}
               user={currentUser}
+              isPreview
             />
           </Container>
         </>

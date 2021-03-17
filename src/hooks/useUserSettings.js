@@ -31,8 +31,9 @@ function useUserSettings() {
     return user.updatePassword(password);
   };
 
-  const deleteAccount = (user) => {
-    return user.delete();
+  const deleteAccount = async (user) => {
+    await firestore.collection("users").doc(user.uid).delete();
+    user.delete();
   };
 
   const updateAbout = (userId, about) => {

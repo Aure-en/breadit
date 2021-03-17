@@ -1,9 +1,7 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useRef } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import { useAuth } from "../../../contexts/AuthContext";
 import useDropdown from "../../../hooks/useDropdown";
-import useSubreadit from "../../../hooks/useSubreadit";
 import useWindowSize from "../../../hooks/useWindowSize";
 import DeleteButton from "./buttons/DeleteButton";
 import ShareButton from "./buttons/ShareButton";
@@ -12,30 +10,10 @@ import EditButton from "./buttons/EditButton";
 // Icons
 import { ReactComponent as IconDots } from "../../../assets/icons/content/icon-dots.svg";
 
-function Buttons({ authorId, subreaditName, onEdit, onDelete, copy, type }) {
+function Buttons({ canEdit, canDelete, onEdit, onDelete, copy, type }) {
   const dropdownRef = useRef();
   const { isDropdownOpen, setIsDropdownOpen } = useDropdown(dropdownRef);
   const { windowSize } = useWindowSize();
-  const { currentUser } = useAuth();
-  const { getDeletePermissions } = useSubreadit();
-  const [canEdit, setCanEdit] = useState(false);
-  const [canDelete, setCanDelete] = useState(false);
-
-  // Sees if the user has permission to edit / delete the post
-  useEffect(() => {
-    // Only the author can edit.
-    if (currentUser && currentUser.uid === authorId) setCanEdit(true);
-
-    // The author or subreadit mods can delete.
-    (async () => {
-      const permissions = await getDeletePermissions(subreaditName);
-      if (
-        (currentUser && currentUser.uid === authorId) ||
-        (currentUser && permissions[currentUser.uid])
-      )
-        setCanDelete(true);
-    })();
-  }, []);
 
   return (
     <>
@@ -81,8 +59,8 @@ function Buttons({ authorId, subreaditName, onEdit, onDelete, copy, type }) {
 export default Buttons;
 
 Buttons.propTypes = {
-  authorId: PropTypes.string.isRequired,
-  subreaditName: PropTypes.string,
+  canEdit: PropTypes.bool,
+  canDelete: PropTypes.bool,
   onEdit: PropTypes.func,
   onDelete: PropTypes.func,
   copy: PropTypes.string.isRequired,
@@ -90,7 +68,8 @@ Buttons.propTypes = {
 };
 
 Buttons.defaultProps = {
-  subreaditName: "",
+  canEdit: false,
+  canDelete: false,
   onEdit: null,
   onDelete: null,
   type: "post",

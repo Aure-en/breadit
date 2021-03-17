@@ -93,7 +93,7 @@ const Notification = styled.span`
   height: 1rem;
   border-radius: 50%;
   background: ${(props) => props.theme.accent};
-  color: white;
+  color: ${(props) => props.theme.bg_container};
   font-size: 0.75rem;
   display: flex;
   align-items: center;

@@ -27,7 +27,8 @@ function UpdateDraft({ draftId, subreadit, title, type, post, link }) {
       draft.subreadit.id === subreadit.id &&
       draft.title === title &&
       draft.type === type &&
-      (draft.content === post || draft.content === link)
+      draft.content === post &&
+      draft.content === link
     ) {
       return false;
     }

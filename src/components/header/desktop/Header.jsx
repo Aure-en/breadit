@@ -125,8 +125,8 @@ const Button = styled.button`
 
 const ButtonFilled = styled(Button)`
   color: ${(props) => props.theme.header_bg};
-  background-color: ${(props) => props.theme.bg_app};
-  border: 1px solid ${(props) => props.theme.bg_app};
+  background-color: ${(props) => props.theme.header_text};
+  border: 1px solid ${(props) => props.theme.header_text};
   opacity: 0.95;
 
   &:hover {

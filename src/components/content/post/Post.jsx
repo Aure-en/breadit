@@ -6,6 +6,7 @@ import redraft from "redraft";
 import { useHistory } from "react-router-dom";
 import { useAuth } from "../../../contexts/AuthContext";
 import usePost from "../../../hooks/usePost";
+import useSubreadit from "../../../hooks/useSubreadit";
 import Carousel from "../shared/Carousel";
 import LinkPreview from "../../feed/preview/LinkPreview";
 import TextEditor, { renderers } from "../../shared/TextEditor";
@@ -19,16 +20,27 @@ function Post({ postId, subreadit }) {
   const { currentUser } = useAuth();
   const history = useHistory();
   const { getPost, editPost, deletePost } = usePost();
+  const { getDeletePermissions } = useSubreadit();
   const [post, setPost] = useState();
   const [isEditing, setIsEditing] = useState(false);
   const [edit, setEdit] = useState("");
+  const [permissions, setPermissions] = useState([]);
 
   useEffect(() => {
     (async () => {
       const post = await getPost(postId);
       setPost(post.data());
     })();
-  }, []);
+  }, [postId]);
+
+  // Checks delete permissions:
+  // Both the author and subreadit mods can delete the post.
+  useEffect(() => {
+    (async () => {
+      const permissions = await getDeletePermissions(subreadit);
+      setPermissions(permissions);
+    })();
+  }, [post]);
 
   const handleEdit = () => {
     editPost(postId, edit);
@@ -89,15 +101,17 @@ function Post({ postId, subreadit }) {
                           sendContent={setEdit}
                           prevContent={post.content}
                         />
-                        <Button
-                          type="button"
-                          onClick={() => setIsEditing(false)}
-                        >
-                          Cancel
-                        </Button>
-                        <ButtonFilled type="button" onClick={handleEdit}>
-                          Save Changes
-                        </ButtonFilled>
+                        <EditorButtons>
+                          <Button
+                            type="button"
+                            onClick={() => setIsEditing(false)}
+                          >
+                            Cancel
+                          </Button>
+                          <ButtonFilled type="button" onClick={handleEdit}>
+                            Save Changes
+                          </ButtonFilled>
+                        </EditorButtons>
                       </Editor>
                     )}
                   </>
@@ -111,8 +125,15 @@ function Post({ postId, subreadit }) {
                 user={currentUser}
               />
               <ExtraButtons
-                authorId={post.author.id}
-                subreaditName={post.subreadit.name}
+                // Only the author can edit, and only text posts can be edited
+                canEdit={
+                  currentUser.uid === post.author.id && post.type === "post"
+                }
+                // Author and subreadits mods can delete
+                canDelete={
+                  currentUser.uid === post.author.id ||
+                  permissions[currentUser.uid]
+                }
                 onEdit={() => {
                   setIsEditing(true);
                 }}
@@ -121,7 +142,6 @@ function Post({ postId, subreadit }) {
                   history.push(`/b/${subreadit}`);
                 }}
                 copy={`${subreadit}/${postId}`}
-                canDelete
                 type="post"
               />
             </ButtonsContainer>
@@ -187,6 +207,22 @@ const Text = styled.div`
 
 const Editor = styled.div`
   position: relative;
+  display: flex;
+  flex-direction: column;
+`;
+
+const EditorButtons = styled.div`
+  display: flex;
+  align-self: flex-end;
+  margin-top: 1rem;
+
+  & > button {
+    margin-right: 1rem;
+  }
+
+  & > button:last-child {
+    margin-right: 0;
+  }
 `;
 
 const ButtonsContainer = styled.div`

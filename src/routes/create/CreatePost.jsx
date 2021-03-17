@@ -87,6 +87,7 @@ function CreatePost({ location }) {
     setSubreadit(draft.subreadit);
     setType(draft.type);
     if (draft.type === "post") setPost(draft.content);
+    console.log(post);
     if (draft.type === "link") setLink(draft.content);
     setCurrentDraft(draft.id);
   };

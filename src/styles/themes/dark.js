@@ -8,7 +8,7 @@ export const colors = {
   overlay: "rgb(27, 25, 25, .5)", // Modals overlay
   settings_overlay: "rgb(27, 25, 25, .2)",
 
-  shadow: "rgba(103, 188, 194, .25)",
+  shadow: "rgba(31, 29, 29, .25)",
 
   carousel_overlay: "rgba(0, 0, 0, .5)", // Carousel
   carousel_shadow: "rgba(0, 0, 0, .4)", // Carousel

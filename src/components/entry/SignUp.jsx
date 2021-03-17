@@ -125,10 +125,13 @@ const Input = styled.input`
   border: 1px solid
     ${(props) =>
       props.hasError ? props.theme.error : props.theme.border_secondary};
+  background: ${(props) => props.theme.input_bg};
+  color: ${(props) => props.theme.text_primary};
 
   &:focus {
     outline: 1px solid transparent;
     border: 1px solid ${(props) => props.theme.accent};
+    background: ${(props) => props.theme.input_bg};
   }
 
   &::placeholder {

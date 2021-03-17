@@ -11,11 +11,12 @@ function Delete({ closeModal, type, onDelete }) {
         <Header>
           <div>
             Delete
+            {" "}
             {type}
           </div>
-          <button type="button" onClick={closeModal}>
+          <Icon type="button" onClick={closeModal}>
             <IconClose />
-          </button>
+          </Icon>
         </Header>
         <Content>Are you sure you want to delete this {type}?</Content>
         <Buttons>
@@ -82,6 +83,10 @@ const Content = styled.div`
   max-width: 15rem;
   align-self: center;
   text-align: center;
+`;
+
+const Icon = styled.button`
+  color: ${(props) => props.theme.text_primary};
 `;
 
 const Buttons = styled.div`
