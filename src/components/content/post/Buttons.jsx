@@ -12,7 +12,7 @@ function Buttons({ postId, subreadit, hide, isPreview, className }) {
       <CommentButton subreadit={subreadit} postId={postId} />
       <SaveButton docId={postId} type="post" />
       {isPreview && <ShareButton copy={`${subreadit}/${postId}`} />}
-      {hide && <HideButton onHide={hide} />}
+      {hide && <HideButton setHide={hide} />}
     </Container>
   );
 }

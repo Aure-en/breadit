@@ -2,8 +2,8 @@ import React, { useState, useContext } from "react";
 import styled, { ThemeContext } from "styled-components";
 import Modal from "react-modal";
 import { useAuth } from "../../../contexts/AuthContext";
+import { toastify } from "../../shared/Toast";
 import useUserSettings from "../../../hooks/useUserSettings";
-import { colors } from "../../../styles/themes/light";
 
 // Icons
 import { ReactComponent as IconClose } from "../../../assets/icons/general/icon-x.svg";
@@ -36,6 +36,7 @@ function DeleteAccount() {
     try {
       await checkPassword(currentUser, currentUser.email, password);
       await deleteAccount(currentUser);
+      toastify("Account successfully deleted");
     } catch (err) {
       setPasswordError("The password is incorrect.");
     }

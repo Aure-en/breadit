@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import { useAuth } from "../../../contexts/AuthContext";
 import useUserSettings from "../../../hooks/useUserSettings";
 import useStorage from "../../../hooks/useStorage";
+import { toastify } from "../../shared/Toast";
 
 // Assets
 import { ReactComponent as IconClose } from "../../../assets/icons/general/icon-x.svg";
@@ -21,12 +22,14 @@ function Images({ prevAvatar, prevBanner }) {
   const handleUpdateAvatar = async (image) => {
     const imageUrl = await uploadImage(image);
     updateAvatar(currentUser, imageUrl);
+    toastify("Avatar successfully updated");
     setAvatar(imageUrl);
   };
 
   const handleUpdateBanner = async (image) => {
     const imageUrl = await uploadImage(image);
     updateBanner(currentUser.uid, imageUrl);
+    toastify("Banner successfully updated");
     setBanner(imageUrl);
   };
 

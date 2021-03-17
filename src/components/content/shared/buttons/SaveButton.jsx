@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import { useAuth } from "../../../../contexts/AuthContext";
 import { useEntry } from "../../../../contexts/EntryContext";
 import { useSave } from "../../../../contexts/SaveContext";
+import { toastify } from "../../../shared/Toast";
 
 // Icons
 import { ReactComponent as IconSave } from "../../../../assets/icons/general/icon-save.svg";
@@ -19,7 +20,14 @@ function SaveButton({ docId, type }) {
       type="button"
       onClick={(e) => {
         e.preventDefault();
-        currentUser ? handleSave(currentUser.uid, docId, type) : openSignUp();
+        if (currentUser) {
+          saved.includes(docId)
+            ? toastify("Post successfully unsaved")
+            : toastify("Post successfully saved");
+          handleSave(currentUser.uid, docId, type);
+        } else {
+          openSignUp();
+        }
       }}
     >
       {saved.includes(docId) ? <IconSaved /> : <IconSave />}

@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { toastify } from "../../shared/Toast";
 
 // Icons
 import { ReactComponent as IconClose } from "../../../assets/icons/general/icon-x.svg";
@@ -27,6 +28,7 @@ function Delete({ closeModal, type, onDelete }) {
             type="button"
             onClick={() => {
               onDelete();
+              toastify("Document successfully deleted.");
               closeModal();
             }}
           >

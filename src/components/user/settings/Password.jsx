@@ -3,6 +3,7 @@ import styled, { ThemeContext } from "styled-components";
 import Modal from "react-modal";
 import { useAuth } from "../../../contexts/AuthContext";
 import useUserSettings from "../../../hooks/useUserSettings";
+import { toastify } from "../../shared/Toast";
 
 // Icons
 import { ReactComponent as IconClose } from "../../../assets/icons/general/icon-x.svg";
@@ -79,6 +80,7 @@ function Password() {
 
     try {
       await updatePassword(currentUser, newPassword);
+      toastify("Password successfully updated");
       closeModal();
     } catch (err) {
       switch (err.code) {
@@ -170,12 +172,12 @@ function Password() {
               />
             </label>
             <MessageError>{newPasswordConfirmationError}</MessageError>
+            <Message>{message}</Message>
           </div>
 
           <ButtonsRight>
             <ButtonFilled type="submit">Save</ButtonFilled>
           </ButtonsRight>
-          <Message>{message}</Message>
         </form>
       </SettingsModal>
     </>

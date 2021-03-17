@@ -2,6 +2,7 @@ import React, { useRef } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { BREADIT_URL } from "../../../../utils/const";
+import { toastify } from "../../../shared/Toast";
 
 // Icons
 import { ReactComponent as IconLink } from "../../../../assets/icons/general/icon-link-small.svg";
@@ -24,6 +25,7 @@ function ShareButton({ copy }) {
         onClick={(e) => {
           e.preventDefault();
           copyLink();
+          toastify("Link copied");
         }}
       >
         <IconLink />

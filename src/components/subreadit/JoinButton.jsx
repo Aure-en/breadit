@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 import useSubreadit from "../../hooks/useSubreadit";
 import { useEntry } from "../../contexts/EntryContext";
+import { toastify } from "../shared/Toast";
 
 function JoinButton({ subscriptions, subreadit, user }) {
   const [isHovered, setIsHovered] = useState();
@@ -14,9 +15,14 @@ function JoinButton({ subscriptions, subreadit, user }) {
       {!subscriptions.includes(subreadit.id) ? (
         <ButtonFilled
           type="button"
-          onClick={() =>
-            user ? joinSubreadit(user.uid, subreadit) : openSignUp()
-          }
+          onClick={() => {
+            if (user) {
+              joinSubreadit(user.uid, subreadit);
+              toastify(`Successfully joined b/${subreadit.name}`);
+            } else {
+              openSignUp();
+            }
+          }}
         >
           Join
         </ButtonFilled>
@@ -25,7 +31,10 @@ function JoinButton({ subscriptions, subreadit, user }) {
           type="button"
           onMouseEnter={() => setIsHovered(subreadit.id)}
           onMouseLeave={() => setIsHovered("")}
-          onClick={() => leaveSubreadit(user.uid, subreadit)}
+          onClick={() => {
+            leaveSubreadit(user.uid, subreadit);
+            toastify(`Successfully left b/${subreadit.name}`);
+          }}
         >
           {isHovered === subreadit.id ? "Leave" : "Joined"}
         </Button>
@@ -38,6 +47,7 @@ JoinButton.propTypes = {
   subscriptions: PropTypes.arrayOf(PropTypes.string),
   subreadit: PropTypes.shape({
     id: PropTypes.string,
+    name: PropTypes.string,
   }).isRequired,
   user: PropTypes.shape({
     uid: PropTypes.string,

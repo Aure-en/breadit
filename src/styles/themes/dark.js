@@ -29,8 +29,8 @@ export const colors = {
   header_text_active: "rgb(255, 248, 222)",
   header_bg_secondary: "rgb(35, 32, 30)",
 
-  error: "rgb(168, 31, 5)",
-  success: "rgb(65, 150, 156)",
+  error: "rgb(130, 44, 44)",
+  success: "rgb(193, 183, 176)",
 
   border: "rgb(103, 91, 83)",
   border_active: "rgb(191, 173, 159)",
@@ -47,6 +47,8 @@ export const colors = {
   text_editor_button: "rgb(56, 53, 50)",
   text_editor_button_active: "rgb(0, 0, 0)",
   text_editor_button_hover: "rgb(189, 178, 168)",
+
+  toast_progress: "rgb(193, 183, 176)",
 };
 
 export default colors;

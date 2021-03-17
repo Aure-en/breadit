@@ -91,4 +91,5 @@ const Close = styled.button`
   position: absolute;
   top: 1rem;
   right: 1rem;
+  color: ${(props) => props.theme.text_primary};
 `;

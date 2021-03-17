@@ -3,6 +3,7 @@ import styled, { ThemeContext } from "styled-components";
 import Modal from "react-modal";
 import { useAuth } from "../../../contexts/AuthContext";
 import useUserSettings from "../../../hooks/useUserSettings";
+import { toastify } from "../../shared/Toast";
 
 // Icons
 import { ReactComponent as IconClose } from "../../../assets/icons/general/icon-x.svg";
@@ -57,8 +58,8 @@ function Email() {
 
     try {
       await updateEmail(currentUser, email);
-      setMessage("Email successfully updated.");
-      setTimeout(() => closeModal(), 1000);
+      toastify("Email successfully updated");
+      closeModal();
     } catch (err) {
       switch (err.code) {
         case "auth/invalid-email":
@@ -138,6 +139,7 @@ function Email() {
               />
             </label>
             <MessageError>{emailError}</MessageError>
+            <Message>{message}</Message>
           </div>
 
           <ButtonsRight>
@@ -145,7 +147,6 @@ function Email() {
               Save email
             </ButtonFilled>
           </ButtonsRight>
-          <Message>{message}</Message>
         </form>
       </SettingsModal>
     </>
@@ -256,6 +257,7 @@ const ButtonClose = styled.button`
   top: 1rem;
   right: 1rem;
   cursor: pointer;
+  color: ${(props) => props.theme.text_primary};
 `;
 
 const ModalText = styled.p`

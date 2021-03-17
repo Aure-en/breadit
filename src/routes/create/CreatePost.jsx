@@ -14,6 +14,7 @@ import Subreadit from "../../components/create/Subreadit";
 import Drafts from "../../components/create/drafts/Drafts";
 import SaveDraft from "../../components/create/drafts/SaveDraft";
 import UpdateDraft from "../../components/create/drafts/UpdateDraft";
+import { toastify } from "../../components/shared/Toast";
 
 function CreatePost({ location }) {
   const [type, setType] = useState("post");
@@ -79,6 +80,7 @@ function CreatePost({ location }) {
       type,
       content
     );
+    toastify("Post successfully created!");
     setTimeout(() => history.push(`/b/${subreadit.name}/${postId}`), 1000);
   };
 
@@ -87,7 +89,6 @@ function CreatePost({ location }) {
     setSubreadit(draft.subreadit);
     setType(draft.type);
     if (draft.type === "post") setPost(draft.content);
-    console.log(post);
     if (draft.type === "link") setLink(draft.content);
     setCurrentDraft(draft.id);
   };

@@ -26,6 +26,7 @@ import User from "./routes/user/User";
 import Inbox from "./routes/inbox/Inbox";
 import NotFound from "./routes/NotFound";
 import Entry from "./components/entry/Entry";
+import Toast from "./components/shared/Toast";
 import "normalize.css";
 
 const Wrapper = styled.div`
@@ -109,6 +110,7 @@ function App() {
                     </Switch>
                   </Container>
                   <Entry />
+                  <Toast />
                 </SaveProvider>
               </SubscriptionProvider>
             </EntryProvider>
