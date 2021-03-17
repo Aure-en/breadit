@@ -25,7 +25,7 @@ function CommentButton({ subreadit, postId }) {
       <IconComment />
       {commentsNumber}
       {windowSize.width > 768 && " Comment"}
-      {windowSize.width > 768 && commentsNumber !== 1 && "s"}
+      {windowSize.width > 768 && commentsNumber > 1 && "s"}
     </Button>
   );
 }

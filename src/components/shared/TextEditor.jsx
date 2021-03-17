@@ -119,6 +119,7 @@ const TextEditor = forwardRef(
     const [link, setLink] = useState("");
     // Gets the selection position so that the link window opens under it.
     const [selection, setSelection] = useState();
+    const [hidePlaceholder, setHidePlaceholder] = useState(false);
     // Gets coordinates to place the link window properly.
     const wrapperRef = useRef();
     const linkRef = useRef();
@@ -406,7 +407,7 @@ const TextEditor = forwardRef(
           <ReactTooltip effect="solid" delayShow={300} />
         </Buttons>
 
-        <Container>
+        <Container className={hidePlaceholder && "Editor-hidePlaceholder"}>
           <Editor
             editorState={editorState}
             onChange={(editorState) => {
@@ -414,6 +415,18 @@ const TextEditor = forwardRef(
               sendContent(
                 JSON.stringify(convertToRaw(editorState.getCurrentContent()))
               );
+
+              // Hide placeholder if there is only a block
+              const contentState = editorState.getCurrentContent();
+              if (!contentState.hasText()) {
+                if (
+                  contentState.getBlockMap().first().getType() !== "unstyled"
+                ) {
+                  setHidePlaceholder(true);
+                } else {
+                  setHidePlaceholder(false);
+                }
+              }
             }}
             customStyleMap={styleMap}
             handleKeyCommand={handleKeyCommand}

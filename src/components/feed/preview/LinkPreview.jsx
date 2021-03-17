@@ -142,17 +142,22 @@ const Preview = styled.div`
   border: 1px solid ${(props) => props.theme.accent};
   border-radius: 5px;
   color: ${(props) => props.theme.accent};
-  width: 9rem;
-  height: 6rem;
-  margin-right: 0.5rem;
+  width: 6rem;
+  height: 4rem;
+  margin: 0.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
+
+  @media all and (min-width: 768px) {
+    width: 8rem;
+    height: 5.5rem;
+  }
 `;
 
 const ExternalLinkIcon = styled.div`
   background: ${(props) => props.theme.accent};
-  color: ${(props) => props.theme.accent};
+  color: ${(props) => props.theme.bg_container};
   position: absolute;
   bottom: 0;
   right: 0;

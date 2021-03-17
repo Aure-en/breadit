@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
+import { useAuth } from "../../contexts/AuthContext";
 import useStorage from "../../hooks/useStorage";
 import useSubreadit from "../../hooks/useSubreadit";
 import useSubreaditSettings from "../../hooks/useSubreaditSettings";
+import NotAllowed from "../../components/subreadit/settings/NotAllowed";
 
 // Icons
 import { ReactComponent as IconClose } from "../../assets/icons/general/icon-x.svg";
@@ -23,6 +25,7 @@ function SubreaditSettings({ match }) {
     },
   ]);
   const [message, setMessage] = useState("");
+  const { currentUser } = useAuth();
   const { getSubreaditByName } = useSubreadit();
   const {
     updateIcon,
@@ -37,12 +40,13 @@ function SubreaditSettings({ match }) {
     (async () => {
       const subreadit = await getSubreaditByName(subreaditName);
       setSubreadit(subreadit);
+      if (!subreadit.permissions.settings.includes(currentUser.uid)) return;
       setIcon(subreadit.icon);
       setBanner(subreadit.banner);
       setRules(subreadit.rules);
       setDescription(subreadit.description);
     })();
-  }, []);
+  }, [match]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -60,208 +64,211 @@ function SubreaditSettings({ match }) {
 
   return (
     <Wrapper>
-      <Container>
-        {subreadit && (
-          <form onSubmit={handleSubmit}>
-            <Heading>
-              b/{subreadit.name_sensitive}
-              {' '}
-              Settings
-</Heading>
-            <Category>General Settings</Category>
+      {subreadit && (
+        <>
+          {subreadit.permissions.settings.includes(currentUser.uid) ? (
+            <Container>
+              <form onSubmit={handleSubmit}>
+                <Heading>b/{subreadit.name_sensitive} Settings</Heading>
+                <Category>General Settings</Category>
 
-            <Setting>
-              <SettingType>Name</SettingType>
-              <div>{subreadit.name_sensitive}</div>
-            </Setting>
+                <Setting>
+                  <SettingType>Name</SettingType>
+                  <div>{subreadit.name_sensitive}</div>
+                </Setting>
 
-            <Setting>
-              <SettingType>Description</SettingType>
-              <label htmlFor="description">
-                <Textarea
-                  id="description"
-                  name="description"
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  required
-                />
-              </label>
-            </Setting>
+                <Setting>
+                  <SettingType>Description</SettingType>
+                  <label htmlFor="description">
+                    <Textarea
+                      id="description"
+                      name="description"
+                      value={description}
+                      onChange={(e) => setDescription(e.target.value)}
+                      required
+                    />
+                  </label>
+                </Setting>
 
-            <Setting>
-              <SettingType>Rules</SettingType>
-              <Rules>
-                {rules.map((rule, index) => {
-                  return (
-                    <div key={index}>
-                      <Row>
-                        <RuleNumber>
-                          Rule
-                          {index + 1}
-                        </RuleNumber>
-                        <IconButton
-                          type="button"
-                          onClick={() => {
-                            setRules((prevRules) => {
-                              const rules = [...prevRules];
-                              rules.splice(index, 1);
-                              return rules;
-                            });
-                          }}
-                        >
-                          <IconClose />
-                        </IconButton>
-                      </Row>
-                      <label htmlFor={`title-${index}`}>
-                        <Input
-                          type="text"
-                          id={`title-${index}`}
-                          name={`title-${index}`}
-                          value={rules[index].title}
-                          placeholder="Title"
-                          onChange={(e) =>
-                            setRules((prev) => {
-                              const rules = [...prev];
-                              rules[index].title = e.target.value;
-                              return rules;
-                            })
-                          }
-                          required
-                        />
-                      </label>
+                <Setting>
+                  <SettingType>Rules</SettingType>
+                  <Rules>
+                    {rules.map((rule, index) => {
+                      return (
+                        <div key={index}>
+                          <Row>
+                            <RuleNumber>
+                              Rule
+                              {index + 1}
+                            </RuleNumber>
+                            <IconButton
+                              type="button"
+                              onClick={() => {
+                                setRules((prevRules) => {
+                                  const rules = [...prevRules];
+                                  rules.splice(index, 1);
+                                  return rules;
+                                });
+                              }}
+                            >
+                              <IconClose />
+                            </IconButton>
+                          </Row>
+                          <label htmlFor={`title-${index}`}>
+                            <Input
+                              type="text"
+                              id={`title-${index}`}
+                              name={`title-${index}`}
+                              value={rules[index].title}
+                              placeholder="Title"
+                              onChange={(e) =>
+                                setRules((prev) => {
+                                  const rules = [...prev];
+                                  rules[index].title = e.target.value;
+                                  return rules;
+                                })
+                              }
+                              required
+                            />
+                          </label>
 
-                      <label htmlFor={`description-${index}`}>
-                        <Textarea
-                          type="text"
-                          id={`description-${index}`}
-                          name={`description-${index}`}
-                          value={rules[index].description}
-                          placeholder="Description (optional)"
-                          onChange={(e) =>
-                            setRules((prev) => {
-                              const rules = [...prev];
-                              rules[index].description = e.target.value;
-                              return rules;
-                            })
-                          }
-                        />
-                      </label>
-                    </div>
-                  );
-                })}
-              </Rules>
-              <RuleButton
-                type="button"
-                onClick={() => {
-                  setRules([...rules, { title: "", description: "" }]);
-                }}
-              >
-                Add a rule
-              </RuleButton>
-            </Setting>
-
-            <Category>Appearance</Category>
-
-            <Setting>
-              <SettingType>Icon and banner image</SettingType>
-              <Message>Images must be .png or .jpg format</Message>
-              <Images>
-                <ImageInput
-                  type="file"
-                  id="icon"
-                  name="icon"
-                  accept="image/png, image/jpeg, image/jpg"
-                  onChange={async (e) => {
-                    if (e.target.files.length > 0) {
-                      const iconUrl = await uploadSubreaditImage(
-                        subreadit.id,
-                        e.target.files[0]
+                          <label htmlFor={`description-${index}`}>
+                            <Textarea
+                              type="text"
+                              id={`description-${index}`}
+                              name={`description-${index}`}
+                              value={rules[index].description}
+                              placeholder="Description (optional)"
+                              onChange={(e) =>
+                                setRules((prev) => {
+                                  const rules = [...prev];
+                                  rules[index].description = e.target.value;
+                                  return rules;
+                                })
+                              }
+                            />
+                          </label>
+                        </div>
                       );
-                      setIcon(iconUrl);
-                    }
-                  }}
-                />
-                <label
-                  htmlFor="icon"
-                  onMouseEnter={() => setIconHover(true)}
-                  onMouseLeave={() => setIconHover(false)}
-                >
-                  <Icon src={icon} alt="Current Icon">
-                    {icon !== SUBREADIT_ICON && iconHover && (
-                      <BtnDelete
-                        onClick={(e) => {
-                          e.preventDefault();
-                          updateIcon(SUBREADIT_ICON, subreadit.id);
-                          setIcon(SUBREADIT_ICON);
-                        }}
-                      >
-                        <IconClose />
-                      </BtnDelete>
-                    )}
-                    {icon === SUBREADIT_ICON && (
-                      <div>
-                        Upload 
-                        {' '}
-                        <br />
-                        <strong>Icon</strong>
-                      </div>
-                    )}
-                  </Icon>
-                </label>
+                    })}
+                  </Rules>
+                  <RuleButton
+                    type="button"
+                    onClick={() => {
+                      setRules([...rules, { title: "", description: "" }]);
+                    }}
+                  >
+                    Add a rule
+                  </RuleButton>
+                </Setting>
 
-                <ImageInput
-                  type="file"
-                  id="banner"
-                  name="banner"
-                  accept="image/png, image/jpeg, image/jpg"
-                  onChange={async (e) => {
-                    if (e.target.files.length > 0) {
-                      const bannerUrl = await uploadSubreaditImage(
-                        subreadit.id,
-                        e.target.files[0]
-                      );
-                      setBanner(bannerUrl);
-                    }
-                  }}
-                />
-                <label
-                  htmlFor="banner"
-                  onMouseEnter={() => setBannerHover(true)}
-                  onMouseLeave={() => setBannerHover(false)}
-                >
-                  <Banner src={banner} alt="Current banner">
-                    {banner !== SUBREADIT_BANNER && bannerHover && (
-                      <BtnDelete
-                        onClick={(e) => {
-                          e.preventDefault();
-                          updateBanner(SUBREADIT_BANNER, subreadit.id);
-                          setBanner(SUBREADIT_BANNER);
-                        }}
-                      >
-                        <IconClose />
-                      </BtnDelete>
-                    )}
-                    {banner === SUBREADIT_BANNER && (
-                      <div>
-                        Upload <strong>Banner</strong>
-                        {' '}
-                        Image
-                      </div>
-                    )}
-                  </Banner>
-                </label>
-              </Images>
-            </Setting>
-            <ButtonFilled type="submit">Save Changes</ButtonFilled>
-          </form>
-        )}
-        {message === "The subreadit settings have been updated." && (
-          <MessageSuccess>{message}</MessageSuccess>
-        )}
-        {message === "Sorry, we were unable to save the settings." && (
-          <MessageError>{message}</MessageError>
-        )}
-      </Container>
+                <Category>Appearance</Category>
+
+                <Setting>
+                  <SettingType>Icon and banner image</SettingType>
+                  <Message>Images must be .png or .jpg format</Message>
+                  <Images>
+                    <ImageInput
+                      type="file"
+                      id="icon"
+                      name="icon"
+                      accept="image/png, image/jpeg, image/jpg"
+                      onChange={async (e) => {
+                        if (e.target.files.length > 0) {
+                          const iconUrl = await uploadSubreaditImage(
+                            subreadit.id,
+                            e.target.files[0]
+                          );
+                          setIcon(iconUrl);
+                        }
+                      }}
+                    />
+                    <label
+                      htmlFor="icon"
+                      onMouseEnter={() => setIconHover(true)}
+                      onMouseLeave={() => setIconHover(false)}
+                    >
+                      <Icon src={icon} alt="Current Icon">
+                        {icon !== SUBREADIT_ICON && iconHover && (
+                          <BtnDelete
+                            onClick={(e) => {
+                              e.preventDefault();
+                              updateIcon(SUBREADIT_ICON, subreadit.id);
+                              setIcon(SUBREADIT_ICON);
+                            }}
+                          >
+                            <IconClose />
+                          </BtnDelete>
+                        )}
+                        {icon === SUBREADIT_ICON && (
+                          <div>
+                            Upload 
+{' '}
+<br />
+                            <strong>Icon</strong>
+                          </div>
+                        )}
+                      </Icon>
+                    </label>
+
+                    <ImageInput
+                      type="file"
+                      id="banner"
+                      name="banner"
+                      accept="image/png, image/jpeg, image/jpg"
+                      onChange={async (e) => {
+                        if (e.target.files.length > 0) {
+                          const bannerUrl = await uploadSubreaditImage(
+                            subreadit.id,
+                            e.target.files[0]
+                          );
+                          setBanner(bannerUrl);
+                        }
+                      }}
+                    />
+                    <label
+                      htmlFor="banner"
+                      onMouseEnter={() => setBannerHover(true)}
+                      onMouseLeave={() => setBannerHover(false)}
+                    >
+                      <Banner src={banner} alt="Current banner">
+                        {banner !== SUBREADIT_BANNER && bannerHover && (
+                          <BtnDelete
+                            onClick={(e) => {
+                              e.preventDefault();
+                              updateBanner(SUBREADIT_BANNER, subreadit.id);
+                              setBanner(SUBREADIT_BANNER);
+                            }}
+                          >
+                            <IconClose />
+                          </BtnDelete>
+                        )}
+                        {banner === SUBREADIT_BANNER && (
+                          <div>
+                            Upload 
+                            {' '}
+                            <strong>Banner</strong> Image
+                          </div>
+                        )}
+                      </Banner>
+                    </label>
+                  </Images>
+                </Setting>
+                <ButtonFilled type="submit">Save Changes</ButtonFilled>
+              </form>
+
+              {message === "The subreadit settings have been updated." && (
+                <MessageSuccess>{message}</MessageSuccess>
+              )}
+              {message === "Sorry, we were unable to save the settings." && (
+                <MessageError>{message}</MessageError>
+              )}
+            </Container>
+          ) : (
+            <NotAllowed subreadit={subreadit.name_sensitive} />
+          )}
+        </>
+      )}
     </Wrapper>
   );
 }

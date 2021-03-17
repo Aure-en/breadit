@@ -40,7 +40,7 @@ function Post({ postId, subreadit }) {
 
   // Helper functions to render content depending on its type
   const renderText = (content) => {
-    return <Text>{redraft(JSON.parse(content), renderers)}</Text>;
+    return content && <Text>{redraft(JSON.parse(content), renderers)}</Text>;
   };
 
   const renderImages = (images, title) => {
@@ -110,19 +110,20 @@ function Post({ postId, subreadit }) {
                 subreadit={post.subreadit.name}
                 user={currentUser}
               />
-              {currentUser && currentUser.uid === post.author.id && (
-                <ExtraButtons
-                  canEdit={post.type === "post"}
-                  onEdit={() => setIsEditing(!isEditing)}
-                  onDelete={() => {
-                    deletePost(postId);
-                    history.push(`/b/${subreadit}`);
-                  }}
-                  copy={`${subreadit}/${postId}`}
-                  canDelete
-                  type="post"
-                />
-              )}
+              <ExtraButtons
+                authorId={post.author.id}
+                subreaditName={post.subreadit.name}
+                onEdit={() => {
+                  setIsEditing(true);
+                }}
+                onDelete={() => {
+                  deletePost(postId);
+                  history.push(`/b/${subreadit}`);
+                }}
+                copy={`${subreadit}/${postId}`}
+                canDelete
+                type="post"
+              />
             </ButtonsContainer>
           </Container>
         </>

@@ -48,8 +48,12 @@ function useSubreadit() {
       icon: SUBREADIT_ICON,
       banner: SUBREADIT_BANNER,
       permissions: {
-        delete: [user.uid],
-        settings: [user.uid],
+        delete: {
+          [user.uid]: true,
+        },
+        settings: {
+          [user.uid]: true,
+        },
       },
       owner: {
         id: user.uid,
@@ -159,6 +163,11 @@ function useSubreadit() {
     return subreadits;
   };
 
+  const getDeletePermissions = async (subreaditName) => {
+    const subreadit = await getSubreaditByName(subreaditName);
+    return subreadit.permissions.delete;
+  };
+
   return {
     createSubreadit,
     deleteSubreadit,
@@ -172,6 +181,7 @@ function useSubreadit() {
     getPopularSubreadits,
     joinSubreadit,
     leaveSubreadit,
+    getDeletePermissions,
   };
 }
 

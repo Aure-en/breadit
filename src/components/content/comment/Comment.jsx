@@ -46,6 +46,7 @@ function Comment({ className, commentId }) {
   }, []);
 
   const handleEdit = () => {
+    if (!edit) return;
     editComment(commentId, edit);
     setIsEditing(false);
   };
@@ -89,7 +90,10 @@ function Comment({ className, commentId }) {
                   {comment.isDeleted ? (
                     <p>[deleted]</p>
                   ) : (
-                    <div>{redraft(JSON.parse(comment.content), renderers)}</div>
+                    <div>
+                      {comment.content &&
+                        redraft(JSON.parse(comment.content), renderers)}
+                    </div>
                   )}
                 </>
                 <ButtonsGroup>
@@ -101,27 +105,26 @@ function Comment({ className, commentId }) {
                     subreadit={comment.post.subreadit.name}
                     onReply={() => setIsReplying(!isReplying)}
                   />
-                  <ExtraButtons
-                    canEdit={
-                      currentUser && currentUser.uid === comment.author.id
-                    }
-                    canDelete={
-                      currentUser && currentUser.uid === comment.author.id
-                    }
-                    onEdit={() => {
-                      setIsEditing(true);
-                      setEdit(comment.content);
-                    }}
-                    onDelete={() => deleteComment(commentId)}
-                    copy={`${comment.post.subreadit.name}/${comment.post.id}/${commentId}`}
-                    type="comment"
-                  />
+                  {!comment.isDeleted && (
+                    <ExtraButtons
+                      authorId={comment.author.id}
+                      subreaditName={comment.post.subreadit.name}
+                      onEdit={() => {
+                        setIsEditing(true);
+                        setEdit(comment.content);
+                      }}
+                      onDelete={() => deleteComment(commentId)}
+                      copy={`${comment.post.subreadit.name}/${comment.post.id}/${commentId}`}
+                      type="comment"
+                    />
+                  )}
                 </ButtonsGroup>
 
                 {isReplying && (
                   <Form
                     onSubmit={(e) => {
                       e.preventDefault();
+                      if (!reply) return;
                       createComment(
                         comment.post,
                         currentUser,

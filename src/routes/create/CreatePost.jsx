@@ -170,7 +170,8 @@ function CreatePost({ location }) {
                 disabled={
                   (type === "post" && (!title || !subreadit.id)) ||
                   (type === "link" && (!title || !link || !subreadit.id)) ||
-                  (type === "image" && (!title || !images || !subreadit.id))
+                  (type === "image" &&
+                    (!title || images.length === 0 || !subreadit.id))
                 }
               >
                 Post

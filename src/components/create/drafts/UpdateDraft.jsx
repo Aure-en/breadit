@@ -50,16 +50,18 @@ function UpdateDraft({ draftId, subreadit, title, type, post, link }) {
   return (
     <>
       {draft && (
-        <Button
-          type="button"
-          onClick={onUpdateDraft}
-          disabled={
-            (!post && !title && !subreadit.id && !link) ||
-            !checkChanges(draft, subreadit, title, type, post, link)
-          }
-        >
-          {button}
-        </Button>
+        <>
+          <Button
+            type="button"
+            onClick={onUpdateDraft}
+            disabled={
+              (!post && !title && !subreadit.id && !link) ||
+              !checkChanges(draft, subreadit, title, type, post, link)
+            }
+          >
+            {button}
+          </Button>
+        </>
       )}
     </>
   );

@@ -59,7 +59,7 @@ function Message({ id, sender, recipient, content, date, isSent }) {
         {formatDistanceStrict(new Date(date.seconds * 1000), new Date())} ago
       </Informations>
 
-      <Content>{redraft(JSON.parse(content), renderers)}</Content>
+      <Content>{content && redraft(JSON.parse(content), renderers)}</Content>
 
       {!isSent && (
         <Buttons>

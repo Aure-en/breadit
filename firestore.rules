@@ -1,8 +1,96 @@
 rules_version = '2';
 service cloud.firestore {
+
   match /databases/{database}/documents {
-    match /{document=**} {
-      allow read, write: if true;
+
+    // -- Posts --
+    match /posts/{post} {
+    	// Anyone can read posts
+    	allow read: if true;
+      
+      // Any logged-in user can create posts
+    	allow create: if request.auth != null;
+      
+      // Only the author can modify the post.
+      allow update: if request.auth != null && request.auth.uid == resource.data.author.id;
+      
+      // Only the author + subreadit mods can delete the post.
+       allow delete: if request.auth != null &&
+       	((request.auth.uid == resource.data.author.id) ||
+      	(get(/databases/$(database)/documents/subreadits/$(resource.data.subreadit.id)).data.permissions.delete[request.auth.uid] == true));
+    }
+    
+    // -- Comments --
+    match /comments/{comment} {
+    	// Anyone can read comments
+    	allow read: if true;
+      
+      // Any logged-in user can create comments
+    	allow create: if request.auth != null;
+      
+      // Only the author can modify the comment.
+      allow update: if request.auth != null && request.auth.uid == resource.data.author.id;
+      
+      // Only the author + subreadit mods + author post (when deleting post) can delete the comment.
+      allow delete: if request.auth != null &&
+      	((request.auth.uid == resource.data.author.id) ||
+        (get(/databases/$(database)/documents/subreadits/$(resource.data.subreadit.id)).data.permissions.delete[request.auth.uid] == true) ||
+        (get(/databases/$(database)/documents/posts/$(resource.data.post.id)).author.id == request.auth.uid));
+    }
+    
+    // -- Users --
+    match /users/{userId} {
+    	allow read: if true;
+      // Only the user themselves can update / delete their data.
+      allow update, delete: if request.auth != null && request.auth.uid == userId;
+      allow create: if request.auth != null;
+    }
+    
+    match /users/{userId}/subreadits/{subreadit} {
+    	allow read: if true;
+      allow update, delete, create: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // -- Saved -- 
+    match /saved/{userId=**} {
+    	allow create: if request.auth != null;
+    }
+    
+    match /saved/{userId}/saved/{doc} {
+    	allow read: if request.auth != null &&
+      request.auth.uid == userId;
+      allow delete, update: if true;
+    }
+    
+    // -- Drafts --
+    match /drafts/{draft} {
+    	allow create: if request.auth != null;
+      // Only the user themselves can update / delete their drafts.
+    	allow read, update, delete: if request.auth != null &&
+      	request.auth.uid == resource.data.author.id;
+    }
+
+    // -- Notifications --
+    match /notifications/{notification} {
+	    allow write: if request.auth != null;
+      allow read: if request.auth != null && request.auth.uid == resource.data.user.id;
+    }
+    
+    // -- Messages --
+    match /messages/{message} {
+    	allow create: if request.auth != null;
+	    allow read: if (resource.data.sender.id == request.auth.uid || resource.data.recipient.id == request.auth.uid);
+    }
+    
+    // -- Subreadits --
+    match /subreadits/{subreadit} {
+	    allow read: if true;
+    	allow create: if request.auth != null;
+      // Any mod can modify the settings
+      allow update: if request.auth != null &&
+        resource.data.permissions.settings[request.auth.uid] == true;
+      // Only tne owner can delete
+      allow delete: if request.auth != null && resource.data.owner.id == request.auth.uid;
     }
   }
 }

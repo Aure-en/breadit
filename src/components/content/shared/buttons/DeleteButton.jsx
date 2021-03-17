@@ -30,7 +30,7 @@ export default DeleteButton;
 
 DeleteButton.propTypes = {
   onDelete: PropTypes.func.isRequired,
-  type: PropTypes.func,
+  type: PropTypes.string,
 };
 
 DeleteButton.defaultProps = {

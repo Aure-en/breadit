@@ -86,6 +86,7 @@ function Post({ match }) {
               <Form
                 onSubmit={(e) => {
                   e.preventDefault();
+                  if (!comment) return; // Prevent from writing empty comments
                   createComment(post, currentUser, comment);
                   textEditorRef.current.reset();
                 }}
@@ -98,7 +99,7 @@ function Post({ match }) {
                     placeholder="What are your thoughts?"
                   />
                 </Editor>
-                <Button type="submit">Comment</Button>
+                <Button type="submit" disabled={!comment}>Comment</Button>
               </Form>
 
               <>
@@ -220,6 +221,12 @@ const Button = styled.button`
   align-self: flex-end;
   text-align: center;
   margin-top: 1rem;
+
+  &:disabled {
+    background-color: ${(props) => props.theme.accent_disabled};
+    border: 1px solid ${(props) => props.theme.accent_disabled};
+    cursor: not-allowed;
+  }
 `;
 
 const NoComment = styled.div`

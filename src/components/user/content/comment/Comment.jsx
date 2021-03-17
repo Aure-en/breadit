@@ -25,8 +25,7 @@ function Comment({ author, content, date, post, id }) {
             {post.subreadit.name}
           </StrongLink>
           {"\u00A0"}
-• Posted by
-{" "}
+• Posted by{" "}
           <UnderlineLink to={`/u/${post.author.id}`}>
             {post.author.name}
           </UnderlineLink>
@@ -44,7 +43,9 @@ function Comment({ author, content, date, post, id }) {
 {" "}
               ago
             </Informations>
-            <Content>{redraft(JSON.parse(content), renderers)}</Content>
+            <Content>
+              {content && redraft(JSON.parse(content), renderers)}
+            </Content>
           </div>
         </Main>
         <Buttons

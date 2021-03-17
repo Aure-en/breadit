@@ -40,3 +40,7 @@
   font-family: "Noto Sans", sans-serif;
   font-size: .875rem;
 }
+
+.Editor-hidePlaceholder .public-DraftEditorPlaceholder-root {
+  display: none;
+}

@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import ShareButton from "../shared/buttons/ShareButton";
 import CommentButton from "../shared/buttons/CommentButton";
 import SaveButton from "../shared/buttons/SaveButton";
 import HideButton from "../shared/buttons/HideButton";
@@ -11,8 +10,7 @@ function Buttons({ postId, subreadit, hide, className }) {
     <Container className={className}>
       <CommentButton subreadit={subreadit} postId={postId} />
       <SaveButton docId={postId} type="post" />
-      <ShareButton copy={`${subreadit}/${postId}`} />
-      <HideButton onHide={hide} />
+      {hide && <HideButton onHide={hide} />}
     </Container>
   );
 }
@@ -22,12 +20,13 @@ export default Buttons;
 Buttons.propTypes = {
   postId: PropTypes.string.isRequired,
   subreadit: PropTypes.string.isRequired,
-  hide: PropTypes.func.isRequired,
+  hide: PropTypes.func,
   className: PropTypes.string,
 };
 
 Buttons.defaultProps = {
   className: "",
+  hide: null,
 };
 
 const Container = styled.div`

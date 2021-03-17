@@ -92,7 +92,7 @@ function NestedPostPreview({ postId }) {
               </Link>
             )}
             <>
-              {post.type === "post" &&
+              {post.type === "post" && post.content &&
                 renderText(post.content, subreadit.name, postId)}
               {post.type === "image" && renderImages(post.content, post.title)}
               {post.type === "link" && renderLink(post.content, post.title)}

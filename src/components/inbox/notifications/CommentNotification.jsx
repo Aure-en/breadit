@@ -33,7 +33,10 @@ function CommentNotification({ id, type, date, content, post }) {
               )}
               &nbsp;ago
             </Informations>
-            <div>{redraft(JSON.parse(content.content), renderers)}</div>
+            <div>
+              {content.content &&
+                redraft(JSON.parse(content.content), renderers)}
+            </div>
           </div>
         </Main>
 

@@ -24,7 +24,7 @@ function PostNotification({ id, content }) {
         />
 
         <Main to={`/b/${content.subreadit.name}/${content.id}`}>
-          {redraft(JSON.parse(content.content), renderers)}
+          {content.content && redraft(JSON.parse(content.content), renderers)}
         </Main>
 
         <Buttons

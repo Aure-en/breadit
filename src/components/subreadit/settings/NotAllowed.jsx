@@ -1,0 +1,91 @@
+import React from "react";
+import PropTypes from "prop-types";
+import styled from "styled-components";
+import { Link } from "react-router-dom";
+
+function NotAllowed({ subreadit }) {
+  return (
+    <Container>
+      <h4>
+        Sorry, you are not allowed to modify b/{subreadit}
+        {' '}
+        settings.
+      </h4>
+      <Row>
+        <ButtonFilled to={`/b/${subreadit}`}>
+          Explore b/
+          {subreadit}
+        </ButtonFilled>
+        <Button to="/">Home</Button>
+      </Row>
+    </Container>
+  );
+}
+
+export default NotAllowed;
+
+NotAllowed.propTypes = {
+  subreadit: PropTypes.string,
+};
+
+NotAllowed.defaultProps = {
+  subreadit: "this subreadit's",
+};
+
+const Container = styled.div`
+  margin-top: 0.5rem;
+  width: 100vw;
+  max-width: 100%;
+  background: ${(props) => props.theme.bg_container};
+  border-bottom: 1px solid ${(props) => props.theme.border};
+  border-top: 1px solid ${(props) => props.theme.border};
+  border-left: 1px solid transparent;
+  border-right: 1px solid transparent;
+  padding: 1rem;
+  border-radius: 0.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  @media all and (min-width: 768px) {
+    border: 1px solid ${(props) => props.theme.border};
+    align-items: center;
+    max-width: 40rem;
+    align-self: center;
+  }
+`;
+
+const Button = styled(Link)`
+  display: block;
+  border: 1px solid ${(props) => props.theme.accent};
+  color: ${(props) => props.theme.accent};
+  border-radius: 0.25rem;
+  padding: 0.35rem 1.25rem;
+  font-weight: 500;
+  text-align: center;
+
+  &:hover {
+    color: ${(props) => props.theme.accent_active};
+    border: 1px solid ${(props) => props.theme.accent_active};
+  }
+`;
+
+const ButtonFilled = styled(Button)`
+  color: ${(props) => props.theme.bg_container};
+  background-color: ${(props) => props.theme.accent};
+  border: 1px solid ${(props) => props.theme.accent};
+
+  &:hover {
+    color: ${(props) => props.theme.bg_container};
+    background-color: ${(props) => props.theme.accent_active};
+    border: 1px solid ${(props) => props.theme.accent_active};
+  }
+`;
+
+const Row = styled.div`
+  display: grid;
+  grid-auto-flow: column;
+  grid-gap: 1rem;
+  margin-top: 1rem;
+`;

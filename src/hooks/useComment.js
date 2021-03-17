@@ -98,7 +98,7 @@ function useComment() {
           name: "[deleted]",
           id: "[deleted]",
         },
-        content: "[deleted]",
+        content: "",
         isDeleted: true,
       });
   };

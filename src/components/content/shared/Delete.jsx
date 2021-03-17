@@ -11,19 +11,24 @@ function Delete({ closeModal, type, onDelete }) {
         <Header>
           <div>
             Delete
-            {" "}
             {type}
           </div>
           <button type="button" onClick={closeModal}>
             <IconClose />
           </button>
         </Header>
-        <Content>
-          Are you sure you want to delete your {type}?
-        </Content>
+        <Content>Are you sure you want to delete this {type}?</Content>
         <Buttons>
-          <Button type="button" onClick={closeModal}>Keep</Button>
-          <ButtonFilled type="button" onClick={onDelete}>
+          <Button type="button" onClick={closeModal}>
+            Keep
+          </Button>
+          <ButtonFilled
+            type="button"
+            onClick={() => {
+              onDelete();
+              closeModal();
+            }}
+          >
             Delete
           </ButtonFilled>
         </Buttons>
