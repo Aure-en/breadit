@@ -8,18 +8,18 @@ import useNotification from "../../../hooks/useNotification";
 import { ReactComponent as IconView } from "../../../assets/icons/content/icon-reply.svg";
 import { ReactComponent as IconDelete } from "../../../assets/icons/content/icon-delete.svg";
 
-function Buttons({ type, subreadit, notificationId, postId, commentId }) {
+function Buttons({ subreadit, notificationId, postId, commentId }) {
   const { deleteNotification } = useNotification();
 
   return (
     <Container>
-      {type === "post" ? (
-        <Button as={Link} to={`/b/${subreadit}/${postId}`}>
+      {commentId ? (
+        <Button as={Link} to={`/b/${subreadit}/${postId}/${commentId}`}>
           <IconView />
           View
         </Button>
       ) : (
-        <Button as={Link} to={`/b/${subreadit}/${postId}/${commentId}`}>
+        <Button as={Link} to={`/b/${subreadit}/${postId}`}>
           <IconView />
           View
         </Button>
@@ -42,7 +42,6 @@ function Buttons({ type, subreadit, notificationId, postId, commentId }) {
 export default Buttons;
 
 Buttons.propTypes = {
-  type: PropTypes.string.isRequired,
   subreadit: PropTypes.string.isRequired,
   notificationId: PropTypes.string.isRequired,
   postId: PropTypes.string.isRequired,

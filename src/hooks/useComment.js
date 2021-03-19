@@ -25,17 +25,7 @@ function useComment() {
       },
       parent: parentId,
       children: [],
-      post: {
-        id: post.id,
-        author: {
-          id: post.author.id,
-          name: post.author.name,
-        },
-        subreadit: {
-          id: post.subreadit.id,
-          name: post.subreadit.name,
-        },
-      },
+      post,
       isDeleted: false,
       id: ref.id,
     };
@@ -46,13 +36,20 @@ function useComment() {
     if (!parentId) {
       if (post.author.id !== author.uid) {
         createNotification(
+          // Type
+          "comment",
+          // User
           {
             id: post.author.id,
             name: post.author.name,
           },
-          "comment",
-          { type: "comment", id: ref.id },
-          data
+          // Author,
+          { id: author.uid, name: author.displayName },
+          post,
+          // Subreadit
+          { id: post.subreadit.id, name: post.subreadit.name },
+          // Content
+          { type: "comment", content, id: ref.id }
         );
       }
     }
@@ -71,14 +68,30 @@ function useComment() {
       const parent = await getComment(parentId);
       if (parent.data().author.id !== author.uid) {
         createNotification(
-          parent.data().author,
+          // Type
           "reply",
-          { type: "comment", id: ref.id },
-          data
+          // User
+          { id: parent.data().author.id, name: parent.data().author.name },
+          { id: author.uid, name: author.displayName },
+          post,
+          // Subreadit
+          { id: post.subreadit.id, name: post.subreadit.name },
+          // Content
+          { type: "comment", content, id: ref.id }
         );
       }
     }
-    notifyMention(author.displayName, content, ref.id, data, "comment");
+
+    // Notify mentioned users
+    notifyMention(
+      // Author
+      { id: author.uid, name: author.displayName },
+      post,
+      // Subreadit
+      { id: post.subreadit.id, name: post.subreadit.name },
+      // Content informations
+      { type: "comment", content, id: ref.id }
+    );
   };
 
   const deleteComment = async (commentId) => {

@@ -2,9 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { useAuth } from "../../contexts/AuthContext";
 import useScroll from "../../hooks/useScroll";
-import usePost from "../../hooks/usePost";
 import useNotification from "../../hooks/useNotification";
-import useComment from "../../hooks/useComment";
 import useLoading from "../../hooks/useLoading";
 import PostNotification from "../../components/inbox/notifications/PostNotification";
 import CommentNotification from "../../components/inbox/notifications/CommentNotification";
@@ -17,32 +15,14 @@ function Notifications() {
     notificationsListener,
     readNotifications,
   } = useNotification();
-  const { getCommentsNumber } = useComment();
-  const { getPost } = usePost();
   const listRef = useRef();
   const { limit } = useScroll(listRef, 20, 10);
   const loading = useLoading(notifications);
-
-  const formatNotifications = async (notifications) => {
-    return Promise.all(
-      notifications.map(async (notification) => {
-        if (notification.document.type === "comment") {
-          const post = await getPost(notification.content.post.id);
-          return { ...notification, post: post.data() };
-        }
-        const comments = await getCommentsNumber(notification.content.id);
-        const newNotification = { ...notification };
-        newNotification.content.comments = comments;
-        return newNotification;
-      })
-    );
-  };
 
   // Load more notifications on scroll
   useEffect(() => {
     (async () => {
       let notifications = await getNotifications(currentUser.uid, limit);
-      notifications = await formatNotifications(notifications);
       setNotifications(notifications);
     })();
   }, [limit]);
@@ -53,7 +33,6 @@ function Notifications() {
       snapshot.docChanges().forEach(async (change) => {
         if (change.type === "removed") {
           let notifications = await getNotifications(currentUser.uid, limit);
-          notifications = await formatNotifications(notifications);
           setNotifications(notifications);
         }
       });
@@ -76,20 +55,25 @@ function Notifications() {
               {notifications.length > 0 ? (
                 <List ref={listRef}>
                   {notifications.map((notification) => {
-                    return notification.document.type === "post" ? (
+                    return notification.type === "post" ? (
                       <PostNotification
                         key={notification.id}
                         id={notification.id}
+                        subreadit={notification.subreadit}
+                        post={notification.post}
                         content={notification.content}
+                        date={notification.date}
                       />
                     ) : (
                       <CommentNotification
                         key={notification.id}
                         id={notification.id}
                         type={notification.type}
-                        date={notification.date}
+                        subreadit={notification.subreadit}
                         content={notification.content}
                         post={notification.post}
+                        author={notification.author}
+                        date={notification.date}
                       />
                     );
                   })}

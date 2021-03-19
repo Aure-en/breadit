@@ -79,7 +79,7 @@ const Mention = ({ children }) => {
   return (
     // Must add a on click event because links in contentEditable don't work by default.
     <LinkToUser
-      to={children}
+      to={children[0].props.text}
       onClick={() => {
         window.open(`${BREADIT_URL}/${children[0].props.text}`);
       }}

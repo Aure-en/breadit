@@ -4,8 +4,6 @@ import { useAuth } from "../../contexts/AuthContext";
 import useScroll from "../../hooks/useScroll";
 import useMessage from "../../hooks/useMessage";
 import useNotification from "../../hooks/useNotification";
-import usePost from "../../hooks/usePost";
-import useComment from "../../hooks/useComment";
 import Message from "../../components/inbox/messages/Message";
 import PostNotification from "../../components/inbox/notifications/PostNotification";
 import CommentNotification from "../../components/inbox/notifications/CommentNotification";
@@ -24,27 +22,10 @@ function Overview() {
     notificationsListener,
     readNotifications,
   } = useNotification();
-  const { getCommentsNumber } = useComment();
-  const { getPost } = usePost();
   const listRef = useRef();
   const { limit } = useScroll(listRef, 20, 10);
   const notificationsLoading = useLoading(notifications);
   const messagesLoading = useLoading(messages);
-
-  const formatNotifications = async (notifications) => {
-    return Promise.all(
-      notifications.map(async (notification) => {
-        if (notification.document.type === "comment") {
-          const post = await getPost(notification.content.post.id);
-          return { ...notification, post: post.data() };
-        }
-        const comments = await getCommentsNumber(notification.content.id);
-        const newNotification = { ...notification };
-        newNotification.content.comments = comments;
-        return newNotification;
-      })
-    );
-  };
 
   // Gets messages and notifications.
   useEffect(() => {
@@ -57,7 +38,6 @@ function Overview() {
   useEffect(() => {
     (async () => {
       let notifications = await getAllNotifications(currentUser.uid);
-      notifications = await formatNotifications(notifications);
       setNotifications(notifications);
     })();
   }, []);
@@ -79,7 +59,6 @@ function Overview() {
       snapshot.docChanges().forEach(async (change) => {
         if (change.type === "removed") {
           let notifications = await getAllNotifications(currentUser.uid, limit);
-          notifications = await formatNotifications(notifications);
           setNotifications(notifications);
         }
       });
@@ -137,20 +116,25 @@ function Overview() {
                       );
                     }
                     if (notifications.includes(doc)) {
-                      return doc.document.type === "post" ? (
+                      return doc.type === "post" ? (
                         <PostNotification
                           key={doc.id}
                           id={doc.id}
+                          subreadit={doc.subreadit}
+                          post={doc.post}
                           content={doc.content}
+                          date={doc.date}
                         />
                       ) : (
                         <CommentNotification
                           key={doc.id}
                           id={doc.id}
                           type={doc.type}
-                          date={doc.date}
+                          subreadit={doc.subreadit}
                           content={doc.content}
                           post={doc.post}
+                          author={doc.author}
+                          date={doc.date}
                         />
                       );
                     }

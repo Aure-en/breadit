@@ -8,29 +8,36 @@ import { renderers } from "../../shared/TextEditor";
 import Information from "./Information";
 import Buttons from "./Buttons";
 
-function CommentNotification({ id, type, date, content, post }) {
+function CommentNotification({
+  id,
+  type,
+  date,
+  content,
+  post,
+  subreadit,
+  author,
+}) {
   return (
     <article>
-      <Container to={`/b/${post.subreadit.name}/${post.id}`}>
+      <Container to={`/b/${subreadit.name}/${post.id}`}>
         <Information
           type={type}
-          author={content.author.name}
-          subreadit={post.subreadit.name}
-          post={post}
+          author={author.name}
+          subreadit={subreadit.name}
+          post={{
+            id: post.id,
+            title: post.title,
+            author: post.author,
+          }}
           date={date}
         />
 
         <Main>
           <div>
             <Informations>
-              <StrongLink to={`/u/${content.author.id}`}>
-                {content.author.name}
-              </StrongLink>
+              <StrongLink to={`/u/${author.name}`}>{author.name}</StrongLink>
               &nbsp;•&nbsp;
-              {formatDistanceStrict(
-                new Date(content.date.seconds * 1000),
-                new Date()
-              )}
+              {formatDistanceStrict(new Date(date.seconds * 1000), new Date())}
               &nbsp;ago
             </Informations>
             <div>
@@ -42,7 +49,7 @@ function CommentNotification({ id, type, date, content, post }) {
 
         <Buttons
           type="comment"
-          subreadit={post.subreadit.name}
+          subreadit={subreadit.name}
           postId={post.id}
           notificationId={id}
           commentId={content.id}
@@ -60,47 +67,31 @@ CommentNotification.propTypes = {
   date: PropTypes.shape({
     seconds: PropTypes.number,
   }).isRequired,
-  content: PropTypes.shape({
-    author: PropTypes.shape({
-      id: PropTypes.string,
-      name: PropTypes.string,
-    }),
-    content: PropTypes.string,
-    date: PropTypes.shape({
-      seconds: PropTypes.number,
-    }),
+  author: PropTypes.shape({
     id: PropTypes.string,
-    postId: PropTypes.string,
-    subreadit: PropTypes.shape({
+    name: PropTypes.string,
+  }).isRequired,
+  post: PropTypes.shape({
+    id: PropTypes.string,
+    author: PropTypes.shape({
       id: PropTypes.string,
       name: PropTypes.string,
     }),
     title: PropTypes.string,
-  }).isRequired,
-  post: PropTypes.shape({
-    author: PropTypes.shape({
-      id: PropTypes.string,
-      name: PropTypes.string,
-    }),
-    id: PropTypes.string.isRequired,
-    subreadit: PropTypes.shape({
-      id: PropTypes.string,
-      name: PropTypes.string,
-    }),
-    title: PropTypes.string.isRequired,
-    type: PropTypes.string.isRequired,
-    content: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.arrayOf(PropTypes.string),
-    ]).isRequired,
+    type: PropTypes.string,
     date: PropTypes.shape({
       seconds: PropTypes.number,
-    }).isRequired,
-  }),
-};
-
-CommentNotification.defaultProps = {
-  post: null,
+    }),
+  }).isRequired,
+  subreadit: PropTypes.shape({
+    id: PropTypes.string,
+    name: PropTypes.string,
+  }).isRequired,
+  content: PropTypes.shape({
+    type: PropTypes.string,
+    content: PropTypes.string,
+    id: PropTypes.string,
+  }).isRequired,
 };
 
 const Container = styled(Link)`

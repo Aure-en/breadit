@@ -30,7 +30,19 @@ function usePost() {
 
     // If some users are mentioned, notify them.
     if (type === "post")
-      notifyMention(author.displayName, content, ref.id, data, "post");
+      notifyMention(
+        // Author
+        { id: author.uid, name: author.displayName },
+        data,
+        // Subreadit
+        { id: subreadit.id, name: subreadit.name },
+        // Content informations
+        {
+          type: "post",
+          id: ref.id,
+          content,
+        }
+      );
     return ref.id;
   };
 

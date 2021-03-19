@@ -7,30 +7,30 @@ import { renderers } from "../../shared/TextEditor";
 import Information from "./Information";
 import Buttons from "./Buttons";
 
-function PostNotification({ id, content }) {
+function PostNotification({ id, subreadit, post, date, content }) {
   return (
     <article>
-      <Container to={`/b/${content.subreadit.name}/${content.id}`}>
+      <Container to={`/b/${subreadit.name}/${post.id}`}>
         <Information
           type="mention"
-          author={content.author.name}
-          subreadit={content.subreadit.name}
+          author={post.author.name}
+          subreadit={subreadit.name}
           post={{
-            id: content.id,
-            title: content.title,
-            author: content.author,
+            id: post.id,
+            title: post.title,
+            author: post.author.name,
           }}
-          date={content.date}
+          date={date}
         />
 
-        <Main to={`/b/${content.subreadit.name}/${content.id}`}>
+        <Main to={`/b/${subreadit.name}/${post.id}`}>
           {content.content && redraft(JSON.parse(content.content), renderers)}
         </Main>
 
         <Buttons
           type="post"
-          subreadit={content.subreadit.name}
-          postId={content.id}
+          subreadit={subreadit.name}
+          postId={post.id}
           notificationId={id}
         />
       </Container>
@@ -42,25 +42,27 @@ export default PostNotification;
 
 PostNotification.propTypes = {
   id: PropTypes.string.isRequired,
-  content: PropTypes.shape({
+  author: PropTypes.shape({
+    id: PropTypes.string,
+    name: PropTypes.string,
+  }).isRequired,
+  subreadit: PropTypes.shape({
+    id: PropTypes.string,
+    name: PropTypes.string,
+  }).isRequired,
+  post: PropTypes.shape({
+    id: PropTypes.string,
+    title: PropTypes.string,
     author: PropTypes.shape({
       id: PropTypes.string,
       name: PropTypes.string,
     }),
-    id: PropTypes.string.isRequired,
-    subreadit: PropTypes.shape({
-      id: PropTypes.string,
-      name: PropTypes.string,
-    }),
-    title: PropTypes.string.isRequired,
-    type: PropTypes.string.isRequired,
-    content: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.arrayOf(PropTypes.string),
-    ]).isRequired,
-    date: PropTypes.shape({
-      seconds: PropTypes.number,
-    }).isRequired,
+  }).isRequired,
+  date: PropTypes.shape({
+    seconds: PropTypes.number,
+  }).isRequired,
+  content: PropTypes.shape({
+    content: PropTypes.string,
   }).isRequired,
 };
 

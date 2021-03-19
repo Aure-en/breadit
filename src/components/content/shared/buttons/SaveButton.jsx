@@ -22,8 +22,12 @@ function SaveButton({ docId, type }) {
         e.preventDefault();
         if (currentUser) {
           saved.includes(docId)
-            ? toastify("Post successfully unsaved")
-            : toastify("Post successfully saved");
+            ? saved.type === "post"
+              ? toastify("Post successfully unsaved")
+              : toastify("Comment successfully unsaved")
+            : saved.type === "post"
+            ? toastify("Post successfully saved")
+            : toastify("Comment successfully saved");
           handleSave(currentUser.uid, docId, type);
         } else {
           openSignUp();

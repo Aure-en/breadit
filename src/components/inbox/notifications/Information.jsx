@@ -20,7 +20,7 @@ function Information({ type, author, subreadit, post, date }) {
         {subreadit}
       </StrongLink>
       <span>{" • Posted by "}</span>
-      <UnderlineLink to={`/u/${post.author.id}`}>
+      <UnderlineLink to={`/u/${post.author.name}`}>
         {post.author.name}
       </UnderlineLink>
       <span>{" • "}</span>

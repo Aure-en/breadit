@@ -4,16 +4,46 @@ import useUser from "./useUser";
 function useNotification() {
   const { getUserByName } = useUser();
 
-  const createNotification = async (user, type, document, content) => {
+  const createNotification = async (
+    type,
+    user,
+    author,
+    post,
+    subreadit,
+    content
+  ) => {
     const ref = await firestore.collection("notifications").doc();
     ref.set({
       user: {
+        // The user receiving the notification
         id: user.id,
         name: user.name,
       },
-      type,
-      document,
-      content,
+      author: {
+        // The user writing the post / comment leading to the notification
+        id: author.id,
+        name: author.name,
+      },
+      type, // "mention", "reply" or "comment"
+      post: {
+        id: post.id,
+        title: post.title,
+        date: post.date,
+        author: {
+          id: post.author.id,
+          name: post.author.name,
+        },
+        type: post.type, // "post", "image" or "link"
+      },
+      subreadit: {
+        id: subreadit.id,
+        name: subreadit.name,
+      },
+      content: {
+        type: content.type, // "post" or "comment"
+        content: content.content,
+        id: content.id,
+      },
       date: new Date(),
       read: false,
       id: ref.id,
@@ -69,11 +99,11 @@ function useNotification() {
     return notifications.docs.length;
   };
 
-  const notifyMention = async (author, content, id, data, type) => {
+  const notifyMention = async (author, post, subreadit, content) => {
     const MENTION_REGEX = /\bu\/[-_a-zA-Z0-9]+\b/gi;
-    let matches = content.match(MENTION_REGEX) || [];
+    let matches = content.content.match(MENTION_REGEX) || [];
     matches = matches.map((match) => match.slice(2).toLowerCase());
-    matches = matches.filter((match) => match !== author.toLowerCase()); // Delete author
+    matches = matches.filter((match) => match !== author.name.toLowerCase()); // Delete author
     matches = Array.from(new Set(matches)); // Delete duplicates.
 
     // Look for the users
@@ -89,13 +119,14 @@ function useNotification() {
 
     mentionedUsers.map((user) => {
       createNotification(
-        {
-          id: user.id,
-          name: user.username,
-        },
+        // type
         "mention",
-        { type, id },
-        data
+        // user
+        { id: user.id, name: user.username },
+        author,
+        post,
+        subreadit,
+        content
       );
     });
   };
