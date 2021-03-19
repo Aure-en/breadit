@@ -24,7 +24,7 @@ function CreatePost({ location }) {
   const [link, setLink] = useState("");
   const [linkError, setLinkError] = useState("");
   const [subreadit, setSubreadit] = useState({ id: "", name: "" });
-  const [currentDraft, setCurrentDraft] = useState("");
+  const [draft, setDraft] = useState();
   const { currentUser } = useAuth();
   const { createPost } = usePost();
   const { uploadImage } = useStorage();
@@ -88,9 +88,9 @@ function CreatePost({ location }) {
     setTitle(draft.title);
     setSubreadit(draft.subreadit);
     setType(draft.type);
-    if (draft.type === "post") setPost(draft.content);
-    if (draft.type === "link") setLink(draft.content);
-    setCurrentDraft(draft.id);
+    setPost(draft.post);
+    setLink(draft.link);
+    setDraft(draft);
   };
 
   return (
@@ -116,7 +116,7 @@ function CreatePost({ location }) {
                   type="post"
                   sendContent={setPost}
                   placeholder="Text (optional)"
-                  prevContent={post}
+                  prevContent={draft && draft.post}
                 />
               </Field>
             )}
@@ -145,9 +145,9 @@ function CreatePost({ location }) {
             <Buttons>
               {type !== "image" && (
                 <>
-                  {currentDraft ? (
+                  {draft ? (
                     <UpdateDraft
-                      draftId={currentDraft}
+                      draftId={draft.id}
                       subreadit={subreadit}
                       title={title}
                       type={type}
@@ -161,7 +161,7 @@ function CreatePost({ location }) {
                       type={type}
                       post={post}
                       link={link}
-                      setDraft={setCurrentDraft}
+                      setDraft={setDraft}
                     />
                   )}
                 </>

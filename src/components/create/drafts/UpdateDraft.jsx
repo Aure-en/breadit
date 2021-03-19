@@ -6,7 +6,7 @@ import useDraft from "../../../hooks/useDraft";
 
 function UpdateDraft({ draftId, subreadit, title, type, post, link }) {
   const [button, setButton] = useState("Update Draft");
-  const [draft, setDraft] = useState({});
+  const [draft, setDraft] = useState();
   const { currentUser } = useAuth();
   const { draftListener, editDraft } = useDraft();
 
@@ -22,13 +22,13 @@ function UpdateDraft({ draftId, subreadit, title, type, post, link }) {
   }, [button]);
 
   const checkChanges = (draft, subreadit, title, type, post, link) => {
-    if (Object.keys(draft).length === 0) return;
+    if (!draft) return;
     if (
       draft.subreadit.id === subreadit.id &&
       draft.title === title &&
       draft.type === type &&
-      draft.content === post &&
-      draft.content === link
+      draft.post === post &&
+      draft.link === link
     ) {
       return false;
     }
@@ -38,13 +38,7 @@ function UpdateDraft({ draftId, subreadit, title, type, post, link }) {
   const onUpdateDraft = async () => {
     if (currentUser.uid !== draft.author.id) return;
     if (!checkChanges(draft, subreadit, title, type, post, link)) return;
-    await editDraft(
-      draftId,
-      subreadit,
-      title,
-      type,
-      type === "post" ? post : link
-    );
+    await editDraft(draftId, subreadit, title, type, post, link);
     setButton("Draft Updated");
   };
 

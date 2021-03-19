@@ -1,7 +1,7 @@
 import { firestore } from "../firebase";
 
 function useDraft() {
-  const createDraft = async (author, subreadit, title, type, content) => {
+  const createDraft = async (author, subreadit, title, type, post, link) => {
     const ref = await firestore.collection("drafts").doc();
     const data = {
       author: {
@@ -10,7 +10,8 @@ function useDraft() {
       },
       type,
       title,
-      content,
+      post,
+      link,
       date: new Date(),
       subreadit: {
         id: subreadit.id,
@@ -22,12 +23,13 @@ function useDraft() {
     return ref.id;
   };
 
-  const editDraft = (id, subreadit, title, type, content) => {
+  const editDraft = (id, subreadit, title, type, post, link) => {
     return firestore.collection("drafts").doc(id).update({
       subreadit,
       title,
       type,
-      content,
+      post,
+      link,
       date: new Date(),
     });
   };

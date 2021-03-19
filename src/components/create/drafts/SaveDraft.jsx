@@ -1,18 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { useAuth } from "../../../contexts/AuthContext";
 import useDraft from "../../../hooks/useDraft";
 
 function SaveDraft({ subreadit, title, type, post, link, setDraft }) {
-  const [button, setButton] = useState("Save Draft");
   const { currentUser } = useAuth();
   const { createDraft } = useDraft();
-
-  useEffect(() => {
-    if (button === "Draft Saved") setButton("Update Draft");
-  }, [button]);
-
   const onSaveDraft = async () => {
     if (!post && !title && !subreadit.id && !link) return;
     const draftId = await createDraft(
@@ -20,10 +14,17 @@ function SaveDraft({ subreadit, title, type, post, link, setDraft }) {
       subreadit,
       title,
       type,
-      type === "post" ? post : link
+      post,
+      link
     );
-    setDraft(draftId);
-    setButton("Draft Saved");
+    setDraft({
+      id: draftId,
+      subreadit,
+      title,
+      type,
+      post,
+      link,
+    });
   };
 
   return (
@@ -32,7 +33,7 @@ function SaveDraft({ subreadit, title, type, post, link, setDraft }) {
       onClick={onSaveDraft}
       disabled={!post && !title && !subreadit.id && !link}
     >
-      {button}
+      Save Draft
     </Button>
   );
 }
