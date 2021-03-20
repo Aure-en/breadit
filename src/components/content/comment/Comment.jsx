@@ -79,8 +79,11 @@ function Comment({ className, commentId }) {
                   isDeleted
                 />
               ) : (
-                <Information author={comment.author} date={comment.date} 
-                isPostAuthor={comment.author.id === comment.post.author.id}/>
+                <Information
+                  author={comment.author}
+                  date={comment.date}
+                  isPostAuthor={comment.author.id === comment.post.author.id}
+                />
               )}
             </>
 

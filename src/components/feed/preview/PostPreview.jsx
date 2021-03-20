@@ -36,13 +36,17 @@ function PostPreview({ postId }) {
     );
   };
 
-  const renderImages = (images, title) => {
+  const renderImages = (images, title, subreaditName, postId) => {
     return images.length > 1 ? (
-      <Carousel images={images} title={title} />
+      <Link to={`/b/${subreaditName}/${postId}`}>
+        <Carousel images={images} title={title} />
+      </Link>
     ) : (
-      <ImageContainer>
-        <Image src={images[0]} alt={title} />
-      </ImageContainer>
+      <Link to={`/b/${subreaditName}/${postId}`}>
+        <ImageContainer>
+          <Image src={images[0]} alt={title} />
+        </ImageContainer>
+      </Link>
     );
   };
 
@@ -81,7 +85,12 @@ function PostPreview({ postId }) {
                     post.content &&
                     renderText(post.content, post.subreadit.name, postId)}
                   {post.type === "image" &&
-                    renderImages(post.content, post.title)}
+                    renderImages(
+                      post.content,
+                      post.title,
+                      post.subreadit.name,
+                      postId
+                    )}
                   {post.type === "link" &&
                     renderLink(
                       post.content,

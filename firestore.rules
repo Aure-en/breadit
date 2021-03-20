@@ -11,8 +11,8 @@ service cloud.firestore {
       // Any logged-in user can create posts
     	allow create: if request.auth != null;
       
-      // Only the author can modify the post.
-      allow update: if request.auth != null && request.auth.uid == resource.data.author.id;
+      // Any logged-in user can modify the post to be able to vote
+      allow update: if request.auth != null
       
       // Only the author + subreadit mods can delete the post.
        allow delete: if request.auth != null &&
@@ -87,9 +87,8 @@ service cloud.firestore {
     match /subreadits/{subreadit} {
 	    allow read: if true;
     	allow create: if request.auth != null;
-      // Any mod can modify the settings
-      allow update: if request.auth != null &&
-        resource.data.permissions.settings[request.auth.uid] == true;
+      // Anyone has to be able to modify to change the members count when joining
+      allow update: if request.auth != null
       // Only tne owner can delete
       allow delete: if request.auth != null && resource.data.owner.id == request.auth.uid;
     }

@@ -2,11 +2,22 @@ import React from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { format } from "date-fns";
+import { Link } from "react-router-dom";
 
-function About({ description, members, date }) {
+// Icons
+import { ReactComponent as IconSettings } from "../../../assets/icons/header/icon-settings.svg";
+
+function About({ subreadit, description, members, date, settings }) {
   return (
     <Container>
-      <Header>About Community</Header>
+      <Header>
+        <div>About Community</div>
+        {settings && (
+          <Link to={`/b/${subreadit}/settings`}>
+            <IconSettings />
+          </Link>
+        )}
+      </Header>
 
       <Main>
         <div>{description}</div>
@@ -37,11 +48,15 @@ About.propTypes = {
   date: PropTypes.shape({
     seconds: PropTypes.number,
   }).isRequired,
+  settings: PropTypes.bool,
+  subreadit: PropTypes.string,
 };
 
 About.defaultProps = {
   description: "",
   members: 0,
+  settings: false,
+  subreadit: "",
 };
 
 const Container = styled.aside`
@@ -57,6 +72,9 @@ const Container = styled.aside`
 `;
 
 const Header = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   color: ${(props) => props.theme.bg_container};
   background: ${(props) => props.theme.accent};
   padding: 0.75rem 1rem;
