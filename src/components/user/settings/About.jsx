@@ -56,6 +56,8 @@ const Textarea = styled.textarea`
   width: 100%;
   min-height: 8rem;
   background: ${(props) => props.theme.input_bg};
+  color: ${(props) => props.theme.text_primary};
+  padding: 0.5rem;
 
   &:focus {
     outline: 1px solid transparent;

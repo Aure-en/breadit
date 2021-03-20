@@ -28,11 +28,9 @@ service cloud.firestore {
       // Any logged-in user can create comments
     	allow create: if request.auth != null;
       
-      // Author / mods can "modify" the document (=delete the comment)
-      allow update: if request.auth != null &&
-      	((request.auth.uid == resource.data.author.id) ||
-        (get(/databases/$(database)/documents/subreadits/$(resource.data.subreadit.id)).data.permissions.delete[request.auth.uid] == true) ||
-        (get(/databases/$(database)/documents/posts/$(resource.data.post.id)).author.id == request.auth.uid));
+      // Anyone who comments have to be able to modify comments because when answering to the comment,
+      // the parent comment's document's children field is updated.
+      allow update: if request.auth != null
       
       // Only the author + subreadit mods + author post (when deleting post) can delete the comment.
       allow delete: if request.auth != null &&
@@ -82,7 +80,7 @@ service cloud.firestore {
     // -- Messages --
     match /messages/{message} {
     	allow create: if request.auth != null;
-	    allow read: if (resource.data.sender.id == request.auth.uid || resource.data.recipient.id == request.auth.uid);
+	    allow read, update, delete: if (resource.data.sender.id == request.auth.uid || resource.data.recipient.id == request.auth.uid);
     }
     
     // -- Subreadits --

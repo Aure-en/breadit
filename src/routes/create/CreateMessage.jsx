@@ -135,6 +135,7 @@ const Input = styled.input`
     ${(props) =>
       props.hasError ? props.theme.error : props.theme.text_secondary};
   background: ${(props) => props.theme.input_bg};
+  color: ${(props) => props.theme.text_primary};
 
   &:focus {
     outline: 1px solid transparent;
@@ -155,7 +156,7 @@ const MessageError = styled(MessageSuccess)`
 
 const Bottom = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
 `;
 
 const Button = styled.button`

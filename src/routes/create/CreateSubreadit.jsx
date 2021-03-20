@@ -128,6 +128,8 @@ const Input = styled.input`
   border: 1px solid ${(props) => props.theme.border_secondary};
   padding: 0.5rem;
   border-radius: 5px;
+  color: ${(props) => props.theme.text_primary};
+  background: ${(props) => props.theme.input_bg};
 
   &:focus {
     outline: 1px solid transparent;
@@ -140,6 +142,8 @@ const Textarea = styled.textarea`
   border: 1px solid ${(props) => props.theme.border_secondary};
   padding: 0.5rem;
   border-radius: 5px;
+  color: ${(props) => props.theme.text_primary};
+  background: ${(props) => props.theme.input_bg};
 
   &:focus {
     outline: 1px solid transparent;
