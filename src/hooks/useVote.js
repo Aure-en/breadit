@@ -53,10 +53,7 @@ function useVote(type, id, userId) {
   const countVotes = async (type, id) => {
     const doc = await firestore.collection(type).doc(id).get();
     if (!doc) return 0;
-    return Object.values(doc.data().votes.list).reduce(
-      (sum, current) => sum + current,
-      0
-    );
+    return doc.data().votes.sum;
   };
 
   const handleUpvote = async (type, id, userId, vote) => {

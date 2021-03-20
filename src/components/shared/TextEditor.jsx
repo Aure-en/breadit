@@ -144,7 +144,7 @@ const TextEditor = forwardRef(
     useEffect(() => {
       if (!prevContent) return;
       const content = convertFromRaw(JSON.parse(prevContent));
-      setEditorState(EditorState.createWithContent(content));
+      setEditorState(EditorState.createWithContent(content, decorator));
     }, [prevContent]);
 
     // Rebuilds tooltip when rendering link box

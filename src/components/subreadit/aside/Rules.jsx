@@ -10,11 +10,7 @@ import { ReactComponent as IconUp } from "../../../assets/icons/general/icon-up.
 function Rules({ subreaditName, rules }) {
   return (
     <Container>
-      <Header>
-        b/{subreaditName}
-        {' '}
-        Rules
-      </Header>
+      <Header>b/{subreaditName} Rules</Header>
       <ol>
         {rules.map((rule) => {
           return <Rule key={rule.title} rule={rule} />;
@@ -29,19 +25,25 @@ function Rule({ rule }) {
   const { isDropdownOpen, setIsDropdownOpen } = useDropdown(dropdownRef, false);
 
   return (
-    <Li ref={dropdownRef}>
-      <DropdownHeader
-        type="button"
-        isDropdownOpen={isDropdownOpen}
-        onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-      >
-        <Title>{rule.title}</Title>
+    <>
+      {rule.description ? (
+        <Li ref={dropdownRef}>
+          <DropdownHeader
+            type="button"
+            isDropdownOpen={isDropdownOpen}
+            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+          >
+            <Title>{rule.title}</Title>
 
-        {isDropdownOpen ? <IconUp /> : <IconDown />}
-      </DropdownHeader>
+            {isDropdownOpen ? <IconUp /> : <IconDown />}
+          </DropdownHeader>
 
-      {isDropdownOpen && <DropdownList>{rule.description}</DropdownList>}
-    </Li>
+          {isDropdownOpen && <DropdownList>{rule.description}</DropdownList>}
+        </Li>
+      ) : (
+        <Simple>{rule.title}</Simple>
+      )}
+    </>
   );
 }
 
@@ -94,12 +96,17 @@ const Li = styled.li`
   }
 `;
 
+const Simple = styled(Li)`
+  font-weight: 500;
+`;
+
 const DropdownHeader = styled.button`
   width: 100%;
   display: flex;
   justify-content: space-between;
   padding: 0.5rem 0;
   color: ${(props) => props.theme.text_primary};
+  text-align: left;
 `;
 
 const Title = styled.div`

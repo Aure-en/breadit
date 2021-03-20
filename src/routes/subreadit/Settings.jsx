@@ -40,7 +40,7 @@ function SubreaditSettings({ match }) {
     (async () => {
       const subreadit = await getSubreaditByName(subreaditName);
       setSubreadit(subreadit);
-      if (!subreadit.permissions.settings.includes(currentUser.uid)) return;
+      if (!subreadit.permissions.settings[currentUser.uid]) return;
       setIcon(subreadit.icon);
       setBanner(subreadit.banner);
       setRules(subreadit.rules);
@@ -66,7 +66,7 @@ function SubreaditSettings({ match }) {
     <Wrapper>
       {subreadit && (
         <>
-          {subreadit.permissions.settings.includes(currentUser.uid) ? (
+          {subreadit.permissions.settings[currentUser.uid] ? (
             <Container>
               <form onSubmit={handleSubmit}>
                 <Heading>b/{subreadit.name_sensitive} Settings</Heading>
@@ -99,6 +99,7 @@ function SubreaditSettings({ match }) {
                           <Row>
                             <RuleNumber>
                               Rule
+                              {" "}
                               {index + 1}
                             </RuleNumber>
                             <IconButton
