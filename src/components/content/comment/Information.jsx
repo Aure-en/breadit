@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import useUser from "../../../hooks/useUser";
 import { BREADITOR_AVATAR } from "../../../utils/const";
 
-function Information({ author, date, isDeleted }) {
+function Information({ author, date, isDeleted, isPostAuthor }) {
   const [user, setUser] = useState();
   const { getUser } = useUser();
 
@@ -30,7 +30,7 @@ function Information({ author, date, isDeleted }) {
       {isDeleted ? (
         <div>[deleted]</div>
       ) : (
-        <AuthorLink to={`/u/${author.name}`}>{author.name}</AuthorLink>
+        <AuthorLink to={`/u/${author.name}`} isPostAuthor={isPostAuthor}>{author.name}</AuthorLink>
       )}
 
       <Secondary>
@@ -51,6 +51,13 @@ Information.propTypes = {
   date: PropTypes.shape({
     seconds: PropTypes.number,
   }).isRequired,
+  isDeleted: PropTypes.bool,
+  isPostAuthor: PropTypes.bool,
+};
+
+Information.defaultProps = {
+  isDeleted: false,
+  isPostAuthor: false,
 };
 
 const Container = styled.div`
@@ -67,6 +74,9 @@ const Icon = styled.img`
 `;
 
 const AuthorLink = styled(Link)`
+  font-weight: ${(props) => props.isPostAuthor && "500"};
+  color: ${(props) => props.isPostAuthor && props.theme.accent};
+
   &:hover {
     text-decoration: underline;
   }
