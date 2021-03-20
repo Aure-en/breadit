@@ -123,10 +123,13 @@ function Comment({ className, commentId }) {
                   {!comment.isDeleted && (
                     <ExtraButtons
                       // Only the author can edit
-                      canEdit={currentUser.uid === comment.author.id}
+                      canEdit={
+                        currentUser && currentUser.uid === comment.author.id
+                      }
                       // Author and subreadits mods can delete
                       canDelete={
                         !comment.isDeleted &&
+                        currentUser &&
                         (currentUser.uid === comment.author.id ||
                           permissions[currentUser.uid])
                       }

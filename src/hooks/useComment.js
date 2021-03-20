@@ -20,8 +20,10 @@ function useComment() {
       content,
       date: new Date(),
       votes: {
-        list: {},
-        sum: 0,
+        list: {
+          [author.uid]: 1,
+        },
+        sum: 1,
       },
       parent: parentId,
       children: [],

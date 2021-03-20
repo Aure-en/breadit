@@ -26,11 +26,11 @@ export const toastify = (content) => {
 export default Toast;
 
 const StyledToastContainer = styled(ToastContainer).attrs({
-  toastClassName: "toast",
+  toastClassName: "toast-wrapper",
   progressClassName: "progress",
   bodyClassName: "body",
 })`
-  .toast {
+  .toast-wrapper {
     background: ${(props) => props.theme.bg_container};
   }
 

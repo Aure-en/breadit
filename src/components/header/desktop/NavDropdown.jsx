@@ -19,12 +19,9 @@ function NavDropdown() {
   const dropdownRef = useRef();
   const { getSubreaditById, getPopularSubreadits } = useSubreadit();
   const { subscriptions } = useSubscription();
-  const {
-    isDropdownOpen,
-    setIsDropdownOpen,
-    current,
-    handleChoice,
-  } = useDropdown(dropdownRef);
+  const { isDropdownOpen, setIsDropdownOpen, handleChoice } = useDropdown(
+    dropdownRef
+  );
 
   // Gets top subreadits
   useEffect(() => {
@@ -59,7 +56,7 @@ function NavDropdown() {
         isDropdownOpen={isDropdownOpen}
         onClick={() => setIsDropdownOpen(!isDropdownOpen)}
       >
-        {current || "Navigation"}
+        Navigation
         <IconDown />
       </DropdownHeader>
       {isDropdownOpen && (

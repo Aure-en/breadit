@@ -47,6 +47,9 @@ export const colors = {
   text_editor_button: "rgba(74, 73, 72)",
   text_editor_button_active: "rgb(0, 0, 0)",
   text_editor_button_hover: "rgb(251, 229, 206)",
+  text_editor_inset: "rgb(224, 192, 192)",
+  text_editor_link_bg: "rgb(255, 240, 219)",
+  text_editor_link_border: "rgba(209, 163, 155, .5)",
 
   toast_progress: "rgb(93, 70, 63)",
 };

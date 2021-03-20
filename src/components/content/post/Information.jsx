@@ -4,6 +4,8 @@ import PropTypes from "prop-types";
 import formatDistanceStrict from "date-fns/formatDistanceStrict";
 import { Link, useLocation } from "react-router-dom";
 import { useSubscription } from "../../../contexts/SubscriptionContext";
+import { useEntry } from "../../../contexts/EntryContext";
+import { useAuth } from "../../../contexts/AuthContext";
 import useSubreadit from "../../../hooks/useSubreadit";
 import useWindowSize from "../../../hooks/useWindowSize";
 
@@ -14,6 +16,8 @@ function Information({ subreaditId, author, date, user, className }) {
   const [subreadit, setSubreadit] = useState();
   const { windowSize } = useWindowSize();
   const { subscriptions } = useSubscription();
+  const { openSignUp } = useEntry();
+  const { currentUser } = useAuth();
   const { getSubreaditById, joinSubreadit } = useSubreadit();
   const location = useLocation();
 
@@ -52,7 +56,7 @@ function Information({ subreaditId, author, date, user, className }) {
                 <Button
                   onClick={(e) => {
                     e.preventDefault();
-                    joinSubreadit(user.uid, subreadit);
+                    currentUser ? joinSubreadit(user.uid, subreadit) : openSignUp();
                   }}
                 >
                   <IconPlus />

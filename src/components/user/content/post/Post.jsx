@@ -54,7 +54,7 @@ function Post({ author, id, title, subreadit, type, content, date }) {
               postId={id}
               subreadit={subreadit.name}
               user={currentUser}
-              hide={() => setIsHidden(true)}
+              hide={setIsHidden}
             />
           </Container>
         </Link>
@@ -114,7 +114,7 @@ const Container = styled.article`
 `;
 
 const VoteContainer = styled.div`
-  @media all and (min-width: 576px) {
+  @media all and (min-width: 768px) {
     grid-row: 1 / -1;
     grid-column: 1;
   }
@@ -135,7 +135,7 @@ const Preview = styled(Link)`
   justify-self: center;
   margin-right: 1rem;
 
-  @media all and (min-width: 576px) {
+  @media all and (min-width: 768px) {
     width: 5rem;
     height: 3.5rem;
     min-width: 5rem;
@@ -157,7 +157,7 @@ const Title = styled.div`
   grid-row: 2;
   grid-column: 2 / -1;
 
-  @media all and (min-width: 576px) {
+  @media all and (min-width: 768px) {
     grid-column: 3;
   }
 `;
@@ -168,7 +168,7 @@ const Information = styled.div`
   grid-row: 1;
   grid-column: 2 / -1;
 
-  @media all and (min-width: 576px) {
+  @media all and (min-width: 768px) {
     grid-column: 3;
   }
 `;

@@ -14,12 +14,12 @@ function Footer() {
       <p>
         More about Breadit
         <ul>
-          <li>
+          <Li>
             <Link to="/b/breadit/FAsPoHGkEOLEBXEbDzQW">Introduction post</Link>
-          </li>
-          <li>
+          </Li>
+          <Li>
             <a href="https://github.com/Aure-en/breadit">Repository</a>
-          </li>
+          </Li>
         </ul>
       </p>
     </Container>
@@ -42,4 +42,10 @@ const Heading = styled.div`
   font-size: 1.125rem;
   margin: 0.25rem 0;
   text-align: center;
+`;
+
+const Li = styled.li`
+  &:hover {
+    text-decoration: underline;
+  }
 `;

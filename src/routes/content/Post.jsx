@@ -9,6 +9,7 @@ import PostContent from "../../components/content/post/Post";
 import Comment from "../../components/content/comment/Comment";
 import Nonexistent from "../../components/content/post/Nonexistent";
 import TextEditor from "../../components/shared/TextEditor";
+import SignToComment from "../../components/content/comment/SignToComment";
 import SortDropdown from "../../components/sort/SortDropdown";
 
 // Icons
@@ -83,24 +84,30 @@ function Post({ match }) {
             <Container>
               <PostContent postId={postId} subreadit={subreadit} />
 
-              <Form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  if (!comment) return; // Prevent from writing empty comments
-                  createComment(post, currentUser, comment);
-                  textEditorRef.current.reset();
-                }}
-              >
-                <Editor>
-                  <TextEditor
-                    type="comment"
-                    sendContent={setComment}
-                    ref={textEditorRef}
-                    placeholder="What are your thoughts?"
-                  />
-                </Editor>
-                <Button type="submit" disabled={!comment}>Comment</Button>
-              </Form>
+              {currentUser ? (
+                <Form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    if (!comment) return; // Prevent from writing empty comments
+                    createComment(post, currentUser, comment);
+                    textEditorRef.current.reset();
+                  }}
+                >
+                  <Editor>
+                    <TextEditor
+                      type="comment"
+                      sendContent={setComment}
+                      ref={textEditorRef}
+                      placeholder="What are your thoughts?"
+                    />
+                  </Editor>
+                  <Button type="submit" disabled={!comment}>
+                    Comment
+                  </Button>
+                </Form>
+              ) : (
+                <SignToComment />
+              )}
 
               <>
                 {!commentsLoading && (
@@ -233,6 +240,7 @@ const NoComment = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 1rem;
 `;
 
 const Icon = styled.span`

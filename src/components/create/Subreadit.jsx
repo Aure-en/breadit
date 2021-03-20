@@ -83,7 +83,7 @@ const Dropdown = styled.div`
   position: relative;
   max-width: 20rem;
   border: 1px solid ${(props) => props.theme.border_secondary};
-  z-index: 2;
+  z-index: 5;
   box-shadow: 0 0 10px -5px ${(props) => props.theme.vote_neutral};
 `;
 

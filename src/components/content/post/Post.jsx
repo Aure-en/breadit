@@ -127,12 +127,15 @@ function Post({ postId, subreadit }) {
               <ExtraButtons
                 // Only the author can edit, and only text posts can be edited
                 canEdit={
-                  currentUser.uid === post.author.id && post.type === "post"
+                  currentUser &&
+                  currentUser.uid === post.author.id &&
+                  post.type === "post"
                 }
                 // Author and subreadits mods can delete
                 canDelete={
-                  currentUser.uid === post.author.id ||
-                  permissions[currentUser.uid]
+                  currentUser &&
+                  (currentUser.uid === post.author.id ||
+                    permissions[currentUser.uid])
                 }
                 onEdit={() => {
                   setIsEditing(true);

@@ -16,6 +16,7 @@ import {
   convertToRaw,
   convertFromRaw,
   ContentState,
+  Modifier,
 } from "draft-js";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
@@ -37,6 +38,7 @@ import { ReactComponent as IconLink } from "../../assets/icons/text_editor/icon-
 import { ReactComponent as IconBlockQuote } from "../../assets/icons/text_editor/icon-blockquote.svg";
 import { ReactComponent as IconCode } from "../../assets/icons/text_editor/icon-code.svg";
 import { ReactComponent as IconBlockCode } from "../../assets/icons/text_editor/icon-code-block.svg";
+import { ReactComponent as IconInfo } from "../../assets/icons/text_editor/icon-info.svg";
 
 const findLinkEntities = (contentBlock, callback, contentState) => {
   contentBlock.findEntityRanges((character) => {
@@ -122,6 +124,7 @@ const TextEditor = forwardRef(
     const [hidePlaceholder, setHidePlaceholder] = useState(false);
     // Gets coordinates to place the link window properly.
     const wrapperRef = useRef();
+    const editorRef = useRef();
     const linkRef = useRef();
 
     // Reset the text editor after the user posts a comment.
@@ -143,6 +146,11 @@ const TextEditor = forwardRef(
       const content = convertFromRaw(JSON.parse(prevContent));
       setEditorState(EditorState.createWithContent(content));
     }, [prevContent]);
+
+    // Rebuilds tooltip when rendering link box
+    useEffect(() => {
+      ReactTooltip.rebuild();
+    }, [isLinkEditorOpen]);
 
     // Allows the user to use keyboard shortcuts (ex: Ctrl + B to bold)
     const handleKeyCommand = (command) => {
@@ -222,8 +230,26 @@ const TextEditor = forwardRef(
     // Nest lists
     const handleTab = (e) => {
       e.preventDefault(); // Prevents focus from going to another element
-      const newState = RichUtils.onTab(e, editorState, 5);
-      if (newState) setEditorState(newState);
+      const blockType = RichUtils.getCurrentBlockType(editorState);
+      if (
+        blockType === "unordered-list-item" ||
+        blockType === "ordered-list-item"
+      ) {
+        const newState = RichUtils.onTab(e, editorState, 5);
+        if (newState) setEditorState(newState);
+      } else {
+        const newContent = Modifier.replaceText(
+          editorState.getCurrentContent(),
+          editorState.getSelection(),
+          "      "
+        );
+        const newState = EditorState.push(
+          editorState,
+          newContent,
+          "insert-fragment"
+        );
+        setEditorState(newState);
+      }
     };
 
     // Blocks custom styles
@@ -370,6 +396,10 @@ const TextEditor = forwardRef(
               e.preventDefault();
               onUnorderedListClick();
             }}
+            active={
+              RichUtils.getCurrentBlockType(editorState) ===
+              "unordered-list-item"
+            }
           >
             <IconUL data-tip="Bulleted List" />
           </Button>
@@ -380,6 +410,9 @@ const TextEditor = forwardRef(
               e.preventDefault();
               onOrderedListClick();
             }}
+            active={
+              RichUtils.getCurrentBlockType(editorState) === "ordered-list-item"
+            }
           >
             <IconOL data-tip="Numbered List" />
           </Button>
@@ -390,6 +423,7 @@ const TextEditor = forwardRef(
               e.preventDefault();
               onQuoteBlockClick();
             }}
+            active={RichUtils.getCurrentBlockType(editorState) === "quoteBlock"}
           >
             <IconBlockQuote data-tip="Quote Block" />
           </Button>
@@ -400,14 +434,16 @@ const TextEditor = forwardRef(
               e.preventDefault();
               onCodeBlockClick();
             }}
+            active={RichUtils.getCurrentBlockType(editorState) === "codeBlock"}
           >
             <IconBlockCode data-tip="Code Block" />
           </Button>
-
-          <ReactTooltip effect="solid" delayShow={300} />
         </Buttons>
 
-        <Container className={hidePlaceholder && "Editor-hidePlaceholder"}>
+        <Container
+          className={hidePlaceholder && "Editor-hidePlaceholder"}
+          onClick={() => editorRef.current.focus()}
+        >
           <Editor
             editorState={editorState}
             onChange={(editorState) => {
@@ -433,22 +469,29 @@ const TextEditor = forwardRef(
             onTab={handleTab}
             blockStyleFn={customBlockFn}
             placeholder={placeholder}
+            ref={editorRef}
           />
         </Container>
 
         {isLinkEditorOpen && (
           <LinkBox selection={selection}>
-            <Input
-              type="text"
-              value={link}
-              onChange={(e) => setLink(e.target.value)}
-              placeholder="Paste or type a link"
-            />
-            <Button type="button" onMouseDown={handleInsertLink}>
+            <Row>
+              <Input
+                type="text"
+                value={link}
+                onChange={(e) => setLink(e.target.value)}
+                placeholder="Paste or type a link"
+              />
+              <Icon>
+                <IconInfo data-tip="Select the text, then insert the link." />
+              </Icon>
+            </Row>
+            <LinkButton type="button" onMouseDown={handleInsertLink}>
               Insert
-            </Button>
+            </LinkButton>
           </LinkBox>
         )}
+        <ReactTooltip effect="solid" delayShow={300} />
       </Wrapper>
     );
   }
@@ -584,15 +627,20 @@ const Buttons = styled.div`
 
 const Button = styled.button`
   padding: 0.2rem;
-  margin: 0.2rem;
+  margin: 0.1rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 3px;
   color: ${(props) =>
     props.active
       ? props.theme.text_editor_button_active
       : props.theme.text_editor_button};
+  border: ${(props) =>
+    props.active
+      ? `2px inset ${props.theme.text_editor_inset}`
+      : "2px solid transparent"};
+  background: ${(props) =>
+    props.active && props.theme.text_editor_button_hover};
 
   &:hover {
     background: ${(props) => props.theme.text_editor_button_hover};
@@ -601,23 +649,49 @@ const Button = styled.button`
 
 const LinkBox = styled.div`
   position: absolute;
-  background: ${(props) => props.theme.bg_app};
+  display: flex;
+  flex-direction: column;
+  background: ${(props) => props.theme.text_editor_link_bg};
   padding: 1rem;
   border-radius: 5px;
+  border: 1px solid ${(props) => props.theme.text_editor_link_border};
   top: ${(props) => props.selection && `calc(${props.selection.top}px + 1rem)`};
   left: ${(props) => props.selection && `${props.selection.left}px`};
   transform: translateX(-50%);
-  z-index: 2;
+  z-index: 3;
 
   &:before {
     content: "";
     border: 7px solid transparent;
-    border-bottom: 10px solid ${(props) => props.theme.bg_app};
+    border-bottom: 10px solid ${(props) => props.theme.text_editor_link_bg};
     z-index: 3;
     position: absolute;
     top: calc(-0.75rem - 5px);
     left: 50%;
     transform: translateX(-50%);
+    z-index: 2;
+  }
+
+  &:after {
+    content: "";
+    border: 8px solid transparent;
+    border-bottom: 12px solid ${(props) => props.theme.text_editor_link_border};
+    z-index: 3;
+    position: absolute;
+    top: calc(-0.75rem - 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+  }
+`;
+
+const LinkButton = styled.button`
+  color: ${(props) => props.theme.text_secondary};
+  text-transform: uppercase;
+  font-size: 0.8rem;
+
+  &:hover {
+    color: ${(props) => props.theme.text_primary};
   }
 `;
 
@@ -645,9 +719,21 @@ const Input = styled.input`
   border-radius: 5px;
   margin-bottom: 0.5rem;
   background: ${(props) => props.theme.input_bg};
+  color: ${(props) => props.theme.text_primary};
 
   &:focus {
     outline: 1px solid transparent;
     border: 1px solid ${(props) => props.theme.border_active};
   }
+`;
+
+const Row = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const Icon = styled.div`
+  cursor: pointer;
+  color: ${(props) => props.theme.text_secondary};
+  margin-left: 0.5rem;
 `;

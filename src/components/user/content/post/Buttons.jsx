@@ -24,7 +24,7 @@ function Buttons({ postId, subreadit, hide }) {
         <>
           <SaveButton docId={postId} type="post" />
           <ShareButton copy={`${subreadit}/${postId}`} />
-          <HideButton onHide={() => hide(true)} />
+          <HideButton setHide={hide} />
         </>
       ) : (
         <Dropdown ref={dropdownRef}>
@@ -50,7 +50,7 @@ function Buttons({ postId, subreadit, hide }) {
                 onClick={() => setIsDropdownOpen(false)}
               />
               <HideButton
-                onHide={() => hide(true)}
+                setHide={hide}
                 onClick={() => setIsDropdownOpen(false)}
               />
             </DropdownList>

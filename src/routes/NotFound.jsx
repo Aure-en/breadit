@@ -30,7 +30,7 @@ const Container = styled.div`
   align-items: center;
   justify-content: center;
 
-  @media all and (min-width: 768px) {
+  @media all and (min-width: 400px) {
     border: 1px solid ${(props) => props.theme.border};
     align-items: center;
     align-self: center;
