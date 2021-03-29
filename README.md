@@ -89,8 +89,8 @@ Breadit is a Reddit clone, made with React and Firebase, as my [final assignment
 </p>
 
 <p float="left" align="middle">
- <img src="https://firebasestorage.googleapis.com/v0/b/breadit-296d8.appspot.com/o/preview%2Fbreadit1L.png?alt=media&token=c29d5a39-5205-48db-a28b-472fe02e58c6" alt="Subreadit preview" width="45%"/>
-  <img src="https://firebasestorage.googleapis.com/v0/b/breadit-296d8.appspot.com/o/preview%2Fbreadit2L.png?alt=media&token=6f92fc54-f888-48be-88df-796fd23542f0" alt="User profile preview" width="45%"/>
+ <img src="https://firebasestorage.googleapis.com/v0/b/breadit-296d8.appspot.com/o/preview%2Fbreadit3L.png?alt=media&token=f144e9ad-66b7-44a8-babf-c5f19b9b7915" alt="Subreadit preview" width="45%"/>
+  <img src="https://firebasestorage.googleapis.com/v0/b/breadit-296d8.appspot.com/o/preview%2Fbreadit4L.png?alt=media&token=69c0b2ba-6a25-484e-945d-d116eb326106" alt="User profile preview" width="45%"/>
 </p>
 
 <p float="left" align="middle">
