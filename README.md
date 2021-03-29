@@ -83,9 +83,25 @@ Breadit is a Reddit clone, made with React and Firebase, as my [final assignment
 
 ## Screenshots
 
-![breadit2](https://user-images.githubusercontent.com/68861848/112839931-07cce380-909f-11eb-8680-c2bc27730dd9.png)
+<p float="left" align="middle">
+ <img src="https://firebasestorage.googleapis.com/v0/b/breadit-296d8.appspot.com/o/preview%2Fbreadit1L.png?alt=media&token=c29d5a39-5205-48db-a28b-472fe02e58c6" alt="Feed preview" width="45%"/>
+  <img src="https://firebasestorage.googleapis.com/v0/b/breadit-296d8.appspot.com/o/preview%2Fbreadit2L.png?alt=media&token=6f92fc54-f888-48be-88df-796fd23542f0" alt="Post preview" width="45%"/>
+</p>
 
-![screenshots1 breadit](https://user-images.githubusercontent.com/68861848/112839944-0bf90100-909f-11eb-9e58-7d9c728950ba.png)
+<p float="left" align="middle">
+ <img src="https://firebasestorage.googleapis.com/v0/b/breadit-296d8.appspot.com/o/preview%2Fbreadit1L.png?alt=media&token=c29d5a39-5205-48db-a28b-472fe02e58c6" alt="Subreadit preview" width="45%"/>
+  <img src="https://firebasestorage.googleapis.com/v0/b/breadit-296d8.appspot.com/o/preview%2Fbreadit2L.png?alt=media&token=6f92fc54-f888-48be-88df-796fd23542f0" alt="User profile preview" width="45%"/>
+</p>
+
+<p float="left" align="middle">
+ <img src="https://firebasestorage.googleapis.com/v0/b/breadit-296d8.appspot.com/o/preview%2Fbreadit1D.png?alt=media&token=f1a29099-ee0a-42e2-af2c-d16be67721de" alt="Feed preview" width="45%"/>
+  <img src="https://firebasestorage.googleapis.com/v0/b/breadit-296d8.appspot.com/o/preview%2Fbreadit2D.png?alt=media&token=4d4e91a6-d333-434d-bb8d-9da03316dc0e" alt="Post preview" width="45%"/>
+</p>
+
+<p float="left" align="middle">
+ <img src="https://firebasestorage.googleapis.com/v0/b/breadit-296d8.appspot.com/o/preview%2Fbreadit3D.png?alt=media&token=e903a072-67bc-4c42-b1c1-768da44ef0bd" alt="Subreadit preview" width="45%"/>
+  <img src="https://firebasestorage.googleapis.com/v0/b/breadit-296d8.appspot.com/o/preview%2Fbreadit4D.png?alt=media&token=660c41c3-deee-4e5d-a31c-481693578b8c" alt="User profile preview" width="45%"/>
+</p>
 
 ## Reflection
 
