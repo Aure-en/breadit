@@ -1,70 +1,82 @@
-# Getting Started with Create React App
+# Breadit
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+[Breadit - View site](https://breadit.web.app/)
 
-## Available Scripts
+## Description
 
-In the project directory, you can run:
+Breadit is a Reddit clone, made with React and Firebase, as my [final assignment](https://www.theodinproject.com/paths/full-stack-javascript/courses/javascript/lessons/final-project) from The Odin Project's JavaScript's section.
 
-### `npm start`
+## Features
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+1. Exploration
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+- Routing with React Router
+- Separate feeds:
+  * All: Posts from any Subreadit will be displayed in this feed.
+  * Main:
+    * If the user is not logged in, the main feed will be identical to the all feed.
+    * If the user is logged in, the main feed will only display posts from communities the user is subscribed to.
+ - On the main / all page, the Top Subreadits (the ones with most subscribers) will be displayed. They will also be displayed on   the navigation dropdown, making exploration easier.
+ - More posts from a feed will be loaded when the user scrolls to the end.
 
-### `npm test`
+2. Communities
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- Communities, or "Subreadits", can currently be created by any logged-in user. For now, only this user will be able to remove any post from this community or to change its settings.
+- Its customizables settings includes:
+  * Name (cannot be changed once defined)
+  * Description
+  * Icon / banner
+  * Rules
+ 
+3. Content and discussion
 
-### `npm run build`
+  ➢ <ins>Posts</ins>
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- Users can create 3 different types of posts:
+  * Text posts: must contain a title, any additional content is not required.
+  * Image posts: must contain a title and one or several images.
+  * Link posts: must contain a title and a valid link.
+    * If the link is a youtube link, the video will be embed in the post.
+    * If it is a link towards another Breadit Post, the post will be displayed.
+    * Any other link simply shows the URL along the title.
+  * Users can show their interest / lack of interest in a post by upvoting or downvoting it.
+  
+➢ <ins>Comment</ins>
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- Users can discuss using comments.
+- Comments can be left on a post, or on another comment (it will then be nested).
+- Just like for posts, users can show their interest / lack of interest by upvoting or downvoting a comment.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+<ins>Notes:</ins>
 
-### `npm run eject`
+- A rich text editor allows the users to format their posts and comments with different styles, lists, and also allows them to insert links in their content.
+- Any post / comment can be edited and deleted by their author.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+4. Users
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- Users can modify their settings and profile informations from the User Settings page :
+  * Settings: they can modify their email address, password, and delete their accounts.
+  * Profile: they can modify their avatar, banner and description.
+- Users' profiles can be visited to see their:
+  * Posts
+  * Comments
+  * Informations (avatar, banner, description, karma...)
+- Users get karma depending on their contributions (how liked their posts / comments are)
+- Users can save posts, which they can see on the "Saved" tab of their profile.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+5. Communication
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+- Users can interact by mentioning each others (ex: u/Bread)
+- Users can also send each other messages in the Inbox Page.
 
-## Learn More
+6. Notifications
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- Users will be notified when:
+  * Another user mentions them in a post or a comment.
+  * Another user comments on their post or reply to their comment.
+  * Another user messages them.
+  
+7. Display
 
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- Responsive
+- Light and dark mode
