@@ -1,4 +1,4 @@
-export const BREADIT_URL = "https://breadit-296d8.web.app";
+export const BREADIT_URL = "https://breadit.web.app";
 export const BREADIT_ICON =
   "https://firebasestorage.googleapis.com/v0/b/breadit-296d8.appspot.com/o/default%2Flogo_breadit.png?alt=media&token=733d9b90-b7b0-40c3-9dc6-a44205eb5c39";
 export const BREADIT_BRAND =

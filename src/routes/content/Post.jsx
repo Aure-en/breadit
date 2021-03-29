@@ -101,7 +101,15 @@ function Post({ match }) {
                       placeholder="What are your thoughts?"
                     />
                   </Editor>
-                  <Button type="submit" disabled={!comment}>
+                  <Button
+                    type="submit"
+                    disabled={
+                      !comment ||
+                      /{"blocks":\[{"key":"[a-zA-Z0-9]{5}","text":"","type":"[\w]+","depth":0,"inlineStyleRanges":\[],"entityRanges":\[],"data":{}}],"entityMap":{}}/i.test(
+                        comment
+                      )
+                    }
+                  >
                     Comment
                   </Button>
                 </Form>

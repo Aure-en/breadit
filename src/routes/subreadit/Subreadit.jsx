@@ -22,6 +22,7 @@ function Subreadit({ match }) {
       const subreadit = await getSubreaditByName(subreaditName);
       setSubreadit(subreadit);
       setLoading(false);
+      console.log(subreadit);
     })();
   }, [match]);
 

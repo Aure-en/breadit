@@ -45,13 +45,17 @@ function NestedPostPreview({ postId }) {
     );
   };
 
-  const renderImages = (images, title) => {
+  const renderImages = (images, title, subreaditName, postId) => {
     return images.length > 1 ? (
-      <Carousel images={images} title={title} />
+      <Link to={`/b/${subreaditName}/${postId}`}>
+        <Carousel images={images} title={title} />
+      </Link>
     ) : (
-      <ImageContainer>
-        <Image src={images[0]} alt={title} />
-      </ImageContainer>
+      <Link to={`/b/${subreaditName}/${postId}`}>
+        <ImageContainer>
+          <Image src={images[0]} alt={title} />
+        </ImageContainer>
+      </Link>
     );
   };
 
@@ -82,7 +86,7 @@ function NestedPostPreview({ postId }) {
                   new Date(post.date.seconds * 1000),
                   new Date()
                 )}
-                {" "}
+{" "}
                 ago
               </Link>
             </Informations>
@@ -92,16 +96,29 @@ function NestedPostPreview({ postId }) {
               </Link>
             )}
             <>
-              {post.type === "post" && post.content &&
+              {post.type === "post" &&
+                post.content &&
                 renderText(post.content, subreadit.name, postId)}
-              {post.type === "image" && renderImages(post.content, post.title)}
+              {post.type === "image" &&
+                renderImages(
+                  post.content,
+                  post.title,
+                  post.subreadit.name,
+                  postId
+                )}
               {post.type === "link" && renderLink(post.content, post.title)}
             </>
             <Informations>
-              <Link to={`/b/${subreadit.name}/${postId}`}>{votes} point{votes > 1 && "s"}</Link>
+              <Link to={`/b/${subreadit.name}/${postId}`}>
+                {votes}
+                {' '}
+                point
+                {votes > 1 && "s"}
+              </Link>
               <span> • </span>
               <Link to={`/b/${subreadit.name}/${postId}`}>
-                {commentsNumber} comment{commentsNumber > 1 && "s"}
+                {commentsNumber} comment
+                {commentsNumber > 1 && "s"}
               </Link>
             </Informations>
           </Container>
