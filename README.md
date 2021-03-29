@@ -8,7 +8,7 @@ Breadit is a Reddit clone, made with React and Firebase, as my [final assignment
 
 ## Features
 
-1. Exploration
+### 1. Exploration
 
 - Routing with React Router
 - Separate feeds:
@@ -19,7 +19,7 @@ Breadit is a Reddit clone, made with React and Firebase, as my [final assignment
  - On the main / all page, the Top Subreadits (the ones with most subscribers) will be displayed. They will also be displayed on   the navigation dropdown, making exploration easier.
  - More posts from a feed will be loaded when the user scrolls to the end.
 
-2. Communities
+### 2. Communities
 
 - Communities, or "Subreadits", can currently be created by any logged-in user. For now, only this user will be able to remove any post from this community or to change its settings.
 - Its customizables settings includes:
@@ -28,7 +28,7 @@ Breadit is a Reddit clone, made with React and Firebase, as my [final assignment
   * Icon / banner
   * Rules
  
-3. Content and discussion
+### 3. Content and discussion
 
   ➢ <ins>Posts</ins>
 
@@ -52,7 +52,7 @@ Breadit is a Reddit clone, made with React and Firebase, as my [final assignment
 - A rich text editor allows the users to format their posts and comments with different styles, lists, and also allows them to insert links in their content.
 - Any post / comment can be edited and deleted by their author.
 
-4. Users
+### 4. Users
 
 - Users can modify their settings and profile informations from the User Settings page :
   * Settings: they can modify their email address, password, and delete their accounts.
@@ -64,19 +64,31 @@ Breadit is a Reddit clone, made with React and Firebase, as my [final assignment
 - Users get karma depending on their contributions (how liked their posts / comments are)
 - Users can save posts, which they can see on the "Saved" tab of their profile.
 
-5. Communication
+### 5. Communication
 
 - Users can interact by mentioning each others (ex: u/Bread)
 - Users can also send each other messages in the Inbox Page.
 
-6. Notifications
+### 6. Notifications
 
 - Users will be notified when:
   * Another user mentions them in a post or a comment.
   * Another user comments on their post or reply to their comment.
   * Another user messages them.
   
-7. Display
+### 7. Display
 
 - Responsive
 - Light and dark mode
+
+## Screenshots
+
+![breadit2](https://user-images.githubusercontent.com/68861848/112839931-07cce380-909f-11eb-8680-c2bc27730dd9.png)
+
+![screenshots1 breadit](https://user-images.githubusercontent.com/68861848/112839944-0bf90100-909f-11eb-9e58-7d9c728950ba.png)
+
+## Reflection
+
+For this project, my goal was to replicate Reddit as closely as possible. I think I got most of the features that make a social media down: being able to share content through a post, being able to show interest through likes / dislikes, being able to interact with other users through messages of comments, being able to save content... Though it lacks Reddit's most recent features, like livestreaming or chatrooms, I am currently satisfied with the current features Breadit contains.
+
+I had a bit of troubles tackling interactions between the save features and content when users decided to delete their content. In the end, I followed Reddit's lead by simply changing the comment's text and author to [deleted] when a user decided to delete their comment, as well as remove it from any other user's saved list. For posts, I chose to completely erase them and their associated document so that they wouldn't clog the feeds.
