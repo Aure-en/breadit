@@ -15,10 +15,11 @@ import { ReactComponent as IconFeed } from "../../../assets/icons/header/icon-fe
 import { ReactComponent as IconInbox } from "../../../assets/icons/header/icon-inbox.svg";
 import { ReactComponent as IconSaved } from "../../../assets/icons/header/icon-saved.svg";
 import { ReactComponent as IconPost } from "../../../assets/icons/header/icon-post.svg";
+import { ReactComponent as IconLogOut } from "../../../assets/icons/header/icon-logout.svg";
 import { BREADIT_ICON, BREADIT_BRAND } from "../../../utils/const";
 
 function Header() {
-  const { currentUser } = useAuth();
+  const { currentUser, signOut } = useAuth();
   const { openSignUp } = useEntry();
   const dropdownRef = useRef();
   const { isDropdownOpen, setIsDropdownOpen, closeDropdown } = useDropdown(
@@ -33,9 +34,11 @@ function Header() {
           <Brand src={BREADIT_BRAND} alt="Breadit Brand" />
         </Breadit>
       </Link>
-      <LinkIcon to="/submit">
-        <IconPost />
-      </LinkIcon>
+      {currentUser && (
+        <LinkIcon to="/submit">
+          <IconPost />
+        </LinkIcon>
+      )}
       <Dropdown ref={dropdownRef}>
         <DropdownHeader
           isDropdownOpen={isDropdownOpen}
@@ -84,10 +87,18 @@ function Header() {
               <IconFeed />
               Popular
             </Choice>
+
             {!currentUser && (
               <Button type="button" onClick={openSignUp}>
                 Sign up / Log in
               </Button>
+            )}
+
+            {currentUser && (
+              <Choice as="button" type="button" onClick={signOut}>
+                <IconLogOut />
+                Log out
+              </Choice>
             )}
           </DropdownList>
         )}

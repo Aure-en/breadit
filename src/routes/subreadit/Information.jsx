@@ -27,7 +27,11 @@ function Information({ subreaditName }) {
             description={subreadit.description}
             members={subreadit.members}
             date={subreadit.date}
-            settings={subreadit.permissions.settings[currentUser.uid]}
+            settings={
+              currentUser
+                ? subreadit.permissions.settings[currentUser.uid]
+                : false
+            }
           />
           {subreadit.rules.length > 0 && (
             <Rules rules={subreadit.rules} subreaditName={subreaditName} />
